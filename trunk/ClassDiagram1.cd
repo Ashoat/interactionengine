@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="InteractionEngine.Client.TwoDimensional.UserInterface2D" Collapsed="true">
+    <Position X="5.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAkAEAAAAAABAAACAEAAAAASQAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Client\2D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Client.TwoDimensional.Graphics2D" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBAEBAAABAAAAEAAQACAAAAAAAQAAoAAAgCQAQAAAAA=</HashCode>
+      <FileName>Client\2D.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="InteractionEngine.Client.ThreeDimensional.UserInterface3D" Collapsed="true">
+    <Position X="8" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABqAAAIAQgAIAAAAAEBAAAACEpIgIAIAgAAAIAAEAA=</HashCode>
+      <FileName>Client\3D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Client.ThreeDimensional.Graphics3D" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAIAAAEAAAAAAAAAAAAAAAAAAAgAAgAAAAAA=</HashCode>
+      <FileName>Client\3D.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="InteractionEngine.Client.ThreeDimensional.Camera" Collapsed="true">
+    <Position X="5.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBQAAAAQASAAQACgIABgIgCAgAABAgAgAgCCAiSQIAA=</HashCode>
+      <FileName>Client\3D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Client.ThreeDimensional.User3D" Collapsed="true">
+    <Position X="3.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Client\3D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Client.Event" Collapsed="true">
+    <Position X="19.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Client\UserInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Client.UserInterface" Collapsed="true">
+    <Position X="8" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEgAAAIAAAAAAAAAAEAABAACAAAABAAAAEAAAAAAAA=</HashCode>
+      <FileName>Client\UserInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Client.KeyboardFocus" Collapsed="true">
+    <Position X="7.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIgAARAAAgAACAAAAAAAAAAAAAACAAAEACAAgAAAA=</HashCode>
+      <FileName>Client\UserInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Client.Text.UserInterfaceText" Collapsed="true">
+    <Position X="10.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEAgAAAAAAAEAAAAAAUAAAAACAAAAAAAAAAABgAAAAA=</HashCode>
+      <FileName>Client\Text.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.Updatable" Collapsed="true">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAQAAAAAABAAAAAAAACAAAQAAgCAAAAAgE=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableBoolean" Collapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAACAgABAAAAAAAAAACAAAAACBAAAAAU=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableInteger" Collapsed="true">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAACAgABAAAAAAAAAACAAAAACBAAAAAU=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableCharacter" Collapsed="true">
+    <Position X="12.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAACAgABAAAAAAAAAACAAAAACBAAAAAU=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableDouble" Collapsed="true">
+    <Position X="14.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAACAgABAAAAAAAAAACAAAAACBAAAAAU=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableString" Collapsed="true">
+    <Position X="17" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAACAgABAAAAAAAAAACAAAAACBAAAAAU=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableArray" Collapsed="true">
+    <Position X="1.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAEAACAAABAQAAAAAAAACAAAAACBAAAAAE=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableList" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFAAAAIAABAEAACEAABAQAAAAAABACIAAAACBABCAAE=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableGameObject&lt;T&gt;" Collapsed="true">
+    <Position X="21.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAABAAAAAA=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Datatypes.UpdatableVector" Collapsed="true">
+    <Position X="10.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAACAgABAAAAAAAAAACAAAAACBAAAAAU=</HashCode>
+      <FileName>Constructs\UpdatableVector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Constructs.GameObject" Collapsed="true">
+    <Position X="6.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAKIAgIAAAIABACAABAAQAABAACAAEEQAAACAQACAgA=</HashCode>
+      <FileName>Constructs\GameObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InteractionEngine.Constructs.LoadRegion" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACKAIgIAAAAABACIACAEACAAgQAAAEMAAAAAAAAAggA=</HashCode>
+      <FileName>Constructs\LoadRegion.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="InteractionEngine.Constructs.Location" Collapsed="true">
+    <Position X="19.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAACCAAQAAAACAAAAAAAAgAAAAAEAAAgAAAAAAACA=</HashCode>
+      <FileName>Constructs\Location.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.GameWorld.GameWorld" Collapsed="true">
+    <Position X="21.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AMYAQhBAAAAAIggAgLCEAAAEgQgAACAKAAIEyAEAAQA=</HashCode>
+      <FileName>GameWorld\GameWorld.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.GameWorld.InteractionGame" Collapsed="true">
+    <Position X="21.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAwQAQAEAAAAgAAAAAAiABAAAAAAAAAQ=</HashCode>
+      <FileName>GameWorld\InteractionEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractionEngine.Server.User" Collapsed="true">
+    <Position X="3.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAIQggBAAAAAQAAAEAAAAEgAIIAAQAgAEAEAEAAAgQA=</HashCode>
+      <FileName>Server\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="InteractionEngine.Client.Interactable" Collapsed="true">
+    <Position X="0.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Client\Graphics.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="InteractionEngine.Client.Graphics" Collapsed="true">
+    <Position X="19.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Client\Graphics.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="InteractionEngine.Client.Graphable" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Client\Graphics.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="InteractionEngine.Client.Keyboardable" Collapsed="true">
+    <Position X="2.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Client\UserInterface.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="InteractionEngine.Constructs.FieldContainer" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAKAAAIAAAAABACAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Constructs\FieldContainer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="InteractionEngine.Constructs.GameObjectable" Collapsed="true">
+    <Position X="1.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAgAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Constructs\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="InteractionEngine.Constructs.Locatable" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Constructs\Location.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Delegate Name="InteractionEngine.Constructs.Datatypes.UpdatableFactory" Collapsed="true">
+    <Position X="19.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+      <FileName>Constructs\Datatypes.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="InteractionEngine.Constructs.GameObjectFactory" Collapsed="true">
+    <Position X="21.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAwAAA=</HashCode>
+      <FileName>Constructs\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="InteractionEngine.Constructs.EventMethod" Collapsed="true">
+    <Position X="19.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Constructs\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="InteractionEngine.GameWorld.RepeatMethod" Collapsed="true">
+    <Position X="23" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameWorld\GameWorld.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
