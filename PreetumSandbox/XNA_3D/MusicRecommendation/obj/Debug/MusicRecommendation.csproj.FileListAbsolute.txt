@@ -1,0 +1,5 @@
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\MusicRecommendation\bin\Debug\MusicRecommendation.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\MusicRecommendation\bin\Debug\MusicRecommendation.pdb
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\MusicRecommendation\obj\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\MusicRecommendation\obj\Debug\MusicRecommendation.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\MusicRecommendation\obj\Debug\MusicRecommendation.pdb

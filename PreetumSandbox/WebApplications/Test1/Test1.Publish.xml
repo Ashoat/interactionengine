@@ -1,0 +1,21 @@
+<publishData>
+  <publishTarget publishUrl="D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1_Publish\">
+    <file relUrl="bin/zh-Hant/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="bin/zh-Hans/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="Futuristic.xaml" publishTime="04/12/2009 02:17:50" />
+    <file relUrl="bin/de/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="AudioGray.xaml" publishTime="04/12/2009 02:20:21" />
+    <file relUrl="Web.config" publishTime="04/12/2009 02:05:37" />
+    <file relUrl="bin/Test1.dll" publishTime="04/12/2009 03:43:47" />
+    <file relUrl="Expression.xaml" publishTime="04/12/2009 02:06:21" />
+    <file relUrl="bin/fr/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="Basic.xaml" publishTime="04/12/2009 02:09:33" />
+    <file relUrl="bin/ja/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="bin/it/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="bin/ko/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="Default.aspx" publishTime="04/12/2009 03:43:07" />
+    <file relUrl="bin/System.Web.Silverlight.dll" publishTime="06/04/2008 15:09:46" />
+    <file relUrl="bin/Test1.pdb" publishTime="04/12/2009 03:43:47" />
+    <file relUrl="bin/es/System.Web.Silverlight.resources.dll" publishTime="06/04/2008 15:09:46" />
+  </publishTarget>
+</publishData>

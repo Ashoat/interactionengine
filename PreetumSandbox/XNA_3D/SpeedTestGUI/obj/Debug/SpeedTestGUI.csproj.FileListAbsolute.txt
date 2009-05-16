@@ -1,0 +1,8 @@
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\bin\Debug\SpeedTestGUI.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\bin\Debug\SpeedTestGUI.pdb
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\obj\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\obj\Debug\SpeedTestGUI.Form1.resources
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\obj\Debug\SpeedTestGUI.Properties.Resources.resources
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\obj\Debug\SpeedTestGUI.csproj.GenerateResource.Cache
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\obj\Debug\SpeedTestGUI.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTestGUI\obj\Debug\SpeedTestGUI.pdb

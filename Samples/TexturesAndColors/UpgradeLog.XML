@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="TexturesAndColorsWindows">
+</Property><Property Name="Solution File" Value="D:\t09\InteractionEngine\Samples\TexturesAndColors\TexturesAndColorsWindows.sln">
+</Property><Property Name="Date" Value="Sunday, April 12, 2009">
+</Property><Property Name="Time" Value="21:29 PM">
+</Property></Properties><Event ErrorLevel="0" Project="TexturesAndColorsWindows" Source="TexturesAndColors\TexturesAndColorsWindows.csproj" Description="Upgraded XNA Game Studio nested content projects.">
+</Event><Event ErrorLevel="0" Project="TexturesAndColorsWindows" Source="TexturesAndColors\TexturesAndColorsWindows.csproj" Description="Upgraded XNA Game Studio project.">
+</Event><Event ErrorLevel="0" Project="TexturesAndColorsWindows" Source="TexturesAndColors\TexturesAndColorsWindows.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="TexturesAndColorsWindows" Source="TexturesAndColors\TexturesAndColorsWindows.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="TexturesAndColorsWindows.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="TexturesAndColorsWindows.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="TexturesAndColorsWindows" Source="TexturesAndColors\TexturesAndColorsWindows.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="TexturesAndColorsWindows" Source="TexturesAndColors\TexturesAndColorsWindows.csproj" Description="Upgraded XNA Framework References.">
+</Event></UpgradeLog>

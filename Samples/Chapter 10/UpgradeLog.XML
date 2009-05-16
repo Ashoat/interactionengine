@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="TerrainEngine">
+</Property><Property Name="Solution File" Value="D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine.sln">
+</Property><Property Name="Date" Value="Tuesday, March 31, 2009">
+</Property><Property Name="Time" Value="15:50 PM">
+</Property></Properties><Event ErrorLevel="0" Project="TerrainEngine" Source="TerrainEngine\TerrainEngine.csproj" Description="Upgraded XNA Game Studio nested content projects.">
+</Event><Event ErrorLevel="0" Project="TerrainEngine" Source="TerrainEngine\TerrainEngine.csproj" Description="Upgraded XNA Game Studio project.">
+</Event><Event ErrorLevel="0" Project="TerrainEngine" Source="TerrainEngine\TerrainEngine.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="TerrainEngine" Source="TerrainEngine\TerrainEngine.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="TerrainEngine.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="TerrainEngine.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="TerrainEngine" Source="TerrainEngine\TerrainEngine.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="TerrainEngine" Source="TerrainEngine\TerrainEngine.csproj" Description="Upgraded XNA Framework References.">
+</Event></UpgradeLog>

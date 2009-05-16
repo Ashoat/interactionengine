@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>ArrowIcon.png</Source>
+      <Name>ArrowIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\ArrowIcon.xnb</Output>
+      <Time>2008-06-03T16:01:28.567657-07:00</Time>
+    </Item>
+    <Item>
+      <Source>BatsFace.png</Source>
+      <Name>BatsFace</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\BatsFace.xnb</Output>
+      <Time>2008-06-03T16:01:28.7014375-07:00</Time>
+    </Item>
+    <Item>
+      <Source>GoldIcon.png</Source>
+      <Name>GoldIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\GoldIcon.xnb</Output>
+      <Time>2008-06-03T16:01:28.7092495-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Pit.png</Source>
+      <Name>Pit</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Pit.xnb</Output>
+      <Time>2008-06-03T16:01:28.7112025-07:00</Time>
+    </Item>
+    <Item>
+      <Source>PitFace.png</Source>
+      <Name>PitFace</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\PitFace.xnb</Output>
+      <Time>2008-06-03T16:01:28.7736985-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Player.png</Source>
+      <Name>Player</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Player.xnb</Output>
+      <Time>2008-06-03T16:01:28.8283825-07:00</Time>
+    </Item>
+    <Item>
+      <Source>RandomCaveHoboWitchDoctor.png</Source>
+      <Name>RandomCaveHoboWitchDoctor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\RandomCaveHoboWitchDoctor.xnb</Output>
+      <Time>2008-06-03T16:01:28.9318915-07:00</Time>
+    </Item>
+    <Item>
+      <Source>RCHWDFace.png</Source>
+      <Name>RCHWDFace</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\RCHWDFace.xnb</Output>
+      <Time>2008-06-03T16:01:28.9924345-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Screen.png</Source>
+      <Name>Screen</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Screen.xnb</Output>
+      <Time>2008-06-03T16:01:29.024659-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Wumpus.png</Source>
+      <Name>Wumpus</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Wumpus.xnb</Output>
+      <Time>2008-06-03T16:01:29.1213325-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Door.png</Source>
+      <Name>Door</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Door.xnb</Output>
+      <Time>2008-06-03T23:14:04.800883-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Room.png</Source>
+      <Name>Room</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Room.xnb</Output>
+      <Time>2008-06-04T00:03:20.111731-07:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont1.spritefont</Source>
+      <Name>SpriteFont1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
+      <Time>2008-06-04T10:39:28.0887395-07:00</Time>
+    </Item>
+    <Item>
+      <Source>pixelcheck.png</Source>
+      <Name>pixelcheck</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\pixelcheck.xnb</Output>
+      <Time>2008-06-04T07:49:11.8529785-07:00</Time>
+    </Item>
+    <Item>
+      <Source>dialogbox.png</Source>
+      <Name>dialogbox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\dialogbox.xnb</Output>
+      <Time>2008-06-04T08:44:54.026761-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button.png</Source>
+      <Name>Button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Button.xnb</Output>
+      <Time>2008-06-04T11:05:33.0615008-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Bat.png</Source>
+      <Name>Bat</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Bat.xnb</Output>
+      <Time>2008-06-03T16:01:28.6936255-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Inventory.png</Source>
+      <Name>Inventory</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Inventory.xnb</Output>
+      <Time>2008-06-04T13:10:03.599335-07:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Windows</TargetPlatform>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <RootDirectory>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2008-04-26T12:32:08-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2008-04-26T12:32:50-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2008-04-26T12:32:40-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2008-04-26T12:31:52-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2008-04-26T12:31:52-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2008-05-31T16:30:31.0014135-07:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>

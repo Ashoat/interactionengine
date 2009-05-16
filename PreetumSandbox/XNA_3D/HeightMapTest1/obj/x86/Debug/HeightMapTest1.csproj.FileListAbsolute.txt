@@ -1,0 +1,2 @@
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt

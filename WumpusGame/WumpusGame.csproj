@@ -1,0 +1,168 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectGuid>{B7B08C26-6FE6-4AD3-A760-4AEA848221F6}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WumpusGame</RootNamespace>
+    <AssemblyName>WumpusGame</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaCrossPlatformGroupID>d57085c4-17cb-4406-8189-0d945b50cdcc</XnaCrossPlatformGroupID>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="InteractionEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\InteractionEngine\InteractionEngine\InteractionEngine\bin\x86\Release\InteractionEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+      <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MAIN.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="World\Modules\Conversation.cs" />
+    <Compile Include="World\Modules\Inventory.cs" />
+    <Compile Include="World\Modules\Item.cs" />
+    <Compile Include="World\Modules\Location.cs" />
+    <Compile Include="World\Modules\Player.cs" />
+    <Compile Include="World\Object Graphics\2D\Bat.cs" />
+    <Compile Include="World\Object Graphics\2D\DialogBox.cs" />
+    <Compile Include="World\Object Graphics\2D\InventoryBox.cs" />
+    <Compile Include="World\Object Graphics\2D\Pit.cs" />
+    <Compile Include="World\Object Graphics\2D\RandomCaveHoboWitchDoctor.cs" />
+    <Compile Include="World\Object Graphics\2D\Room.cs" />
+    <Compile Include="World\Object Graphics\2D\Door.cs" />
+    <Compile Include="World\Object Graphics\2D\Wumpus.cs" />
+    <Compile Include="World\Object Graphics\Arrow.cs" />
+    <Compile Include="World\Object Graphics\Bat.cs" />
+    <Compile Include="World\Object Graphics\Door.cs" />
+    <Compile Include="World\Object Graphics\Pit.cs" />
+    <Compile Include="World\Object Graphics\Player.cs" />
+    <Compile Include="World\Object Graphics\RandomCaveHoboWitchDoctor.cs" />
+    <Compile Include="World\Object Graphics\Text\Arrow.cs" />
+    <Compile Include="World\Object Graphics\Text\Bat.cs" />
+    <Compile Include="World\Object Graphics\Text\DialogBox.cs" />
+    <Compile Include="World\Object Graphics\Text\Door.cs" />
+    <Compile Include="World\Object Graphics\Text\Pit.cs" />
+    <Compile Include="World\Object Graphics\Text\Player.cs" />
+    <Compile Include="World\Object Graphics\Text\RandomCaveHoboWitchDoctor.cs" />
+    <Compile Include="World\Object Graphics\Text\Room.cs" />
+    <Compile Include="World\Object Graphics\Text\Wumpus.cs" />
+    <Compile Include="World\Object Graphics\Wumpus.cs" />
+    <Compile Include="World\Object Logic\Arrow.cs" />
+    <Compile Include="World\Object Logic\Bat.cs" />
+    <Compile Include="World\Object Logic\DialogBox.cs" />
+    <Compile Include="World\Object Logic\Door.cs" />
+    <Compile Include="World\Object Logic\Gold.cs" />
+    <Compile Include="World\Object Logic\InventoryBox.cs" />
+    <Compile Include="World\Object Logic\Pit.cs" />
+    <Compile Include="World\Object Logic\Player.cs" />
+    <Compile Include="World\Object Logic\RandomCaveHoboWitchDoctor.cs" />
+    <Compile Include="World\Object Logic\Room.cs" />
+    <Compile Include="World\Object Logic\Trivia.cs" />
+    <Compile Include="World\Object Logic\Wumpus.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game.ico" />
+    <Content Include="GameThumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <NestedContentProject Include="Content\Content.contentproj">
+      <Project>b969d01b-20c4-4c5b-bc67-c7195fee5210</Project>
+      <Visible>False</Visible>
+    </NestedContentProject>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\v3.0\Microsoft.Xna.GameStudio.Common.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\v3.0\Microsoft.Xna.GameStudio.NestedContent.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,6 @@
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test2\bin\x86\Debug\Test2.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test2\bin\x86\Debug\Test2.pdb
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test2\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test2\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test2\obj\x86\Debug\Test2.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test2\obj\x86\Debug\Test2.pdb

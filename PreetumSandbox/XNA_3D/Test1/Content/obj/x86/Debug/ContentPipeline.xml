@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>Cube.X</Source>
+      <Name>Cube</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\Cube.xnb</Output>
+      <Time>2007-05-22T14:38:04-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Cube_0.xml</Key>
+        <Value>2009-04-25T00:59:12.865-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>velo2.fbx</Source>
+      <Name>velo2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\velo2.xnb</Output>
+      <Time>2009-03-31T14:59:19.208-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\velo2_0.xml</Key>
+        <Value>2009-04-25T00:59:30.514-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>lab.fbx</Source>
+      <Name>lab</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\lab.xnb</Output>
+      <Time>2009-04-21T14:19:00.59-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\lab_0.xml</Key>
+        <Value>2009-04-25T00:59:31.26-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>Veloci.fbx</Source>
+      <Name>Veloci2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\Veloci2.xnb</Output>
+      <Time>2009-04-21T14:27:54.827-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Veloci_0.xml</Key>
+        <Value>2009-04-25T00:59:31.652-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>human 3.fbx</Source>
+      <Name>human 3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\human 3.xnb</Output>
+      <Time>2009-04-21T14:39:51.78-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\human 3_0.xml</Key>
+        <Value>2009-04-25T00:59:31.834-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>human 2.fbx</Source>
+      <Name>human 2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\human 2.xnb</Output>
+      <Time>2009-04-21T14:42:55.09-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\human 2_0.xml</Key>
+        <Value>2009-04-25T00:59:32.029-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>human4.fbx</Source>
+      <Name>human4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\human4.xnb</Output>
+      <Time>2009-04-21T14:45:42.243-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\human4_0.xml</Key>
+        <Value>2009-04-25T00:59:32.193-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>28560.fbx</Source>
+      <Name>28560</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\28560.xnb</Output>
+      <Time>2009-04-21T14:47:53.14-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\28560_0.xml</Key>
+        <Value>2009-04-25T00:59:33.946-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>veloci.jpg</Source>
+      <Name>velociTex</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\velociTex.xnb</Output>
+      <Time>2009-04-15T01:08:30.567-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Cube.X</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Cube_0.xml</Output>
+      <Time>2007-05-22T14:38:04-07:00</Time>
+    </Item>
+    <Item>
+      <Source>velo2.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\velo2_0.xml</Output>
+      <Time>2009-03-31T14:59:19.208-07:00</Time>
+    </Item>
+    <Item>
+      <Source>lab.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\lab_0.xml</Output>
+      <Time>2009-04-21T14:19:00.59-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Veloci.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Veloci_0.xml</Output>
+      <Time>2009-04-21T14:27:54.827-07:00</Time>
+    </Item>
+    <Item>
+      <Source>human 3.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\human 3_0.xml</Output>
+      <Time>2009-04-21T14:39:51.78-07:00</Time>
+    </Item>
+    <Item>
+      <Source>human 2.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\human 2_0.xml</Output>
+      <Time>2009-04-21T14:42:55.09-07:00</Time>
+    </Item>
+    <Item>
+      <Source>human4.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\human4_0.xml</Output>
+      <Time>2009-04-21T14:45:42.243-07:00</Time>
+    </Item>
+    <Item>
+      <Source>28560.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\28560_0.xml</Output>
+      <Time>2009-04-21T14:47:53.14-07:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Windows</TargetPlatform>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\Test1\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2008-10-10T18:42:32-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2008-10-10T18:43:28-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2008-10-10T18:43:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2008-10-10T18:48:18-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2008-10-10T18:48:50-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2009-01-30T21:55:17.543-08:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>

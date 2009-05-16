@@ -1,0 +1,12 @@
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\Test1.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\Test1.pdb
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\System.Web.Silverlight.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\de\System.Web.Silverlight.resources.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\es\System.Web.Silverlight.resources.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\fr\System.Web.Silverlight.resources.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\it\System.Web.Silverlight.resources.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\ja\System.Web.Silverlight.resources.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\bin\ko\System.Web.Silverlight.resources.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\obj\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\obj\Debug\Test1.dll
+D:\t09\InteractionEngine\PreetumSandbox\WebApplications\Test1\obj\Debug\Test1.pdb

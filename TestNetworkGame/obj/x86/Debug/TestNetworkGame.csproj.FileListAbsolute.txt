@@ -1,0 +1,8 @@
+D:\Development\InteractionEngine\TestNetworkGame\bin\x86\Debug\TestNetworkGame.exe
+D:\Development\InteractionEngine\TestNetworkGame\bin\x86\Debug\TestNetworkGame.pdb
+D:\Development\InteractionEngine\TestNetworkGame\bin\x86\Debug\InteractionEngine.dll
+D:\Development\InteractionEngine\TestNetworkGame\bin\x86\Debug\InteractionEngine.pdb
+D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\TestNetworkGame.exe
+D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\TestNetworkGame.pdb

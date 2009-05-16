@@ -1,0 +1,2 @@
+D:\t09\Samples\HeightmapCollision\HeightmapCollision\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\Samples\HeightmapCollision\HeightmapCollision\Content\obj\x86\Debug\ResolveAssemblyReference.cache

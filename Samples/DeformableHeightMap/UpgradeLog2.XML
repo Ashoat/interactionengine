@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DeformableHeightMap">
+</Property><Property Name="Solution File" Value="D:\t09\DeformableHeightMap\DeformableHeightMap.sln">
+</Property><Property Name="Date" Value="Monday, April 06, 2009">
+</Property><Property Name="Time" Value="6:43 AM">
+</Property><Property Name="Log Number" Value="2">
+</Property></Properties><Event ErrorLevel="0" Project="DeformableHeightMap_Xbox360" Source="DeformableHeightMap_Xbox360\DeformableHeightMap_Xbox360.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DeformableHeightMap_Xbox360" Source="DeformableHeightMap_Xbox360\DeformableHeightMap_Xbox360.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="DeformableHeightMap.sln" Description="The solution file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="" Source="DeformableHeightMap.sln" Description="No Conversion Required">
+</Event></UpgradeLog>

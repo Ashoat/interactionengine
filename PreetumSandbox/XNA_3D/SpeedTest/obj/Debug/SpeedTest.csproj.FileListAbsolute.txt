@@ -1,0 +1,5 @@
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTest\bin\Debug\SpeedTest.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTest\bin\Debug\SpeedTest.pdb
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTest\obj\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTest\obj\Debug\SpeedTest.exe
+D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\SpeedTest\obj\Debug\SpeedTest.pdb

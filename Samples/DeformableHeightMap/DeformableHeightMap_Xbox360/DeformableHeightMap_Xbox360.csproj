@@ -1,0 +1,196 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectGuid>{D66C8B87-CC0E-41BD-B072-4B231DB66A86}</ProjectGuid>
+    <ProjectTypeGuids>{9F340DF3-2AED-4330-AC16-78AC2D9B4738};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Xbox 360</Platform>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeformableHeightMap_Xbox360</RootNamespace>
+    <AssemblyName>DeformableHeightMap_Xbox360</AssemblyName>
+    <XnaFrameworkVersion>v1.0</XnaFrameworkVersion>
+    <XnaPlatform>Xbox 360</XnaPlatform>
+    <XNAGlobalContentPipelineAssemblies>Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll;Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll;Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll;Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</XNAGlobalContentPipelineAssemblies>
+    <XNAProjectContentPipelineAssemblies>
+    </XNAProjectContentPipelineAssemblies>
+    <FileUpgradeFlags>0</FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Xbox 360' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Xbox 360\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;XBOX;XBOX360</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Xbox 360' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Xbox 360\Release</OutputPath>
+    <DefineConstants>TRACE;XBOX;XBOX360</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\source\Avatar.cs">
+      <Link>Avatar.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Avatar</Name>
+    </Compile>
+    <Compile Include="..\source\Background.cs">
+      <Link>Background.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Background</Name>
+    </Compile>
+    <Compile Include="..\source\Camera.cs">
+      <Link>Camera.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Camera</Name>
+    </Compile>
+    <Compile Include="..\source\CrossHairCamera.cs">
+      <Link>CrossHairCamera.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>CrossHairCamera</Name>
+    </Compile>
+    <Compile Include="..\source\Draw.cs">
+      <Link>Draw.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Draw</Name>
+    </Compile>
+    <Compile Include="..\source\FractalTerrain.cs">
+      <Link>FractalTerrain.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>FractalTerrain</Name>
+    </Compile>
+    <Compile Include="..\source\Game1.cs">
+      <Link>Game1.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Game1</Name>
+    </Compile>
+    <Compile Include="..\source\HeightMap.cs">
+      <Link>HeightMap.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>HeightMap</Name>
+    </Compile>
+    <Compile Include="..\source\Map.cs">
+      <Link>Map.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Map</Name>
+    </Compile>
+    <Compile Include="..\source\Math.cs">
+      <Link>Math.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Math</Name>
+    </Compile>
+    <Compile Include="..\source\Movement.cs">
+      <Link>Movement.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Movement</Name>
+    </Compile>
+    <Compile Include="..\source\Object.cs">
+      <Link>Object.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Object</Name>
+    </Compile>
+    <Compile Include="..\source\Player.cs">
+      <Link>Player.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Player</Name>
+    </Compile>
+    <Compile Include="..\source\Program.cs">
+      <Link>Program.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Program</Name>
+    </Compile>
+    <Compile Include="..\source\Projectile.cs">
+      <Link>Projectile.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Projectile</Name>
+    </Compile>
+    <Compile Include="..\source\RandomNumGen.cs">
+      <Link>RandomNumGen.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>RandomNumGen</Name>
+    </Compile>
+    <Compile Include="..\source\Rotation.cs">
+      <Link>Rotation.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Rotation</Name>
+    </Compile>
+    <Compile Include="..\source\scene.cs">
+      <Link>scene.cs</Link>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>scene</Name>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\models\projectile.fbx">
+      <Link>models\projectile.fbx</Link>
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>projectile</Name>
+    </Content>
+    <Content Include="..\models\sphere.fbx">
+      <Link>models\sphere.fbx</Link>
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>sphere</Name>
+    </Content>
+    <Content Include="..\textures\crater.bmp">
+      <Link>textures\crater.bmp</Link>
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>TextureImporter</Importer>
+      <Processor>SpriteTextureProcessor</Processor>
+      <Name>crater</Name>
+    </Content>
+    <Content Include="..\textures\heightmap.bmp">
+      <Link>textures\heightmap.bmp</Link>
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>TextureImporter</Importer>
+      <Processor>SpriteTextureProcessor</Processor>
+      <Name>heightmap</Name>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\textures\crosshair.tga">
+      <Link>textures\crosshair.tga</Link>
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>TextureImporter</Importer>
+      <Processor>SpriteTextureProcessor</Processor>
+      <Name>crosshair</Name>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA\Game Studio Express\v1.0\Microsoft.Xna.ContentPipeline.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA\Game Studio Express\v1.0\Microsoft.Xna.Common.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
