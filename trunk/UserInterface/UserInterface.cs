@@ -19,35 +19,6 @@
 
 namespace InteractionEngine.Client {
 
-    /**
-     * This class holds a GameObject ID and an event hash.
-     */
-    public class Event {
-
-        // Contains a reference to a GameObject.
-        // Used for knowing where to find the EventHashlist for this Event.
-        public int gameObjectID;
-        // Contains a string referencing this particular event.
-        // Used for figuring out which method to use on the GameObject's EventHashlist.
-        public string eventHash;
-        // Contains extra information for the event.
-        // Used when extra information needs to be passed with the event.
-        public object parameter;
-
-        /// <summary>
-        /// Constructs the event.
-        /// </summary>
-        /// <param name="id">The ID of the GameObject this Event is associated with.</param>
-        /// <param name="hash">The eventHash of this Event.</param>
-        /// <param name="parameter">Any extra information that needs to be passed with this Event.</param>
-        public Event(int gameObjectID, string hash, object parameter) {
-            this.gameObjectID = gameObjectID;
-            this.eventHash = hash;
-            this.parameter = parameter;
-        }
-
-    }
-
     /// <summary>
     /// Interface for the user interface. Can do anything it wants, as long as it can input and output from and to the user.
     /// </summary>
@@ -71,6 +42,8 @@ namespace InteractionEngine.Client {
         /// Constructor... sets up input-event-detecting thread.
         /// </summary>
         public UserInterface() {
+            inputDetector = new System.Threading.Thread(new System.Threading.ThreadStart(runRetrieveInput));
+            inputDetector.Start();
         }
 
         /// <summary>
@@ -121,13 +94,10 @@ namespace InteractionEngine.Client {
         /// Initialize stuff.
         /// </summary>
         public virtual void initialize() {
-            inputDetector = new System.Threading.Thread(new System.Threading.ThreadStart(runRetrieveInput));
-            inputDetector.Start();
+            // Default: do nothing!
         }
 
     }
-
-
 
     /// <summary>
     /// The GameObject that receives keyboard input and passes it on to whichever GameObject has the focus.
@@ -253,4 +223,5 @@ namespace InteractionEngine.Client {
         void focusLost(Keyboardable newFocusHolder);
 
     }
+
 }

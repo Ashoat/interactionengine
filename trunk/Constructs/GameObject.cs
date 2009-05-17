@@ -20,11 +20,6 @@ namespace InteractionEngine.Constructs {
     public delegate GameObject GameObjectFactory(LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader);
 
     /**
-     * This delegate holds references to methods that can be executed by Events.
-     */
-    public delegate void EventMethod(System.Object parameter);
-
-    /**
      * This interface is extended by Module types. See documentation for more information on Modules.
      */
     public interface GameObjectable : FieldContainer {
@@ -40,7 +35,7 @@ namespace InteractionEngine.Constructs {
         /// </summary>s
         /// <param name="hash">The string that represents the event.</param>
         /// <returns>The method that is callde by the event.</returns>
-        EventMethod getEvent(string hash);
+        InteractionEngine.EventHandling.EventMethod getEvent(string hash);
 
         /// <summary>
         /// Get the eventHashlist's enumerator.
@@ -67,13 +62,13 @@ namespace InteractionEngine.Constructs {
         public static System.Collections.Generic.Dictionary<string, GameObjectFactory> factoryList = new System.Collections.Generic.Dictionary<string, GameObjectFactory>();
 
         /// <summary>
-        /// Constructs a GameObject and assigns it an ID.
+        /// Constructs the GameObject on the server-side from the GameWorld.
         /// This is the constructor that should be used, unless you are a MULTIPLAYER_CLIENT. 
         /// If you are a MULTIPLAYER_CLIENT, you need an ID before construction, which you receive from the server. Therefore, you use the GameObject(LoadRegion, int) constructor.
         /// If you are a MULTIPLAYER_SERVER or a MULTIPLAYER_SERVERCLIENT this constructor will alert clients that a new GameObject has been created.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this LoadRegion belongs.</param>
-        protected GameObject(LoadRegion loadRegion) {
+        public GameObject(LoadRegion loadRegion) {
             if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You cannot use the GameObject(LoadRegion) constructor if you are a client in a multiplayer game. You need the ID of the Updatable from the server to prevent synchronization errors.");
             this.id = LoadRegion.nextFieldContainerID++;

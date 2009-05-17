@@ -9,97 +9,132 @@
 |                                          |
 |••••••••••••••••••••••••••••••••••••••••••|
 | SERVER                                   |
-| * User                             Class |
-| * Server                           Class |
+| * Client                           Class |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
-namespace InteractionEngine.Server {
+namespace InteractionEngine.Networking {
 
     /**
-     * This class represents a networking client. It is only ever touched on the server.
+     * This class represents a client in the InteractionEngine. It is the focal point for networking on the server-side.
+     * This class is only ever touched on the server, with the exception of the portNumber.
      */
     public class Client {
 
-        #region Networking
+        #region Static Server-Wide Components
 
-        // Contains the port number we are using.
-        // Used so the TcpListener knows which port to listen on for connections.
-        private static int portNumber = 1337;
         // Contains a TcpListener that will monitor the port for new connections.
-        // Used so that the server can catch clients who are trying
+        // Used so that clients can open a connection with the server.
         private static System.Net.Sockets.TcpListener tcpListener;
-        // Contains a list of User classes.
-        // Used for looping through all the users.
+        // Contains a list of all the clients currently connected to this server.
+        // Used for iterating through clients.
         internal static System.Collections.Generic.List<Client> clientList = new System.Collections.Generic.List<Client>();
-        // Contains a reference to a connection to a User.
-        // Used for interfacing across a network with a client.
-        private readonly System.Net.Sockets.TcpClient tcpClient;
+        // Contains a list of events that need to be triggered when a new Client is established.
+        // Used so that the GameWorld can deal with new Clients however it wants.
+        public static System.Collections.Generic.List<EventHandling.Event> onJoin = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
+        // Contains a list of Events that need to be triggered when a Client quits.
+        // Used so that the GameWorld can deal with Client quitting however it wants.
+        public static System.Collections.Generic.List<EventHandling.Event> onQuit = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
 
         /// <summary>
-        /// Start listening on a set port (1337 by default).
+        /// Start listening for new clients to connect using the set port. 
+        /// This method can only be called by a server's GameWorld!
         /// </summary>
         public static void startListening() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT) {
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            }
+            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("The game developer screwed up. They shouldn't be telling a client to start listening for connections!");
             if (tcpListener != null) return;
             tcpListener = new System.Net.Sockets.TcpListener(portNumber);
         }
 
         /// <summary>
-        /// Start listening on a specified port.
+        /// Stop listening for new clients to connect.
         /// </summary>
-        /// <param name="port">The port to listen on.</param>
-        public static void startListening(int port) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT) {
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            }
-            if (tcpListener != null) return;
-            portNumber = port;
-            tcpListener = new System.Net.Sockets.TcpListener(portNumber);
+        public static void stopListening() {
+            tcpListener = null;
         }
 
         /// <summary>
-        /// Return a new client.
+        /// Contains the default port that will be used if none is provided.
+        /// Used for opening up a socket.
+        /// If you are currently listening for connections, setting this will stop that process. You will have to restart it.
         /// </summary>
-        /// <param name="tcpClient">The connection we are establishing the Client class around.</param>
+        private static int portNumber = 1337;
+        public static int listeningPort {
+            get {
+                return portNumber;
+            }
+            set {
+                stopListening();
+                portNumber = value;
+            }
+        }
+
+        /// <summary>
+        /// Check the TcpListener for new connections. 
+        /// This method can only be called by a server's InteractionEngine!
+        /// </summary>
+        internal static void checkForNewConnections() {
+            if (tcpListener == null) return;
+            while (tcpListener.Pending()) {
+                Client newClient = new Client(tcpListener.AcceptTcpClient());
+                clientList.Add(newClient);
+                // Trigger the onJoin Events.
+                foreach (EventHandling.Event eventObject in onJoin)
+                    GameWorld.GameWorld.addEvent(eventObject);
+            }
+        }
+
+        #endregion
+
+        #region Networking
+
+        // Contains a reference to the TcpClient connection that defines this class.
+        // Used for communicating to the client this class represents.
+        private readonly System.Net.Sockets.TcpClient tcpClient;
+        
+        /// <summary>
+        /// Construct a new Client using a TcpClient object.
+        /// </summary>
+        /// <param name="tcpClient">The connection to build the Client class around.</param>
         protected Client(System.Net.Sockets.TcpClient tcpClient) {
             this.tcpClient = tcpClient;
         }
 
         /// <summary>
-        /// This method checks for a new 
-        /// </summary>
-        static internal void checkForNewUser() {
-            if (tcpListener == null) return; 
-            while (tcpListener.Pending()) {
-                clientList.Add(new Client(tcpListener.AcceptTcpClient()));
-            }
-        }
-
-        /// <summary>
-        /// Sends information to this client. Only to be used by the server.
+        /// Send information to this client. 
         /// </summary>
         /// <param name="information">An array of bytes to be passed to a client.</param>
         internal virtual void send(byte[] information) {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             tcpClient.GetStream().Write(information, 0, information.Length);
         }
 
+        // Contains a constant specifying what increment of bytes to read by.
+        // Used to allow easy changing of this for the receive() method.
+        private const int READ_INCREMENT = 1024;
+
         /// <summary>
-        /// Receives a stream of bytes from the client. Returns in increments of kilobytes.
+        /// Read a list of events from this client.
         /// </summary>
-        /// <returns>A byte array containing the received information.</returns>
-        internal virtual byte[] receive() {
-            byte[] returnBytes = new byte[0];
-            while (myNetworkStream.DataAvailable) {
-                byte[] loopBytes = new byte[1024];
-                tcpClient.GetStream().Read(loopBytes, 0, loopBytes.Length);
-                byte[] newReturnBytes = new byte[returnBytes.Length + loopBytes.Length];
-                returnBytes.CopyTo(newReturnBytes, 0);
-                loopBytes.CopyTo(newReturnBytes, returnBytes.Length);
-                returnBytes = newReturnBytes;
+        /// <returns>A list of events that we got from this client.</returns>
+        internal System.Collections.Generic.List<EventHandling.Event> getEvents() {
+            System.Collections.Generic.List<EventHandling.Event> events = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();            
+            // Loop through the stream and get the byte array by merging a bunch of smaller arrays
+            while (tcpClient.GetStream().DataAvailable) {
+                // The first four bytes are the GameObjectID.
+                byte[] gameObjectIdBytes = new byte[4];
+                tcpClient.GetStream().Read(gameObjectIdBytes, 0, 4);
+                int gameObjectID = System.Convert.ToInt32(gameObjectIdBytes[0]) << 24 + System.Convert.ToInt32(gameObjectIdBytes[1]) << 16 + System.Convert.ToInt32(gameObjectIdBytes[2]) << 8 + System.Convert.ToInt32(gameObjectIdBytes[3]);
+                // I have absolutely no idea how to read a string in bytes.
+                string eventHash = "wtf";  
+                // Get the parameter.
+                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                object parameter = formatter.Deserialize(tcpClient.GetStream());
+                // Instantiate an Event and add it to the list 
+                events.Add(new EventHandling.Event(gameObjectID, eventHash, parameter));
             }
-            return returnBytes;
+            return events;
         }
 
         #endregion
@@ -216,15 +251,6 @@ namespace InteractionEngine.Server {
         }
 
         #endregion
-
-    }
-
-    /**
-     * This class represents a networking server. It is only ever touched on the client.
-     */
-    public class Server {
-
-
 
     }
 
