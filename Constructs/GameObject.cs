@@ -62,13 +62,52 @@ namespace InteractionEngine.Constructs {
         public static System.Collections.Generic.Dictionary<string, GameObjectFactory> factoryList = new System.Collections.Generic.Dictionary<string, GameObjectFactory>();
 
         /// <summary>
-        /// Constructs the GameObject on the server-side from the GameWorld.
-        /// This is the constructor that should be used, unless you are a MULTIPLAYER_CLIENT. 
-        /// If you are a MULTIPLAYER_CLIENT, you need an ID before construction, which you receive from the server. Therefore, you use the GameObject(LoadRegion, int) constructor.
+        /// Constructs the GameObject from the GameWorld on the server-side.
+        /// This method is protected, as we don't know which GameObject to instantiate at this point. Commented pseudocode is inside to give an example of what to do in the child "constructor".
+        /// This method isn't an actual constructor because it
         /// If you are a MULTIPLAYER_SERVER or a MULTIPLAYER_SERVERCLIENT this constructor will alert clients that a new GameObject has been created.
+        /// If you are a MULTIPLAYER_CLIENT, nothing will happen; you will wait for an update from the server.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this LoadRegion belongs.</param>
-        public GameObject(LoadRegion loadRegion) {
+        /// <returns>
+        /// An integer containing the assigned ID of the GameObject. 
+        /// If you are a MULTIPLAYER_CLIENT, this will return zero; you will have to wait for the server to add your GameObject before you can interact with it.
+        /// If you need to do some post-instantiation work with this GameObject, make an if(id > 0) block in the current EventMethod 
+        /// and add a new EventMethod with that same block's contents to the Server's onCreateObject.
+        /// </returns>
+        public static int instantiateGameObject(LoadRegion loadRegion) {
+            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
+            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return 0;
+            // Otherwise, we are a server. Let's go!
+            GameObject returnObject = new this(loadRegion);
+            this.id = loadRegion.nextFieldID;
+            loadRegion.nextFieldID++;
+            
+            GameWorld.GameWorld.addObject(this);
+            this.loadRegion = loadRegion.addObject(this.id);
+            // Add the CREATE_OBJECT so that all the clients get the update.
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.SINGLE_PLAYER) {
+                System.IO.MemoryStream cache = new System.IO.MemoryStream();
+                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(cache);
+                writer.Write(GameWorld.GameWorld.CREATE_OBJECT);
+                writer.Write(loadRegion.id);
+                writer.Write(this.getClassHash());
+                writer.Write(this.id);
+                loadRegion.writeUpdate(cache.ToArray());
+            }
+        }
+
+        private GameObject(LoadRegion loadRegion) {
+
+        }
+
+        /// <summary>
+        /// Constructs the GameObject from the GameWorld on the server-side.
+        /// If you are a MULTIPLAYER_SERVER or a MULTIPLAYER_SERVERCLIENT this constructor will alert clients that a new GameObject has been created.
+        /// If you are a MULTIPLAYER_CLIENT, nothing will happen; you will wait for an update from the server.
+        /// </summary>
+        /// <param name="loadRegion">The LoadRegion to which this LoadRegion belongs.</param>
+        /*public GameObject(LoadRegion loadRegion) {
             if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You cannot use the GameObject(LoadRegion) constructor if you are a client in a multiplayer game. You need the ID of the Updatable from the server to prevent synchronization errors.");
             this.id = LoadRegion.nextFieldContainerID++;
@@ -85,7 +124,7 @@ namespace InteractionEngine.Constructs {
                 writer.Write(this.id);
                 loadRegion.writeUpdate(cache.ToArray());
             }
-        }
+        }*/
 
         /// <summary>
         /// Constructs a GameObject and assigns it an ID.
