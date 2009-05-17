@@ -25,28 +25,32 @@ namespace InteractionEngine.Constructs {
         internal static int nextFieldContainerID = 0;
         // Contains the lowest available ID for an Updatable.
         // Used for giving every Updatable a unique ID.
-        internal static int nextFieldID = 0;
-        // Contains the ID of this LoadRegion. Must be positive. 
-        // These are the same across the networking ONLY because order of LoadRegion construction must be guaranteed. MAKE SURE ORDER IS GUARANTEED!
+        internal int nextFieldID = 0;
+        // Contains the ID of this LoadRegion. Must be positive.
         // Used for passing a reference to this LoadRegion across a network.
         public readonly int id;
 
         /// <summary>
-        /// Construct the LoadRegion.
+        /// Construct the LoadRegion from the GameWorld on the server-side. 
+        /// This method should only be called by EventMethods that are run exclusively on a server! Don't screw this up.
+        /// EventMethods triggered by the server are exclusive to Client.onJoin and Client.onQuit. So you can only create LoadRegions before networking begins, or when a client joins or quits.
         /// </summary>
         public LoadRegion() : base() {
             if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Oops, somebody screwed up. You can't instantiate LoadRegions without specified IDs from a client.");
+                throw new System.Exception("The game developer screwed up. They shouldn't be calling a LoadRegion constructor on the Client-side without an ID to assign it.");
             this.id = nextFieldContainerID;
             nextFieldContainerID++;
-            objects = new Datatypes.UpdatableList(this);
         }
 
-        public LoadRegion(int id) {
-            if (GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Oops, somebody screwed up. You can't instantiate LoadRegions with specified IDs from a server.");
+        /// <summary>
+        /// Construct the LoadRegion on the client-side.
+        /// This method should only be called by the client InteractionEngine when it receives a CREATE_REGION transfer code.
+        /// </summary>
+        /// <param name="id">The ID to assign this LoadRegion, provided by the server.</param>
+        internal LoadRegion(int id) : base() {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.id = id;
-            objects = new Datatypes.UpdatableList(this);
         }
 
         #region Object List
@@ -56,17 +60,15 @@ namespace InteractionEngine.Constructs {
          * 
          * Every LoadRegion has GameObjects located in it; this is a list of GameObjects.
          */
-        //TODO: changing from one loadregion to another
-        private readonly Datatypes.UpdatableList objects;
+        private readonly System.Collections.Generic.List<int> objects = new System.Collections.Generic.List<int>();
 
         /// <summary>
         /// This method is triggered when a GameObject enters this LoadRegion.
         /// </summary>
         /// <param name="objectId">The id of the GameObject that enters the room.</param>
         /// <returns>A reference to this LoadRegion, so that the GameObject can assign it to its field.</returns>
-        public LoadRegion addObject(int objectId) {
-            this.objects.add(new Datatypes.UpdatableInteger(this, objectId));
-            return this;
+        internal void addObject(int objectId) {
+            this.objects.Add(objectId);
         }
 
         /// <summary>
@@ -74,8 +76,8 @@ namespace InteractionEngine.Constructs {
         /// Does not set the GameObject's LoadRegion field to null.
         /// </summary>
         /// <param name="objectId">The id of the GameObject that leaves the room.</param>
-        public void removeObject(int objectId) {
-            this.objects.remove(objectId);
+        internal void removeObject(int objectId) {
+            this.objects.Remove(objectId);
         }
 
         /// <summary>
@@ -84,24 +86,15 @@ namespace InteractionEngine.Constructs {
         /// <param name="objectId">The id of the GameObject we are checking for.</param>
         /// <returns>True if the list contains the value, false otherwise.</returns>
         public bool containsObject(int objectId) {
-            return this.objects.contains(objectId);
+            return this.objects.Contains(objectId);
         }
 
         /// <summary>
-        /// This method returns the GameObject from this LoadRegion.
-        /// </summary>
-        /// <param name="id">The id of the GameObject you want to retrieve.</param>
-        /// <returns>The GameObject being returned.</returns>
-        public Constructs.GameObjectable getObject(int id) {
-            return GameWorld.GameWorld.getObject(((Datatypes.UpdatableInteger)this.objects.get(id)).value);
-        }
-
-        /// <summary>
-        /// This method returns the number of GameObjects in this LoadRegions.
+        /// This method returns the number of GameObjects in this LoadRegion.
         /// </summary>
         /// <returns>The number of GameObjects in this LoadRegion.</returns>
         public int getObjectCount() {
-            return this.objects.getLength();
+            return this.objects.Count;
         }
 
         #endregion
@@ -209,10 +202,6 @@ namespace InteractionEngine.Constructs {
         }
 
         #endregion
-
-        // move from one LoadRegion to another!
-
-        // step 1: get a request for LR #3
 
     }
 

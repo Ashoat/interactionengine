@@ -35,11 +35,13 @@ namespace InteractionEngine.GameWorld {
          * XNA Stuff
          *                 
          * Any field whose type is in the namespace "Microsoft.Xna.*" goes in here.
-         * We want to eventually deprecate this. 
          */
         // Contains a reference to the XNA Game object.
         // Used by various XNA components. See XNA documentation.
         public static InteractionGame game;
+        // Contains a reference to the XNA object for the local gamer, which contains methods for sending and recieving data.
+        // Used for sending and recieving data.
+        internal static Microsoft.Xna.Framework.Net.LocalNetworkGamer gamer;
         // Contains the current game time.
         // Used for letting GameObjects know what the time is (it's game time).
         private static Microsoft.Xna.Framework.GameTime gameTimeField;
@@ -48,28 +50,6 @@ namespace InteractionEngine.GameWorld {
         public static Microsoft.Xna.Framework.GameTime gameTime {
             get { return gameTimeField; }
         }
-
-        #endregion
-
-        #region Networking Configuration
-
-        /**
-         * NETWORKING CONFIGURATION
-         *                 
-         * This is where you configure networking information.
-         */
-        // Contains an enum telling the InteractionEngine what status this user is running as.
-        // Used for distinguishing server/client-specific actions within the run loop.
-        public enum Status {
-            SINGLE_PLAYER,
-            MULTIPLAYER_SERVER,
-            MULTIPLAYER_CLIENT,
-            MULTIPLAYER_SERVERCLIENT
-        }
-        public static Status status;
-        // Contains a reference to the local Server.User.
-        // Used for passing the Server.User to methods when calling them locally.
-        public static InteractionEngine.Server.User user;
 
         #endregion
 
@@ -83,6 +63,18 @@ namespace InteractionEngine.GameWorld {
         // Contains a boolean telling the GameWorld whether or not the run loop needs to be run.
         // Used for starting and ending the use of the GameWorld class. 
         public static bool gameRunning = true;
+        // Contains an enum telling the InteractionEngine what status this user is running as.
+        // Used for distinguishing server/client-specific actions within the run loop.
+        public enum Status {
+            SINGLE_PLAYER,
+            MULTIPLAYER_SERVER,
+            MULTIPLAYER_CLIENT,
+            MULTIPLAYER_SERVERCLIENT
+        }
+        public static Status status;
+        // Contains a reference to the local Server.User.
+        // Used for passing the Server.User to methods when calling them locally.
+        public static InteractionEngine.Server.User user;
         // Contains a reference to the UI class.
         // Used by the client to execute output.
         public static Client.UserInterface userInterface;
@@ -94,127 +86,88 @@ namespace InteractionEngine.GameWorld {
         public static void run(Microsoft.Xna.Framework.GameTime gameTime) {
             gameTimeField = gameTime;
             if (status == Status.SINGLE_PLAYER) {
-                // Get and process input from the local client
-                System.Collections.Generic.List<Client.Event> localEvents = userInterface.input();
-                processEvents(localEvents);
-                // Run repeaters
-                processRepeaters();
+                // Get Events from the GameWorld
+                System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
+                // Get Events from the InteractionEngine
+                events.AddRange(getEvents());
+                // Process the Events locally
+                processEvents(events);
                 // Output graphics
                 userInterface.output();
              } else if (status == Status.MULTIPLAYER_SERVERCLIENT) {
-                // Get and process input from the local client
-                System.Collections.Generic.List<Client.Event> localEvents = userInterface.input();
-                processEvents(localEvents);
-                // Get and process input from remote clients
-                System.Collections.Generic.List<Client.Event> remoteEvents = readInput();
-                processEvents(remoteEvents);
+                // Get Events from the GameWorld
+                System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
+                // Get Events from the InteractionEngine
+                events.AddRange(getEvents());
+                // Process the Events locally
+                processEvents(events);
+                // Get and handle Events from Clients
+                handleInput();
                 // Send updates to clients
                 sendUpdate();
-                // Run repeaters
-                processRepeaters();
                 // Output graphics
                 userInterface.output();
             } else if (status == Status.MULTIPLAYER_CLIENT) {
-                // Get and process input from the local client
-                System.Collections.Generic.List<Client.Event> localEvents = userInterface.input();
-                // Send input to server
-                sendInput(localEvents);
-                // Process input locally
-                processEvents(localEvents);
+                // Get Events from the GameWorld
+                System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
+                // Get Events from the InteractionEngine
+                events.AddRange(getEvents());
+                // Send Events to be processed remotely by the server
+                sendInput(events);
+                // Process the Events locally
+                processEvents(events);
                 // Recieve and process updates from the server
                 receiveUpdate();
-                // Run repeaters
-                processRepeaters();
                 // Output graphics
                 userInterface.output();
             } else if (status == Status.MULTIPLAYER_SERVER) {
-                // Get and process input from remote clients
-                System.Collections.Generic.List<Client.Event> remoteEvents = readInput();
-                processEvents(remoteEvents);
+                // Get and handle Events from Clients
+                handleInput();
                 // Send updates to clients
                 sendUpdate();
-                // Run repeaters
-                processRepeaters();
             }
+        }
+
+        /// <summary>
+        /// Process Events that have been generated locally and call methods related to them. 
+        /// </summary>
+        /// <param name="events">The list of events to process.</param>
+        private static void processEvents(System.Collections.Generic.List<EventHandling.Event> events) {
+            foreach (EventHandling.Event eventObject in events)
+                GameWorld.getObject(eventObject.gameObjectID).getEvent(eventObject.eventHash)(null, eventObject.parameter);
         }
 
         #endregion
 
-        #region Repeating Methods
+        #region Event Cache
 
         /**
-         * REPEATER CLASS
+         * EVENT CACHE
          * 
-         * If a method needs to be repeated every run through the game, then an in-game method can insert a Repeater into the Repeater list.
-         * This class holds a RepeatMethod, how often it must be repeated, and the maximum number of times it can be repeated.
+         * This is a way for the InteractionEngine (as opposed to the GameWorld) to add Events to be processed by the GameWorld.
+         * On the other hand, the GameWorld using a UserInterface object to get Events for processing.
          */
-        public class Repeater {
 
-            //Constructor info
-            internal RepeatMethod repeatMethod;
-            internal int repeatTime = 0;
-
-            //State info
-            internal System.DateTime lastRepeat = new System.DateTime();
-            internal int repeatsLeft = 0;
-
-            /**
-             * Instantiate the repeater.
-             * @param repeatMethod The method that will be repeated.
-             * @param repeatTime The time, in milliseconds, between repeats.
-             * @param maxRepeats The maximum number of times this method can be run.
-             */
-            public Repeater(RepeatMethod repeatMethod, int repeatTime, int maxRepeats) {
-                this.repeatMethod = repeatMethod;
-                this.repeatTime = repeatTime;
-                this.repeatsLeft = maxRepeats;
-            }
-
-        }
-
-        // Contains references to any methods that we want to be automatically repeated every run through the loop.
-        // Used for runtime animation.
-        private static System.Collections.Generic.List<Repeater> repeaterList = new System.Collections.Generic.List<Repeater>();
+        // Contains a list of events that need to be executed on every run of the main game loop. The InteractionEngine adds Events here.
+        // Used so that the InteractionEngine can trigger Events on certain events; ie. the GameWorld tells the InteractionEngine to trigger an Event when a new client joins a game.
+        private static System.Collections.Generic.List<EventHandling.Event> eventCache = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
 
         /// <summary>
-        /// Add a repeater. Can only be removed by the method it calls, or by eclipsing its repeatTime or maxRepeats.
+        /// This method adds an Event to the EventCache.
         /// </summary>
-        /// <param name="repeater">The repeater that is being added.</param>
-        public static void addRepeater(Repeater repeater) {
-            repeaterList.Add(repeater);
+        /// <param name="theEvent">The Event to add to the EventCache.</param>
+        internal static void addEvent(EventHandling.Event theEvent) {
+            eventCache.Add(theEvent);
         }
 
         /// <summary>
-        /// Private method to remove a repeater.
+        /// This method gets and clears the EventCache.
         /// </summary>
-        /// <param name="repeater">The repeater to remove.</param>
-        private static void removeRepeater(int id) {
-            repeaterList.RemoveAt(id);
-        }
-
-        /// <summary>
-        /// Process the list of repeaters.
-        /// </summary>
-        private static void processRepeaters() {
-            System.DateTime currentTime = new System.DateTime();
-            // For every repeater...
-            for (int i = 0; i < repeaterList.Count; ) {
-                if ((currentTime.Ticks - repeaterList[i].lastRepeat.Ticks) / System.TimeSpan.TicksPerMillisecond <= 0) {
-                    // Call the method. If it tells use to, remove the repeater.
-                    if (repeaterList[i].repeatMethod()) {
-                        removeRepeater(i);
-                        continue;
-                    }
-                    repeaterList[i].lastRepeat = new System.DateTime();
-                    // If no more time is left, remove the repeater.
-                } else removeRepeater(i);
-                // If no more repeats can be made, remove the repeater.
-                if (--repeaterList[i].repeatsLeft <= 0) {
-                    removeRepeater(i);
-                    continue;
-                }
-                i++;
-            }
+        /// <returns>All the Events in the EventCache.</returns>
+        private static System.Collections.Generic.List<EventHandling.Event> getEvents() {
+            System.Collections.Generic.List<EventHandling.Event> returnCache = eventCache;
+            eventCache = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
+            return returnCache;
         }
 
         #endregion
@@ -229,29 +182,26 @@ namespace InteractionEngine.GameWorld {
 
         /// <summary>
         /// Transfer code constants.
-        /// These constants are the first information passed in an update from the server. 
-        /// They help determine how the client's GameWorld needs to handle that update.
+        /// These constants are the first information passed in an update packet from the server. 
+        /// They help determine how the client's InteractionEngine needs to handle that update.
         /// </summary>
-        public const byte CREATE_OBJECT = 0;    // This code tells the GameWorld to instantiate a new GameObject using that GameObject's factory.
-        public const byte DELETE_OBJECT = 1;    // This code tells the GameWorld to delete a GameObject and to remove its reference from its LoadRegion.
-        public const byte UPDATE_FIELD = 2;     // This code tells the GameWorld to update an Updatable.
+        public const byte CREATE_OBJECT = 0;    // This code tells the client to instantiate a new GameObject using that GameObject's factory.
+        public const byte CREATE_REGION = 1;    // This code tells the client to instantiate a new LoadRegion.
+        public const byte DELETE_REGION = 2;    // This code tells the client to delete a LoadRegion.
+        public const byte DELETE_OBJECT = 3;    // This code tells the client to delete a GameObject and to remove its reference from its LoadRegion.
+        public const byte UPDATE_FIELD = 4;     // This code tells the client to update an Updatable.
+        public const byte MOVE_OBJECT = 5;      // This code tells the client to move an object from one LoadRegion to another.
+
+        private static Networking.Server server;
 
         /// <summary>
         /// Send a byte array to the server containing called events. This method is only used on the client.
         /// </summary>
         /// <param name="events">Events that have been called by this client.</param>
-        private static void sendInput(System.Collections.Generic.List<Client.Event> events) {
-            foreach (Client.Event eventObject in events) {
-                Microsoft.Xna.Framework.Net.PacketWriter packetwriter = new Microsoft.Xna.Framework.Net.PacketWriter();
-                // Write the informaton
-                packetwriter.Write(eventObject.gameObjectID);
-                packetwriter.Write(eventObject.eventHash);
-                // Write the parameter
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                formatter.Serialize(packetwriter.BaseStream, eventObject.parameter);
-                // Send the information to the server
-                game.session.LocalGamers[0].SendData(packetwriter, Microsoft.Xna.Framework.Net.SendDataOptions.Reliable, game.session.Host);
-            }
+        private static void sendInput(System.Collections.Generic.List<EventHandling.Event> events) {
+            if (server == null) return;
+            foreach (EventHandling.Event eventObject in events)
+                server.sendEvent(eventObject);
         }
 
         /// <summary>
@@ -318,31 +268,18 @@ namespace InteractionEngine.GameWorld {
          *                 
          * These methods handle communication from the server side.
          */
-        // Contains a dictionary pointing all NetworkGamer objects to their corresponding Server.User objects. Local gamer is not included.
-        // Used for converting the information from the XNA recieve method into the a format compatible with the Interaction Engine.
-        private static System.Collections.Generic.Dictionary<Microsoft.Xna.Framework.Net.NetworkGamer, InteractionEngine.Server.User> userHashlist = new System.Collections.Generic.Dictionary<Microsoft.Xna.Framework.Net.NetworkGamer, Server.User>();
 
         /// <summary>
-        /// Process the byte array received from the client. This method is only used on the server.
+        /// Get and process all Events sent by Clients.
         /// </summary>
-        /// <param name="reader">A PacketReader containing all data recieved.</param>
-        private static System.Collections.Generic.List<Client.Event> readInput(Microsoft.Xna.Framework.Net.PacketReader reader) {
-            System.Collections.Generic.List<Client.Event> returnList = new System.Collections.Generic.List<InteractionEngine.Client.Event>();
-            while (game.session.LocalGamers[0].IsDataAvailable) {
-                // Instantiate the reader and the gamer objects, and recieve the data.
-                Microsoft.Xna.Framework.Net.PacketReader preader = new Microsoft.Xna.Framework.Net.PacketReader();
-                Microsoft.Xna.Framework.Net.NetworkGamer otherGamer;
-                game.session.LocalGamers[0].ReceiveData(preader, out otherGamer);
-                // Get the information
-                int gameObjectID = preader.ReadInt32();
-                string eventHash = preader.ReadString();
-                // Get the parameter
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                object parameter = formatter.Deserialize(preader.BaseStream);
-                // Construct an event
-                returnList.Add(new InteractionEngine.Client.Event(gameObjectID, eventHash, parameter));
+        private static void handleInput() {
+            foreach (Networking.Client client in Networking.Client.clientList) {
+                // Get the events.
+                System.Collections.Generic.List<EventHandling.Event> events = client.getEvents();
+                // Process the events.
+                foreach (EventHandling.Event eventObject in events)
+                    GameWorld.getObject(eventObject.gameObjectID).getEvent(eventObject.eventHash)(client, eventObject.parameter);
             }
-            return returnList;
         }
 
         /// <summary>
@@ -360,15 +297,6 @@ namespace InteractionEngine.GameWorld {
                 Constructs.FieldContainer region = pair.Value;
                 if (region is Constructs.LoadRegion) ((Constructs.LoadRegion)region).resetCache();
             }
-        }
-
-        /// <summary>
-        /// Process events and call methods related to them. This is a server method.
-        /// </summary>
-        /// <param name="events">The list of events to process.</param>
-        private static void processEvents(System.Collections.Generic.List<Client.Event> events) {
-            foreach (Client.Event eventObject in events)
-                GameWorld.getObject(eventObject.gameObjectID).getEvent(eventObject.eventHash)(eventObject.parameter);
         }
 
         #endregion

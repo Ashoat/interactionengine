@@ -16,20 +16,7 @@
 
 namespace InteractionEngine.Client {
 
-    /**
-     * Implemented by GameObjects that can be interacted with.
-     */
-    public interface Interactable : Graphable {
-
-        /// <summary>
-        /// Gets an Event from this Interactable module.
-        /// </summary>
-        /// <param name="invoker">The invoker of this Event. If you have multiple possible invokers (ie. mouse click and mouse over) then we recommend you define constants for them.</param>
-        /// <param name="user">The User that invokes this Event. Needed often for associating User invokers with GameObject invokers.</param>
-        /// <returns>An Event.</returns>
-        Event getEvent(int invoker);
-
-    }
+    
 
     /**
      * Holds all information and methods regarding how a GameObject looks and is displayed.
