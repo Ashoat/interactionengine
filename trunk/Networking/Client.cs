@@ -88,9 +88,16 @@ namespace InteractionEngine.Networking {
 
         #region Networking
 
+        // Contains a static reference to a BinaryFormatter.
+        // Used for serialization/deserialization of objects.
+        private static System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
         // Contains a reference to the TcpClient connection that defines this class.
         // Used for communicating to the client this class represents.
         private readonly System.Net.Sockets.TcpClient tcpClient;
+        // Contains a BinaryReader that wraps the above TcpClient.
+        // Used so that we don't have to individually encode each byte into the stream.
+        private readonly System.IO.BinaryReader reader;
         
         /// <summary>
         /// Construct a new Client using a TcpClient object.
@@ -98,6 +105,7 @@ namespace InteractionEngine.Networking {
         /// <param name="tcpClient">The connection to build the Client class around.</param>
         protected Client(System.Net.Sockets.TcpClient tcpClient) {
             this.tcpClient = tcpClient;
+            this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
         }
 
         /// <summary>
@@ -119,6 +127,16 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <returns>A list of events that we got from this client.</returns>
         internal System.Collections.Generic.List<EventHandling.Event> getEvents() {
+            System.Collections.Generic.List<EventHandling.Event> events = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
+            // TODO: multithread this, since it will probably block during the last iteration of this loop.
+            while (tcpClient.GetStream().DataAvailable) {
+                int gameObjectID = reader.ReadInt32();
+                string eventHash = reader.ReadString();
+                object parameter = formatter.Deserialize(tcpClient.GetStream());
+                events.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter);
+            }
+            return events;
+            /* OLD CODE THAT ASHOAT SHOULD REMOVE AS SOON AS HE VERIFIES MINE
             System.Collections.Generic.List<EventHandling.Event> events = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();            
             // Loop through the stream and get the byte array by merging a bunch of smaller arrays
             while (tcpClient.GetStream().DataAvailable) {
@@ -135,6 +153,7 @@ namespace InteractionEngine.Networking {
                 events.Add(new EventHandling.Event(gameObjectID, eventHash, parameter));
             }
             return events;
+            */
         }
 
         #endregion

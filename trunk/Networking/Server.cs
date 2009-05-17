@@ -20,9 +20,17 @@ namespace InteractionEngine.Networking {
      */
     public class Server {
 
+
+        // Contains a static reference to a BinaryFormatter.
+        // Used for serialization/deserialization of objects.
+        private static System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
         // Contains a reference to the TcpClient connection that defines this class.
         // Used for communicating to the server this class represents.
         private readonly System.Net.Sockets.TcpClient tcpClient;
+        // Contains a BinaryReader that wraps the above TcpClient.
+        // Used so that we don't have to individually encode each byte into the stream.
+        private readonly System.IO.BinaryWriter writer;
 
         /// <summary>
         /// Connect to a server at the specified IP.
@@ -30,6 +38,7 @@ namespace InteractionEngine.Networking {
         /// <param name="ipAddress">The IP address where we can find the server at.</param>
         public Server(int ipAddress) {
             tcpClient = new System.Net.Sockets.TcpClient(new System.Net.IPEndPoint((long)ipAddress, Client.listeningPort));
+            writer = new System.IO.BinaryWriter(tcpClient.GetStream());
         }
 
         /// <summary>
@@ -37,6 +46,12 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="eventObject">The Event to send across.</param>
         public void sendEvent(EventHandling.Event eventObject) {
+            // The simplest way would, of course, be to mark Event with [Serializable], but hey,
+            // at least this takes a minimal amount of manual work.
+            writer.Write(eventObject.gameObjectID);
+            writer.Write(eventObject.eventHash);
+            formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);
+            /*
             // The first four bytes are the GameObjectID.
             byte[] gameObjectIdBytes = new byte[4];
             int id = eventObject.gameObjectID;
@@ -52,6 +67,7 @@ namespace InteractionEngine.Networking {
             // Write the parameter.
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);
+             */
         }
 
     }
