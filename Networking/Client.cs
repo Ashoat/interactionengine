@@ -91,18 +91,16 @@ namespace InteractionEngine.Networking {
         // Contains a static reference to a BinaryFormatter.
         // Used for serialization/deserialization of objects.
         private static System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
         // Contains a reference to the TcpClient connection that defines this class.
         // Used for communicating to the client this class represents.
         private readonly System.Net.Sockets.TcpClient tcpClient;
         // Contains a BinaryReader that wraps the above TcpClient.
         // Used so that we don't have to individually encode each byte into the stream.
         private readonly System.IO.BinaryReader reader;
-
         // Contains the thread that handles reading of Events from the network stream.
         // Used for concurrently reading events so that we don't block the main game loop waiting for one to completely arrive.
         private System.Threading.Thread eventReaderThread;
-        // Contains the list of events that have been read by the eventReaderThread.
+        // Contains the list of Events that have been read by the eventReaderThread.
         // Used for passing events from the reader thread to the main game thread.
         private System.Collections.Generic.List<EventHandling.Event> eventBuffer = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
         
@@ -126,10 +124,6 @@ namespace InteractionEngine.Networking {
             tcpClient.GetStream().Write(information, 0, information.Length);
         }
 
-        // Contains a constant specifying what increment of bytes to read by.
-        // Used to allow easy changing of this for the receive() method.
-        private const int READ_INCREMENT = 1024;
-
         /// <summary>
         /// Continuously reads events from the network stream... intended to be run asynchronously by the eventReaderThread.
         /// </summary>
@@ -139,8 +133,8 @@ namespace InteractionEngine.Networking {
                 int gameObjectID = reader.ReadInt32();
                 string eventHash = reader.ReadString();
                 object parameter = formatter.Deserialize(tcpClient.GetStream());
-                lock (this.eventBuffer) {
-                    this.eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
+                lock (eventBuffer) {
+                    eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
                 }
             }
         }
@@ -150,31 +144,12 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <returns>A list of events that we got from this client.</returns>
         internal System.Collections.Generic.List<EventHandling.Event> getEvents() {
-            // TODO we would prefer not to have to create a new list every time.
             System.Collections.Generic.List<EventHandling.Event> events = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
             lock (eventBuffer) {
                 events.AddRange(eventBuffer);
                 eventBuffer.Clear();
             }
             return events;
-            /* OLD CODE THAT ASHOAT SHOULD REMOVE AS SOON AS HE VERIFIES MINE
-            System.Collections.Generic.List<EventHandling.Event> events = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();            
-            // Loop through the stream and get the byte array by merging a bunch of smaller arrays
-            while (tcpClient.GetStream().DataAvailable) {
-                // The first four bytes are the GameObjectID.
-                byte[] gameObjectIdBytes = new byte[4];
-                tcpClient.GetStream().Read(gameObjectIdBytes, 0, 4);
-                int gameObjectID = System.Convert.ToInt32(gameObjectIdBytes[0]) << 24 + System.Convert.ToInt32(gameObjectIdBytes[1]) << 16 + System.Convert.ToInt32(gameObjectIdBytes[2]) << 8 + System.Convert.ToInt32(gameObjectIdBytes[3]);
-                // I have absolutely no idea how to read a string in bytes.
-                string eventHash = "wtf";  
-                // Get the parameter.
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                object parameter = formatter.Deserialize(tcpClient.GetStream());
-                // Instantiate an Event and add it to the list 
-                events.Add(new EventHandling.Event(gameObjectID, eventHash, parameter));
-            }
-            return events;
-            */
         }
 
         #endregion
@@ -244,49 +219,49 @@ namespace InteractionEngine.Networking {
         /**
          * PERMISSION LIST
          * 
-         * Contains a list of GameObjects that this User is allowed to call methods on.
-         * Used for specifying which GameObjects the User controls, and thus preventing Users from commanding other User's GameObjects.
+         * Contains a list of GameObjects that this Client is allowed to call methods on.
+         * Used for specifying which GameObjects the Client controls, and thus preventing Client from commanding other Clients' GameObjects.
         */
-        private System.Collections.Generic.List<Constructs.GameObject> permissionList = new System.Collections.Generic.List<InteractionEngine.Constructs.GameObject>();
+        private System.Collections.Generic.List<int> permissionList = new System.Collections.Generic.List<int>();
 
         /// <summary>
-        /// This adds a GameObject to be controllable by the User. 
+        /// This adds a GameObject to be controllable by the Client. 
         /// </summary>
-        /// <param name="gameObject">The GameObject to be added</param>
-        public void addPermission(Constructs.GameObject gameObject) {
-            permissionList.Add(gameObject);
+        /// <param name="gameObject">The ID of the GameObject to be added.</param>
+        public void addPermission(int gameObjectID) {
+            permissionList.Add(gameObjectID);
         }
 
         /// <summary>
-        /// Get a GameObject that this User controls.
+        /// Remove a GameObject from the list of GameObjects this Client controls.
         /// </summary>
-        /// <param name="index">The index of the GameObject.</param>
-        /// <returns>The GameObject.</returns>
-        public Constructs.GameObject getPermission(int index) {
-            return permissionList[index];
+        /// <param name="index">The ID of the GameObject to be removed.</param>
+        public void removePermission(int gameObjectID) {
+            permissionList.Remove(gameObjectID);
         }
 
         /// <summary>
-        /// Remove a GameObject from the list of GameObjects this User controls.
+        /// Checks whether or not this Client has permission to access a certain GameObject.
         /// </summary>
-        /// <param name="index">The index of the GameObject to be removed.</param>
-        public void removePermission(int index) {
-            permissionList.RemoveAt(index);
+        /// <param name="gameObjectID">The ID of the GameObject to be checked.</param>
+        /// <returns>True if the Client has permission; false if not.</returns>
+        public bool hasPermission(int gameObjectID) {
+            return permissionList.Contains(gameObjectID);
         }
 
         /// <summary>
-        /// Get the number of GameObjects that this User controls.
+        /// Get the number of GameObjects that this Client controls.
         /// </summary>
-        /// <returns>The number of GameObjects that this User controls.</returns>
+        /// <returns>The number of GameObjects that this Client controls.</returns>
         public int getPermissionCount() {
             return permissionList.Count;
         }
 
         /// <summary>
-        /// Get the permission list as a read-only list.
+        /// Get the Permission List as a read-only list.
         /// </summary>
         /// <returns>The permission list in read-only form.</returns>
-        public System.Collections.Generic.IList<Constructs.GameObject> getPermissions() {
+        public System.Collections.Generic.IList<int> getPermissions() {
             return permissionList.AsReadOnly();
         }
 

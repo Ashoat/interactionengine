@@ -20,16 +20,6 @@ namespace InteractionEngine.Constructs {
      */
     public class LoadRegion : FieldContainer {
 
-        // Contains the lowest available ID for a LoadRegion.
-        // Used for giving every LoadRegion a unique ID.
-        internal static int nextFieldContainerID = 0;
-        // Contains the lowest available ID for an Updatable.
-        // Used for giving every Updatable a unique ID.
-        internal int nextFieldID = 0;
-        // Contains the ID of this LoadRegion. Must be positive.
-        // Used for passing a reference to this LoadRegion across a network.
-        public readonly int id;
-
         /// <summary>
         /// Construct the LoadRegion from the GameWorld on the server-side. 
         /// This method should only be called by EventMethods that are run exclusively on a server! Don't screw this up.
@@ -38,8 +28,7 @@ namespace InteractionEngine.Constructs {
         public LoadRegion() : base() {
             if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("The game developer screwed up. They shouldn't be calling a LoadRegion constructor on the Client-side without an ID to assign it.");
-            this.id = nextFieldContainerID;
-            nextFieldContainerID++;
+            GameWorld.GameWorld.addFieldContainer(this);
         }
 
         /// <summary>
@@ -50,7 +39,8 @@ namespace InteractionEngine.Constructs {
         internal LoadRegion(int id) : base() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            this.id = id;
+            this.setID(id);
+            GameWorld.GameWorld.addFieldContainer(this);
         }
 
         #region Object List
@@ -110,12 +100,27 @@ namespace InteractionEngine.Constructs {
          */
         private System.Collections.Generic.Dictionary<int, Constructs.Datatypes.Updatable> fieldHashlist = new System.Collections.Generic.Dictionary<int, Constructs.Datatypes.Updatable>();
 
+        // Contains the ID of this FieldContainer. Must be positive.
+        // Used for passing a reference to this FieldContainer across a network.
+        private int id = -1;
+        // Contains the lowest available ID for the next Updatable.
+        // Used for knowing what ID the Server should assign a new Updatable.
+        private static int nextID = 0;
+
         /// <summary>
         /// Get this FieldContainer's ID.
         /// </summary>
         /// <returns>This FieldContainer's ID.</returns>
         public int getID() {
             return id;
+        }
+
+        /// <summary>
+        /// Set this FieldContainer's ID. Only works once.
+        /// </summary>
+        /// <param name="newId">The ID to set.</param>
+        public void setID(int newId) {
+            if (id == -1) id = newId;
         }
 
         /// <summary>
