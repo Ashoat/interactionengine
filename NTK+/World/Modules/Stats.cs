@@ -66,8 +66,8 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="stat">The type of the stat.</param>
         /// <returns>The value of the specified stat, after buffs and such.</returns>
         public int getStat(StatType stat) {
+            if (!this.modifications.ContainsKey(stat)) return this.getBaseStat(stat);
             StatModification buff = this.modifications[stat];
-            if (buff == null) return this.getBaseStat(stat);
             bool expired;
             int modification = this.modifications[stat].getChainStatModification(this, out expired);
             if (expired) this.modifications[stat] = this.modifications[stat].getNextModification();

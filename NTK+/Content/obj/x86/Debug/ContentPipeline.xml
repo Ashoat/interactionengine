@@ -7,8 +7,8 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
-      <Time>2009-04-01T19:54:06-07:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
+      <Time>2009-05-17T14:49:39.5295459-07:00</Time>
     </Item>
     <Item>
       <Source>borat_code.jpg</Source>
@@ -16,8 +16,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\borat.xnb</Output>
-      <Time>2009-03-03T21:49:58-08:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\borat.xnb</Output>
+      <Time>2009-05-17T14:49:39.3267459-07:00</Time>
     </Item>
     <Item>
       <Source>Amazonia.jpg</Source>
@@ -25,8 +25,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\Amazonia.xnb</Output>
-      <Time>2009-05-15T18:37:44.93-07:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Amazonia.xnb</Output>
+      <Time>2009-05-17T14:49:39.5295459-07:00</Time>
     </Item>
     <Item>
       <Source>Images\human_texture.jpg</Source>
@@ -34,8 +34,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
-      <Time>2009-05-15T18:39:12.813-07:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
+      <Time>2009-05-17T14:49:33.4455459-07:00</Time>
     </Item>
     <Item>
       <Source>heightImage.png</Source>
@@ -43,8 +43,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\heightImage.xnb</Output>
-      <Time>2009-05-15T18:39:59.633-07:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\heightImage.xnb</Output>
+      <Time>2009-05-17T14:49:39.5295459-07:00</Time>
     </Item>
     <Item>
       <Source>Models\Borat.fbx</Source>
@@ -52,11 +52,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\Models\Borat.xnb</Output>
-      <Time>2009-05-15T18:37:55.141-07:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\Borat.xnb</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\Borat_0.xml</Key>
-        <Value>2009-05-15T18:40:10.429-07:00</Value>
+        <Value>2009-05-17T19:37:25.347-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -65,11 +65,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
-      <Time>2009-05-15T18:38:04.99-07:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\sphere180_0.xml</Key>
-        <Value>2009-05-15T18:40:10.847-07:00</Value>
+        <Value>2009-05-17T19:37:25.6278-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -78,11 +78,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\Models\human4.xnb</Output>
-      <Time>2009-05-15T18:38:11.627-07:00</Time>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\human4.xnb</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\human4_0.xml</Key>
-        <Value>2009-05-15T18:40:10.971-07:00</Value>
+        <Value>2009-05-17T19:37:25.8462-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -90,56 +90,56 @@
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\Borat_0.xml</Output>
-      <Time>2009-05-15T18:37:55.141-07:00</Time>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
     </Item>
     <Item>
       <Source>Models\sphere180.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\sphere180_0.xml</Output>
-      <Time>2009-05-15T18:38:04.99-07:00</Time>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
     </Item>
     <Item>
       <Source>Models\human4.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\human4_0.xml</Output>
-      <Time>2009-05-15T18:38:11.627-07:00</Time>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>D:\t09\InteractionEngine\NTK+\Content\</RootDirectory>
-      <LoggerRootDirectory>D:\t09\InteractionEngine\NTK+\</LoggerRootDirectory>
-      <IntermediateDirectory>D:\t09\InteractionEngine\NTK+\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>D:\t09\InteractionEngine\NTK+\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
-        <Value>2008-10-10T18:42:32-07:00</Value>
+        <Value>2008-10-10T17:42:32-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
-        <Value>2008-10-10T18:43:28-07:00</Value>
+        <Value>2008-10-10T17:43:28-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
-        <Value>2008-10-10T18:43:18-07:00</Value>
+        <Value>2008-10-10T17:43:18-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
-        <Value>2008-10-10T18:48:18-07:00</Value>
+        <Value>2008-10-10T17:48:18-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
-        <Value>2008-10-10T18:48:50-07:00</Value>
+        <Value>2008-10-10T17:48:50-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2009-01-30T21:55:17.543-08:00</Value>
+        <Value>2009-03-30T15:26:49.825644-07:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

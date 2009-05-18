@@ -1,19 +1,17 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
-    <ProjectGuid>{7357ED0E-7CFF-466E-9C68-62EC73164DBF}</ProjectGuid>
+    <ProjectGuid>{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NTKPlusGame</RootNamespace>
-    <AssemblyName>NTKPlusGame</AssemblyName>
+    <RootNamespace>InteractionEngine</RootNamespace>
+    <AssemblyName>InteractionEngine</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
-    <XnaCrossPlatformGroupID>f286b09b-846b-432d-acbe-de3e1f6bbdd2</XnaCrossPlatformGroupID>
-    <ApplicationIcon>Game.ico</ApplicationIcon>
-    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <XnaCrossPlatformGroupID>fce5ba30-76e9-4c87-85bb-d20eea6082c4</XnaCrossPlatformGroupID>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -83,44 +81,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game2.cs" />
+    <Compile Include="Constructs\Datatypes.cs" />
+    <Compile Include="Constructs\FieldContainer.cs" />
+    <Compile Include="Constructs\GameObject.cs" />
+    <Compile Include="Constructs\LoadRegion.cs" />
+    <Compile Include="Constructs\Location.cs" />
+    <Compile Include="Constructs\UpdatableVector.cs" />
+    <Compile Include="GameWorld\GameWorld.cs" />
+    <Compile Include="GameWorld\InteractionEngine.cs" />
+    <Compile Include="Networking\User.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Constructs\TerrainedLoadRegion.cs" />
-    <Compile Include="TestGame\TestGame.cs" />
-    <Compile Include="World\Modules\Attack.cs" />
-    <Compile Include="World\Modules\InfoDisplay.cs" />
-    <Compile Include="World\Modules\Combat.cs" />
-    <Compile Include="World\Modules\TerrainMovement.cs" />
-    <Compile Include="World\NTKPlusUser.cs" />
-    <Compile Include="World\Modules\Physics.cs" />
-    <Compile Include="World\Modules\Selection.cs" />
-    <Compile Include="World\Modules\Stats.cs" />
-    <Compile Include="World\Modules\TerrainLocation.cs" />
-    <Compile Include="World\Object Logic\FighterTemplate.cs" />
-    <Compile Include="World\Object Logic\InfoDisplayBox.cs" />
-    <Compile Include="World\Object Logic\KeyboardCameraControl.cs" />
-    <Compile Include="World\Object Logic\Player.cs" />
-    <Compile Include="World\Object Logic\SelectionFocus.cs" />
-    <Compile Include="World\Object Logic\Terrain.cs" />
-    <Compile Include="World\Object Logic\WalkerTemplate.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Game.ico" />
-    <Content Include="GameThumbnail.png" />
-    <Content Include="obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt" />
+    <Compile Include="UserInterface\2D.cs" />
+    <Compile Include="UserInterface\3D.cs" />
+    <Compile Include="UserInterface\Graphics.cs" />
+    <Compile Include="UserInterface\Text.cs" />
+    <Compile Include="UserInterface\UserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <NestedContentProject Include="Content\Content.contentproj">
-      <Project>200ba175-bd2e-4a2f-b2a0-7c4ba0a11e39</Project>
+      <Project>64a68a04-9a54-4c97-9631-37378d2b04ab</Project>
       <Visible>False</Visible>
     </NestedContentProject>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -133,17 +118,7 @@
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
+      <ProductName>Microsoft.Net.Framework.3.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Xna.Framework.3.0">
@@ -153,25 +128,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Content.contentproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\testInteractionEngine\InteractionEngine.csproj">
-      <Project>{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}</Project>
-      <Name>InteractionEngine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\x86\Debug\" />
-    <Folder Include="bin\x86\Release\" />
-    <Folder Include="Content\bin\x86\Debug\" />
-    <Folder Include="Content\bin\x86\Release\" />
-    <Folder Include="Content\Models\" />
-    <Folder Include="Content\obj\x86\Debug\TempPE\" />
-    <Folder Include="Content\obj\x86\Release\TempPE\" />
-    <Folder Include="obj\x86\Debug\Refactor\" />
-    <Folder Include="obj\x86\Debug\TempPE\" />
-    <Folder Include="obj\x86\Release\TempPE\" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

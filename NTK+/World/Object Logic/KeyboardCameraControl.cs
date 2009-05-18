@@ -12,43 +12,48 @@
 |                                          |
 |••••••••••••••••••••••••••••••••••••••••••|
 | GAME OBJECTS                             |
-| * InfoDisplayBox                   Class |
+| * KeyboardCameraControl            Class |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
 using InteractionEngine.Constructs;
 using InteractionEngine.GameWorld;
 using NTKPlusGame.World.Modules;
 using InteractionEngine.Client;
+using InteractionEngine.Client.ThreeDimensional;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace NTKPlusGame.World {
 
-
-    public class InfoDisplayBox : GameObject, Locatable { //, Graphable {
+    /**
+     * Template
+     */
+    public class KeyboardCameraControl : GameObject, Keyboardable {
 
         #region FACTORY
 
         // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
         // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
-        internal const string classHash = "InfoDisplayBox";
+        internal const string classHash = "KeyboardCameraControl";
 
         /// <summary>
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
-        static InfoDisplayBox() {
-            GameObject.factoryList.Add(classHash, new GameObjectFactory(makeInfoDisplayBox));
+        static KeyboardCameraControl() {
+            GameObject.factoryList.Add(classHash, new GameObjectFactory(makeKeyboardCameraControl));
         }
 
         /// <summary>
-        /// A factory method that creates and returns a new instance of InfoDisplayBox. Used by the client when the server requests it to make a new GameObject.
+        /// A factory method that creates and returns a new instance of KeyboardCameraControl. Used by the client when the server requests it to make a new GameObject.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
         /// <param name="id">This GameObject's ID.</param>
         /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
-        /// <returns>A new instance of InfoDisplayBox.</returns>
-        static InfoDisplayBox makeInfoDisplayBox(LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
+        /// <returns>A new instance of KeyboardCameraControl.</returns>
+        static KeyboardCameraControl makeKeyboardCameraControl(LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
             if (GameWorld.status != GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
-            InfoDisplayBox gameObject = new InfoDisplayBox(loadRegion, id);
+            KeyboardCameraControl gameObject = new KeyboardCameraControl(loadRegion, id);
             // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
             return gameObject;
         }
@@ -60,7 +65,7 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
         /// <param name="id">This GameObject's ID.</param>
-        private InfoDisplayBox(LoadRegion loadRegion, int id)
+        private KeyboardCameraControl(LoadRegion loadRegion, int id)
             : base(loadRegion, id) {
         }
 
@@ -74,44 +79,32 @@ namespace NTKPlusGame.World {
 
         #endregion
 
-        public const string DESCRIPTION_CHANGE_EVENT_HASH = "description change";
 
         /// <summary>
-        /// Returns the Location module of this GameObject.
-        /// </summary>
-        /// <returns>The Location module associated with this GameObject.
-        private readonly Location location;
-        public Location getLocation() {
-            return location;
-        }
-
-        /// <summary>
-        /// Returns the Graphics module of this GameObject.
-        /// </summary>
-        /// <returns>The Graphics module associated with this GameObject.
-        private InteractionEngine.Client.Graphics graphics;
-        public InteractionEngine.Client.Graphics getGraphics() {
-            return graphics;
-        }
-
-        /// <summary>
-        /// Constructs a new InfoDisplayBox.
+        /// Constructs a new KeyboardCameraControl.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        public InfoDisplayBox(LoadRegion loadRegion)
+        public KeyboardCameraControl(LoadRegion loadRegion)
             : base(loadRegion) {
-            this.location = new Location(this);
-            this.graphics = null; // TODO
-            this.addEvent(DESCRIPTION_CHANGE_EVENT_HASH, new EventMethod(changeActiveDescription));
         }
 
-        public void changeActiveDescription(object param) {
-            string description = (string)param;
-            // TODO
+
+
+        #region Keyboardable Members
+
+        public void keyPressed(Microsoft.Xna.Framework.Input.Keys key) {
+            Camera camera = NTKPlusUser.localUser.camera;
+            if (key == Keys.Up) camera.ChangeAzimuth(camera.Position, Vector3.Up, 0.1f);
+            if (key == Keys.Down) camera.ChangeAzimuth(camera.Position, Vector3.Up, -0.1f);
+            if (key == Keys.Left) camera.RotateUponAxis(camera.Position, Vector3.Up, 0.1f);
+            if (key == Keys.Right) camera.RotateUponAxis(camera.Position, Vector3.Up, 0.1f);
         }
 
-        // TODO
+        public void focusLost(Keyboardable newFocusHolder) {
+            throw new System.NotImplementedException();
+        }
 
+        #endregion
     }
 
 }

@@ -63,6 +63,7 @@ namespace NTKPlusGame.World.Modules {
 			this.lastUpdate = new UpdatableDouble(gameObject);
 			this.isMoving = new UpdatableBoolean(gameObject);
 			this.gameObject.getStats().registerStatType(SPEED_STAT);
+            this.gameObject.getStats().setBaseStat(SPEED_STAT, 2);
         }
 		
 
@@ -71,7 +72,10 @@ namespace NTKPlusGame.World.Modules {
         /// </summary>
         /// <param name="target">The location to go to.</param>
 		public void startWalking(Vector3 target) {
+            Vector3 direction = target - base.getPoint();
+            this.yaw = (float)Math.Atan2(direction.Y, direction.X);
 			this.targetPosition.value = target;
+            this.isMoving.value = true;
 			this.lastUpdate.value = GameWorld.gameTime.TotalRealTime.TotalMilliseconds;
 		}
 
@@ -83,6 +87,7 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="followingDistance">The distance from the target at which to stop.</param>
         public void startTracking(Locatable target, float trackingDistance) {
             this.targetGameObject.value = target;
+            this.isMoving.value = true;
             this.lastUpdate.value = GameWorld.gameTime.TotalRealTime.TotalMilliseconds;
         }
 		
@@ -123,7 +128,7 @@ namespace NTKPlusGame.World.Modules {
 				if (displacement >= toTarget.Length()) {
 					base.move(toTarget);
 					isMoving.value = false;
-                    destinationArrived.Invoke(this.gameObject, null);
+                    if (destinationArrived != null) destinationArrived.Invoke(this.gameObject, null);
 				} else {  // Travel!
                     toTarget.Normalize();
                     base.move(Vector3.Multiply(toTarget, displacement));

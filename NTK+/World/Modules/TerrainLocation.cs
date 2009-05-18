@@ -39,7 +39,7 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="gameObject">The GameObject whose Location this is.</param>
         public TerrainLocation(TerrainLocatable gameObject) : base(gameObject) {
             this.gameObject = gameObject;
-            grounded = new UpdatableBoolean(gameObject);
+            grounded = new UpdatableBoolean(gameObject, true);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace NTKPlusGame.World.Modules {
         /// <returns>The change in height effected during the move.</returns>
         public float move(float dx, float dy) {
             if (grounded.value) {
-                Vector3 position = this.getPoint();
+                Vector3 position = base.getPoint();
                 // Calculate the z-translation based on the terrain.
                 float z = gameObject.getTerrainedLoadRegion().getTerrain().getHeight(position.X + dx, position.Y + dy);
                 float dz = z - position.Z;

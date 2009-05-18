@@ -81,24 +81,24 @@ namespace NTKPlusGame.World {
 
 
 
-        VertexPositionNormalTexture[] vertices;
-        int[] indices;
+        private VertexPositionNormalTexture[] vertices;
+        private int[] indices;
 
-        byte[] heightMap;
+        private byte[] heightMap;
 
-        VertexBuffer vb;
-        IndexBuffer ib;
-        int numVertices;
-        int numTriangles;
+        private VertexBuffer vb;
+        private IndexBuffer ib;
+        private int numVertices;
+        private int numTriangles;
 
-        int vertexCountX;
-        int vertexCountZ;
-        float blockScale;
-        float heightScale;
+        private int vertexCountX;
+        private int vertexCountZ;
+        private float blockScale;
+        private float heightScale;
 
-        Texture2D tex;
+        private Texture2D tex;
 
-        Graphics3D.ModelEffect effect = new Graphics3D.ModelEffect(UserInterface3D.graphicsDevice, (EffectPool)null);
+        private Graphics3D.ModelEffect effect;
 
         private const string TERRAIN_CLICKED_HASH = "terrain clicked";
 
@@ -136,24 +136,14 @@ namespace NTKPlusGame.World {
         /// Constructs a Terrain.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        public Terrain(TerrainedLoadRegion loadRegion, Texture2D mapAsset, Texture2D texAsset, float blockScaleF, float heightScaleF)
+        public Terrain(TerrainedLoadRegion loadRegion, float blockScaleF, float heightScaleF)
             : base(loadRegion) {
             this.location = new Location(this);
             this.graphics = new TerrainGraphics(this);
             this.addEvent(TERRAIN_CLICKED_HASH, new EventMethod(onClicked));
-
             this.blockScale = blockScaleF;
             this.heightScale = heightScaleF;
-            this.LoadHeightmapFromImage(mapAsset);
-            this.LoadTexture(texAsset);
-
-            this.GenerateIndices();
-            this.GenerateVertices();
-            this.GenerateNormals();
-
-            this.SetData(UserInterface3D.graphicsDevice);
-            this.InitDefaultEffectVal();
-
+            loadRegion.initialize(this);
         }
 
         /// <summary>
@@ -438,6 +428,24 @@ namespace NTKPlusGame.World {
             this.Effect.End();
         }
 
+        private void loadContent() {
+            effect = new Graphics3D.ModelEffect(GameWorld.game.GraphicsDevice, (EffectPool)null);
+            effect.ActiveCamera = UserInterface3D.user.camera;
+
+            Texture2D texAsset = GameWorld.game.Content.Load<Texture2D>("Amazonia"); //tex1.png //Amazonia.jpg
+            Texture2D mapAsset = GameWorld.game.Content.Load<Texture2D>("heightImage"); //heightImage
+
+            this.LoadHeightmapFromImage(mapAsset);
+            this.LoadTexture(texAsset);
+
+            this.GenerateIndices();
+            this.GenerateVertices();
+            this.GenerateNormals();
+
+            this.SetData(GameWorld.game.GraphicsDevice);
+            this.InitDefaultEffectVal();
+        }
+
 
         class TerrainGraphics : Graphics3D
         {
@@ -445,14 +453,22 @@ namespace NTKPlusGame.World {
             Terrain gameObject;
 
             public TerrainGraphics(Terrain gameObject)
-                : base(gameObject, null, new ModelEffect(UserInterface3D.graphicsDevice, (EffectPool)null))
-            {
+                : base(gameObject, null) {
                 this.gameObject = gameObject;
             }
 
             public override void onDraw()
             {
                 gameObject.onDraw();
+            }
+
+            public override void loadContent() {
+                base.loadEffect();
+                gameObject.loadContent();
+            }
+
+            public override float? intersects(Ray ray) {
+                return 3;
             }
         }
 

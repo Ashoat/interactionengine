@@ -1,0 +1,5 @@
+D:\Development\InteractionEngine\XNA 3.0\InteractionEngine\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Development\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Woofy\Desktop\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Woofy\Desktop\interactionengine2\testInteractionEngine\Content\obj\x86\Debug\ResolveAssemblyReference.cache
