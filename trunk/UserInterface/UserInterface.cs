@@ -17,6 +17,7 @@
 
 // TODO: "inputEnabled?"
 
+using InteractionEngine.EventHandling;
 namespace InteractionEngine.Client {
 
     /// <summary>
@@ -174,7 +175,7 @@ namespace InteractionEngine.Client {
         public KeyboardFocus(InteractionEngine.Constructs.LoadRegion loadRegion)
             : base(loadRegion) {
             focusHolder = new InteractionEngine.Constructs.Datatypes.UpdatableGameObject<Keyboardable>(this);
-            this.addEvent(EVENT_HASH, new InteractionEngine.Constructs.EventMethod(keyPressed));
+            this.addEvent(EVENT_HASH, new EventMethod(keyPressed));
         }
 
         /// <summary>
@@ -182,7 +183,7 @@ namespace InteractionEngine.Client {
         /// By dispatching it to the focus-holder, basically.
         /// </summary>
         /// <param name="keyParam">The Microsoft.Xna.Framework.Input.Keys key pressed.</param>
-        public void keyPressed(object keyParam) {
+        public void keyPressed(InteractionEngine.Networking.Client client, object keyParam) {
             Microsoft.Xna.Framework.Input.Keys key = (Microsoft.Xna.Framework.Input.Keys)keyParam;
             focusHolder.value.keyPressed(key);
         }

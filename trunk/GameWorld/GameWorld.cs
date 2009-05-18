@@ -286,6 +286,7 @@ namespace InteractionEngine.GameWorld {
         /// Send an update to every User. This method is only used on the server.
         /// </summary>
         private static void sendUpdate() {
+            // TODO make work with the recent revamping of the networking system
             // Send an update to every user.
             foreach (System.Collections.Generic.KeyValuePair<Microsoft.Xna.Framework.Net.NetworkGamer, InteractionEngine.Server.User> pair in userHashlist) {
                 // Update each of the user's LoadRegions.

@@ -98,6 +98,13 @@ namespace InteractionEngine.Networking {
         // Contains a BinaryReader that wraps the above TcpClient.
         // Used so that we don't have to individually encode each byte into the stream.
         private readonly System.IO.BinaryReader reader;
+
+        // Contains the thread that handles reading of Events from the network stream.
+        // Used for concurrently reading events so that we don't block the main game loop waiting for one to completely arrive.
+        private System.Threading.Thread eventReaderThread;
+        // Contains the list of events that have been read by the eventReaderThread.
+        // Used for passing events from the reader thread to the main game thread.
+        private System.Collections.Generic.List<EventHandling.Event> eventBuffer = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
         
         /// <summary>
         /// Construct a new Client using a TcpClient object.
@@ -106,6 +113,7 @@ namespace InteractionEngine.Networking {
         protected Client(System.Net.Sockets.TcpClient tcpClient) {
             this.tcpClient = tcpClient;
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
+            this.eventReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readEvents));
         }
 
         /// <summary>
@@ -123,17 +131,30 @@ namespace InteractionEngine.Networking {
         private const int READ_INCREMENT = 1024;
 
         /// <summary>
+        /// Continuously reads events from the network stream... intended to be run asynchronously by the eventReaderThread.
+        /// </summary>
+        private void readEvents() {
+            // TODO: handle IO exceptions
+            while (true) {
+                int gameObjectID = reader.ReadInt32();
+                string eventHash = reader.ReadString();
+                object parameter = formatter.Deserialize(tcpClient.GetStream());
+                lock (this.eventBuffer) {
+                    this.eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
+                }
+            }
+        }
+
+        /// <summary>
         /// Read a list of events from this client.
         /// </summary>
         /// <returns>A list of events that we got from this client.</returns>
         internal System.Collections.Generic.List<EventHandling.Event> getEvents() {
+            // TODO we would prefer not to have to create a new list every time.
             System.Collections.Generic.List<EventHandling.Event> events = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
-            // TODO: multithread this, since it will probably block during the last iteration of this loop.
-            while (tcpClient.GetStream().DataAvailable) {
-                int gameObjectID = reader.ReadInt32();
-                string eventHash = reader.ReadString();
-                object parameter = formatter.Deserialize(tcpClient.GetStream());
-                events.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter);
+            lock (eventBuffer) {
+                events.AddRange(eventBuffer);
+                eventBuffer.Clear();
             }
             return events;
             /* OLD CODE THAT ASHOAT SHOULD REMOVE AS SOON AS HE VERIFIES MINE
