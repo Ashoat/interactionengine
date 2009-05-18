@@ -51,7 +51,7 @@ namespace InteractionEngine.Networking {
             writer.Write(eventObject.gameObjectID);
             writer.Write(eventObject.eventHash);
             formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);
-            /*
+            /* OLD CODE THAT ASHOAT SHOULD REMOVE AS SOON AS HE VERIFIES MINE
             // The first four bytes are the GameObjectID.
             byte[] gameObjectIdBytes = new byte[4];
             int id = eventObject.gameObjectID;

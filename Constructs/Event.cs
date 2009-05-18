@@ -25,19 +25,20 @@ namespace InteractionEngine.EventHandling {
     /**
      * This class is a wrapper around a call to a method in the GameWorld.
      * It holds a GameObject ID and an "event hash", which is basically a pointer to the method on the GameObject.
-     * It also hols a parameter to be given the Event.
+     * It also holds a parameter to be given the Event.
      */
     public class Event {
 
         // Contains a reference to a GameObject.
         // Used for knowing where to find the EventHashlist for this Event.
-        public int gameObjectID;
+        public readonly int gameObjectID;
         // Contains a string referencing this particular event.
         // Used for figuring out which method to use on the GameObject's EventHashlist.
-        public string eventHash;
+        public readonly string eventHash;
         // Contains extra information for the event.
         // Used when extra information needs to be passed with the event.
-        public object parameter;
+        // Note: must be serializable.
+        public readonly object parameter;
 
         /// <summary>
         /// Constructs the event.
@@ -56,7 +57,7 @@ namespace InteractionEngine.EventHandling {
     /**
      * Implemented by GameObjects that can be interacted with.
      */
-    public interface Interactable : Graphable {
+    public interface Interactable : InteractionEngine.Client.Graphable {
 
         /// <summary>
         /// Gets an Event from this Interactable module.
