@@ -144,8 +144,8 @@ namespace InteractionEngine.Constructs {
         /// Add an Updatable to the list of Updatables requiring network updates.
         /// </summary>
         /// <param name="update">The Updatable requiring an update broadcast.</param>
-        public override void addUpdate(Datatypes.Updatable update) {
-            loadRegion.addUpdate(update);
+        public override void registerUpdate(Datatypes.Updatable update) {
+            loadRegion.registerUpdate(update);
         }
 
         /// <summary>
@@ -155,14 +155,6 @@ namespace InteractionEngine.Constructs {
         /// <param name="update">The Updatable no longer requiring an update network broadcast.</param>
         public override void cancelUpdate(Datatypes.Updatable update) {
             loadRegion.cancelUpdate(update);
-        }
-
-        /// <summary>
-        /// Write an update directly to the binary cache of network updates waiting to be sent.
-        /// </summary>
-        /// <param name="update">The byte array containing the update information.</param>
-        public override void writeUpdate(byte[] update) {
-            loadRegion.writeUpdate(update);
         }
 
         #endregion

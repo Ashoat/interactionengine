@@ -38,7 +38,15 @@ namespace InteractionEngine.Networking {
         internal const byte UPDATE_FIELD = 5;     // This code tells the client to update an Updatable.
 
         /// <summary>
+        /// Send this update across the network to a client.
+        /// This method should only be used on the server side.
+        /// </summary>
+        /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
+        void sendUpdate(System.IO.BinaryWriter writer);
+
+        /// <summary>
         /// Execute the update this class contains.
+        /// This method should only be used on the client side.
         /// </summary>
         void executeUpdate();
 
@@ -76,10 +84,22 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
+        /// Send this update across the network to a client.
+        /// This method should only be used on the server side.
+        /// </summary>
+        /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer) {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+        }
+
+        /// <summary>
         /// Execute the update this class contains.
+        /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
         }
 
     }
@@ -116,10 +136,22 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
+        /// Send this update across the network to a client.
+        /// This method should only be used on the server side.
+        /// </summary>
+        /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer) {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+        }
+
+        /// <summary>
         /// Execute the update this class contains.
+        /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
         }
 
     }
@@ -177,10 +209,22 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
+        /// Send this update across the network to a client.
+        /// This method should only be used on the server side.
+        /// </summary>
+        /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer) {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+        }
+
+        /// <summary>
         /// Execute the update this class contains.
+        /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
         }
 
     }
@@ -217,9 +261,22 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
+        /// Send this update across the network to a client.
+        /// This method should only be used on the server side.
+        /// </summary>
+        /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer) {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+        }
+
+        /// <summary>
         /// Execute the update this class contains.
+        /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
 
         }
 
@@ -263,10 +320,22 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
+        /// Send this update across the network to a client.
+        /// This method should only be used on the server side.
+        /// </summary>
+        /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer) {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+        }
+
+        /// <summary>
         /// Execute the update this class contains.
+        /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
         }
 
     }
@@ -317,10 +386,22 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
+        /// Send this update across the network to a client.
+        /// This method should only be used on the server side.
+        /// </summary>
+        /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer) {
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+        }
+
+        /// <summary>
         /// Execute the update this class contains.
+        /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-
+            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
         }
 
     }

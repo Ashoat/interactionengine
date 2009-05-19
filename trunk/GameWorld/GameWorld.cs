@@ -93,7 +93,7 @@ namespace InteractionEngine.GameWorld {
                 // Get and handle Events from Clients
                 handleInput();
                 // Send updates to clients
-                sendUpdate();
+                sendUpdates();
                 // Output graphics
                 userInterface.output();
             } else if (status == Status.MULTIPLAYER_CLIENT) {
@@ -113,7 +113,7 @@ namespace InteractionEngine.GameWorld {
                 // Get and handle Events from Clients
                 handleInput();
                 // Send updates to clients
-                sendUpdate();
+                sendUpdates();
             }
         }
 
@@ -214,7 +214,7 @@ namespace InteractionEngine.GameWorld {
                 // Process the events.
                 foreach (EventHandling.Event eventObject in events) {
                     if (client.hasPermission(eventObject.gameObjectID))
-                        GameWorld.getObject(eventObject.gameObjectID).getEvent(eventObject.eventHash)(client, eventObject.parameter);
+                        GameWorld.getObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(client, eventObject.parameter);
                 }
             }
         }
@@ -222,17 +222,19 @@ namespace InteractionEngine.GameWorld {
         /// <summary>
         /// Send an update to every User. This method is only used on the server.
         /// </summary>
-        private static void sendUpdate() {
+        private static void sendUpdates() {
             // Send an update to every client.
             foreach (Networking.Client client in Networking.Client.clientList) {
                 // Update each of the client's LoadRegions.
-                foreach (InteractionEngine.Constructs.LoadRegion loadRegion in client.getLoadRegionList())
-                    client.sendUpdate(loadRegion.getUpdates());
+                foreach (InteractionEngine.Constructs.LoadRegion loadRegion in client.getLoadRegionList()) {
+                    foreach (Networking.Update update in loadRegion.getUpdates())
+                        client.sendUpdate(update);
+                }
             }
             // Reset the cache in every LoadRegion.
             foreach (System.Collections.Generic.KeyValuePair<int, Constructs.FieldContainer> pair in fieldContainerHashlist) {
                 Constructs.FieldContainer region = pair.Value;
-                if (region is Constructs.LoadRegion) ((Constructs.LoadRegion)region).resetCache();
+                if (region is Constructs.LoadRegion) ((Constructs.LoadRegion)region).resetBuffer();
             }
         }
 

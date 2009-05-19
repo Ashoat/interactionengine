@@ -119,13 +119,11 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
-        /// Send information to this client. 
+        /// Send an update across the network to this client.
         /// </summary>
-        /// <param name="information">An array of bytes to be passed to a client.</param>
-        internal virtual void send(byte[] information) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            tcpClient.GetStream().Write(information, 0, information.Length);
+        /// <param name="update"></param>
+        internal void sendUpdate(Update update) {
+            update.sendUpdate(writer);
         }
 
         /// <summary>
