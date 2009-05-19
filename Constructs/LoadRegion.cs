@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -19,6 +19,8 @@ namespace InteractionEngine.Constructs {
      * It itself is a GameObject, but only because it needs to act as an Updatable container. Also, it needs to use the synchronized instantiation 
      */
     public class LoadRegion : FieldContainer {
+
+        #region Basic Functionality
 
         /// <summary>
         /// Construct the LoadRegion from the GameWorld on the server-side. 
@@ -42,6 +44,8 @@ namespace InteractionEngine.Constructs {
             this.setID(id);
             GameWorld.GameWorld.addFieldContainer(this);
         }
+
+        #endregion
 
         #region Object List
 

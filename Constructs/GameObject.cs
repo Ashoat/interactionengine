@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -9,6 +9,8 @@
 |                                          |
 |••••••••••••••••••••••••••••••••••••••••••|
 | CONSTRUCTS                               |
+| * GameObjectFactory       Delegate       |
+| * GameObjectable          Interface      |
 | * GameObject              Abstract Class |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
@@ -21,8 +23,13 @@ namespace InteractionEngine.Constructs {
 
     /**
      * This interface is extended by Module types. See documentation for more information on Modules.
+     * LOL THIS CLASS IS GAY! Problems:
+     * 1) Basically a copy of GameObject for the purpose of making UpdatableGameObject work.
+     * 2) Attempts to implement Interactable, but doesn't actually implement it and implements it wrong anyways.
+     * 3) Doesn't implement FieldContainer 'cuz that's now an abstract class.
+     * RECOMMENDED FOR DELETION!
      */
-    public interface GameObjectable : FieldContainer {
+    public interface GameObjectable /*: FieldContainer*/ {
 
         /// <summary>
         /// Returns this GameObject's LoadRegion.
@@ -50,6 +57,8 @@ namespace InteractionEngine.Constructs {
      * It consists of modules and actions.
      */
     public abstract class GameObject : FieldContainer {
+
+        #region Basic Functionality
 
         // Contains a reference to this GameObject's LoadRegion.
         // Used for knowing when and to whom to send updates about this GameObject.
@@ -127,12 +136,7 @@ namespace InteractionEngine.Constructs {
             return loadRegion;
         }
 
-        /// <summary>
-        /// Contains a string hash of this type.
-        /// Used when passing a CREATE_FIELD to specify which type to use.
-        /// </summary>
-        /// <returns>The string hash.</returns>
-        public abstract string getClassHash();
+        #endregion
 
         #region Field Container
 
@@ -163,10 +167,10 @@ namespace InteractionEngine.Constructs {
 
         #endregion
 
-        #region Event Hashlist
+        #region EventMethod Hashlist
 
         /**
-         * EVENT HASHLIST
+         * EVENTMETHOD HASHLIST
          * 
          * Contains a dictionary that links event strings transfered through the network to methods within the GameWorld.
          * Used for transferring a reference to a method across a network, as transferring delegate references wouldn't work for obvious reasons.
@@ -179,7 +183,7 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <param name="hash">The string that represents the event.</param>
         /// <param name="method">The method that is called by the event.</param>
-        public void addEvent(string hash, InteractionEngine.EventHandling.EventMethod method) {
+        public void addEventMethod(string hash, InteractionEngine.EventHandling.EventMethod method) {
             eventHashlist.Add(hash, method);
         }
 
@@ -187,7 +191,7 @@ namespace InteractionEngine.Constructs {
         /// Removes an event from the eventHashlist.
         /// </summary>
         /// <param name="hash">The string that represents the event.</param>
-        public void removeEvent(string hash) {
+        public void removeEventMethod(string hash) {
             eventHashlist.Remove(hash);
         }
 
@@ -196,7 +200,7 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <param name="hash">The string that represents the event.</param>
         /// <returns>The method that is called by the event.</returns>
-        public EventMethod getEvent(string hash) {
+        public InteractionEngine.EventHandling.EventMethod getEventMethod(string hash) {
             return eventHashlist[hash];
         }
 
@@ -204,7 +208,7 @@ namespace InteractionEngine.Constructs {
         /// Get the eventHashlist's enumerator.
         /// </summary>
         /// <returns>The eventHashlist's enumerator.</returns>
-        public System.Collections.Generic.Dictionary<string, EventMethod>.Enumerator getEventEnumerator() {
+        public System.Collections.Generic.Dictionary<string, EventMethod>.Enumerator getEventMethodEnumerator() {
             return eventHashlist.GetEnumerator();
         }
 

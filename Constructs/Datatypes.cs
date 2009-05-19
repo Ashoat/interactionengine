@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -9,7 +9,6 @@
 |                                          |
 |••••••••••••••••••••••••••••••••••••••••••|
 | CONSTRUCTS                               |
-| * UpdatableFactory        Delegate       |
 | * Updatable               Abstract Class |
 | * UpdatableBoolean        Class          |
 | * UpdatableInteger        Class          |

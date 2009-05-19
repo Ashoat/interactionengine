@@ -94,6 +94,7 @@
     <Compile Include="GameWorld\GameWorld.cs" />
     <Compile Include="GameWorld\InteractionEngine.cs" />
     <Compile Include="Networking\Server.cs" />
+    <Compile Include="Networking\Updates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Networking\Client.cs" />
     <Compile Include="UserInterface\2D.cs" />

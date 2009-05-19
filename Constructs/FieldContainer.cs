@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
