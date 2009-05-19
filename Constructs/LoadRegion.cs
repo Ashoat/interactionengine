@@ -20,7 +20,7 @@ namespace InteractionEngine.Constructs {
      */
     public class LoadRegion : FieldContainer {
 
-        #region Basic Functionality
+        #region Constructors
 
         /// <summary>
         /// Construct the LoadRegion from the GameWorld on the server-side. 
