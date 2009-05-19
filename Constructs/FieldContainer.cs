@@ -74,7 +74,7 @@ namespace InteractionEngine.Constructs {
         /// Add an Updatable to the list of Updatables requiring network updates.
         /// </summary>
         /// <param name="update">The Updatable requiring an update network broadcast.</param>
-        public abstract void addUpdate(Datatypes.Updatable update);
+        public abstract void registerUpdate(Datatypes.Updatable update);
 
         /// <summary>
         /// Removes an Updatable from the list of Updatables requiring network updates.
@@ -82,12 +82,6 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <param name="update">The Updatable no longer requiring an update network broadcast.</param>
         public abstract void cancelUpdate(Datatypes.Updatable update);
-
-        /// <summary>
-        /// Write an update directly to the binary cache of network updates waiting to be sent.
-        /// </summary>
-        /// <param name="update">The byte array containing the update information.</param>
-        public abstract void writeUpdate(byte[] update);
 
     }
 

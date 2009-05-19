@@ -28,9 +28,6 @@ namespace InteractionEngine.Constructs.Datatypes {
      */
     public abstract class Updatable {
 
-        // Contains a list of all the Updatable factory methods.
-        // Used for figuring out which Updatable to instantiate when a CREATE_FIELD command is issued from the server.
-        public static System.Collections.Generic.Dictionary<string, UpdatableFactory> factoryList = new System.Collections.Generic.Dictionary<string, UpdatableFactory>();
         // Contains an ID that is needed for communication between client and server, as references will be lost across a network.
         // Used for having an unique ID for the fieldHashlist in GameWorld, so that the GameWorld knows which field to update in the case of an UPDATE_FIELD command from the server.
         private int realID = -1;
@@ -65,48 +62,19 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// <param name="nonUpdatable">The object containg the value of this Updatable.</param>
         public abstract Updatable(FieldContainer fieldContainer, object nonUpdatable);
 
-        // Whether or not an update is currently registered with the FieldContainer so that this Updatable will be updated in the next network broadcast.
-        // Used in the two methods used to communicate with the FieldContainer.
-        private bool updateRegistered = false;
+        /// <summary>
+        /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on the server.
+        /// </summary>
+        /// <returns>This field's value as an object.</returns>
+        internal abstract object getValue();
 
         /// <summary>
-        /// One of two methods used for communicating with the FieldContainer.
-        /// Registers this Updatable to be updated the next time the FieldContainer has a network update.
-        /// Avoids re-registering if this Updatable is already registered and the FieldContainer has not had a network update since last registration.
-        /// This method is to be called whenever a change occurs in an Updatable field requiring updates to be sent.
+        /// Sets the value of this Updatable using the information retrieved from an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on a client.
         /// </summary>
-        protected void registerUpdate() {
-            if (!this.updateRegistered && (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)) {
-                this.fieldContainer.addUpdate(this);
-                updateRegistered = true;
-            }
-        }
-
-        /// <summary>
-        /// One of two methods used for communicating with the FieldContainer.
-        /// Writes this Updatable's update data into the PacketWriter for transmittance to other network players.
-        /// Assumes that this Updatable is no longer registered for a FieldContainer update broadcast once the method returns.
-        /// </summary>
-        /// <param name="cache">The PacketWriter used to send updates to other network players.</param>
-        public void writeUpdate(Microsoft.Xna.Framework.Net.PacketWriter cache) {
-            cache.Write(GameWorld.GameWorld.UPDATE_FIELD);
-            cache.Write(this.fieldContainer.getID());
-            cache.Write(this.id);
-            this.writeValue(cache);
-            updateRegistered = false;
-        }
-
-        /// <summary>
-        /// Returns the binary representation of this field for network communication purposes.
-        /// Called by the method writeUpdate defined in Updatable whenever a network update is requested.
-        /// </summary>
-        protected abstract void writeValue(Microsoft.Xna.Framework.Net.PacketWriter cache);
-
-        /// <summary>
-        /// This method is called when the server updates this variable.
-        /// </summary>
-        /// <param name="reader">The BinaryReader to read the variable from.</param>
-        public abstract void readUpdate(System.IO.BinaryReader reader);
+        /// <param name="reader">The object containing the update.</param>
+        internal abstract void setValue(object value);
 
     }
 
@@ -160,27 +128,26 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.registerUpdate();
+                this.fieldContainer.registerUpdate(this);
             }
         }
 
         /// <summary>
-        /// Returns the binary representation of this field for network communication purposes.
-        /// Called by the method writeUpdate defined in Updatable whenever a network update is requested.
+        /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on the server.
         /// </summary>
-        protected override void writeValue(Microsoft.Xna.Framework.Net.PacketWriter cache) {
-            // The three-part message for updating of an Updatable happens 2/3 at the Update writeUpdate 
-            // and 1/3 at the child writeValue
-            cache.Write(this.realValue);
+        /// <returns>This field's value as an object.</returns>
+        internal abstract object getValue() {
+            return (object)realValue;
         }
 
         /// <summary>
-        /// This method is called by client when the server updates this variable.
+        /// Sets the value of this Updatable using the information retrieved from an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on a client.
         /// </summary>
-        /// <param name="reader">The BinaryReader to read the variable from.</param>
-        public override void readUpdate(System.IO.BinaryReader reader) {
-            this.realValue = reader.ReadBoolean();
-            this.lastServerSetValue = this.realValue;
+        /// <param name="reader">The object containing the update.</param>
+        internal abstract void setValue(object value) {
+            this.realValue = (bool)value;
         }
 
     }
@@ -240,26 +207,26 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.registerUpdate();
+                this.fieldContainer.registerUpdate(this);
             }
         }
 
         /// <summary>
-        /// Returns the binary representation of this field for network communication purposes.
-        /// Called by the method writeUpdate defined in Updatable whenever a network update is requested.
+        /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on the server.
         /// </summary>
-        protected override void writeValue(Microsoft.Xna.Framework.Net.PacketWriter cache) {
-            // The three-part message for updating of an Updatable happens 2/3 at the Update writeUpdate 
-            // and 1/3 at the child writeValue
-            cache.Write(this.realValue);
+        /// <returns>This field's value as an object.</returns>
+        internal abstract object getValue() {
+            return (object)realValue;
         }
 
         /// <summary>
-        /// This method is called when the server updates this variable.
+        /// Sets the value of this Updatable using the information retrieved from an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on a client.
         /// </summary>
-        /// <param name="reader">The BinaryReader to read the variable from.</param>
-        public override void readUpdate(System.IO.BinaryReader reader) {
-            this.realValue = reader.ReadInt32();
+        /// <param name="reader">The object containing the update.</param>
+        internal abstract void setValue(object value) {
+            this.realValue = (int)value;
         }
 
     }
@@ -316,26 +283,26 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.registerUpdate();
+                this.fieldContainer.registerUpdate(this);
             }
         }
 
         /// <summary>
-        /// Returns the binary representation of this field for network communication purposes.
-        /// Called by the method writeUpdate defined in Updatable whenever a network update is requested.
+        /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on the server.
         /// </summary>
-        protected override void writeValue(Microsoft.Xna.Framework.Net.PacketWriter cache) {
-            // The three-part message for updating of an Updatable happens 2/3 at the Update writeUpdate 
-            // and 1/3 at the child writeValue
-            cache.Write(this.realValue);
+        /// <returns>This field's value as an object.</returns>
+        internal abstract object getValue() {
+            return (object)realValue;
         }
 
         /// <summary>
-        /// This method is called when the server updates this variable.
+        /// Sets the value of this Updatable using the information retrieved from an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on a client.
         /// </summary>
-        /// <param name="reader">The BinaryReader to read the variable from.</param>
-        public override void readUpdate(System.IO.BinaryReader reader) {
-            this.realValue = reader.ReadChar();
+        /// <param name="reader">The object containing the update.</param>
+        internal abstract void setValue(object value) {
+            this.realValue = (char)value;
         }
 
     }
@@ -392,26 +359,26 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.registerUpdate();
+                this.fieldContainer.registerUpdate(this);
             }
         }
 
         /// <summary>
-        /// Returns the binary representation of this field for network communication purposes.
-        /// Called by the method writeUpdate defined in Updatable whenever a network update is requested.
+        /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on the server.
         /// </summary>
-        protected override void writeValue(Microsoft.Xna.Framework.Net.PacketWriter cache) {
-            // The three-part message for updating of an Updatable happens 2/3 at the Update writeUpdate 
-            // and 1/3 at the child writeValue
-            cache.Write(this.realValue);
+        /// <returns>This field's value as an object.</returns>
+        internal abstract object getValue() {
+            return (object)realValue;
         }
 
         /// <summary>
-        /// This method is called when the server updates this variable.
+        /// Sets the value of this Updatable using the information retrieved from an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on a client.
         /// </summary>
-        /// <param name="reader">The BinaryReader to read the variable from.</param>
-        public override void readUpdate(System.IO.BinaryReader reader) {
-            this.realValue = reader.ReadDouble();
+        /// <param name="reader">The object containing the update.</param>
+        internal abstract void setValue(object value) {
+            this.realValue = (double)value;
         }
 
     }
@@ -468,26 +435,26 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.registerUpdate();
+                this.fieldContainer.registerUpdate(this);
             }
         }
 
         /// <summary>
-        /// Returns the binary representation of this field for network communication purposes.
-        /// Called by the method writeUpdate defined in Updatable whenever a network update is requested.
+        /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on the server.
         /// </summary>
-        protected override void writeValue(Microsoft.Xna.Framework.Net.PacketWriter cache) {
-            // The three-part message for updating of an Updatable happens 2/3 at the Update writeUpdate 
-            // and 1/3 at the child writeValue
-            cache.Write(this.realValue);
+        /// <returns>This field's value as an object.</returns>
+        internal abstract object getValue() {
+            return (object)realValue;
         }
 
         /// <summary>
-        /// This method is called when the server updates this variable.
+        /// Sets the value of this Updatable using the information retrieved from an UPDATE_FIELD transfer code.
+        /// This method should only ever be executed on a client.
         /// </summary>
-        /// <param name="reader">The BinaryReader to read the variable from.</param>
-        public override void readUpdate(System.IO.BinaryReader reader) {
-            this.realValue = reader.ReadString();
+        /// <param name="reader">The object containing the update.</param>
+        internal abstract void setValue(object value) {
+            this.realValue = (string)value;
         }
 
     }
@@ -509,7 +476,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             : base(fieldContainer) {
             realValue = (Updatable[])values.Clone();
             if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
-                registerUpdate();
+                this.fieldContainer.registerUpdate(this);
         }
 
         /// <summary>
@@ -748,7 +715,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         private void writeUpdate(int id, int index) {
             this.updateWriter.Write(id);
             this.updateWriter.Write(index);
-            this.registerUpdate();
+            this.fieldContainer.registerUpdate(this);
         }
 
         /// <summary>

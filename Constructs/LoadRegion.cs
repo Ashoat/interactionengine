@@ -149,65 +149,62 @@ namespace InteractionEngine.Constructs {
 
         #endregion
 
-        #region Update Cache
+        #region Update Buffer
 
         /**
-         * UPDATE CACHE
+         * UPDATE BUFFER
          * 
          * Every LoadRegion handles cached updates to send to users that have it loaded.
          */
-        
-        // Contains a stream of bytes to be sent across the network to a client or multiple clients.
-        // Used for caching the message before sending it.
-        private Microsoft.Xna.Framework.Net.PacketWriter cache = new Microsoft.Xna.Framework.Net.PacketWriter();
-
+    
+        // Contains a list of all the Updates currently waiting to be sent to clients in this LoadRegion.
+        // Used so that we send Updates only to clients who need them.
+        private System.Collections.Generic.List<Networking.Update> updateBuffer = new System.Collections.Generic.List<InteractionEngine.Networking.Update>();
         // Contains a list of all the Updatables that have been modified this loop.
         // Used so that we can make sure we have no duplicate UPDATE_FIELD messages.
-        private System.Collections.Generic.List<Datatypes.Updatable> updateList = new System.Collections.Generic.List<Datatypes.Updatable>();
+        private System.Collections.Generic.List<Datatypes.Updatable> updateFieldBuffer = new System.Collections.Generic.List<Datatypes.Updatable>();
 
         /// <summary>
-        /// Add an Updatable to the list of Updatables requiring network updates.
+        /// Add an Update to the Update Buffer.
         /// </summary>
-        /// <param name="update">The Updatable requiring an update broadcast.</param>
-        public void addUpdate(Datatypes.Updatable update) {
-            updateList.Add(update);
+        /// <param name="update">The Update to be added.</param>
+        public void addUpdate(Networking.Update update) {
+            updateBuffer.Add(update);
+        }
+
+        /// <summary>
+        /// Add an Updatable to the UpdateField Buffer.
+        /// </summary>
+        /// <param name="field">The Updatable to be added.</param>
+        public void registerUpdate(Datatypes.Updatable field) {
+            updateFieldBuffer.Add(field);
         }
 
         /// <summary>
         /// Removes an Updatable from the list of Updatables requiring network updates.
         /// It's a good idea to call this method before deleting an object with this field.
         /// </summary>
-        /// <param name="update">The Updatable no longer requiring an update network broadcast.</param>
+        /// <param name="update">The Updatable no longer requiring an UPDATE_FIELD transfer code.</param>
         public void cancelUpdate(Datatypes.Updatable update) {
-            updateList.Remove(update);
+            updateFieldBuffer.Remove(update);
         }
 
         /// <summary>
-        /// Write an update directly to the binary cache of network updates waiting to be sent.
+        /// Reset the Update Buffer.
         /// </summary>
-        /// <param name="update">The byte array containing the update information.</param>
-        public void writeUpdate(byte[] update) {
-            cache.Write(update);
+        public void resetBuffer() {
+            updateBuffer.Clear();
         }
 
         /// <summary>
-        /// Reset the PacketWriter cache.
+        /// Get the current list of Updates in this LoadRegion's Update Buffer.
         /// </summary>
-        public void resetCache() {
-            cache = new Microsoft.Xna.Framework.Net.PacketWriter();
-        }
-
-        /// <summary>
-        /// Send the output from the cache to a client.
-        /// </summary>
-        /// <param name="gamer">The NetworkGamer we are sending an update to.</param>
-        /// <see>XNA documentation for more information on NetworkGamer.</see>
-        public void sendUpdate(Microsoft.Xna.Framework.Net.NetworkGamer gamer) {
-            foreach (Datatypes.Updatable updating in updateList) {
-                updating.writeUpdate(cache);
-            }
-            updateList.Clear();
-            GameWorld.GameWorld.gamer.SendData(cache, Microsoft.Xna.Framework.Net.SendDataOptions.Reliable, gamer);
+        /// <returns>The list of Updates.</returns>
+        public System.Collections.Generic.List<Networking.Update> getUpdates() {
+            foreach (Datatypes.Updatable updating in updateFieldBuffer)
+                updateBuffer.Add(new Networking.UpdateField(updating.fieldContainer.id, updating.id, updating.getValue()));
+            updateFieldBuffer.Clear();
+            return updateBuffer;
         }
 
         #endregion
