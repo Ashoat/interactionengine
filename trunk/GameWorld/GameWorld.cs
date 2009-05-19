@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -8,19 +8,11 @@
 |           \/   |___/___/\___|            |
 |                                          |
 |••••••••••••••••••••••••••••••••••••••••••|
-| GAME WORLD                               |
-| * RepeatMethod              Delegate     |
-| * Repeater                  Class        |
+| GAMEWORLD                                |
 | * GameWorld                 Static Class |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
 namespace InteractionEngine.GameWorld {
-
-    /**
-     * This class holds a reference to a method that needs to be checked every once in a while.
-     * @return True means doesn't need to be repeated anymore.
-     */
-    public delegate bool RepeatMethod();
 
     /**
      * Does like, everything. Seriously. w00t for procedural style!
@@ -72,9 +64,6 @@ namespace InteractionEngine.GameWorld {
             MULTIPLAYER_SERVERCLIENT
         }
         public static Status status;
-        // Contains a reference to the local Server.User.
-        // Used for passing the Server.User to methods when calling them locally.
-        public static InteractionEngine.Server.User user;
         // Contains a reference to the UI class.
         // Used by the client to execute output.
         public static Client.UserInterface userInterface;
@@ -134,7 +123,7 @@ namespace InteractionEngine.GameWorld {
         /// <param name="events">The list of events to process.</param>
         private static void processEvents(System.Collections.Generic.List<EventHandling.Event> events) {
             foreach (EventHandling.Event eventObject in events)
-                GameWorld.getObject(eventObject.gameObjectID).getEvent(eventObject.eventHash)(null, eventObject.parameter);
+                GameWorld.getObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(null, eventObject.parameter);
         }
 
         #endregion
@@ -180,18 +169,8 @@ namespace InteractionEngine.GameWorld {
          * These methods handle communication from the client side.
          */
 
-        /// <summary>
-        /// Transfer code constants.
-        /// These constants are the first information passed in an update packet from the server. 
-        /// They help determine how the client's InteractionEngine needs to handle that update.
-        /// </summary>
-        public const byte CREATE_OBJECT = 0;    // This code tells the client to instantiate a new GameObject using that GameObject's factory.
-        public const byte CREATE_REGION = 1;    // This code tells the client to instantiate a new LoadRegion.
-        public const byte DELETE_REGION = 2;    // This code tells the client to delete a LoadRegion.
-        public const byte DELETE_OBJECT = 3;    // This code tells the client to delete a GameObject and to remove its reference from its LoadRegion.
-        public const byte UPDATE_FIELD = 4;     // This code tells the client to update an Updatable.
-        public const byte MOVE_OBJECT = 5;      // This code tells the client to move an object from one LoadRegion to another.
-
+        // Contains a reference to the Server object.
+        // Used for handling basic networking operations for clients.
         private static Networking.Server server;
 
         /// <summary>
@@ -208,55 +187,11 @@ namespace InteractionEngine.GameWorld {
         /// Recieve and process updates from the server. This method is only used on the client.
         /// </summary>
         private static void receiveUpdate() {
-            while (game.session.LocalGamers[0].IsDataAvailable) {
-                // Instantiate the reader and the gamer objects, and recieve the data.
-                Microsoft.Xna.Framework.Net.PacketReader reader = new Microsoft.Xna.Framework.Net.PacketReader();
-                Microsoft.Xna.Framework.Net.NetworkGamer otherGamer;
-                game.session.LocalGamers[0].ReceiveData(reader, out otherGamer);
-                while (reader.Position < reader.Length) {
-                    byte transferCode = reader.ReadByte();
-                    switch (transferCode) {
-                        case CREATE_OBJECT:
-                            createObject(reader);
-                            break;
-                        case DELETE_OBJECT:
-                            deleteObject(reader);
-                            break;
-                        case UPDATE_FIELD:
-                            updateField(reader);
-                            break;
-                    }
-                }
+            if (server == null) return;
+            System.Collections.Generic.List<Networking.Update> updates = server.getUpdates();
+            foreach (Networking.Update update in updates) {
+                update.executeUpdate();
             }
-        }
-
-        /// <summary>
-        /// Process the byte array received from the server. This method is only used on the client.
-        /// </summary>
-        /// <param name="reader">A PacketReader containing all data recieved.</param>
-        public static void createObject(Microsoft.Xna.Framework.Net.PacketReader reader) {
-            Constructs.LoadRegion loadRegion = (Constructs.LoadRegion)fieldContainerHashlist[reader.ReadInt32()];
-            string classHash = reader.ReadString();
-            int gameObjectID = reader.ReadInt32();
-            Constructs.GameObject.factoryList[classHash](loadRegion, gameObjectID, reader);
-        }
-
-        /// <summary>
-        /// Process the byte array received from the server. This method is only used on the client.
-        /// </summary>
-        /// <param name="reader">A PacketReader containing all data recieved.</param>
-        private static void deleteObject(Microsoft.Xna.Framework.Net.PacketReader reader) {
-            Constructs.GameObjectable gameObject = getObject(reader.ReadInt32());
-            gameObject.getLoadRegion().removeObject(gameObject.getID());
-            removeFieldContainer(gameObject.getID());
-        }
-
-        /// <summary>
-        /// Process the byte array received from the server. This method is only used on the client.
-        /// </summary>
-        /// <param name="reader">A PacketReader containing all data recieved.</param>
-        public static void updateField(Microsoft.Xna.Framework.Net.PacketReader reader) {
-
         }
 
         #endregion
@@ -288,12 +223,11 @@ namespace InteractionEngine.GameWorld {
         /// Send an update to every User. This method is only used on the server.
         /// </summary>
         private static void sendUpdate() {
-            // TODO make work with the recent revamping of the networking system
-            // Send an update to every user.
-            foreach (System.Collections.Generic.KeyValuePair<Microsoft.Xna.Framework.Net.NetworkGamer, InteractionEngine.Server.User> pair in userHashlist) {
-                // Update each of the user's LoadRegions.
-                foreach (InteractionEngine.Constructs.LoadRegion loadRegion in pair.Value.getLoadRegionList())
-                    loadRegion.sendUpdate(pair.Key);
+            // Send an update to every client.
+            foreach (Networking.Client client in Networking.Client.clientList) {
+                // Update each of the client's LoadRegions.
+                foreach (InteractionEngine.Constructs.LoadRegion loadRegion in client.getLoadRegionList())
+                    client.sendUpdate(loadRegion.getUpdates());
             }
             // Reset the cache in every LoadRegion.
             foreach (System.Collections.Generic.KeyValuePair<int, Constructs.FieldContainer> pair in fieldContainerHashlist) {
@@ -379,7 +313,7 @@ namespace InteractionEngine.GameWorld {
         /// </summary>
         /// <param name="id">The ID of the LoadRegion you want to retrieve.</param>
         /// <returns>The LoadRegion being returned.</returns>
-        public static Constructs.LoadRegion getObject(int id) {
+        public static Constructs.LoadRegion getLoadRegion(int id) {
             if (fieldContainerHashlist.ContainsKey(id)) {
                 Constructs.FieldContainer returnRegion = fieldContainerHashlist[id];
                 if (returnRegion is Constructs.LoadRegion) return (Constructs.LoadRegion)returnRegion;

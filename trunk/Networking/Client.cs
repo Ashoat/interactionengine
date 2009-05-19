@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -8,7 +8,7 @@
 |           \/   |___/___/\___|            |
 |                                          |
 |••••••••••••••••••••••••••••••••••••••••••|
-| SERVER                                   |
+| NETWORKING                               |
 | * Client                           Class |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
@@ -97,6 +97,9 @@ namespace InteractionEngine.Networking {
         // Contains a BinaryReader that wraps the above TcpClient.
         // Used so that we don't have to individually encode each byte into the stream.
         private readonly System.IO.BinaryReader reader;
+        // Contains a BinaryReader that wraps the above TcpClient.
+        // Used so that we don't have to individually encode each byte into the stream.
+        private readonly System.IO.BinaryWriter writer;
         // Contains the thread that handles reading of Events from the network stream.
         // Used for concurrently reading events so that we don't block the main game loop waiting for one to completely arrive.
         private System.Threading.Thread eventReaderThread;
@@ -111,6 +114,7 @@ namespace InteractionEngine.Networking {
         protected Client(System.Net.Sockets.TcpClient tcpClient) {
             this.tcpClient = tcpClient;
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
+            this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
             this.eventReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readEvents));
         }
 
@@ -133,16 +137,14 @@ namespace InteractionEngine.Networking {
                 int gameObjectID = reader.ReadInt32();
                 string eventHash = reader.ReadString();
                 object parameter = formatter.Deserialize(tcpClient.GetStream());
-                lock (eventBuffer) {
-                    eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
-                }
+                lock (eventBuffer) eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
             }
         }
 
         /// <summary>
-        /// Read a list of events from this client.
+        /// Read a list of Events from this Client.
         /// </summary>
-        /// <returns>A list of events that we got from this client.</returns>
+        /// <returns>A list of Events that we got from this Client.</returns>
         internal System.Collections.Generic.List<EventHandling.Event> getEvents() {
             System.Collections.Generic.List<EventHandling.Event> events = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
             lock (eventBuffer) {
