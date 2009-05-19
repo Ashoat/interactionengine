@@ -21,7 +21,7 @@
 namespace InteractionEngine.Networking {
 
     /// <summary>
-    /// Sort of an empty class representing an "update" from the Server.
+    /// An interface representing an "update" from the Server.
     /// </summary>
     internal interface Update {
 
@@ -42,7 +42,9 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the server side.
         /// </summary>
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
-        void sendUpdate(System.IO.BinaryWriter writer);
+        /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
+        /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
+        void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter);
 
         /// <summary>
         /// Execute the update this class contains.
@@ -88,9 +90,13 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the server side.
         /// </summary>
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer) {
+        /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
+        /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            writer.Write(Update.CREATE_REGION);
+            writer.Write(this.loadRegionID);
         }
 
         /// <summary>
@@ -100,6 +106,7 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+
         }
 
     }
@@ -140,9 +147,13 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the server side.
         /// </summary>
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer) {
+        /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
+        /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            writer.Write(Update.DELETE_REGION);
+            writer.Write(this.loadRegionID);
         }
 
         /// <summary>
@@ -213,9 +224,20 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the server side.
         /// </summary>
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer) {
+        /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
+        /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            writer.Write(Update.CREATE_OBJECT);
+            writer.Write(this.loadRegionID);
+            writer.Write(this.gameObjectID);
+            writer.Write(this.classHash);
+            writer.Write(this.fieldValues.Count);
+            foreach (System.Collections.Generic.KeyValuePair<int, object> pair in fieldValues) {
+                writer.Write(pair.Key);
+                formatter.Serialize(stream, pair.Value);
+            }
         }
 
         /// <summary>
@@ -265,9 +287,13 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the server side.
         /// </summary>
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer) {
+        /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
+        /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            writer.Write(Update.DELETE_OBJECT);
+            writer.Write(this.gameObjectID);
         }
 
         /// <summary>
@@ -324,9 +350,14 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the server side.
         /// </summary>
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer) {
+        /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
+        /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            writer.Write(Update.MOVE_OBJECT);
+            writer.Write(this.gameObjectID);
+            writer.Write(this.loadRegionID);
         }
 
         /// <summary>
@@ -390,9 +421,15 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the server side.
         /// </summary>
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer) {
+        /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
+        /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
+        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            writer.Write(Update.UPDATE_FIELD);
+            writer.Write(this.fieldContainerID);
+            writer.Write(this.fieldID);
+            formatter.Serialize(stream, newValue);
         }
 
         /// <summary>

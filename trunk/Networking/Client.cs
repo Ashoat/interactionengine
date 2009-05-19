@@ -123,7 +123,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="update"></param>
         internal void sendUpdate(Update update) {
-            update.sendUpdate(writer);
+            update.sendUpdate(writer, tcpClient.GetStream(), formatter);
         }
 
         /// <summary>
