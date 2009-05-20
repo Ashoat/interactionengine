@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -17,8 +17,7 @@
 
 // TODO: "inputEnabled?"
 
-using InteractionEngine.EventHandling;
-namespace InteractionEngine.Client {
+namespace InteractionEngine.UserInterface {
 
     /// <summary>
     /// Interface for the user interface. Can do anything it wants, as long as it can input and output from and to the user.
@@ -33,7 +32,7 @@ namespace InteractionEngine.Client {
         // Contains a list of user input events triggered since the last call to this.input().
         // Used for safely shuttling events from the user input thread into the main GameWorld thread.
         // It would be inadvisable to modify this list without first obtaining its lock.
-        private System.Collections.Generic.List<Event> eventList = new System.Collections.Generic.List<Event>();
+        private System.Collections.Generic.List<EventHandling.Event> eventList = new System.Collections.Generic.List<EventHandling.Event>();
 
         // Contains the thread that handles detection of user input events by running runRetrieveInput().
         // Used for concurrently collecting user input events while the main thread is still running.
@@ -48,12 +47,12 @@ namespace InteractionEngine.Client {
         }
 
         /// <summary>
-        /// Continuous loop that calls the retrieveInput(System.Collections.Generic.List<Event>) method repeatedly,
+        /// Continuous loop that calls the retrieveInput(System.Collections.Generic.List<EventHandling.Event>) method repeatedly,
         /// and stuffs the new events into the eventList, for the GameWorld to later fetch via the input() method.
         /// This method should run in its own thread, if that isn't clear already.
         /// </summary>
         private void runRetrieveInput() {
-            System.Collections.Generic.List<Event> newEvents = new System.Collections.Generic.List<Event>();
+            System.Collections.Generic.List<EventHandling.Event> newEvents = new System.Collections.Generic.List<EventHandling.Event>();
             while (true) {
                 newEvents.Clear();
                 retrieveInput(newEvents);
@@ -69,10 +68,10 @@ namespace InteractionEngine.Client {
         /// Also, clears eventList of all events.
         /// </summary>
         /// <returns>The events that are being called. Each includes a GameObject ID and an event hash.</returns>
-        public System.Collections.Generic.List<Event> input() {
-            System.Collections.Generic.List<Event> eventExport;
+        public System.Collections.Generic.List<EventHandling.Event> input() {
+            System.Collections.Generic.List<EventHandling.Event> eventExport;
             lock (eventList) {
-                eventExport = new System.Collections.Generic.List<Event>(eventList);
+                eventExport = new System.Collections.Generic.List<EventHandling.Event>(eventList);
                 eventList.Clear();
             }
             return eventExport;
@@ -80,11 +79,11 @@ namespace InteractionEngine.Client {
 
         /// <summary>
         /// Checks state of user input devices to see if an input event should be triggered.
-        /// If so, collects the Event objects and inserts them into the given list.
+        /// If so, collects the EventHandling.Event objects and inserts them into the given list.
         /// Make it quick!
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
-        protected abstract void retrieveInput(System.Collections.Generic.List<Event> newEventList);
+        protected abstract void retrieveInput(System.Collections.Generic.List<EventHandling.Event> newEventList);
 
         /// <summary>
         /// Output stuff into the user interface.
@@ -128,7 +127,7 @@ namespace InteractionEngine.Client {
         /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
         /// <returns>A new instance of KeyboardFocus.</returns>
         static KeyboardFocus makeKeyboardFocus(InteractionEngine.Constructs.LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
             KeyboardFocus keyboardFocus = new KeyboardFocus(loadRegion, id);
             // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
@@ -167,16 +166,18 @@ namespace InteractionEngine.Client {
         // Used for knowing where to send keyboard events.
         private Constructs.Datatypes.UpdatableGameObject<Keyboardable> focusHolder;
 
+        // You can't use the following method. You have to use a factory like in GameObject.
+
         /// <summary>
         /// Constructs a new KeyboardFocus object.
         /// Should be assigned to a user's local LoadRegion.
         /// </summary>
         /// <param name="loadRegion">The user's local LoadRegion to which this GameObject belongs.</param>
-        public KeyboardFocus(InteractionEngine.Constructs.LoadRegion loadRegion)
-            : base(loadRegion) {
+        /*public KeyboardFocus(InteractionEngine.Constructs.LoadRegion loadRegion) {
+            InteractionEngine.Constructs.GameObject.createGameObject<KeyboardFocus>(loadRegion);
             focusHolder = new InteractionEngine.Constructs.Datatypes.UpdatableGameObject<Keyboardable>(this);
-            this.addEvent(EVENT_HASH, new EventMethod(keyPressed));
-        }
+            this.addEvent(EVENT_HASH, new EventHandlingEventMethod(keyPressed));
+        }*/
 
         /// <summary>
         /// Processes the event where a key press is received.
@@ -202,8 +203,8 @@ namespace InteractionEngine.Client {
         /// </summary>
         /// <param name="invoker">The type of event (ie. left-click, right-click, etc).</param>
         /// <returns>The method that is called by the event.</returns>
-        public Event getEvent(int invoker) {
-            return new Event(this.getID(), EVENT_HASH, (object)invoker);
+        public EventHandling.Event getEvent(int invoker) {
+            return new EventHandling.Event(this.id, EVENT_HASH, (object)invoker);
         }
 
     }

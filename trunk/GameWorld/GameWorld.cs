@@ -12,12 +12,12 @@
 | * GameWorld                 Static Class |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
-namespace InteractionEngine.GameWorld {
+namespace InteractionEngine {
 
     /**
      * Does like, everything. Seriously. w00t for procedural style!
      */
-    public static class GameWorld {
+    public static class Engine {
 
         // TODO: Make a central reference for all GameObject factories, pointing types (string) to GameObject factory methods.
 
@@ -78,7 +78,7 @@ namespace InteractionEngine.GameWorld {
         }
         // Contains a reference to the UI class.
         // Used by the client to execute output.
-        public static Client.UserInterface userInterface;
+        public static UserInterface.UserInterface userInterface;
 
         /// <summary>
         /// Run the game.
@@ -135,7 +135,7 @@ namespace InteractionEngine.GameWorld {
         /// <param name="events">The list of events to process.</param>
         private static void processEvents(System.Collections.Generic.List<EventHandling.Event> events) {
             foreach (EventHandling.Event eventObject in events)
-                GameWorld.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(null, eventObject.parameter);
+                Engine.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(null, eventObject.parameter);
         }
 
         #endregion
@@ -226,7 +226,7 @@ namespace InteractionEngine.GameWorld {
                 // Process the events.
                 foreach (EventHandling.Event eventObject in events) {
                     if (client.hasPermission(eventObject.gameObjectID))
-                        GameWorld.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(client, eventObject.parameter);
+                        Engine.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(client, eventObject.parameter);
                 }
             }
         }
@@ -244,10 +244,7 @@ namespace InteractionEngine.GameWorld {
                 }
             }
             // Reset the cache in every LoadRegion.
-            foreach (System.Collections.Generic.KeyValuePair<int, Constructs.FieldContainer> pair in fieldContainerHashlist) {
-                Constructs.FieldContainer region = pair.Value;
-                if (region is Constructs.LoadRegion) ((Constructs.LoadRegion)region).resetBuffer();
-            }
+            foreach (Constructs.LoadRegion region in getLoadRegionList()) region.resetBuffer();
         }
 
         #endregion

@@ -46,17 +46,19 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="ipAddress">The IP address where we can find the server at.</param>
         public Server(int ipAddress) {
-            this.tcpClient = new System.Net.Sockets.TcpClient(new System.Net.IPEndPoint((long)ipAddress, Client.listeningPort)); 
+            if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("The game developer screwed up. They shouldn't be insantiating a Server object on a server.");
+            this.tcpClient = new System.Net.Sockets.TcpClient(new System.Net.IPEndPoint((long)ipAddress, Client.listeningPort));
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
             this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
             this.updateReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readUpdates));
         }
 
         /// <summary>
-        /// Send a packet containing an Event to the server.
+        /// Send a packet containing an EventHandling.Event to the server.
         /// </summary>
-        /// <param name="eventObject">The Event to send across.</param>
-        public void sendEvent(EventHandling.Event eventObject) {
+        /// <param name="eventObject">The EventHandling.Event to send across.</param>
+        public void sendEvent(EventHandling.EventHandling.Event eventObject) {
             writer.Write(eventObject.gameObjectID);
             writer.Write(eventObject.eventHash);
             formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);
@@ -110,8 +112,6 @@ namespace InteractionEngine.Networking {
             }
             return updates;
         }
-
-        #endregion
 
     }
 

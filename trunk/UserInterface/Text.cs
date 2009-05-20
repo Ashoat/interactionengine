@@ -1,6 +1,6 @@
 ﻿
 
-namespace InteractionEngine.Client.Text {
+namespace InteractionEngine.UserInterface.Text {
 
     /**
      * Holds all information and methods regarding inventory.
@@ -9,7 +9,7 @@ namespace InteractionEngine.Client.Text {
 
         // Contains a dictionary pointing an ID to an Event.
         // Used for allowing users to enter an integer to indicate an Event. 
-        System.Collections.Generic.List<Event> options = new System.Collections.Generic.List<Event>();
+        System.Collections.Generic.List<EventHandling.Event> options = new System.Collections.Generic.List<EventHandling.Event>();
         // Contains all the text that is going to be output this next loop.
         // Used for saving that text until it needs to be output.
         private string outputBuffer = "";
@@ -20,16 +20,16 @@ namespace InteractionEngine.Client.Text {
         // Used for figuring out if retrieved input is in the correct format.
         private System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^[0-9]+$");
         // Contains an event invoker constant.
-        // Used for figuring out what Event an Interactable should return.
+        // Used for figuring out what EventHandling.Event an Interactable should return.
         public const int TEXT_EVENT_CHOSEN = 245340;
 
         /// <summary>
         /// Checks state of user input devices to see if an input event should be triggered.
-        /// If so, collects the Event objects and inserts them into the given list.
+        /// If so, collects the EventHandling.Event objects and inserts them into the given list.
         /// Make it quick!
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
-        protected override void retrieveInput(System.Collections.Generic.List<Event> newEvents) {
+        protected override void retrieveInput(System.Collections.Generic.List<EventHandling.Event> newEvents) {
             string nextLine = System.Console.ReadLine();
             while (nextLine != null) {
                 readyToOutput = true;
@@ -48,15 +48,15 @@ namespace InteractionEngine.Client.Text {
         public override void output() {
             if (!readyToOutput) return;
             options.Clear();
-            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.user.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = loadRegion.getObject(i);
+                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
                     // Go through every GameObject and see if they have something to output
                     if (gameObject is Graphable)
                         ((Graphable)gameObject).getGraphics().onDraw();
                     // Go through every GameObject and see if they can be interacted with
-                    if (gameObject is Interactable)
-                        options.Add(((Interactable)gameObject).getEvent(TEXT_EVENT_CHOSEN));
+                    if (gameObject is InteractionEngine.EventHandling.Interactable)
+                        options.Add(((InteractionEngine.EventHandling.Interactable)gameObject).getEvent(TEXT_EVENT_CHOSEN));
                 }
             }
             for (int i = 0; i < options.Count; i++)

@@ -14,7 +14,7 @@
 | * Graphable                    Interface |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
-namespace InteractionEngine.Client {
+namespace InteractionEngine.UserInterface {
 
     
 

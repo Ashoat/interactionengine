@@ -179,17 +179,17 @@ namespace InteractionEngine.Constructs {
         /// Also, make sure to remove this EventMethod from the lits when you're done with the post-insantiation work.
         /// </returns>
         public static GameObject createGameObject<Type>(LoadRegion loadRegion) where Type : GameObject, new() {
-            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
-            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return null;
+            // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return null;
             // Otherwise, we are a server. Let's go!
             Type returnObject = new Type();
             // Add this FieldContainer to the GameWorld. This will set its ID.
-            GameWorld.GameWorld.addGameObject(returnObject);
+            InteractionEngine.Engine.addGameObject(returnObject);
             // Add and assign it to the LoadRegion.
             loadRegion.addObject(returnObject.id);
             returnObject.loadRegion = loadRegion;
             // Add a CreateObject to the LoadRegion's Update Buffer so that all the clients get the update.
-            if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT) {
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT) {
                 returnObject.loadRegion.addUpdate(new InteractionEngine.Networking.CreateObject(
                     returnObject.loadRegion.id,
                     returnObject.id,
@@ -208,12 +208,12 @@ namespace InteractionEngine.Constructs {
         /// <param name="id"></param>
         protected GameObject(LoadRegion loadRegion, int id) {
             // This constructor should only ever be called by a subclass's constructor on a MULTIPLAYER_CLIENT, which in turn was called by a factory method on that subclass.
-            if (GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("The game developer screwed up. They shouldn't be calling this method, except on a GameObject's factory constructor on a MULTIPLAYER_CLIENT.");
             // Set this GameObject's ID.
             this.id = id;
             // Add this FieldContainer to the GameWorld. This will NOT set its ID.
-            GameWorld.GameWorld.addGameObject(this);
+            InteractionEngine.Engine.addGameObject(this);
             // Add and assign it to the LoadRegion.
             loadRegion.addObject(this.id);
             this.loadRegion = loadRegion;
@@ -223,8 +223,8 @@ namespace InteractionEngine.Constructs {
         /// Get rid of this GameObject. Sad, I know.
         /// </summary>
         public void deconstruct() {
-            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
-            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return;
+            // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return;
             this.loadRegion.addUpdate(new Networking.DeleteObject(this.id));
             internalDeconstruct();
         }
@@ -233,7 +233,7 @@ namespace InteractionEngine.Constructs {
         /// Gets rid of this GameObject. Called by the above method as well as DeleteObject.executeUpdate().
         /// </summary>
         internal void internalDeconstruct() {
-            GameWorld.GameWorld.removeGameObject(this.id);
+            InteractionEngine.Engine.removeGameObject(this.id);
             this.loadRegion.removeObject(this.id);
         }
 
@@ -258,8 +258,8 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <param name="newLoadRegion">The new LoadRegion.</param>
         public void move(LoadRegion newLoadRegion) {
-            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
-            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return;
+            // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return;
             this.loadRegion.addUpdate(new Networking.MoveObject(this.id, newLoadRegion.id));
             this.internalMove(newLoadRegion);
         }

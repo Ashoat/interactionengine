@@ -18,7 +18,7 @@ namespace InteractionEngine.Constructs {
      * Each LoadRegion contains GameObjects, which get loaded all at once. A LoadRegion is a unit of trans-network updating.
      * It itself is a GameObject, but only because it needs to act as an Updatable container. Also, it needs to use the synchronized instantiation 
      */
-    public class LoadRegion : FieldContainer {
+    public class LoadRegion {
 
         // Contains the ID of this LoadRegion. Must be positive.
         // Used for passing a reference to this LoadRegion across a network.
@@ -41,13 +41,13 @@ namespace InteractionEngine.Constructs {
         /// If you are a MULTIPLAYER_CLIENT, nothing will happen as a result of this method. You will never know this LoadRegion was ever instantiated.
         /// </summary>
         public static LoadRegion createLoadRegion() {
-            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
-            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 return null;
             // Otherwise, we are a server. Let's go!
             LoadRegion returnRegion = new LoadRegion();
             // Add this FieldContainer to the GameWorld. This will set its ID.
-            GameWorld.GameWorld.addLoadRegion(returnRegion);
+            InteractionEngine.Engine.addLoadRegion(returnRegion);
             return returnRegion;
         }
 
@@ -73,13 +73,13 @@ namespace InteractionEngine.Constructs {
         /// you will have to use onCreateObject instead. You'll probably want to count the GameObjects created in the LoadRegion until you have all you need so you know the LoadRegion is ready to be played with.
         /// </returns></returns>
         public static LoadRegion createLoadRegion(System.Collections.Generic.List<Networking.Client> clients) {
-            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
-            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 return null;
             // Otherwise, we are a server. Let's go!
             LoadRegion returnRegion = new LoadRegion();
             // Add this FieldContainer to the GameWorld. This will set its ID.
-            GameWorld.GameWorld.addLoadRegion(returnRegion);
+            InteractionEngine.Engine.addLoadRegion(returnRegion);
             foreach (Networking.Client client in clients)
                 client.sendUpdate(new Networking.CreateRegion(returnRegion.id));
             return returnRegion;
@@ -97,19 +97,19 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <param name="id">The ID to assign this LoadRegion, provided by the server.</param>
         internal LoadRegion(int id) : base() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.id = id;
-            GameWorld.GameWorld.addLoadRegion(this);
+            InteractionEngine.Engine.addLoadRegion(this);
         }
 
         /// <summary>
         /// Get rid of this LoadRegion. Sad, I know.
         /// </summary>
         public void deconstruct() {
-            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
-            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return;
-            foreach (int gameObjectID in objects) GameWorld.GameWorld.getGameObject(gameObjectID).deconstruct();
+            // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return;
+            foreach (int gameObjectID in objects) InteractionEngine.Engine.getGameObject(gameObjectID).deconstruct();
             this.addUpdate(new Networking.DeleteRegion(this.id));
             this.internalDeconstruct();
         }
@@ -118,7 +118,7 @@ namespace InteractionEngine.Constructs {
         /// Gets rid of this LoadRegion. Called by the above method as well as DeleteRegion.executeUpdate().
         /// </summary>
         internal void internalDeconstruct() {
-            GameWorld.GameWorld.removeLoadRegion(this.id);
+            InteractionEngine.Engine.removeLoadRegion(this.id);
         }
 
         #endregion
@@ -222,7 +222,7 @@ namespace InteractionEngine.Constructs {
         /// <returns>The list of Updates.</returns>
         public System.Collections.Generic.List<Networking.Update> getUpdates() {
             foreach (Datatypes.Updatable updating in updateFieldBuffer)
-                updateBuffer.Add(new Networking.UpdateField(updating.fieldContainer.id, updating.id, updating.getValue()));
+                updateBuffer.Add(new Networking.UpdateField(updating.gameObject.id, updating.id, updating.getValue()));
             updateFieldBuffer.Clear();
             return updateBuffer;
         }
