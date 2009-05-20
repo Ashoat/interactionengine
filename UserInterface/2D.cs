@@ -24,98 +24,98 @@ namespace InteractionEngine.Client.TwoDimensional {
         // Contains the SpriteBatch this UserInterface uses to draw its GameObjects.
         // Used for drawing GameObjects to the screen.
         public Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
-        // Contain lists of Interactables that had been MOUSE_OVER'd and MOUSE_CLICK'd in the last iteration of input().
+        // Contain lists of EventHandling.Interactables that had been MOUSE_OVER'd and MOUSE_CLICK'd in the last iteration of input().
         // Used for knowing when to invoke MOUSE_OUT and MOUSE_RELEASE events.
-        private System.Collections.Generic.List<Interactable> mouseOvered = new System.Collections.Generic.List<Interactable>();
-        private System.Collections.Generic.List<Interactable> mouseLeftClicked = new System.Collections.Generic.List<Interactable>();
-        private System.Collections.Generic.List<Interactable> mouseRightClicked = new System.Collections.Generic.List<Interactable>();
+        private System.Collections.Generic.List<EventHandling.Interactable> mouseOvered = new System.Collections.Generic.List<EventHandling.Interactable>();
+        private System.Collections.Generic.List<EventHandling.Interactable> mouseLeftClicked = new System.Collections.Generic.List<EventHandling.Interactable>();
+        private System.Collections.Generic.List<EventHandling.Interactable> mouseRightClicked = new System.Collections.Generic.List<EventHandling.Interactable>();
         // Contains an event invoker constant.
-        // Used for figuring out what Event an Interactable should return.
+        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_OVER = 0;
         // Contains an event invoker constant.
-        // Used for figuring out what Event an Interactable should return.
+        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_OUT = 1;
         // Contains an event invoker constant.
-        // Used for figuring out what Event an Interactable should return.
+        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_RIGHT_CLICK = 2;
         // Contains an event invoker constant.
-        // Used for figuring out what Event an Interactable should return.
+        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_RIGHT_RELEASE = 3;
         // Contains an event invoker constant.
-        // Used for figuring out what Event an Interactable should return.
+        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_LEFT_CLICK = 4;
         // Contains an event invoker constant.
-        // Used for figuring out what Event an Interactable should return.
+        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_LEFT_RELEASE = 5;
 
         /// <summary>
         /// Checks state of user input devices to see if an input event should be triggered.
-        /// If so, collects the Event objects and inserts them into the given list.
+        /// If so, collects the EventHandling.Event objects and inserts them into the given list.
         /// Make it quick!
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
-        protected override void retrieveInput(System.Collections.Generic.List<Event> newEvents) {
+        protected override void retrieveInput(System.Collections.Generic.List<EventHandling.Event> newEvents) {
             // Get mouse /*and keyboard*/ states
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             // Loop through previously clicked/over'd GameObjects to see if they have been released/out'd.
             for (int i = mouseOvered.Count - 1; i >= 0; i--) {
-                Interactable interactable = mouseOvered[i];
+                EventHandling.Interactable interactable = mouseOvered[i];
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_OUT?
                 if (!graphics.contains(mouse.X, mouse.Y)) {
-                    Event evvie = interactable.getEvent(MOUSE_OUT);
+                    EventHandling.Event evvie = interactable.getEvent(MOUSE_OUT);
                     if (evvie != null) newEvents.Add(evvie);
                     mouseOvered.RemoveAt(i);
                 }
             }
             for (int i = mouseLeftClicked.Count - 1; i >= 0; i--) {
-                Interactable interactable = mouseLeftClicked[i];
+                EventHandling.Interactable interactable = mouseLeftClicked[i];
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_LEFT_RELEASE?
                 if (!graphics.contains(mouse.X, mouse.Y) || mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released) {
-                    Event evvie = interactable.getEvent(MOUSE_LEFT_RELEASE);
+                    EventHandling.Event evvie = interactable.getEvent(MOUSE_LEFT_RELEASE);
                     if (evvie != null) newEvents.Add(evvie);
                     mouseLeftClicked.RemoveAt(i);
                 }
             }
             for (int i = mouseRightClicked.Count - 1; i >= 0; i--) {
-                Interactable interactable = mouseRightClicked[i];
+                EventHandling.Interactable interactable = mouseRightClicked[i];
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_RIGHT_RELEASE?
                 if (!graphics.contains(mouse.X, mouse.Y) || mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released) {
-                    Event evvie = interactable.getEvent(MOUSE_RIGHT_RELEASE);
+                    EventHandling.Event evvie = interactable.getEvent(MOUSE_RIGHT_RELEASE);
                     if (evvie != null) newEvents.Add(evvie);
                     mouseRightClicked.RemoveAt(i);
                 }
             }
             // Loop through all of the User's LoadRegions
-            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.user.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.getLoadRegionList()) {
                 // Loop through all the LoadRegion's GameObjects
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = loadRegion.getObject(i);
+                    Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(i);
                     // See if this GameObject can be interacted with.
                     if (gameObject is Graphable) {
                         Graphics2D graphics = (Graphics2D)((Graphable)gameObject).getGraphics();
-                        if (gameObject is Interactable) {
-                            Interactable interaction = (Interactable)gameObject;
+                        if (gameObject is EventHandling.Interactable) {
+                            EventHandling.Interactable interaction = (EventHandling.Interactable)gameObject;
                             // Check to see if the mouse is intersecting the GameObject.
                             if (graphics.contains(mouse.X, mouse.Y)) {
                                 // MOUSE_OVER?
                                 if (!mouseOvered.Contains(interaction)) {
                                     mouseOvered.Add(interaction);
-                                    Event evvie = interaction.getEvent(MOUSE_OVER);
+                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_OVER);
                                     if (evvie != null) newEvents.Add(evvie);
                                 }
                                 // MOUSE_LEFT_CLICK?
                                 if (mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseLeftClicked.Contains(interaction)) {
                                     mouseLeftClicked.Add(interaction);
-                                    Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK);
+                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK);
                                     if (evvie != null) newEvents.Add(evvie);
                                 }
                                 // MOUSE_RIGHT_CLICK?
                                 if (mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseRightClicked.Contains(interaction)) {
                                     mouseRightClicked.Add(interaction);
-                                    Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK);
+                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK);
                                     if (evvie != null) newEvents.Add(evvie);
                                 }
                             }
@@ -130,9 +130,9 @@ namespace InteractionEngine.Client.TwoDimensional {
         /// </summary>
         public override void output() {
             this.spriteBatch.Begin();
-            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.user.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.getLoadRegionList()) {
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = loadRegion.getObject(i);
+                    Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(i);
                     // Go through every GameObject and see if they have something to output
                     if (gameObject is Graphable)
                         ((Graphable)gameObject).getGraphics().onDraw();
@@ -183,9 +183,12 @@ namespace InteractionEngine.Client.TwoDimensional {
         /// <param name="textureFileName">The filename of this GameObject's texture.</param>
         public Graphics2D(Constructs.GameObject gameObject) {
             this.gameObject = gameObject;
-            xPos = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject, 0);
-            yPos = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject, 0);
-            rotation = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject, 0);
+            xPos = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject);
+            xPos.value = 0;
+            yPos = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject);
+            yPos.value = 0;
+            rotation = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject);
+            rotation.value = 0;
         }
 
 

@@ -20,17 +20,75 @@ namespace InteractionEngine.Constructs {
      */
     public class LoadRegion : FieldContainer {
 
-        #region Constructors
+        // Contains the ID of this LoadRegion. Must be positive.
+        // Used for passing a reference to this LoadRegion across a network.
+        private int realID = -1;
+        public int id {
+            get {
+                return realID;
+            }
+            set {
+                if (realID == -1) id = value;
+            }
+        }
+
+        #region Constructors and Deconstructors
 
         /// <summary>
-        /// Construct the LoadRegion from the GameWorld on the server-side. 
-        /// This method should only be called by EventMethods that are run exclusively on a server! Don't screw this up.
-        /// EventMethods triggered by the server are exclusive to Client.onJoin and Client.onQuit. So you can only create LoadRegions before networking begins, or when a client joins or quits.
+        /// Constructs the LoadRegion from the GameWorld.
+        /// This method isn't an actual constructor because it doesn't return a LoadRegion if you're a client. That's because we can't make the LoadRegion until the server updates us with the ID.
+        /// You probably shouldn't run this method often on a networked game, because without specifying clients that will receive this LoadRegion it will sort of be orphaned. Try createLoadRegion(List<![CDATA[<Client>]]>).
+        /// If you are a MULTIPLAYER_CLIENT, nothing will happen as a result of this method. You will never know this LoadRegion was ever instantiated.
         /// </summary>
-        public LoadRegion() : base() {
+        public static LoadRegion createLoadRegion() {
+            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
             if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("The game developer screwed up. They shouldn't be calling a LoadRegion constructor on the Client-side without an ID to assign it.");
-            GameWorld.GameWorld.addFieldContainer(this);
+                return null;
+            // Otherwise, we are a server. Let's go!
+            LoadRegion returnRegion = new LoadRegion();
+            // Add this FieldContainer to the GameWorld. This will set its ID.
+            GameWorld.GameWorld.addLoadRegion(returnRegion);
+            return returnRegion;
+        }
+
+        /// <summary>
+        /// Constructs the LoadRegion from the GameWorld.
+        /// This method isn't an actual constructor because it doesn't return a LoadRegion if you're a client. That's because we can't make the LoadRegion until the server updates us with the ID.
+        /// If you are a MULTIPLAYER_SERVER or a MULTIPLAYER_SERVERCLIENT this constructor will alert clients that a new LoadRegion has been created.
+        /// If you are a MULTIPLAYER_CLIENT, nothing will happen; you will wait for an update from the server (assuming you were listed in the parameter).
+        /// </summary>
+        /// <param name="clients">
+        /// This list contains all the Clients who will be needing this LoadRegion once it's created.
+        /// On a client, this list might have one item that's just null (assuming the game developer adds the EventMethod's second parameter to the list), but that's okay because we don't do anything on a client.
+        /// </param>
+        /// <returns>
+        /// The constructed LoadRegion.
+        /// If you are a MULTIPLAYER_CLIENT, this will return null; you will have to wait for the server to add your LoadRegion before you can interact with it.
+        /// If you need to do some post-instantiation work with this LoadRegion, write a new EventMethod with the relevant code. 
+        /// Then, make an if(region != null) block in the current EventMethod that calls the new EventMethod 
+        /// and an else block that adds the new EventMethod to the static onCreateRegion list on CreateRegion if it isn't already there.
+        /// Make sure that the new EventMethod checks that it is dealing with the right LoadRegion, because it is going to be called on each new instantiation.
+        /// Also, make sure to remove this EventMethod from the list when you're done with the post-insantiation work.
+        /// Note: when the onCreateRegion list is triggered, the LoadRegion will be empty of GameObjects. If you want to deal with it once the client has created all relevant GameObjects,
+        /// you will have to use onCreateObject instead. You'll probably want to count the GameObjects created in the LoadRegion until you have all you need so you know the LoadRegion is ready to be played with.
+        /// </returns></returns>
+        public static LoadRegion createLoadRegion(System.Collections.Generic.List<Networking.Client> clients) {
+            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
+            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+                return null;
+            // Otherwise, we are a server. Let's go!
+            LoadRegion returnRegion = new LoadRegion();
+            // Add this FieldContainer to the GameWorld. This will set its ID.
+            GameWorld.GameWorld.addLoadRegion(returnRegion);
+            foreach (Networking.Client client in clients)
+                client.sendUpdate(new Networking.CreateRegion(returnRegion.id));
+            return returnRegion;
+        }
+
+        /// <summary>
+        /// Empty constructor for the factory methods above.
+        /// </summary>
+        private LoadRegion() {
         }
 
         /// <summary>
@@ -41,8 +99,18 @@ namespace InteractionEngine.Constructs {
         internal LoadRegion(int id) : base() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            this.setID(id);
-            GameWorld.GameWorld.addFieldContainer(this);
+            this.id = id;
+            GameWorld.GameWorld.addLoadRegion(this);
+        }
+
+        /// <summary>
+        /// Get rid of this LoadRegion. Sad, I know.
+        /// </summary>
+        public void deconstruct() {
+            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
+            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return;
+            GameWorld.GameWorld.removeLoadRegion(this.id);
+            foreach (int gameObjectID in objects) GameWorld.GameWorld.getGameObject(gameObjectID).deconstruct();
         }
 
         #endregion
@@ -89,62 +157,6 @@ namespace InteractionEngine.Constructs {
         /// <returns>The number of GameObjects in this LoadRegion.</returns>
         public int getObjectCount() {
             return this.objects.Count;
-        }
-
-        #endregion
-
-        #region Field Container
-
-        /**
-         * FIELD CONTAINER
-         *                 
-         * Contains a dictionary that links Updatable IDs with Updatables. Note: a "field" is synonymous to an "Updatable".
-         * Used for processing CREATE_FIELD, DELETE_FIELD, and UPDATE_FIELD commands from the server. Only used by the client and Updatable (on instantiation).
-         * It is only used on client GameWorld. 
-         */
-        private System.Collections.Generic.Dictionary<int, Constructs.Datatypes.Updatable> fieldHashlist = new System.Collections.Generic.Dictionary<int, Constructs.Datatypes.Updatable>();
-
-        // Contains the ID of this FieldContainer. Must be positive.
-        // Used for passing a reference to this FieldContainer across a network.
-        private int id = -1;
-        // Contains the lowest available ID for the next Updatable.
-        // Used for knowing what ID the Server should assign a new Updatable.
-        private static int nextID = 0;
-
-        /// <summary>
-        /// Get this FieldContainer's ID.
-        /// </summary>
-        /// <returns>This FieldContainer's ID.</returns>
-        public int getID() {
-            return id;
-        }
-
-        /// <summary>
-        /// Set this FieldContainer's ID. Only works once.
-        /// </summary>
-        /// <param name="newId">The ID to set.</param>
-        public void setID(int newId) {
-            if (id == -1) id = newId;
-        }
-
-        /// <summary>
-        /// This adds a field to the field table. Read about the field table above.
-        /// </summary>
-        /// <param name="field">The field to be added.</param>
-        /// <returns>The id (the component of one's mind that contains unconscious, primitive desires).</returns>
-        public int addField(Constructs.Datatypes.Updatable field) {
-            int id = nextFieldID++;
-            fieldHashlist.Add(id, field);
-            return id;
-        }
-
-        /// <summary>
-        /// This method unboxes and returns the field.
-        /// </summary>
-        /// <param name="id">The id of the field you want to get.</param>
-        /// <returns>The field being returned.</returns>
-        public Constructs.Datatypes.Updatable getField(int id) {
-            return fieldHashlist[id];
         }
 
         #endregion

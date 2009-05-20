@@ -36,31 +36,22 @@ namespace InteractionEngine.Constructs.Datatypes {
                 return realID;
             }
             set {
-                if (id == -1) id = value;
+                if (realID == -1) id = value;
             }
         }
         // Contains a reference to this Updatable's FieldContainer.
         // Used so that when a field is updated, we know what FieldContainer (and hence what LoadRegion) to register that update with.
-        public FieldContainer fieldContainer;
+        public readonly GameObject gameObject;
 
         /// <summary>
         /// Constructs a field and assigns it an ID. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        protected Updatable(FieldContainer fieldContainer) {
+        protected Updatable(GameObject gameObject) {
             // Add this field to the FieldContainer. This will set its ID.
-            fieldContainer.addField(this);
-            this.fieldContainer = fieldContainer;
+            gameObject.addField(this);
+            this.gameObject = gameObject;
         }
-
-        /// <summary>
-        /// Constructs a field, assigns it an ID, and gives it a value.
-        /// This constructor will be used (for example) when a MULTIPLAYER_CLIENT walks into an already existing LoadRegion whose GameObjects have already been manipulated.
-        /// Then, CREATE_OBJECT transfer codes will be sent to the client that also contain a pseudo-dictionary pointing field IDs to a serialized object containg their value.
-        /// </summary>
-        /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        /// <param name="nonUpdatable">The object containg the value of this Updatable.</param>
-        public abstract Updatable(FieldContainer fieldContainer, object nonUpdatable);
 
         /// <summary>
         /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
@@ -87,22 +78,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Constructs a field and assigns it an ID. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        public UpdatableBoolean(FieldContainer fieldContainer)
-            : base(fieldContainer) {
-        }
-
-        /// <summary>
-        /// Constructs a field, assigns it an ID, and gives it a value.
-        /// This constructor will be used (for example) when a MULTIPLAYER_CLIENT walks into an already existing LoadRegion whose GameObjects have already been manipulated.
-        /// Then, CREATE_OBJECT transfer codes will be sent to the client that also contain a pseudo-dictionary pointing field IDs to a serialized object containg their value.
-        /// </summary>
-        /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        /// <param name="nonUpdatable">The object containg the value of this Updatable.</param>
-        public UpdatableBoolean(FieldContainer fieldContainer, object nonUpdatable)
-            : base(fieldContainer) {
-            if (GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            value = (bool)nonUpdatable;
+        public UpdatableBoolean(GameObject gameObject)
+            : base(gameObject) {
         }
 
         /// <summary>
@@ -128,7 +105,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.fieldContainer.registerUpdate(this);
+                this.gameObject.getLoadRegion().registerUpdate(this);
             }
         }
 
@@ -163,22 +140,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableInteger(FieldContainer fieldContainer)
-            : base(fieldContainer) {
-        }
-
-        /// <summary>
-        /// Constructs a field, assigns it an ID, and gives it a value.
-        /// This constructor will be used (for example) when a MULTIPLAYER_CLIENT walks into an already existing LoadRegion whose GameObjects have already been manipulated.
-        /// Then, CREATE_OBJECT transfer codes will be sent to the client that also contain a pseudo-dictionary pointing field IDs to a serialized object containg their value.
-        /// </summary>
-        /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        /// <param name="nonUpdatable">The object containg the value of this Updatable.</param>
-        public UpdatableInteger(FieldContainer fieldContainer, object nonUpdatable)
-            : base(fieldContainer) {
-            if (GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            value = (int)nonUpdatable;
+        public UpdatableInteger(GameObject gameObject)
+            : base(gameObject) {
         }
 
         /// <summary>
@@ -207,7 +170,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.fieldContainer.registerUpdate(this);
+                this.gameObject.getLoadRegion().registerUpdate(this);
             }
         }
 
@@ -242,22 +205,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableCharacter(FieldContainer fieldContainer)
-            : base(fieldContainer) {
-        }
-
-        /// <summary>
-        /// Constructs a field, assigns it an ID, and gives it a value.
-        /// This constructor will be used (for example) when a MULTIPLAYER_CLIENT walks into an already existing LoadRegion whose GameObjects have already been manipulated.
-        /// Then, CREATE_OBJECT transfer codes will be sent to the client that also contain a pseudo-dictionary pointing field IDs to a serialized object containg their value.
-        /// </summary>
-        /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        /// <param name="nonUpdatable">The object containg the value of this Updatable.</param>
-        public UpdatableCharacter(FieldContainer fieldContainer, object nonUpdatable)
-            : base(fieldContainer) {
-            if (GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            value = (char)nonUpdatable;
+        public UpdatableCharacter(GameObject gameObject)
+            : base(gameObject) {
         }
 
         /// <summary>
@@ -283,7 +232,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.fieldContainer.registerUpdate(this);
+                this.gameObject.getLoadRegion().registerUpdate(this);
             }
         }
 
@@ -318,22 +267,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableDouble(FieldContainer fieldContainer)
-            : base(fieldContainer) {
-        }
-
-        /// <summary>
-        /// Constructs a field, assigns it an ID, and gives it a value.
-        /// This constructor will be used (for example) when a MULTIPLAYER_CLIENT walks into an already existing LoadRegion whose GameObjects have already been manipulated.
-        /// Then, CREATE_OBJECT transfer codes will be sent to the client that also contain a pseudo-dictionary pointing field IDs to a serialized object containg their value.
-        /// </summary>
-        /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        /// <param name="nonUpdatable">The object containg the value of this Updatable.</param>
-        public UpdatableDouble(FieldContainer fieldContainer, object nonUpdatable)
-            : base(fieldContainer) {
-            if (GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            value = (double)nonUpdatable;
+        public UpdatableDouble(GameObject gameObject)
+            : base(gameObject) {
         }
 
         /// <summary>
@@ -359,7 +294,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.fieldContainer.registerUpdate(this);
+                this.gameObject.getLoadRegion().registerUpdate(this);
             }
         }
 
@@ -394,22 +329,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableString(FieldContainer fieldContainer)
-            : base(fieldContainer) {
-        }
-
-        /// <summary>
-        /// Constructs a field, assigns it an ID, and gives it a value.
-        /// This constructor will be used (for example) when a MULTIPLAYER_CLIENT walks into an already existing LoadRegion whose GameObjects have already been manipulated.
-        /// Then, CREATE_OBJECT transfer codes will be sent to the client that also contain a pseudo-dictionary pointing field IDs to a serialized object containg their value.
-        /// </summary>
-        /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        /// <param name="nonUpdatable">The object containg the value of this Updatable.</param>
-        public UpdatableString(FieldContainer fieldContainer, object nonUpdatable)
-            : base(fieldContainer) {
-            if (GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            value = (string)nonUpdatable;
+        public UpdatableString(GameObject gameObject)
+            : base(gameObject) {
         }
 
         /// <summary>
@@ -435,7 +356,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.fieldContainer.registerUpdate(this);
+                this.gameObject.getLoadRegion().registerUpdate(this);
             }
         }
 
@@ -472,11 +393,11 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
         /// <param name="values">The list of field IDs that will be put into the array.</param>
-        public UpdatableArray(FieldContainer fieldContainer, Updatable[] values)
-            : base(fieldContainer) {
+        public UpdatableArray(GameObject gameObject, Updatable[] values)
+            : base(gameObject) {
             realValue = (Updatable[])values.Clone();
             if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
-                this.fieldContainer.registerUpdate(this);
+                this.gameObject.getLoadRegion().registerUpdate(this);
         }
 
         /// <summary>
@@ -497,7 +418,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         public override void readUpdate(System.IO.BinaryReader reader) {
             this.realValue = new Updatable[reader.ReadInt32()];
             for (int i = 0; i < realValue.Length; i++)
-                realValue[i] = this.fieldContainer.getField(reader.ReadInt32());
+                realValue[i] = this.gameObject.getField(reader.ReadInt32());
         }
 
         /// <summary>
@@ -545,8 +466,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor should only be used on the server side.
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableList(FieldContainer fieldContainer)
-            : base(fieldContainer) {
+        public UpdatableList(GameObject gameObject)
+            : base(gameObject) {
             updateWriter = new System.IO.BinaryWriter(updateList);
             realValue = new System.Collections.Generic.List<Updatable>();
         }
@@ -557,8 +478,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
         /// <param name="list">Array of Updatables to include in the UpdateableList. Must have length > 0.</param>
-        public UpdatableList(FieldContainer fieldContainer, Updatable[] list)
-            : base(fieldContainer) {
+        public UpdatableList(GameObject gameObject, Updatable[] list)
+            : base(gameObject) {
             updateWriter = new System.IO.BinaryWriter(updateList);
             realValue = new System.Collections.Generic.List<Updatable>();
             for (int i = 0; i < list.Length; i++) {
@@ -573,8 +494,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
         /// <param name="list">List of Updatables to include in the UpdateableList. Must have length > 0.</param>
-        public UpdatableList(FieldContainer fieldContainer, System.Collections.Generic.List<Updatable> list)
-            : base(fieldContainer) {
+        public UpdatableList(GameObject gameObject, System.Collections.Generic.List<Updatable> list)
+            : base(gameObject) {
             updateWriter = new System.IO.BinaryWriter(updateList);
             realValue = new System.Collections.Generic.List<Updatable>();
             for (int i = 0; i < list.Count; i++) {
@@ -698,8 +619,8 @@ namespace InteractionEngine.Constructs.Datatypes {
                 int index = reader.ReadInt32();
                 if (id < 0 && index < 0) realValue.Clear();
                 else if (id < 0) realValue.RemoveAt(index);
-                else if (index < 0) realValue.Add(this.fieldContainer.getField(id));
-                else realValue.Insert(index, this.fieldContainer.getField(id));
+                else if (index < 0) realValue.Add(this.gameObject.getField(id));
+                else realValue.Insert(index, this.gameObject.getField(id));
             }
         }
 
@@ -715,7 +636,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         private void writeUpdate(int id, int index) {
             this.updateWriter.Write(id);
             this.updateWriter.Write(index);
-            this.fieldContainer.registerUpdate(this);
+            this.gameObject.getLoadRegion().registerUpdate(this);
         }
 
         /// <summary>
@@ -741,8 +662,9 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Constructs a new UpdatableGameObject. 
         /// </summary>
         /// <param name="owner">The FieldContainer to which this field belongs. NOT the value of this field.</param>
-        public UpdatableGameObject(FieldContainer owner) {
-            realValue = new UpdatableInteger(owner, -1);
+        public UpdatableGameObject(GameObject owner) {
+            realValue = new UpdatableInteger(owner);
+            realValue.setValue((object)-1);
         }
 
         /// <summary>
@@ -750,8 +672,9 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// </summary>
         /// <param name="owner">The FieldContainer to which this field belongs. NOT the value of this field.</param>]
         /// <param name="gameObject">The GameObject to be stored as the value of this field.</param>
-        public UpdatableGameObject(FieldContainer owner, T gameObject) {
-            realValue = new UpdatableInteger(owner, gameObject.getID());
+        public UpdatableGameObject(GameObject owner, T gameObject) {
+            realValue = new UpdatableInteger(owner);
+            realValue.setValue((object)(gameObject.id));
         }
 
         /// <summary>
@@ -770,8 +693,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         private UpdatableInteger realValue;
         public T value {
             // default(T) returns null for reference types
-            get { return (realValue.value == -1) ? default(T) : (T)GameWorld.GameWorld.getObject(realValue.value); }
-            set { this.realValue.value = (value == null) ? -1 : value.getID(); }
+            get { return (realValue.value == -1) ? default(T) : (T)GameWorld.GameWorld.getGameObject(realValue.value); }
+            set { this.realValue.value = (value == null) ? -1 : value.id; }
         }
 
     }
