@@ -18,7 +18,7 @@ namespace InteractionEngine.Constructs {
     /**
      * Holds all information and methods regarding location.
      */
-
+    
     public class Location {
 
         // Contains a reference to the GameObject this Location module is associated with.

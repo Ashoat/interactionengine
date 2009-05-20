@@ -20,8 +20,6 @@ namespace InteractionEngine.Networking {
      */
     public class Server {
 
-        #region Networking
-
         // Contains a static reference to a BinaryFormatter.
         // Used for serialization/deserialization of objects.
         private static System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -58,7 +56,7 @@ namespace InteractionEngine.Networking {
         /// Send a packet containing an EventHandling.Event to the server.
         /// </summary>
         /// <param name="eventObject">The EventHandling.Event to send across.</param>
-        public void sendEvent(EventHandling.EventHandling.Event eventObject) {
+        public void sendEvent(EventHandling.Event eventObject) {
             writer.Write(eventObject.gameObjectID);
             writer.Write(eventObject.eventHash);
             formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);

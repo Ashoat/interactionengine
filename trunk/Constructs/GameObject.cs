@@ -28,7 +28,7 @@ namespace InteractionEngine.Constructs {
 
         // Contains the ID of this FieldContainer. Must be positive.
         // Used for passing a reference to this FieldContainer across a network.
-        public int id {
+        int id {
             get;
             set;
         }
@@ -38,24 +38,6 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <returns>The class hash of this GameObject.</returns>
         string getClassHash();
-
-        /// <summary>
-        /// Constructs the GameObject from the GameWorld.
-        /// This method isn't an actual constructor because it doesn't return a GameObject if you're a client. That's because we can't make the GameObject until the server updates us with the ID.
-        /// If you are a MULTIPLAYER_SERVER or a MULTIPLAYER_SERVERCLIENT this constructor will alert clients that a new GameObject has been created.
-        /// If you are a MULTIPLAYER_CLIENT, nothing will happen; you will wait for an update from the server.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <returns>
-        /// The constructed GameObject.
-        /// If you are a MULTIPLAYER_CLIENT, this will return null; you will have to wait for the server to add your GameObject before you can interact with it.
-        /// If you need to do some post-instantiation work with this GameObject, write a new EventMethod with the relevant code. 
-        /// Then, make an if(object != null) block in the current EventMethod that calls the new EventMethod 
-        /// and an else block that adds the new EventMethod to the static onCreateObject list on CreateObject if it isn't already there.
-        /// Make sure that the new EventMethod checks that it is dealing with the right GameObject, because it is going to be called on each new instantiation.
-        /// Also, make sure to remove this EventMethod from the lits when you're done with the post-insantiation work.
-        /// </returns>
-        static GameObject createGameObject<Type>(LoadRegion loadRegion);
 
         /// <summary>
         /// Returns this GameObject's LoadRegion.
@@ -73,7 +55,7 @@ namespace InteractionEngine.Constructs {
         /// Moves this GameObject from one LoadRegion to another. Called by the above method as well as MoveObject.executeUpdate().
         /// </summary>
         /// <param name="newLoadRegion">The new LoadRegion.</param>
-        internal void internalMove(LoadRegion newLoadRegion);
+        void internalMove(LoadRegion newLoadRegion);
 
         /// <summary>
         /// Get rid of this GameObject. Sad, I know.
@@ -83,7 +65,7 @@ namespace InteractionEngine.Constructs {
         /// <summary>
         /// Get rid of this GameObject. Sad, I know. Called by the above method as well as DeleteObject.executeUpdate().
         /// </summary>
-        internal void internalDeconstruct();
+        void internalDeconstruct();
 
         /// <summary>
         /// This adds a field to the field table. If you are a server, it assigns an ID to the field if one is not present.

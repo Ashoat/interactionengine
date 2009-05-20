@@ -23,7 +23,7 @@ namespace InteractionEngine.Networking {
     /// <summary>
     /// An interface representing an "update" from the Server.
     /// </summary>
-    internal interface Update {
+    internal abstract class Update {
 
         /// <summary>
         /// Transfer code constants.
@@ -44,13 +44,13 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter);
+        public abstract void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter);
 
         /// <summary>
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        void executeUpdate();
+        public abstract void executeUpdate();
 
     }
 
@@ -113,7 +113,7 @@ namespace InteractionEngine.Networking {
             if (InteractionEngine.Engine.getLoadRegion(this.loadRegionID) != null) return;
             new Constructs.LoadRegion(this.loadRegionID);
             foreach (EventHandling.Event eventObject in onCreateRegion) {
-                Engine.addEvent(eventObject):
+                Engine.addEvent(eventObject);
             }
         }
 
