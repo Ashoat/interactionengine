@@ -30,7 +30,7 @@ namespace TestNetworkGame.Logic {
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static GameField() {
-            GameObject.factoryList.Add(realHash, new InteractionEngine.Constructs.GameObjectFactory(GameObject.createFromUpdate<GameField>));
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<GameField>));
         }
 
         #endregion
