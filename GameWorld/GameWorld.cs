@@ -63,7 +63,19 @@ namespace InteractionEngine.GameWorld {
             MULTIPLAYER_CLIENT,
             MULTIPLAYER_SERVERCLIENT
         }
-        public static Status status;
+        private static Status realStatus;
+        public static Status status {
+            get {
+                return realStatus;
+            }
+            set {
+                // Don't want any collisions with existing numbers if the client had an GameObject or LoadRegion with an ID the server sent them.
+                // Really only need this for the server, but better safe than sorry.
+                nextLoadRegionID = nextLoadRegionID + 100;
+                nextGameObjectID = nextGameObjectID + 1000;
+                realStatus = value;
+            }
+        }
         // Contains a reference to the UI class.
         // Used by the client to execute output.
         public static Client.UserInterface userInterface;

@@ -109,8 +109,16 @@ namespace InteractionEngine.Constructs {
         public void deconstruct() {
             // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
             if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return;
-            GameWorld.GameWorld.removeLoadRegion(this.id);
             foreach (int gameObjectID in objects) GameWorld.GameWorld.getGameObject(gameObjectID).deconstruct();
+            this.addUpdate(new Networking.DeleteRegion(this.id));
+            this.internalDeconstruct();
+        }
+
+        /// <summary>
+        /// Gets rid of this LoadRegion. Called by the above method as well as DeleteRegion.executeUpdate().
+        /// </summary>
+        internal void internalDeconstruct() {
+            GameWorld.GameWorld.removeLoadRegion(this.id);
         }
 
         #endregion
