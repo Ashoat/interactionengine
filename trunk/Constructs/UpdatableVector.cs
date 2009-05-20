@@ -15,7 +15,7 @@
 namespace InteractionEngine.Constructs.Datatypes {
 
     /**
-     * The GameWorld boolean datatype.
+     * The GameWorld Vector3 datatype.
      */
     public class UpdatableVector : Updatable {
 
