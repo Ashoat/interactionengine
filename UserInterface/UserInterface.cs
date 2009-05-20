@@ -106,17 +106,12 @@ namespace InteractionEngine.UserInterface {
     /// </summary>
     public class KeyboardFocus : InteractionEngine.Constructs.GameObject {
 
-        #region Constructors
-
-        /// <summary>
-        /// This helper method creates all of this GameObject's fields in constant order.
-        /// </summary>
-        public override void makeFields() {
-        }
+        #region FACTORY
 
         /// <summary>
         /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
         /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+        /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
         /// </summary>
         public KeyboardFocus() {
         }
@@ -136,6 +131,14 @@ namespace InteractionEngine.UserInterface {
         }
 
         #endregion
+
+        /// <summary>
+        /// This method creates all of this GameObject's fields in constant order. 
+        /// Instantiate modules and their fields here too.
+        /// Pretty much the constructor. It'll be called every time this object is instantiated.
+        /// </summary>
+        public override void construct() {
+        }
 
         private const string EVENT_HASH = "Key";
         // Contains the delay before the first key press events if the key is held down, in milliseconds.

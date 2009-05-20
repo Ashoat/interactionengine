@@ -40,9 +40,11 @@ namespace InteractionEngine.Constructs {
         }
 
         /// <summary>
-        /// This helper method creates all of this GameObject's fields in constant order.
+        /// This method creates all of this GameObject's fields in constant order. 
+        /// Instantiate modules and their fields here too.
+        /// Pretty much the constructor. It'll be called every time this object is instantiated.
         /// </summary>
-        void makeFields();
+        void construct();
 
         /// <summary>
         /// Returns this GameObject's LoadRegion.
@@ -136,9 +138,11 @@ namespace InteractionEngine.Constructs {
         }
 
         /// <summary>
-        /// This helper method creates all of this GameObject's fields in constant order.
+        /// This method creates all of this GameObject's fields in constant order. 
+        /// Instantiate modules and their fields here too.
+        /// Pretty much the constructor. It'll be called every time this object is instantiated.
         /// </summary>
-        public abstract void makeFields();
+        public abstract void construct();
 
         #region Client
 
@@ -170,7 +174,7 @@ namespace InteractionEngine.Constructs {
             loadRegion.addObject(gameObject.id);
             gameObject.loadRegion = loadRegion;
             // Setup its fields.
-            gameObject.makeFields();
+            gameObject.construct();
             // Return it!
             return gameObject;
         }
@@ -215,7 +219,7 @@ namespace InteractionEngine.Constructs {
                 ));
             }
             // Setup its fields.
-            returnObject.makeFields();
+            returnObject.construct();
             return returnObject;
         }
 
