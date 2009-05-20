@@ -43,7 +43,7 @@ namespace InteractionEngine.Networking {
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("The game developer screwed up. They shouldn't be telling a client to start listening for connections!");
             if (tcpListener != null) return;
-            tcpListener = new System.Net.Sockets.TcpListener(portNumber);
+            tcpListener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Any, portNumber);
         }
 
         /// <summary>

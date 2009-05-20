@@ -25,3 +25,9 @@ D:\t09\InteractionEngine\trunk\obj\x86\Debug\InteractionEngine.pdb
 C:\Users\Ashoat\Desktop\InteractionEngine\trunk\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Ashoat\Desktop\InteractionEngine\trunk\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\Ashoat\Desktop\InteractionEngine\trunk\obj\x86\Debug\InteractionEngine.dll
+C:\Users\Ashoat\Desktop\InteractionEngine\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Ashoat\Desktop\InteractionEngine\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Ashoat\Desktop\InteractionEngine\obj\x86\Debug\InteractionEngine.dll
+C:\Users\Ashoat\Desktop\InteractionEngine\bin\x86\Debug\InteractionEngine.dll
+C:\Users\Ashoat\Desktop\InteractionEngine\bin\x86\Debug\InteractionEngine.pdb
+C:\Users\Ashoat\Desktop\InteractionEngine\obj\x86\Debug\InteractionEngine.pdb

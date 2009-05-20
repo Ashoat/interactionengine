@@ -6,10 +6,10 @@
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\trunk\Content\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\trunk\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\trunk\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\trunk\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>

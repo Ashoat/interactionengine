@@ -80,7 +80,7 @@ namespace InteractionEngine.Networking {
                         break;
                     case Update.CREATE_OBJECT:
                         Update createObject = new CreateObject(reader, tcpClient.GetStream(), formatter);
-                        lock (updateBuffer) updateBuffer.Add(createRegion);
+                        lock (updateBuffer) updateBuffer.Add(createObject);
                         break;
                     case Update.DELETE_OBJECT:
                         Update deleteObject = new DeleteObject(reader);

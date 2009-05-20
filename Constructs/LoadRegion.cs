@@ -188,7 +188,7 @@ namespace InteractionEngine.Constructs {
         /// Add an Update to the Update Buffer.
         /// </summary>
         /// <param name="update">The Update to be added.</param>
-        public void addUpdate(Networking.Update update) {
+        internal void addUpdate(Networking.Update update) {
             updateBuffer.Add(update);
         }
 
@@ -196,7 +196,7 @@ namespace InteractionEngine.Constructs {
         /// Add an Updatable to the UpdateField Buffer.
         /// </summary>
         /// <param name="field">The Updatable to be added.</param>
-        public void registerUpdate(Datatypes.Updatable field) {
+        internal void registerUpdate(Datatypes.Updatable field) {
             updateFieldBuffer.Add(field);
         }
 
@@ -205,14 +205,14 @@ namespace InteractionEngine.Constructs {
         /// It's a good idea to call this method before deleting an object with this field.
         /// </summary>
         /// <param name="update">The Updatable no longer requiring an UPDATE_FIELD transfer code.</param>
-        public void cancelUpdate(Datatypes.Updatable update) {
+        internal void cancelUpdate(Datatypes.Updatable update) {
             updateFieldBuffer.Remove(update);
         }
 
         /// <summary>
         /// Reset the Update Buffer.
         /// </summary>
-        public void resetBuffer() {
+        internal void resetBuffer() {
             updateBuffer.Clear();
         }
 
@@ -220,7 +220,7 @@ namespace InteractionEngine.Constructs {
         /// Get the current list of Updates in this LoadRegion's Update Buffer.
         /// </summary>
         /// <returns>The list of Updates.</returns>
-        public System.Collections.Generic.List<Networking.Update> getUpdates() {
+        internal System.Collections.Generic.List<Networking.Update> getUpdates() {
             foreach (Datatypes.Updatable updating in updateFieldBuffer)
                 updateBuffer.Add(new Networking.UpdateField(updating.gameObject.id, updating.id, updating.getValue()));
             updateFieldBuffer.Clear();
