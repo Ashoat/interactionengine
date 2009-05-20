@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using InteractionEngine.EventHandling;
 
-namespace InteractionEngine.Client.ThreeDimensional {
+namespace InteractionEngine.UserInterface.ThreeDimensional {
 
     /// <summary>
     /// Coolio.
@@ -84,7 +84,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// and removes from the list of held events.
         /// </summary>
         /// <param name="newEvents">The list into which newly detected events are to be inserted.</param>
-        private void resetEvents(System.Collections.Generic.List<Event> newEvents, Ray ray) {
+        private void resetEvents(System.Collections.Generic.List<EventHandling.Event> newEvents, Ray ray) {
             // Check states of mouse input
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             bool leftReleased = mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released;
@@ -95,14 +95,14 @@ namespace InteractionEngine.Client.ThreeDimensional {
                 int eveCode = eventsAwaitingReset[interactable];
                 if (testMask(eveCode, MOUSEMASK_LEFT_PRESS)) {
                     if (leftReleased) {
-                        Event evvie = interactable.getEvent(MOUSEMASK_LEFT_RELEASE);
+                        EventHandling.Event evvie = interactable.getEvent(MOUSEMASK_LEFT_RELEASE);
                         newEvents.Add(evvie);
                         eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_LEFT_PRESS);
                     }
                 }
                 if (testMask(eveCode, MOUSEMASK_RIGHT_PRESS)) {
                     if (rightReleased) {
-                        Event evvie = interactable.getEvent(MOUSEMASK_RIGHT_RELEASE);
+                        EventHandling.Event evvie = interactable.getEvent(MOUSEMASK_RIGHT_RELEASE);
                         newEvents.Add(evvie);
                         eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_RIGHT_PRESS);
                     }
@@ -110,7 +110,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
                 if (testMask(eveCode, MOUSEMASK_OVER)) {
                     Graphics3D graphics = (Graphics3D)interactable.getGraphics();
                     if (graphics.intersects(ray) == -1) {
-                        Event evvie = interactable.getEvent(MOUSEMASK_OUT);
+                        EventHandling.Event evvie = interactable.getEvent(MOUSEMASK_OUT);
                         newEvents.Add(evvie);
                         eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_OVER);
                     }
@@ -124,7 +124,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
 
         }
 
-        private void checkInteractableForInteraction(System.Collections.Generic.List<Event> newEvents, Ray ray, Interactable interaction) {
+        private void checkInteractableForInteraction(System.Collections.Generic.List<EventHandling.Event> newEvents, Ray ray, Interactable interaction) {
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             Graphics3D graphics = (Graphics3D)interaction.getGraphics();
             // Check to see if the mouse is intersecting the GameObject.
@@ -133,19 +133,19 @@ namespace InteractionEngine.Client.ThreeDimensional {
                 // MOUSEMASK_OVER?
                 if (!testMask(alreadyEvented, MOUSEMASK_OVER)) {
                     eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_OVER);
-                    Event evvie = interaction.getEvent(MOUSEMASK_OVER);
+                    EventHandling.Event evvie = interaction.getEvent(MOUSEMASK_OVER);
                     if (evvie != null) newEvents.Add(evvie);
                 }
                 // MOUSEMASK_LEFT_CLICK?
                 if (!testMask(alreadyEvented, MOUSEMASK_LEFT_PRESS) && mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
                     eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_LEFT_PRESS);
-                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS);
+                    EventHandling.Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS);
                     if (evvie != null) newEvents.Add(evvie);
                 }
                 // MOUSEMASK_RIGHT_CLICK?
                 if (!testMask(alreadyEvented, MOUSEMASK_LEFT_PRESS) && mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
                     eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_LEFT_PRESS);
-                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS);
+                    EventHandling.Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS);
                     if (evvie != null) newEvents.Add(evvie);
                 }
             }
@@ -153,21 +153,21 @@ namespace InteractionEngine.Client.ThreeDimensional {
 
         /// <summary>
         /// Checks state of user input devices to see if an input event should be triggered.
-        /// If so, collects the Event objects and inserts them into the given list.
+        /// If so, collects the EventHandling.Event objects and inserts them into the given list.
         /// Make it quick!
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
-        protected override void retrieveInput(System.Collections.Generic.List<Event> newEvents) {
+        protected override void retrieveInput(System.Collections.Generic.List<EventHandling.Event> newEvents) {
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             Ray ray = new Ray(); // TODO: PREETUM figure out how to get the useful ray here.
             // Reset old events
             resetEvents(newEvents, ray);
             // Loop through all of the User's LoadRegions
-            foreach (InteractionEngine.Constructs.LoadRegion loadRegion in GameWorld.GameWorld.user.getLoadRegionList()) {
+            foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through all the LoadRegion's GameObjects
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = loadRegion.getObject(i);
+                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
                     // See if this GameObject can be interacted with.
                     if (gameObject is Interactable) {
                         checkInteractableForInteraction(newEvents, ray, (Interactable)gameObject);
@@ -182,10 +182,10 @@ namespace InteractionEngine.Client.ThreeDimensional {
         public override void output() {
             this.spriteBatch.Begin();
             // Loop through the user's LoadRegions
-            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.user.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.user.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = loadRegion.getObject(i);
+                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
                     // Go through every GameObject and see if they have something to output
                     if (gameObject is Graphable)
                         ((Graphable)gameObject).getGraphics().onDraw();
@@ -198,7 +198,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// Initialize stuff.
         /// </summary>
         public override void initialize() {
-            this.spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(GameWorld.GameWorld.game.GraphicsDevice);
+            this.spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(InteractionEngine.Engine.game.GraphicsDevice);
         }
 
     }
@@ -270,7 +270,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
         /// <returns>A new instance of Camera.</returns>
         static Camera makeCamera(InteractionEngine.Constructs.LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
             Camera camera = new Camera(loadRegion, id);
             // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
@@ -307,14 +307,16 @@ namespace InteractionEngine.Client.ThreeDimensional {
             return location;
         }
 
+        // You can't use a constructor anymore. Use a factory, like in GameObject.
+
         /// <summary>
         /// Constructs a new Camera.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        public Camera(Constructs.LoadRegion loadRegion)
+        /*public Camera(Constructs.LoadRegion loadRegion)
             : base(loadRegion) {
             location = new Constructs.Location(this);
-        }
+        }*/
 
 
         // TODO: do stuff

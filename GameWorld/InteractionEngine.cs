@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -13,7 +13,7 @@
 | * InteractionSprite         Class        |
 \*••••••••••••••••••••••••••••••••••••••••*/
 
-namespace InteractionEngine.GameWorld {
+namespace InteractionEngine {
 
     /**
      * This class specifies an InteractionEngine-integrated XNA Game.
@@ -39,7 +39,7 @@ namespace InteractionEngine.GameWorld {
             // Add the GamerServciesComponent to the Game class. Check MSDN's Programming Guide for XNA Networking for more information.
             Components.Add(new Microsoft.Xna.Framework.GamerServices.GamerServicesComponent(this));
             // Create the network session.
-            if (InteractionEngine.GameWorld.GameWorld.status != InteractionEngine.GameWorld.GameWorld.Status.SINGLE_PLAYER) {
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.SINGLE_PLAYER) {
                 session = Microsoft.Xna.Framework.Net.NetworkSession.Create(Microsoft.Xna.Framework.Net.NetworkSessionType.SystemLink, 1, 4);
                 session.AllowHostMigration = false;
                 session.AllowJoinInProgress = false;
@@ -57,7 +57,7 @@ namespace InteractionEngine.GameWorld {
         /// </summary>
         protected override void Initialize() {
             base.Initialize();
-            GameWorld.userInterface.initialize();
+            Engine.userInterface.initialize();
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace InteractionEngine.GameWorld {
             this.graphics.ApplyChanges();
             this.graphics.GraphicsDevice.Clear(this.color);
             // TODO: i = 1?
-            for (int i = 1; i < GameWorld.getFieldContainerCount(); i++) {
-                InteractionEngine.Constructs.FieldContainer oneOfThem = GameWorld.getFieldContainer(i);
-                if (oneOfThem is Client.Graphable) {
-                    ((Client.Graphable)oneOfThem).getGraphics().loadContent();
+            for (int i = 1; i < Engine.getGameObjectCount(); i++) {
+                InteractionEngine.Constructs.GameObjectable oneOfThem = Engine.getGameObject(i);
+                if (oneOfThem is UserInterface.Graphable) {
+                    ((UserInterface.Graphable)oneOfThem).getGraphics().loadContent();
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace InteractionEngine.GameWorld {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(Microsoft.Xna.Framework.GameTime gameTime) {
             this.graphics.GraphicsDevice.Clear(this.color);
-            GameWorld.run(gameTime);
+            Engine.run(gameTime);
             base.Update(gameTime);
         }
 

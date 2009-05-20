@@ -59,9 +59,9 @@ namespace InteractionEngine.Networking {
     /// </summary>
     internal class CreateRegion : Update {
 
-        // Contains a list of EventMethods that get triggered when this Event is executed.
+        // Contains a list of EventMethods that get triggered when this EventHandling.Event is executed.
         // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
-        public static System.Collections.Generic.List<EventHandling.EventMethod> onCreateRegion = new System.Collections.Generic.List<InteractionEngine.EventHandling.EventMethod>();
+        public static System.Collections.Generic.List<EventHandling.Event> onCreateRegion = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
 
         // Contains the ID to assign this LoadRegion.
         // Used for making sure LoadRegions have synchronized IDs across the network.
@@ -73,7 +73,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="loadRegionID">The ID to assign this LoadRegion.</param>
         internal CreateRegion(int loadRegionID) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.loadRegionID = loadRegionID;
         }
@@ -84,7 +84,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal CreateRegion(System.IO.BinaryReader reader) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             loadRegionID = reader.ReadInt32();
         }
@@ -97,7 +97,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.CREATE_REGION);
             writer.Write(this.loadRegionID);
@@ -108,12 +108,12 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            if (GameWorld.GameWorld.getLoadRegion(this.loadRegionID) != null) return;
+            if (InteractionEngine.Engine.getLoadRegion(this.loadRegionID) != null) return;
             new Constructs.LoadRegion(this.loadRegionID);
-            foreach (EventHandling.EventMethod eventMethod in onCreateRegion) {
-                eventMethod(null, null);
+            foreach (EventHandling.Event eventObject in onCreateRegion) {
+                Engine.addEvent(eventObject):
             }
         }
 
@@ -134,7 +134,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="loadRegionID">The ID of the LoadRegion we want to delete.</param>
         internal DeleteRegion(int loadRegionID) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.loadRegionID = loadRegionID;
         }
@@ -145,7 +145,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal DeleteRegion(System.IO.BinaryReader reader) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             loadRegionID = reader.ReadInt32();
         }
@@ -158,7 +158,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.DELETE_REGION);
             writer.Write(this.loadRegionID);
@@ -169,9 +169,9 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            Constructs.LoadRegion loadRegion = GameWorld.GameWorld.getLoadRegion(this.loadRegionID);
+            Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
             if(loadRegion == null) return;
             loadRegion.internalDeconstruct();
         }
@@ -184,9 +184,9 @@ namespace InteractionEngine.Networking {
     /// </summary>
     internal class CreateObject : Update {
         
-        // Contains a list of EventMethods that get triggered when this Event is executed.
+        // Contains a list of EventMethods that get triggered when this EventHandling.Event is executed.
         // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
-        public static System.Collections.Generic.List<EventHandling.EventMethod> onCreateObject = new System.Collections.Generic.List<InteractionEngine.EventHandling.EventMethod>();
+        public static System.Collections.Generic.List<EventHandling.Event> onCreateObject = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
         // Contains the ID of the LoadRegion this GameObject will be assigned to.
         // Used for making sure every GameObject has a home.
         private int loadRegionID;
@@ -209,7 +209,7 @@ namespace InteractionEngine.Networking {
         /// <param name="classHash">A string identifying the GameObject subclass this CreateObject is instantiating.</param>
         /// <param name="fieldValues">A dictionary pointing field IDs to their values.</param>
         internal CreateObject(int loadRegionID, int gameObjectID, string classHash, System.Collections.Generic.Dictionary<int, object> fieldValues) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.loadRegionID = loadRegionID;
             this.gameObjectID = gameObjectID;
@@ -225,7 +225,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream where we can deserialize objects from.</param>
         /// <param name="formatter">The BinaryFormatter that can deserialize objects from the NetworkStream.</param>
         internal CreateObject(System.IO.BinaryReader reader, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             loadRegionID = reader.ReadInt32();
             gameObjectID = reader.ReadInt32();
@@ -242,7 +242,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.CREATE_OBJECT);
             writer.Write(this.loadRegionID);
@@ -260,10 +260,10 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            if (GameWorld.GameWorld.getGameObject(this.gameObjectID) != null) return;
-            Constructs.LoadRegion loadRegion = GameWorld.GameWorld.getLoadRegion(this.loadRegionID);
+            if (InteractionEngine.Engine.getGameObject(this.gameObjectID) != null) return;
+            Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
             if (loadRegion == null) return;
             Constructs.GameObject gameObject = Constructs.GameObject.factoryList[this.classHash](loadRegion, this.gameObjectID);
             foreach (System.Collections.Generic.KeyValuePair<int, object> pair in fieldValues) {
@@ -271,8 +271,8 @@ namespace InteractionEngine.Networking {
                 if (field == null) continue;
                 field.setValue(pair.Value);
             }
-            foreach (EventHandling.EventMethod eventMethod in onCreateObject) {
-                eventMethod(null, null);
+            foreach (EventHandling.Event eventObject in onCreateObject) {
+                Engine.addEvent(eventObject);
             }
         }
 
@@ -293,7 +293,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="gameObjectID">The ID of the GameObject we want to delete.</param>
         internal DeleteObject(int gameObjectID) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.gameObjectID = gameObjectID;
         }
@@ -304,7 +304,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal DeleteObject(System.IO.BinaryReader reader) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             gameObjectID = reader.ReadInt32();
         }
@@ -317,7 +317,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.DELETE_OBJECT);
             writer.Write(this.gameObjectID);
@@ -328,9 +328,9 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            Constructs.GameObject gameObject = GameWorld.GameWorld.getGameObject(this.gameObjectID);
+            Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.gameObjectID);
             if (gameObject == null) return;
             gameObject.internalDeconstruct();
         }
@@ -356,7 +356,7 @@ namespace InteractionEngine.Networking {
         /// <param name="gameObjectID">The ID of the GameObject we want to move.</param>
         /// <param name="loadRegionID">The ID of the LoadRegion we want to delete.</param>
         internal MoveObject(int gameObjectID, int loadRegionID) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.gameObjectID = gameObjectID;
             this.loadRegionID = loadRegionID;
@@ -368,7 +368,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal MoveObject(System.IO.BinaryReader reader) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             gameObjectID = reader.ReadInt32();
             loadRegionID = reader.ReadInt32();
@@ -382,7 +382,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.MOVE_OBJECT);
             writer.Write(this.gameObjectID);
@@ -394,10 +394,10 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(this.gameObjectID);
-            Constructs.LoadRegion loadRegion = GameWorld.GameWorld.getLoadRegion(this.loadRegionID);
+            Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.gameObjectID);
+            Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
             if (gameObject == null || loadRegion == null) return;
             gameObject.internalMove(loadRegion);
         }
@@ -427,7 +427,7 @@ namespace InteractionEngine.Networking {
         /// <param name="fieldID">The ID of the Updatable we need to update.</param>
         /// <param name="newValue">The new value for this Updatable, cast as an object.</param>
         internal UpdateField(int fieldContainerID, int fieldID, object newValue) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             this.fieldContainerID = fieldContainerID;
             this.fieldID = fieldID;
@@ -442,7 +442,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream where we can deserialize objects from.</param>
         /// <param name="formatter">The BinaryFormatter that can deserialize objects from the NetworkStream.</param>
         internal UpdateField(System.IO.BinaryReader reader, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             fieldContainerID = reader.ReadInt32();
             fieldID = reader.ReadInt32();
@@ -457,7 +457,7 @@ namespace InteractionEngine.Networking {
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVER && GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.UPDATE_FIELD);
             writer.Write(this.fieldContainerID);
@@ -470,9 +470,9 @@ namespace InteractionEngine.Networking {
         /// This method should only be used on the client side.
         /// </summary>
         internal void executeUpdate() {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(this.fieldContainerID);
+            Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.fieldContainerID);
             if (gameObject == null) return;
             Constructs.Datatypes.Updatable updatable = gameObject.getField(this.fieldID);
             if (updatable == null) return;

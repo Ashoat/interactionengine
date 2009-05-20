@@ -58,7 +58,7 @@ namespace InteractionEngine.EventHandling {
     /**
      * Implemented by GameObjects that can be interacted with.
      */
-    public interface Interactable : InteractionEngine.Client.Graphable {
+    public interface Interactable : InteractionEngine.UserInterface.Graphable {
 
         /// <summary>
         /// Gets an Event from this Interactable module.

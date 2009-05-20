@@ -396,7 +396,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         public UpdatableArray(GameObject gameObject, Updatable[] values)
             : base(gameObject) {
             realValue = (Updatable[])values.Clone();
-            if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 this.gameObject.getLoadRegion().registerUpdate(this);
         }
 
@@ -522,7 +522,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// <param name="input">The item to add.</param>
         public void add(int index, Updatable input) {
             realValue.Insert(index, input);
-            if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 this.writeUpdate(input.id, index); // "Add" update
         }
 
@@ -532,7 +532,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// <param name="input">The item to add.</param>
         public void add(Updatable input) {
             realValue.Add(input);
-            if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 this.writeUpdate(input.id, -1); // "Add" update
         }
 
@@ -542,7 +542,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// <param name="index">The index at which to remove the item.</param>
         public void remove(int index) {
             realValue.RemoveAt(index);
-            if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 this.writeUpdate(-1, index); // "Remove" update
         }
 
@@ -554,7 +554,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             int removed = this.indexOf(toRemove);
             if (removed < 0) return;
             realValue.RemoveAt(removed);
-            if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 this.writeUpdate(-1, removed); // "Remove" update
         }
 
@@ -563,7 +563,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// </summary>
         public void clear() {
             realValue.Clear();
-            if (GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVER || GameWorld.GameWorld.status == GameWorld.GameWorld.Status.MULTIPLAYER_SERVERCLIENT)
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 this.writeUpdate(-1, -1); // "Clear" update
         }
 
@@ -693,7 +693,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         private UpdatableInteger realValue;
         public T value {
             // default(T) returns null for reference types
-            get { return (realValue.value == -1) ? default(T) : (T)GameWorld.GameWorld.getGameObject(realValue.value); }
+            get { return (realValue.value == -1) ? default(T) : (T)InteractionEngine.Engine.getGameObject(realValue.value); }
             set { this.realValue.value = (value == null) ? -1 : value.id; }
         }
 

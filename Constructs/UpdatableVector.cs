@@ -38,7 +38,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// <param name="id">The ID the server constructed this Updatable with. Passed for synchronization.</param>
         /// <returns>The Updatable that is constructed.</returns>
         public static Updatable getUpdatable(FieldContainer fieldContainer, int id) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You're not a client, so why are you calling the Updatable factory method?");
             return new UpdatableVector(fieldContainer, id, false);
         }
@@ -86,7 +86,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             value = nonUpdatable;
         }
 
-        /// <summary>
+        /// <summary> 
         /// Tests if this Updatable equals another Updatable.
         /// </summary>
         /// <param name="obj">The value to compare to.</param>
@@ -113,7 +113,7 @@ namespace InteractionEngine.Constructs.Datatypes {
                 // Too much work
                 // if (realValue.Equals(value)) return;
                 realValue = value;
-                this.registerUpdate();
+                this.gameObject.getLoadRegion().registerUpdate(this);
             }
         }
 

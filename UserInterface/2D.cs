@@ -1,6 +1,6 @@
 ﻿/*••••••••••••••••••••••••••••••••••••••••*\
 | Interaction Engine                       |
-| (C) Copyright Bluestone Coding 2008      |
+| (C) Copyright Bluestone Coding 2008-2009 |
 |••••••••••••••••••••••••••••••••••••••••••|
 |           __    ___ ___  ___             |
 |          /++\  | _ ) __|/ __|            |
@@ -17,7 +17,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace InteractionEngine.Client.TwoDimensional {
+namespace InteractionEngine.UserInterface.TwoDimensional {
 
     public class UserInterface2D : UserInterface {
 
@@ -30,27 +30,27 @@ namespace InteractionEngine.Client.TwoDimensional {
         private System.Collections.Generic.List<EventHandling.Interactable> mouseLeftClicked = new System.Collections.Generic.List<EventHandling.Interactable>();
         private System.Collections.Generic.List<EventHandling.Interactable> mouseRightClicked = new System.Collections.Generic.List<EventHandling.Interactable>();
         // Contains an event invoker constant.
-        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
+        // Used for figuring out what EventHandling.EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_OVER = 0;
         // Contains an event invoker constant.
-        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
+        // Used for figuring out what EventHandling.EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_OUT = 1;
         // Contains an event invoker constant.
-        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
+        // Used for figuring out what EventHandling.EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_RIGHT_CLICK = 2;
         // Contains an event invoker constant.
-        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
+        // Used for figuring out what EventHandling.EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_RIGHT_RELEASE = 3;
         // Contains an event invoker constant.
-        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
+        // Used for figuring out what EventHandling.EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_LEFT_CLICK = 4;
         // Contains an event invoker constant.
-        // Used for figuring out what EventHandling.Event an EventHandling.Interactable should return.
+        // Used for figuring out what EventHandling.EventHandling.Event an EventHandling.Interactable should return.
         public const int MOUSE_LEFT_RELEASE = 5;
 
         /// <summary>
         /// Checks state of user input devices to see if an input event should be triggered.
-        /// If so, collects the EventHandling.Event objects and inserts them into the given list.
+        /// If so, collects the EventHandling.EventHandling.Event objects and inserts them into the given list.
         /// Make it quick!
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
@@ -89,10 +89,10 @@ namespace InteractionEngine.Client.TwoDimensional {
                 }
             }
             // Loop through all of the User's LoadRegions
-            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through all the LoadRegion's GameObjects
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(i);
+                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
                     // See if this GameObject can be interacted with.
                     if (gameObject is Graphable) {
                         Graphics2D graphics = (Graphics2D)((Graphable)gameObject).getGraphics();
@@ -130,9 +130,9 @@ namespace InteractionEngine.Client.TwoDimensional {
         /// </summary>
         public override void output() {
             this.spriteBatch.Begin();
-            foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(i);
+                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
                     // Go through every GameObject and see if they have something to output
                     if (gameObject is Graphable)
                         ((Graphable)gameObject).getGraphics().onDraw();
@@ -145,7 +145,7 @@ namespace InteractionEngine.Client.TwoDimensional {
         /// Initialize stuff.
         /// </summary>
         public override void initialize() {
-            this.spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(GameWorld.GameWorld.game.GraphicsDevice);
+            this.spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(InteractionEngine.Engine.game.GraphicsDevice);
         }
 
     }
@@ -216,7 +216,7 @@ namespace InteractionEngine.Client.TwoDimensional {
         /// </summary>
         /// <param name="textureFileName">The file name of the texture to load.</param>
         public void loadTexture(string textureFileName) {
-            texture = GameWorld.GameWorld.game.Content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(textureFileName);
+            texture = InteractionEngine.Engine.game.Content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(textureFileName);
             this.loadBounds();
         }
 
@@ -243,7 +243,7 @@ namespace InteractionEngine.Client.TwoDimensional {
         /// Draw this Graphics2D onto the SpriteBatch.
         /// </summary>
         public virtual void onDraw() {
-            ((UserInterface2D)GameWorld.GameWorld.userInterface).spriteBatch.Draw(texture,
+            ((UserInterface2D)InteractionEngine.Engine.userInterface).spriteBatch.Draw(texture,
                 new Vector2((float)xPos.value, (float)yPos.value),
                 null,
                 Color.White,

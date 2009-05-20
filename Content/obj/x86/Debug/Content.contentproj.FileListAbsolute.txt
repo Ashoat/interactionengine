@@ -2,3 +2,4 @@ D:\Development\InteractionEngine\XNA 3.0\InteractionEngine\Content\obj\x86\Debug
 D:\Development\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Woofy\Desktop\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 D:\t09\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Ashoat\Desktop\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache

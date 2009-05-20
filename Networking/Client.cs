@@ -40,7 +40,7 @@ namespace InteractionEngine.Networking {
         /// This method can only be called by a server's GameWorld!
         /// </summary>
         public static void startListening() {
-            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
+            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("The game developer screwed up. They shouldn't be telling a client to start listening for connections!");
             if (tcpListener != null) return;
             tcpListener = new System.Net.Sockets.TcpListener(portNumber);
@@ -80,7 +80,7 @@ namespace InteractionEngine.Networking {
                 clientList.Add(newClient);
                 // Trigger the onJoin Events.
                 foreach (EventHandling.Event eventObject in onJoin)
-                    GameWorld.GameWorld.addEvent(eventObject);
+                    InteractionEngine.Engine.addEvent(eventObject);
             }
         }
 
@@ -111,7 +111,7 @@ namespace InteractionEngine.Networking {
         /// Construct a new Client using a TcpClient object.
         /// </summary>
         /// <param name="tcpClient">The connection to build the Client class around.</param>
-        protected Client(System.Net.Sockets.TcpClient tcpClient) {
+        private Client(System.Net.Sockets.TcpClient tcpClient) {
             this.tcpClient = tcpClient;
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
             this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
@@ -155,6 +155,7 @@ namespace InteractionEngine.Networking {
         #endregion
 
         #region LoadRegion List
+
         /**
          * LOADREGION LIST
          * 
