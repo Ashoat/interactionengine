@@ -6,3 +6,11 @@ D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\ResolveAssemblyRe
 D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\TestNetworkGame.exe
 D:\Development\InteractionEngine\TestNetworkGame\obj\x86\Debug\TestNetworkGame.pdb
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\obj\x86\Debug\TestNetworkGame.exe
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\obj\x86\Debug\TestNetworkGame.pdb
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\TestNetworkGame.exe
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\TestNetworkGame.pdb
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\InteractionEngine.dll
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\InteractionEngine.pdb
