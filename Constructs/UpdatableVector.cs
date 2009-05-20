@@ -37,10 +37,10 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
         /// <param name="id">The ID the server constructed this Updatable with. Passed for synchronization.</param>
         /// <returns>The Updatable that is constructed.</returns>
-        public static Updatable getUpdatable(FieldContainer fieldContainer, int id) {
+        public static Updatable getUpdatable(GameObject gameObject, int id) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You're not a client, so why are you calling the Updatable factory method?");
-            return new UpdatableVector(fieldContainer, id, false);
+            return new UpdatableVector(gameObject, id, false);
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
         /// <param name="id">ID with which to instantiate the class with.</param>
-        private UpdatableVector(FieldContainer fieldContainer, int id, bool blah)
-            : base(fieldContainer, id) { // Yah, I know it's really hacky. We had no choice. Go away.
+        private UpdatableVector(GameObject fieldContainer, int id, bool blah)
+            : base(GameObject, id) { // Yah, I know it's really hacky. We had no choice. Go away.
         }
 
         /// <summary>

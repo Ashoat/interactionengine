@@ -16,7 +16,7 @@
 
 namespace InteractionEngine.UserInterface {
 
-    
+
 
     /**
      * Holds all information and methods regarding how a GameObject looks and is displayed.
