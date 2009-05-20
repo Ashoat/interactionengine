@@ -162,7 +162,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
             if (this.kf == null) return;
             Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
             if (this.previousKeyboard == null) this.previousKeyboard = keyboard;
-            Console.WriteLine(keyboard.GetPressedKeys());
+//            Console.WriteLine(keyboard.GetPressedKeys());
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
                 if (previousKeyboard.IsKeyUp(key)) newEvents.Add(this.kf.getEvent((int)key));
             }
@@ -176,13 +176,12 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
         protected override void retrieveInput(System.Collections.Generic.List<Event> newEvents) {
-            Console.WriteLine(System.DateTime.Now.Second + "." + System.DateTime.Now.Millisecond);
             this.checkKeyboard(newEvents);
 
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
-            System.Console.WriteLine(mouse.LeftButton);
+//            System.Console.WriteLine(mouse.LeftButton);
 
             Vector3 near = new Vector3(mouse.X, mouse.Y, 0f);
             Vector3 far = new Vector3(mouse.X, mouse.Y, 1f);
@@ -241,75 +240,136 @@ namespace InteractionEngine.Client.ThreeDimensional {
 
     }
 
+
+    public class ModelEffect {
+
+        private BasicEffect basicEffect;
+        private EffectPool effectPool;
+
+        public float Alpha = 1f;
+        public Vector3 AmbientLightColor = Vector3.One;
+        public EffectTechnique CurrentTechnique;
+        public Vector3 DiffuseColor = Vector3.One;
+        public Vector3 EmissiveColor;// = Vector3.One;
+        public Vector3 FogColor = Vector3.One;
+        public bool FogEnabled;
+        public float FogEnd;
+        public float FogStart;
+        public bool LightingEnabled = true;
+        public bool PreferPerPixelLighting;
+        public Vector3 SpecularColor = Vector3.One;
+        public float SpecularPower = 1;
+        public Texture2D Texture;
+        public bool TextureEnabled;
+        public bool VertexColorEnabled;
+        public Matrix World = Matrix.Identity;
+
+        private string textureName;
+        private bool enableDefaultLighting;
+
+        /// <summary>
+        /// NOTE: Any additions to the used properties of this class MUST BE ADDED to HelperClass.CloneModelEffect(...)
+        /// </summary>
+        //private Camera activeCamera;
+        private Camera activeCamera;
+        public Camera ActiveCamera {
+            set {
+                activeCamera = value;
+                UpdateFromActiveCamera();
+            }
+            get {
+                return activeCamera;
+            }
+        }
+        public void UpdateFromActiveCamera() {
+            if (basicEffect == null) return;
+            basicEffect.View = activeCamera.View;
+            basicEffect.Projection = activeCamera.Projection;
+        }
+
+        public ModelEffect(EffectPool effectPool) : this() {
+            this.effectPool = effectPool;
+        }
+
+        public ModelEffect(EffectPool effectPool, ModelEffect source)
+            : this(effectPool) {
+            this.CloneFrom(source);
+        }
+
+        public ModelEffect() {
+        }
+
+        public void Initialize(Camera camera) {
+            this.basicEffect = new BasicEffect(GameWorld.GameWorld.game.GraphicsDevice, effectPool);
+            this.CommitProperties();
+            this.ActiveCamera = camera;
+            this.setTextureName(this.textureName);
+            if (this.enableDefaultLighting) this.basicEffect.EnableDefaultLighting();
+        }
+
+        public void setTextureName(string textureName) {
+            this.textureName = textureName;
+            if (basicEffect != null && this.textureName != null) {
+                this.Texture = GameWorld.GameWorld.game.Content.Load<Texture2D>(this.textureName);
+                basicEffect.Texture = this.Texture;
+            }
+        }
+
+        public void CommitProperties() {
+            if (basicEffect == null) return;
+            basicEffect.Alpha = this.Alpha;
+            basicEffect.AmbientLightColor = this.AmbientLightColor;
+            if (this.CurrentTechnique != null) basicEffect.CurrentTechnique = this.CurrentTechnique;
+            basicEffect.DiffuseColor = this.DiffuseColor;
+            basicEffect.EmissiveColor = this.EmissiveColor;
+            basicEffect.FogColor = this.FogColor;
+            basicEffect.FogEnabled = this.FogEnabled;
+            basicEffect.FogEnd = this.FogEnd;
+            basicEffect.FogStart = this.FogStart;
+            basicEffect.LightingEnabled = this.LightingEnabled;
+            basicEffect.PreferPerPixelLighting = this.PreferPerPixelLighting;
+            basicEffect.SpecularColor = this.SpecularColor;
+            basicEffect.SpecularPower = this.SpecularPower;
+            basicEffect.Texture = this.Texture;
+            basicEffect.TextureEnabled = this.TextureEnabled;
+            basicEffect.VertexColorEnabled = this.VertexColorEnabled;
+            basicEffect.World = this.World;
+        }
+
+        public void CloneFrom(ModelEffect source) {
+            this.ActiveCamera = source.ActiveCamera;
+            this.Alpha = source.Alpha;
+            this.AmbientLightColor = source.AmbientLightColor;
+            this.CurrentTechnique = source.CurrentTechnique;
+            this.DiffuseColor = source.DiffuseColor;
+            this.EmissiveColor = source.EmissiveColor;
+            this.FogColor = source.FogColor;
+            this.FogEnabled = source.FogEnabled;
+            this.FogEnd = source.FogEnd;
+            this.FogStart = source.FogStart;
+            this.LightingEnabled = source.LightingEnabled;
+            this.PreferPerPixelLighting = source.PreferPerPixelLighting;
+            this.SpecularColor = source.SpecularColor;
+            this.SpecularPower = source.SpecularPower;
+            this.Texture = source.Texture;
+            this.TextureEnabled = source.TextureEnabled;
+            this.VertexColorEnabled = source.VertexColorEnabled;
+            this.World = source.World;
+        }
+
+        public void EnableDefaultLighting() {
+            if (this.basicEffect != null) this.basicEffect.EnableDefaultLighting();
+            else this.enableDefaultLighting = true;
+        }
+
+        public Effect Effect {
+            get { return basicEffect; }
+        }
+
+    }
+
     public class Graphics3D : Graphics {
 
-        public class ModelEffect : BasicEffect
-        {
-            /// <summary>
-            /// NOTE: Any additions to the used properties of this class MUST BE ADDED to HelperClass.CloneModelEffect(...)
-            /// </summary>
-            //private Camera activeCamera;
-            private Camera activeCamera;
-            public Camera ActiveCamera
-            {
-                set
-                {
-                    activeCamera = value;
-                    UpdateFromActiveCamera();
-                }
-                get
-                {
-                    return activeCamera;
-                }
-            }
-            public void UpdateFromActiveCamera()
-            {
-                base.View = activeCamera.View;
-                base.Projection = activeCamera.Projection;
-            }
-
-            public ModelEffect(GraphicsDevice device, EffectPool effectPool)
-                : base(GameWorld.GameWorld.game.GraphicsDevice, (EffectPool)null)
-            {
-            }
-
-            public ModelEffect(GraphicsDevice device, EffectPool effectPool, ModelEffect source)
-                : base(device, (EffectPool)null)
-            {
-                this.CloneFrom(source);
-            }
-
-            //public ModelEffect() { }
-
-            public void CloneFrom(ModelEffect source)
-            {
-                this.ActiveCamera = source.ActiveCamera;
-
-
-                this.Alpha = source.Alpha;
-                this.AmbientLightColor = source.AmbientLightColor;
-                this.CurrentTechnique = source.CurrentTechnique;
-                this.DiffuseColor = source.DiffuseColor;
-                this.EmissiveColor = source.EmissiveColor;
-                this.FogColor = source.FogColor;
-                this.FogEnabled = source.FogEnabled;
-                this.FogEnd = source.FogEnd;
-                this.FogStart = source.FogStart;
-                this.LightingEnabled = source.LightingEnabled;
-                this.PreferPerPixelLighting = source.PreferPerPixelLighting;
-                this.Projection = source.Projection;
-                this.SpecularColor = source.SpecularColor;
-                this.SpecularPower = source.SpecularPower;
-                this.Texture = source.Texture;
-                this.TextureEnabled = source.TextureEnabled;
-                this.VertexColorEnabled = source.VertexColorEnabled;
-                this.View = source.View;
-                this.World = source.World;
-            }
-
-            //public static implicit operator ModelEffect(BasicEffect
-
-        }
 
         private ModelEffect effect;
 
@@ -321,6 +381,8 @@ namespace InteractionEngine.Client.ThreeDimensional {
 
         private float scale = 1f;
 
+        private BoundingSphere baseBoundingSphere;
+
         // Contains a reference to this Graphics module's GameObject.
         // Used for proper Updatable construction.
         private Graphable3D gameObject;
@@ -329,10 +391,12 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// Constructs the Graphics3D
         /// </summary>
         /// <param name="textureFileName">The filename of this GameObject's texture.</param>
-        public Graphics3D(Graphable3D gameObject, string modelName)
+        public Graphics3D(Graphable3D gameObject, ModelEffect effect, string modelName)
         {
             this.gameObject = gameObject;
-            
+
+            this.effect = effect;
+
             this.modelName = modelName;
 
             this.worldLocal = Matrix.Identity;
@@ -351,24 +415,23 @@ namespace InteractionEngine.Client.ThreeDimensional {
 
         public BoundingSphere BoundingSphere
         {
-            get { return this.getBoundingSphere(); }
+            get { return new BoundingSphere(baseBoundingSphere.Center + this.gameObject.getLocation().getPoint(), baseBoundingSphere.Radius * this.scale); }
         }
 
-        public BoundingSphere getBoundingSphere()
+        public void calculateBoundingSphere()
         {
             BoundingSphere welded = this.model.Meshes[0].BoundingSphere;
             foreach (ModelMesh mesh in this.model.Meshes)
             {
                 welded = BoundingSphere.CreateMerged(welded, mesh.BoundingSphere);
             }
-            BoundingSphere transBounds = new BoundingSphere(welded.Center + this.gameObject.getLocation().getPoint(), welded.Radius * this.scale);
-            return transBounds;
+            this.baseBoundingSphere = welded;
         }
 
         private void updateWorld()
         {
             this.worldLocal = localWorld();
-            effect.World = worldContainer(UserInterface3D.user.worldTransform);
+            effect.World = worldContainer(Matrix.Identity); // UserInterface3D.user.worldTransform);
         }
 
         /// <summary>
@@ -415,7 +478,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
                     //
                     effect.Alpha = this.effect.Alpha;
                     effect.AmbientLightColor = this.effect.AmbientLightColor;
-                    effect.CurrentTechnique = this.effect.CurrentTechnique;
+                    if (this.effect.CurrentTechnique != null) effect.CurrentTechnique = this.effect.CurrentTechnique;
                     effect.DiffuseColor = this.effect.DiffuseColor;
                     effect.EmissiveColor = this.effect.EmissiveColor;
                     effect.FogColor = this.effect.FogColor;
@@ -451,7 +514,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
             return null;
         }
 
-        public Vector3? intersectionPoint(Ray ray) {
+        public virtual Vector3? intersectionPoint(Ray ray) {
             float? distance = this.intersects(ray);
             if (distance.HasValue) return ray.Position + ray.Direction * distance;
             return null;
@@ -462,13 +525,9 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// </summary>
         public virtual void loadContent() {
             this.model = GameWorld.GameWorld.game.Content.Load<Model>(modelName);
-            loadEffect();
+            effect.Initialize(UserInterface3D.user.camera);
+            this.calculateBoundingSphere();
             // Also, remove "virtual" unless the plan is to subclass this.
-        }
-        public virtual void loadEffect() {
-            this.effect = new ModelEffect(UserInterface3D.graphicsDevice, (EffectPool)null);
-            this.effect.ActiveCamera = UserInterface3D.user.camera;
-            this.effect.World = this.worldLocal * UserInterface3D.user.worldTransform;
         }
 
     }

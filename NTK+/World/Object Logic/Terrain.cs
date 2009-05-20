@@ -98,7 +98,7 @@ namespace NTKPlusGame.World {
 
         private Texture2D tex;
 
-        private Graphics3D.ModelEffect effect;
+        private ModelEffect effect;
 
         private const string TERRAIN_CLICKED_HASH = "terrain clicked";
 
@@ -268,7 +268,7 @@ namespace NTKPlusGame.World {
             //set { effect.World = value; }
         }
 
-        public Graphics3D.ModelEffect Effect
+        public ModelEffect Effect
         {
             get { return this.effect; }
         }
@@ -403,6 +403,7 @@ namespace NTKPlusGame.World {
             effect.SpecularColor = new Vector3(.4f, .4f, .4f);
             effect.PreferPerPixelLighting = true;
             effect.SpecularPower = 4f;
+            effect.CommitProperties();
             //effect.FogEnabled = true;
             //effect.FogColor = Vector3.Zero;
             //effect.FogStart = 50;
@@ -417,20 +418,21 @@ namespace NTKPlusGame.World {
             UserInterface3D.graphicsDevice.Indices = ib;
 
             this.Effect.UpdateFromActiveCamera();
-            this.Effect.Begin();
-            foreach (EffectPass pass in this.Effect.CurrentTechnique.Passes)
+            Effect actualEffect = this.Effect.Effect;
+            actualEffect.Begin();
+            foreach (EffectPass pass in actualEffect.CurrentTechnique.Passes)
             {
                 pass.Begin();
                 // Draw the mesh
                 UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
                 pass.End();
             }
-            this.Effect.End();
+            actualEffect.End();
         }
 
         private void loadContent() {
-            effect = new Graphics3D.ModelEffect(GameWorld.game.GraphicsDevice, (EffectPool)null);
-            effect.ActiveCamera = UserInterface3D.user.camera;
+            effect = new ModelEffect();
+            effect.Initialize(UserInterface3D.user.camera);
 
             Texture2D texAsset = GameWorld.game.Content.Load<Texture2D>("Amazonia"); //tex1.png //Amazonia.jpg
             Texture2D mapAsset = GameWorld.game.Content.Load<Texture2D>("heightImage"); //heightImage
@@ -446,14 +448,48 @@ namespace NTKPlusGame.World {
             this.InitDefaultEffectVal();
         }
 
+        private Vector3? intersectionPoint(Ray ray) {
+
+            Vector3 rayStep = ray.Direction * blockScale * .5f;
+            Vector3 currPoint = ray.Position;
+            Vector3 prevPoint = currPoint;
+
+            currPoint += rayStep;
+
+            while (currPoint.Y > this.getHeight(currPoint.X, currPoint.Z) && this.isOnTerrain(new Vector2(currPoint.X, currPoint.Z))) {
+                prevPoint = currPoint;
+                currPoint += rayStep;
+            }
+            //linear search over
+
+            Vector3 topPoint = prevPoint;
+            Vector3 botPoint = currPoint;
+            for (int i = 0; i < 8; i++) {
+                Vector3 midPoint = (topPoint + botPoint) / 2;
+                if (midPoint.Y < this.getHeight(midPoint.X, midPoint.Z))
+                    botPoint = midPoint;
+                else
+                    topPoint = midPoint;
+            }
+            Vector3 finalPoint = (topPoint + botPoint) / 2;
+            Console.WriteLine(finalPoint);
+            return finalPoint; //the last point seen above the terrain.
+        }
+
+        public float? intersects(Ray ray) {
+            Vector3? intersectionPoint = this.intersectionPoint(ray);
+            if (intersectionPoint == null) return null;
+            else return (intersectionPoint.Value - ray.Position).Length();
+        }
+
 
         class TerrainGraphics : Graphics3D
         {
 
-            Terrain gameObject;
+            private Terrain gameObject;
 
             public TerrainGraphics(Terrain gameObject)
-                : base(gameObject, null) {
+                : base(gameObject, new ModelEffect(), null) {
                 this.gameObject = gameObject;
             }
 
@@ -463,12 +499,18 @@ namespace NTKPlusGame.World {
             }
 
             public override void loadContent() {
-                base.loadEffect();
+                // TODO: this.
+                UserInterface3D.user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GameWorld.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
                 gameObject.loadContent();
+                //base.loadContent();
             }
 
             public override float? intersects(Ray ray) {
-                return 3;
+                return gameObject.intersects(ray);
+            }
+
+            public override Vector3? intersectionPoint(Ray ray) {
+                return gameObject.intersectionPoint(ray);
             }
         }
 

@@ -61,24 +61,35 @@ namespace NTKPlusGame.World.Modules {
         /// Also adjusts to the altitude of the terrain if this Location is grounded.
         /// </summary>
         /// <param name="dx">The x-component of the horizontal translation by which to move.</param>
-        /// <param name="dy">The y-component of the horizontal translation by which to move.</param>
+        /// <param name="dz">The z-component of the horizontal translation by which to move.</param>
         /// <returns>The change in height effected during the move.</returns>
-        public float move(float dx, float dy) {
+        public float move(float dx, float dz) {
             if (grounded.value) {
                 Vector3 position = base.getPoint();
                 // Calculate the z-translation based on the terrain.
-                float z = gameObject.getTerrainedLoadRegion().getTerrain().getHeight(position.X + dx, position.Y + dy);
-                float dz = z - position.Z;
+                float y = gameObject.getTerrainedLoadRegion().getTerrain().getHeight(position.X + dx, position.Z + dz);
+                float dy = y - position.Y;
                 // Apply translation
                 Vector3 translation = position; // recycling the Vector3 object
                 translation.X = dx;
                 translation.Y = dy;
                 translation.Z = dz;
                 base.move(translation);
-                return dz;
+                return dy;
             } else {
-                base.move(new Vector3(dx, dy, 0));
+                base.move(new Vector3(dx, 0, dz));
                 return 0;
+            }
+        }
+
+        public override void moveTo(Vector3 position) {
+            if (grounded.value) {
+                float x = position.X;
+                float z = position.Z;
+                float y = this.gameObject.getTerrainedLoadRegion().getTerrain().getHeight(position.X, position.Z);
+                base.moveTo(new Vector3(x, y, z));
+            } else {
+                base.moveTo(position);
             }
         }
 
@@ -90,8 +101,8 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="translation">The vector describing the translation by which to move.</param>
         public override void move(Vector3 translation) {
             if (grounded.value) {
-                translation.Z = 0;
-                this.move(translation.X, translation.Y);
+                translation.Y = 0;
+                this.move(translation.X, translation.Z);
             } else {
                 base.move(translation);
             }
@@ -103,10 +114,10 @@ namespace NTKPlusGame.World.Modules {
         /// Terrain. This height adjustment is then included in the specified distance.
         /// </summary>
         /// <param name="dx">The x-component of the horizontal direction in which to move.</param>
-        /// <param name="dy">The y-component of the horizontal direction in which to move.</param>
+        /// <param name="dz">The z-component of the horizontal direction in which to move.</param>
         /// <param name="distance">The total distance to move.</param>
         /// <returns>The change in height effected during the move.</returns>
-        public float moveMagn(float dx, float dy, float distance) {
+        public float moveMagn(float dx, float dz, float distance) {
             // TODO
             return 0.0f;
         }

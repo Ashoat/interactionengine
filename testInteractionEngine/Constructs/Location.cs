@@ -78,6 +78,10 @@ namespace InteractionEngine.Constructs {
             set { this.heading.value = new Microsoft.Xna.Framework.Vector3(this.heading.value.X, this.heading.value.Y, value); }
         }
 
+        public virtual void moveTo(Microsoft.Xna.Framework.Vector3 position) {
+            this.point.value = position;
+        }
+
         /// <summary>
         /// Translates this Location.
         /// </summary>

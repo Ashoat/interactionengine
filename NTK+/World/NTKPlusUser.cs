@@ -20,6 +20,7 @@ using InteractionEngine.GameWorld;
 using InteractionEngine.Client;
 using NTKPlusGame.World.Modules;
 using InteractionEngine.Client.ThreeDimensional;
+using Microsoft.Xna.Framework;
 
 namespace NTKPlusGame.World {
 

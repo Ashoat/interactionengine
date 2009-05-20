@@ -73,7 +73,7 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="target">The location to go to.</param>
 		public void startWalking(Vector3 target) {
             Vector3 direction = target - base.getPoint();
-            this.yaw = (float)Math.Atan2(direction.Y, direction.X);
+            this.yaw = (float)Math.Atan2(direction.X, direction.Z);
 			this.targetPosition.value = target;
             this.isMoving.value = true;
 			this.lastUpdate.value = GameWorld.gameTime.TotalRealTime.TotalMilliseconds;

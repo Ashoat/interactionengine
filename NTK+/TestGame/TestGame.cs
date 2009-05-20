@@ -9,6 +9,7 @@ using NTKPlusGame.World;
 using InteractionEngine.Client;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using InteractionEngine.Constructs.Datatypes;
 
 
 namespace Game
@@ -109,6 +110,8 @@ namespace Game
         #endregion
 
 
+        private readonly UpdatableGameObject<DebugSphere> debugSphere;
+
         /// <summary>
         /// Returns the Graphics module of this GameObject.
         /// </summary>
@@ -122,16 +125,27 @@ namespace Game
         }
 
         public Human(TerrainedLoadRegion loadRegion) : base(loadRegion) {
-            Graphics3D.ModelEffect modelEffect = null; // new Graphics3D.ModelEffect(GameWorld.game.GraphicsDevice, null);
-            //modelEffect.SpecularColor = new Vector3(.1f, .3f, .6f);
-            //modelEffect.SpecularPower = 10f;
-            //modelEffect.Texture = GameWorld.game.Content.Load<Texture2D>("Images\\human_texture");
-            //modelEffect.TextureEnabled = true;
+            ModelEffect modelEffect = new ModelEffect(); // new Graphics3D.ModelEffect(GameWorld.game.GraphicsDevice, null);
+            modelEffect.SpecularColor = new Vector3(.1f, .3f, .6f);
+            modelEffect.SpecularPower = 10f;
+            modelEffect.setTextureName("Images\\human_texture");
+            modelEffect.TextureEnabled = true;
             //modelEffect.Texture = null;
-            //modelEffect.SpecularPower = 1f;
-            this.graphics = new Graphics3D(this, "Models\\Borat");
-            //this.graphics.SetScale(3f);
+            modelEffect.SpecularPower = 1f;
+            modelEffect.CommitProperties();
+            this.graphics = new Graphics3D(this, modelEffect, "Models\\Borat");
+            this.graphics.SetScale(3f);
             this.getLocation().yaw = MathHelper.Pi;
+            Console.WriteLine(this.getLocation().getPoint());
+
+            DebugSphere newDebugSphere = new DebugSphere(loadRegion, new Vector3(), 0);
+
+            this.debugSphere = new UpdatableGameObject<DebugSphere>(this, newDebugSphere);
+        }
+
+        public override Event getEvent(int invoker, Vector3 position) {
+            this.debugSphere.value.setPosition(this.graphics.BoundingSphere.Center, this.graphics.BoundingSphere.Radius);
+            return base.getEvent(invoker, position);
         }
 
     }

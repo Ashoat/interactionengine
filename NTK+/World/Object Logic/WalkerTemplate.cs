@@ -108,7 +108,7 @@ namespace NTKPlusGame.World {
         /// <param name="user">The User that invokes this Event. Needed often for associating User invokers with GameObject invokers.</param>
         /// <param name="position">The position where the interaction happened, if applicable.</param>
         /// <returns>An Event.</returns>
-        public Event getEvent(int invoker, Vector3 coordinates) {
+        public virtual Event getEvent(int invoker, Vector3 coordinates) {
             if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS)
                 return new Event(this.getID(), MOVE_EVENT_HASH, null);
             else return null;
@@ -132,7 +132,8 @@ namespace NTKPlusGame.World {
         /// false if the SelectionFocus should be transferred to the new selection.</returns>
         public virtual bool acceptSecondSelection(GameObjectable second, object param) {
             if (second is Terrain && param is Vector3) {
-                this.getTerrainMovement().startWalking((Vector3)param);
+                //this.getTerrainMovement().startWalking((Vector3)param);
+                this.getTerrainMovement().moveTo((Vector3)param);
                 return true;
             }
             return false;

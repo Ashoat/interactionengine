@@ -96,6 +96,7 @@
     <Compile Include="World\Modules\Selection.cs" />
     <Compile Include="World\Modules\Stats.cs" />
     <Compile Include="World\Modules\TerrainLocation.cs" />
+    <Compile Include="World\Object Logic\DebugSphere.cs" />
     <Compile Include="World\Object Logic\FighterTemplate.cs" />
     <Compile Include="World\Object Logic\InfoDisplayBox.cs" />
     <Compile Include="World\Object Logic\KeyboardCameraControl.cs" />
