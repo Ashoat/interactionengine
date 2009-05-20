@@ -41,13 +41,13 @@ namespace InteractionEngine.Constructs.Datatypes {
         }
         // Contains a reference to this Updatable's FieldContainer.
         // Used so that when a field is updated, we know what FieldContainer (and hence what LoadRegion) to register that update with.
-        public readonly GameObject gameObject;
+        public readonly GameObjectable gameObject;
 
         /// <summary>
         /// Constructs a field and assigns it an ID. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        protected Updatable(GameObject gameObject) {
+        protected Updatable(GameObjectable gameObject) {
             // Add this field to the FieldContainer. This will set its ID.
             gameObject.addField(this);
             this.gameObject = gameObject;
@@ -78,7 +78,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Constructs a field and assigns it an ID. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        public UpdatableBoolean(GameObject gameObject)
+        public UpdatableBoolean(GameObjectable gameObject)
             : base(gameObject) {
         }
 
@@ -114,7 +114,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on the server.
         /// </summary>
         /// <returns>This field's value as an object.</returns>
-        internal abstract object getValue() {
+        internal override object getValue() {
             return (object)realValue;
         }
 
@@ -123,7 +123,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on a client.
         /// </summary>
         /// <param name="reader">The object containing the update.</param>
-        internal abstract void setValue(object value) {
+        internal override void setValue(object value) {
             this.realValue = (bool)value;
         }
 
@@ -140,7 +140,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableInteger(GameObject gameObject)
+        public UpdatableInteger(GameObjectable gameObject)
             : base(gameObject) {
         }
 
@@ -179,7 +179,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on the server.
         /// </summary>
         /// <returns>This field's value as an object.</returns>
-        internal abstract object getValue() {
+        internal override object getValue() {
             return (object)realValue;
         }
 
@@ -188,7 +188,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on a client.
         /// </summary>
         /// <param name="reader">The object containing the update.</param>
-        internal abstract void setValue(object value) {
+        internal override void setValue(object value) {
             this.realValue = (int)value;
         }
 
@@ -205,7 +205,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableCharacter(GameObject gameObject)
+        public UpdatableCharacter(GameObjectable gameObject)
             : base(gameObject) {
         }
 
@@ -241,7 +241,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on the server.
         /// </summary>
         /// <returns>This field's value as an object.</returns>
-        internal abstract object getValue() {
+        internal override object getValue() {
             return (object)realValue;
         }
 
@@ -250,7 +250,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on a client.
         /// </summary>
         /// <param name="reader">The object containing the update.</param>
-        internal abstract void setValue(object value) {
+        internal override void setValue(object value) {
             this.realValue = (char)value;
         }
 
@@ -267,7 +267,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableDouble(GameObject gameObject)
+        public UpdatableDouble(GameObjectable gameObject)
             : base(gameObject) {
         }
 
@@ -303,7 +303,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on the server.
         /// </summary>
         /// <returns>This field's value as an object.</returns>
-        internal abstract object getValue() {
+        internal override object getValue() {
             return (object)realValue;
         }
 
@@ -312,7 +312,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on a client.
         /// </summary>
         /// <param name="reader">The object containing the update.</param>
-        internal abstract void setValue(object value) {
+        internal override void setValue(object value) {
             this.realValue = (double)value;
         }
 
@@ -329,7 +329,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This constructor does not add the field to the fieldHashlist on the FieldContainer, as it is not used on the server. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype would be associated with.</param>
-        public UpdatableString(GameObject gameObject)
+        public UpdatableString(GameObjectable gameObject)
             : base(gameObject) {
         }
 
@@ -365,7 +365,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on the server.
         /// </summary>
         /// <returns>This field's value as an object.</returns>
-        internal abstract object getValue() {
+        internal override object getValue() {
             return (object)realValue;
         }
 
@@ -374,7 +374,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on a client.
         /// </summary>
         /// <param name="reader">The object containing the update.</param>
-        internal abstract void setValue(object value) {
+        internal override void setValue(object value) {
             this.realValue = (string)value;
         }
 
@@ -384,7 +384,7 @@ namespace InteractionEngine.Constructs.Datatypes {
      * The GameWorld array datatype.
      * We were going to make this with generics, but sucks because it gets really hard to pass those generics across a network.
      */
-    public class UpdatableArray : Updatable {
+    /*public class UpdatableArray : Updatable {
 
         /// <summary>
         /// Constructs a field.
@@ -450,13 +450,13 @@ namespace InteractionEngine.Constructs.Datatypes {
                 cache.Write(realValue[i].id);
         }
 
-    }
+    }*/
 
     /**
      * The GameWorld list datatype.
      * We were going to make this with generics, but sucks because it gets really hard to pass those generics across a network.
      */
-    public class UpdatableList : Updatable {
+    /*public class UpdatableList : Updatable {
 
         private System.IO.MemoryStream updateList = new System.IO.MemoryStream();
         private System.IO.BinaryWriter updateWriter;
@@ -651,7 +651,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             updateList.SetLength(0);
         }
 
-    }
+    }*/
 
     /**
      * Not actually an Updatable, but a wrapper class that internally stores the GameObject's ID in an UpdatableInteger.

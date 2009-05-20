@@ -90,8 +90,8 @@
     <Compile Include="Constructs\LoadRegion.cs" />
     <Compile Include="Constructs\Location.cs" />
     <Compile Include="Constructs\UpdatableVector.cs" />
-    <Compile Include="GameWorld\GameWorld.cs" />
-    <Compile Include="GameWorld\InteractionEngine.cs" />
+    <Compile Include="InteractionEngine\GameWorld.cs" />
+    <Compile Include="InteractionEngine\InteractionEngine.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\Updates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

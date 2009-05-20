@@ -23,7 +23,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Constructs a field and assigns it an ID. 
         /// </summary>
         /// <param name="fieldContainer">The FieldContainer that this datatype will be associated with.</param>
-        public UpdatableVector(GameObject gameObject)
+        public UpdatableVector(GameObjectable gameObject)
             : base(gameObject) {
         }
 
@@ -59,7 +59,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on the server.
         /// </summary>
         /// <returns>This field's value as an object.</returns>
-        internal abstract object getValue() {
+        internal override object getValue() {
             return (object)realValue;
         }
 
@@ -68,7 +68,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// This method should only ever be executed on a client.
         /// </summary>
         /// <param name="reader">The object containing the update.</param>
-        internal abstract void setValue(object value) {
+        internal override void setValue(object value) {
             this.realValue = (Microsoft.Xna.Framework.Vector3)value;
         }
 

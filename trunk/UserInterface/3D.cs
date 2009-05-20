@@ -182,7 +182,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         public override void output() {
             this.spriteBatch.Begin();
             // Loop through the user's LoadRegions
-            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.user.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
                 for (int i = 0; i < loadRegion.getObjectCount(); i++) {
                     Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
@@ -269,7 +269,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="id">This GameObject's ID.</param>
         /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
         /// <returns>A new instance of Camera.</returns>
-        static Camera makeCamera(InteractionEngine.Constructs.LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
+        static Camera makeCamera(InteractionEngine.Constructs.LoadRegion loadRegion, int id) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
             Camera camera = new Camera(loadRegion, id);

@@ -52,20 +52,9 @@ namespace InteractionEngine.Constructs {
         void move(LoadRegion newLoadRegion);
 
         /// <summary>
-        /// Moves this GameObject from one LoadRegion to another. Called by the above method as well as MoveObject.executeUpdate().
-        /// </summary>
-        /// <param name="newLoadRegion">The new LoadRegion.</param>
-        void internalMove(LoadRegion newLoadRegion);
-
-        /// <summary>
         /// Get rid of this GameObject. Sad, I know.
         /// </summary>
         void deconstruct();
-
-        /// <summary>
-        /// Get rid of this GameObject. Sad, I know. Called by the above method as well as DeleteObject.executeUpdate().
-        /// </summary>
-        void internalDeconstruct();
 
         /// <summary>
         /// This adds a field to the field table. If you are a server, it assigns an ID to the field if one is not present.
@@ -110,7 +99,7 @@ namespace InteractionEngine.Constructs {
         /// Get the eventHashlist's enumerator.
         /// </summary>
         /// <returns>The eventHashlist's enumerator.</returns>
-        System.Collections.Generic.Dictionary<string, EventMethod>.Enumerator getEventMethodEnumerator();
+        System.Collections.Generic.Dictionary<string, EventHandling.EventMethod>.Enumerator getEventMethodEnumerator();
 
     }
 
@@ -343,7 +332,7 @@ namespace InteractionEngine.Constructs {
         /// Get the eventHashlist's enumerator.
         /// </summary>
         /// <returns>The eventHashlist's enumerator.</returns>
-        public System.Collections.Generic.Dictionary<string, EventMethod>.Enumerator getEventMethodEnumerator() {
+        public System.Collections.Generic.Dictionary<string, EventHandling.EventMethod>.Enumerator getEventMethodEnumerator() {
             return eventHashlist.GetEnumerator();
         }
 

@@ -126,7 +126,7 @@ namespace InteractionEngine.UserInterface {
         /// <param name="id">This GameObject's ID.</param>
         /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
         /// <returns>A new instance of KeyboardFocus.</returns>
-        static KeyboardFocus makeKeyboardFocus(InteractionEngine.Constructs.LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
+        static KeyboardFocus makeKeyboardFocus(InteractionEngine.Constructs.LoadRegion loadRegion, int id) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
             KeyboardFocus keyboardFocus = new KeyboardFocus(loadRegion, id);

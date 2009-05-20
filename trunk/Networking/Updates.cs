@@ -44,13 +44,13 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        public abstract void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter);
+        internal abstract void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter);
 
         /// <summary>
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        public abstract void executeUpdate();
+        internal abstract void executeUpdate();
 
     }
 
@@ -96,7 +96,7 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
+        internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.CREATE_REGION);
@@ -107,7 +107,7 @@ namespace InteractionEngine.Networking {
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        internal void executeUpdate() {
+        internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             if (InteractionEngine.Engine.getLoadRegion(this.loadRegionID) != null) return;
@@ -157,7 +157,7 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
+        internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.DELETE_REGION);
@@ -168,7 +168,7 @@ namespace InteractionEngine.Networking {
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        internal void executeUpdate() {
+        internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
@@ -241,7 +241,7 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
+        internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.CREATE_OBJECT);
@@ -259,7 +259,7 @@ namespace InteractionEngine.Networking {
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        internal void executeUpdate() {
+        internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             if (InteractionEngine.Engine.getGameObject(this.gameObjectID) != null) return;
@@ -316,7 +316,7 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
+        internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.DELETE_OBJECT);
@@ -327,12 +327,12 @@ namespace InteractionEngine.Networking {
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        internal void executeUpdate() {
+        internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.gameObjectID);
             if (gameObject == null) return;
-            gameObject.internalDeconstruct();
+            if (gameObject is Constructs.GameObject) ((Constructs.GameObject)gameObject).internalDeconstruct();
         }
 
     }
@@ -381,7 +381,7 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
+        internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.MOVE_OBJECT);
@@ -393,13 +393,13 @@ namespace InteractionEngine.Networking {
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        internal void executeUpdate() {
+        internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.gameObjectID);
             Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
             if (gameObject == null || loadRegion == null) return;
-            gameObject.internalMove(loadRegion);
+            if (gameObject is Constructs.GameObject) ((Constructs.GameObject)gameObject).internalMove(loadRegion);
         }
 
     }
@@ -456,7 +456,7 @@ namespace InteractionEngine.Networking {
         /// <param name="writer">The BinaryWriter wrapped around the NetworkStream.</param>
         /// <param name="stream">The NetworkStream that we can serialize objects to.</param>
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
-        internal void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
+        internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             writer.Write(Update.UPDATE_FIELD);
@@ -469,7 +469,7 @@ namespace InteractionEngine.Networking {
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
         /// </summary>
-        internal void executeUpdate() {
+        internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.fieldContainerID);
