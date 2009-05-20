@@ -1,21 +1,20 @@
-﻿using InteractionEngine.Constructs;
-using InteractionEngine.Server;
-using InteractionEngine.GameWorld;
+﻿using InteractionEngine;
+using InteractionEngine.Constructs;
+using InteractionEngine.EventHandling;
+using InteractionEngine.Networking;
+using InteractionEngine.UserInterface.TwoDimensional;
 using System;
+using System.Collections.Generic;
 
 namespace TestNetworkGame {
 
     public class main {
 
         public static void Main() {
-
-            string server = /*Console.ReadLine();*/ "test";
-            if (server == "test") Console.WriteLine("equal");
-            else Console.WriteLine("not equal");
-            // Initialize the GameWorld.
-            //GameWorld.game = new InteractionGame();
-            //GameWorld.status = GameWorld.Status.
-
+            // Set up XNA.
+            Engine.game = new InteractionGame();
+            // Set up the UI.
+            Engine.userInterface = new UserInterface2D();
         }
 
     }
