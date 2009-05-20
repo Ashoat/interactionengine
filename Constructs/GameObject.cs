@@ -149,7 +149,7 @@ namespace InteractionEngine.Constructs {
         /// Make sure that the new EventMethod checks that it is dealing with the right GameObject, because it is going to be called on each new instantiation.
         /// Also, make sure to remove this EventMethod from the lits when you're done with the post-insantiation work.
         /// </returns>
-        public static GameObject createGameObject<Type>(LoadRegion loadRegion) where Type : GameObject, new() {
+        public static Type createGameObject<Type>(LoadRegion loadRegion) where Type : GameObject, new() {
             // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return null;
             // Otherwise, we are a server. Let's go!
@@ -172,11 +172,18 @@ namespace InteractionEngine.Constructs {
         }
 
         /// <summary>
+        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject().
+        /// NEVER CALL THIS! This constructor is exclusively for use by GameObject.createGameObject(). If anyone else calls it things will break.
+        /// </summary>
+        public GameObject() {
+        }
+
+        /// <summary>
         /// This method is meant to be called by a subclass constructor, which in turn was called by a factory method on that subclass.
         /// It instantiates a GameObject from the information that was sent to a MULTIPLAYER_CLIENT by a CREATE_OBJECT packet.
         /// </summary>
-        /// <param name="loadRegion"></param>
-        /// <param name="id"></param>
+        /// <param name="loadRegion">The LoadRegion this GameObject belongs to.</param>
+        /// <param name="id">The ID of this GameObject.</param>
         protected GameObject(LoadRegion loadRegion, int id) {
             // This constructor should only ever be called by a subclass's constructor on a MULTIPLAYER_CLIENT, which in turn was called by a factory method on that subclass.
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)

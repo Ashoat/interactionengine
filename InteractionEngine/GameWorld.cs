@@ -63,7 +63,7 @@ namespace InteractionEngine {
             MULTIPLAYER_CLIENT,
             MULTIPLAYER_SERVERCLIENT
         }
-        private static Status realStatus;
+        private static Status realStatus = Status.SINGLE_PLAYER;
         public static Status status {
             get {
                 return realStatus;
