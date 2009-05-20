@@ -145,6 +145,8 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         /// Initialize stuff.
         /// </summary>
         public override void initialize() {
+            Engine.game.setWindowSize(1000, 1100);
+            Engine.game.setBackgroundColor(Microsoft.Xna.Framework.Graphics.Color.White);
             this.spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(InteractionEngine.Engine.game.GraphicsDevice);
         }
 
