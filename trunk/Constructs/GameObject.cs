@@ -33,11 +33,16 @@ namespace InteractionEngine.Constructs {
             set;
         }
 
+        // Contains a string identifying this GameObject subclass.
+        // Used as an identifying key to get to the GameObjectFactory method for this GameObject's class.
+        string classHash {
+            get;
+        }
+
         /// <summary>
-        /// This method returns the class hash of this GameObject. We need this so we have an identifying key to get to the GameObjectFactory method for this GameObject's class.
+        /// This helper method creates all of this GameObject's fields in constant order.
         /// </summary>
-        /// <returns>The class hash of this GameObject.</returns>
-        string getClassHash();
+        void makeFields();
 
         /// <summary>
         /// Returns this GameObject's LoadRegion.
@@ -123,15 +128,56 @@ namespace InteractionEngine.Constructs {
 
         #region Constructors and Deconstructors
 
+        /// <summary>
+        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+        /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+        /// </summary>
+        public GameObject() {
+        }
+
+        /// <summary>
+        /// This helper method creates all of this GameObject's fields in constant order.
+        /// </summary>
+        public abstract void makeFields();
+
+        #region Client
+
+        // Contains a string identifying this GameObject subclass.
+        // Used as an identifying key to get to the GameObjectFactory method for this GameObject's class.
+        public abstract string classHash {
+            get;
+        }
+
         // Contains a list of all the Updatable factory methods.
         // Used for figuring out which Updatable to instantiate when a CREATE_FIELD command is issued from the server.
         public static System.Collections.Generic.Dictionary<string, GameObjectFactory> factoryList = new System.Collections.Generic.Dictionary<string, GameObjectFactory>();
 
         /// <summary>
-        /// This method returns the class hash of this GameObject. We need this so we have an identifying key to get to the GameObjectFactory method for this GameObject's class.
+        /// A factory method that creates and returns a new instance of this GameObject. Used by the client when the server requests it to make a new GameObject.
         /// </summary>
-        /// <returns>The class hash of this GameObject.</returns>
-        public abstract string getClassHash();
+        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
+        /// <param name="id">This GameObject's ID.</param>
+        /// <returns>A new instance of this LoadRegion.</returns>
+        public static Type createFromUpdate<Type>(InteractionEngine.Constructs.LoadRegion loadRegion, int id) where Type : GameObject, new() {
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
+                throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
+            Type gameObject = new Type();
+            // Set this GameObject's ID.
+            gameObject.id = id;
+            // Add this FieldContainer to the GameWorld. This will NOT set its ID.
+            InteractionEngine.Engine.addGameObject(gameObject);
+            // Add and assign it to the LoadRegion.
+            loadRegion.addObject(gameObject.id);
+            gameObject.loadRegion = loadRegion;
+            // Setup its fields.
+            gameObject.makeFields();
+            // Return it!
+            return gameObject;
+        }
+
+        #endregion
+
+        #region GameWorld
 
         /// <summary>
         /// Constructs the GameObject from the GameWorld.
@@ -164,37 +210,13 @@ namespace InteractionEngine.Constructs {
                 returnObject.loadRegion.addUpdate(new InteractionEngine.Networking.CreateObject(
                     returnObject.loadRegion.id,
                     returnObject.id,
-                    returnObject.getClassHash(),
+                    returnObject.classHash,
                     new System.Collections.Generic.Dictionary<int, object>()
                 ));
             }
+            // Setup its fields.
+            returnObject.makeFields();
             return returnObject;
-        }
-
-        /// <summary>
-        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject().
-        /// NEVER CALL THIS! This constructor is exclusively for use by GameObject.createGameObject(). If anyone else calls it things will break.
-        /// </summary>
-        public GameObject() {
-        }
-
-        /// <summary>
-        /// This method is meant to be called by a subclass constructor, which in turn was called by a factory method on that subclass.
-        /// It instantiates a GameObject from the information that was sent to a MULTIPLAYER_CLIENT by a CREATE_OBJECT packet.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion this GameObject belongs to.</param>
-        /// <param name="id">The ID of this GameObject.</param>
-        protected GameObject(LoadRegion loadRegion, int id) {
-            // This constructor should only ever be called by a subclass's constructor on a MULTIPLAYER_CLIENT, which in turn was called by a factory method on that subclass.
-            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("The game developer screwed up. They shouldn't be calling this method, except on a GameObject's factory constructor on a MULTIPLAYER_CLIENT.");
-            // Set this GameObject's ID.
-            this.id = id;
-            // Add this FieldContainer to the GameWorld. This will NOT set its ID.
-            InteractionEngine.Engine.addGameObject(this);
-            // Add and assign it to the LoadRegion.
-            loadRegion.addObject(this.id);
-            this.loadRegion = loadRegion;
         }
 
         /// <summary>
@@ -214,6 +236,8 @@ namespace InteractionEngine.Constructs {
             InteractionEngine.Engine.removeGameObject(this.id);
             this.loadRegion.removeObject(this.id);
         }
+
+        #endregion
 
         #endregion
 
