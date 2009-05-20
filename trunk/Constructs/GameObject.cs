@@ -62,11 +62,28 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <returns>This GameObject's LoadRegion.</returns>
         LoadRegion getLoadRegion();
-        
+
+        /// <summary>
+        /// Move this GameObject from one LoadRegion to another.
+        /// </summary>
+        /// <param name="newLoadRegion">The new LoadRegion.</param>
+        void move(LoadRegion newLoadRegion);
+
+        /// <summary>
+        /// Moves this GameObject from one LoadRegion to another. Called by the above method as well as MoveObject.executeUpdate().
+        /// </summary>
+        /// <param name="newLoadRegion">The new LoadRegion.</param>
+        internal void internalMove(LoadRegion newLoadRegion);
+
         /// <summary>
         /// Get rid of this GameObject. Sad, I know.
         /// </summary>
         void deconstruct();
+
+        /// <summary>
+        /// Get rid of this GameObject. Sad, I know. Called by the above method as well as DeleteObject.executeUpdate().
+        /// </summary>
+        internal void internalDeconstruct();
 
         /// <summary>
         /// This adds a field to the field table. If you are a server, it assigns an ID to the field if one is not present.
@@ -112,6 +129,7 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <returns>The eventHashlist's enumerator.</returns>
         System.Collections.Generic.Dictionary<string, EventMethod>.Enumerator getEventMethodEnumerator();
+
     }
 
     /**
@@ -205,10 +223,18 @@ namespace InteractionEngine.Constructs {
         /// Get rid of this GameObject. Sad, I know.
         /// </summary>
         public void deconstruct() {
-            
+            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
+            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return;
+            this.loadRegion.addUpdate(new Networking.DeleteObject(this.id));
+            internalDeconstruct();
+        }
+
+        /// <summary>
+        /// Gets rid of this GameObject. Called by the above method as well as DeleteObject.executeUpdate().
+        /// </summary>
+        internal void internalDeconstruct() {
             GameWorld.GameWorld.removeGameObject(this.id);
             this.loadRegion.removeObject(this.id);
-            //if (
         }
 
         #endregion
@@ -225,6 +251,27 @@ namespace InteractionEngine.Constructs {
         /// <returns>This GameObject's LoadRegion.</returns>
         public LoadRegion getLoadRegion() {
             return loadRegion;
+        }
+
+        /// <summary>
+        /// Move this GameObject from one LoadRegion to another.
+        /// </summary>
+        /// <param name="newLoadRegion">The new LoadRegion.</param>
+        public void move(LoadRegion newLoadRegion) {
+            // Are we a client? If so, wait for an update from the server who will independently process the Event that called this method.
+            if (GameWorld.GameWorld.status == InteractionEngine.GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT) return;
+            this.loadRegion.addUpdate(new Networking.MoveObject(this.id, newLoadRegion.id));
+            this.internalMove(newLoadRegion);
+        }
+
+        /// <summary>
+        /// Moves this GameObject from one LoadRegion to another. Called by the above method as well as MoveObject.executeUpdate().
+        /// </summary>
+        /// <param name="newLoadRegion">The new LoadRegion.</param>
+        internal void internalMove(LoadRegion newLoadRegion) {
+            this.loadRegion.removeObject(this.id);
+            newLoadRegion.addObject(this.id);
+            this.loadRegion = newLoadRegion;
         }
 
         #endregion

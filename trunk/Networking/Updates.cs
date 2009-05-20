@@ -59,6 +59,10 @@ namespace InteractionEngine.Networking {
     /// </summary>
     internal class CreateRegion : Update {
 
+        // Contains a list of EventMethods that get triggered when this Event is executed.
+        // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
+        public static System.Collections.Generic.List<EventHandling.EventMethod> onCreateRegion = new System.Collections.Generic.List<InteractionEngine.EventHandling.EventMethod>();
+
         // Contains the ID to assign this LoadRegion.
         // Used for making sure LoadRegions have synchronized IDs across the network.
         private int loadRegionID;
@@ -106,7 +110,11 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-
+            if (GameWorld.GameWorld.getLoadRegion(this.loadRegionID) != null) return;
+            new Constructs.LoadRegion(this.loadRegionID);
+            foreach (EventHandling.EventMethod eventMethod in onCreateRegion) {
+                eventMethod(null, null);
+            }
         }
 
     }
@@ -163,7 +171,9 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-
+            Constructs.LoadRegion loadRegion = GameWorld.GameWorld.getLoadRegion(this.loadRegionID);
+            if(loadRegion == null) return;
+            loadRegion.internalDeconstruct();
         }
 
     }
@@ -173,8 +183,9 @@ namespace InteractionEngine.Networking {
     /// Also contains a list of values to set for the GameObject's fields.
     /// </summary>
     internal class CreateObject : Update {
-
         
+        // Contains a list of EventMethods that get triggered when this Event is executed.
+        // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
         public static System.Collections.Generic.List<EventHandling.EventMethod> onCreateObject = new System.Collections.Generic.List<InteractionEngine.EventHandling.EventMethod>();
         // Contains the ID of the LoadRegion this GameObject will be assigned to.
         // Used for making sure every GameObject has a home.
@@ -251,9 +262,17 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            Constructs.GameObject gameObject = Constructs.GameObject.factoryList[this.classHash](GameWorld.GameWorld.getLoadRegion(this.loadRegionID), this.gameObjectID);
+            if (GameWorld.GameWorld.getGameObject(this.gameObjectID) != null) return;
+            Constructs.LoadRegion loadRegion = GameWorld.GameWorld.getLoadRegion(this.loadRegionID);
+            if (loadRegion == null) return;
+            Constructs.GameObject gameObject = Constructs.GameObject.factoryList[this.classHash](loadRegion, this.gameObjectID);
             foreach (System.Collections.Generic.KeyValuePair<int, object> pair in fieldValues) {
-                gameObject.getField(pair.Key).setValue(pair.Value);
+                Constructs.Datatypes.Updatable field = gameObject.getField(pair.Key);
+                if (field == null) continue;
+                field.setValue(pair.Value);
+            }
+            foreach (EventHandling.EventMethod eventMethod in onCreateObject) {
+                eventMethod(null, null);
             }
         }
 
@@ -311,7 +330,9 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-
+            Constructs.GameObject gameObject = GameWorld.GameWorld.getGameObject(this.gameObjectID);
+            if (gameObject == null) return;
+            gameObject.internalDeconstruct();
         }
 
     }
@@ -375,6 +396,10 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(this.gameObjectID);
+            Constructs.LoadRegion loadRegion = GameWorld.GameWorld.getLoadRegion(this.loadRegionID);
+            if (gameObject == null || loadRegion == null) return;
+            gameObject.internalMove(loadRegion);
         }
 
     }
@@ -447,6 +472,11 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            Constructs.GameObjectable gameObject = GameWorld.GameWorld.getGameObject(this.fieldContainerID);
+            if (gameObject == null) return;
+            Constructs.Datatypes.Updatable updatable = gameObject.getField(this.fieldID);
+            if (updatable == null) return;
+            updatable.setValue(this.newValue);
         }
 
     }
