@@ -20,6 +20,8 @@ namespace InteractionEngine.Networking {
      */
     public class Server {
 
+        #region Networking
+
         // Contains a static reference to a BinaryFormatter.
         // Used for serialization/deserialization of objects.
         private static System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -108,6 +110,8 @@ namespace InteractionEngine.Networking {
             }
             return updates;
         }
+
+        #endregion
 
     }
 

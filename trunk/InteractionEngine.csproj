@@ -86,7 +86,6 @@
   <ItemGroup>
     <Compile Include="Constructs\Datatypes.cs" />
     <Compile Include="Constructs\Event.cs" />
-    <Compile Include="Constructs\FieldContainer.cs" />
     <Compile Include="Constructs\GameObject.cs" />
     <Compile Include="Constructs\LoadRegion.cs" />
     <Compile Include="Constructs\Location.cs" />

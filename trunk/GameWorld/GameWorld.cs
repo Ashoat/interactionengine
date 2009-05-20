@@ -123,7 +123,7 @@ namespace InteractionEngine.GameWorld {
         /// <param name="events">The list of events to process.</param>
         private static void processEvents(System.Collections.Generic.List<EventHandling.Event> events) {
             foreach (EventHandling.Event eventObject in events)
-                GameWorld.getObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(null, eventObject.parameter);
+                GameWorld.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(null, eventObject.parameter);
         }
 
         #endregion
@@ -214,7 +214,7 @@ namespace InteractionEngine.GameWorld {
                 // Process the events.
                 foreach (EventHandling.Event eventObject in events) {
                     if (client.hasPermission(eventObject.gameObjectID))
-                        GameWorld.getObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(client, eventObject.parameter);
+                        GameWorld.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(client, eventObject.parameter);
                 }
             }
         }
@@ -240,91 +240,113 @@ namespace InteractionEngine.GameWorld {
 
         #endregion
 
-        #region FieldContainer Hashlist
+        #region GameObject Hashlist
 
         /**
-         * FIELDCONTAINER HASHLIST
+         * GAMEOBJECT HASHLIST
          *                 
-         * Contains a dictionary that links FieldContainer IDs with FieldContainers.
-         * Used for having a synchronized method of referring to GameObjects and LoadRegions across the network.
-         * All GameObject and LoadRegions add themselves to this list in their constructors.
+         * Contains a dictionary that links GameObject IDs with GameObjects.
+         * Used for having a synchronized method of referring to GameObjects across the network.
+         * All GameObjects add themselves to this list in their constructors.
          */
-        private static System.Collections.Generic.Dictionary<int, Constructs.FieldContainer> fieldContainerHashlist = new System.Collections.Generic.Dictionary<int, Constructs.FieldContainer>();
-        // Contains the lowest available ID for the next FieldContainer.
-        // Used for knowing what ID the Server should assign a new FieldContainer.
-        public static int nextID = 0;
+        private static System.Collections.Generic.Dictionary<int, Constructs.GameObjectable> gameObjectHashlist = new System.Collections.Generic.Dictionary<int, Constructs.GameObjectable>();
+        // Contains the lowest available ID for the next GameObject.
+        // Used for knowing what ID the Server should assign a new GameObject.
+        private static int nextGameObjectID = 0;
 
         /// <summary>
-        /// This adds a FieldContainer to the FieldContainer Hashlist.
+        /// This adds a GameObject to the GameObject Hashlist.
         /// </summary>
-        /// <param name="gameObject">The FieldContainer to be added.</param>
-        public static void addFieldContainer(Constructs.FieldContainer fieldContainer) {
+        /// <param name="gameObject">The GameObject to be added.</param>
+        public static void addGameObject(Constructs.GameObjectable gameObject) {
             // This will only work if the GameObject doesn't already have an ID.
             // Since on a MULTIPLAYER_CLIENT this ID would have already been set, nothing will happen in that case.
-            fieldContainer.id = nextID++;
-            fieldContainerHashlist.Add(fieldContainer.id, fieldContainer);
+            gameObject.id = nextGameObjectID++;
+            gameObjectHashlist.Add(gameObject.id, gameObject);
         }
 
         /// <summary>
-        /// This removes a FieldContainer from the FieldContainer Hashlist. 
+        /// This removes a GameObject from the GameObject Hashlist. 
         /// </summary>
         /// <param name="id">The id of the GameObject to be removed</param>
-        public static void removeFieldContainer(int id) {
-            if (fieldContainerHashlist.ContainsKey(id)) fieldContainerHashlist.Remove(id);
+        public static void removeGameObject(int id) {
+            if (gameObjectHashlist.ContainsKey(id)) gameObjectHashlist.Remove(id);
         }
 
         /// <summary>
-        /// This method retrieves a FieldContainer from the Field Container Hashlist.
+        /// This method retrieves a GameObject from the GameObject Hashlist.
         /// </summary>
-        /// <param name="id">The ID of the FieldContainer to retrieve.</param>
-        /// <returns>The requested FieldContainer.</returns>
-        public static Constructs.FieldContainer getFieldContainer(int id) {
-            if (fieldContainerHashlist.ContainsKey(id)) return fieldContainerHashlist[id];
+        /// <param name="id">The ID of the GameObject to retrieve.</param>
+        /// <returns>The requested GameObject.</returns>
+        public static Constructs.GameObjectable getGameObject(int id) {
+            if (gameObjectHashlist.ContainsKey(id)) return gameObjectHashlist[id];
             else return null;
         }
 
         /// <summary>
-        /// This method returns the number of FieldContainers in the GameWorld.
+        /// This method returns the number of GameObjects in the GameWorld.
         /// </summary>
-        /// <returns>The number of FieldContainers in the GameWorld.</returns>
-        public static int getFieldContainerCount() {
-            return fieldContainerHashlist.Count;
-        }
-
-        #region Object List
-
-        /// <summary>
-        /// This method returns a GameObject from the FieldContainer table.
-        /// </summary>
-        /// <param name="id">The ID of the GameObject you want to retrieve.</param>
-        /// <returns>The GameObject being returned.</returns>
-        public static Constructs.GameObject getObject(int id) {
-            if (fieldContainerHashlist.ContainsKey(id)) {
-                Constructs.FieldContainer returnObject = fieldContainerHashlist[id];
-                if (returnObject is Constructs.GameObject) return (Constructs.GameObject)returnObject;
-                else return null;
-            } else return null;
+        /// <returns>The number of GameObjects in the GameWorld.</returns>
+        public static int getGameObjectCount() {
+            return gameObjectHashlist.Count;
         }
 
         #endregion
 
-        #region LoadRegion List
+        #region LoadRegion Hashlist
+
+        /**
+         * LOADREGION HASHLIST
+         *                 
+         * Contains a dictionary that links LoadRegion IDs with LoadRegions.
+         * Used for having a synchronized method of referring to LoadRegions across the network.
+         * All LoadRegions add themselves to this list in their constructors.
+         */
+        private static System.Collections.Generic.Dictionary<int, Constructs.LoadRegion> loadRegionHashlist = new System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>();
+        // Contains the lowest available ID for the next LoadRegion.
+        // Used for knowing what ID the Server should assign a new LoadRegion.
+        private static int nextLoadRegionID = 0;
 
         /// <summary>
-        /// This method returns a LoadRegion from the FieldContainer table.
+        /// This adds a LoadRegion to the LoadRegion Hashlist.
         /// </summary>
-        /// <param name="id">The ID of the LoadRegion you want to retrieve.</param>
-        /// <returns>The LoadRegion being returned.</returns>
+        /// <param name="loadRegion">The LoadRegion to be added.</param>
+        public static void addLoadRegion(Constructs.LoadRegion loadRegion) {
+            // This will only work if the LoadRegion doesn't already have an ID.
+            // Since on a MULTIPLAYER_CLIENT this ID would have already been set, nothing will happen in that case.
+            loadRegion.id = nextLoadRegionID++;
+            loadRegionHashlist.Add(loadRegion.id, loadRegion);
+        }
+
+        /// <summary>
+        /// This removes a LoadRegion from the LoadRegion Hashlist. 
+        /// </summary>
+        /// <param name="id">The id of the LoadRegion to be removed</param>
+        public static void removeLoadRegion(int id) {
+            if (loadRegionHashlist.ContainsKey(id)) loadRegionHashlist.Remove(id);
+        }
+
+        /// <summary>
+        /// This method retrieves a LoadRegion from the LoadRegion Hashlist.
+        /// </summary>
+        /// <param name="id">The ID of the LoadRegion to retrieve.</param>
+        /// <returns>The requested LoadRegion.</returns>
         public static Constructs.LoadRegion getLoadRegion(int id) {
-            if (fieldContainerHashlist.ContainsKey(id)) {
-                Constructs.FieldContainer returnRegion = fieldContainerHashlist[id];
-                if (returnRegion is Constructs.LoadRegion) return (Constructs.LoadRegion)returnRegion;
-                else return null;
-            } else return null;
+            if (loadRegionHashlist.ContainsKey(id)) return loadRegionHashlist[id];
+            else return null;
         }
 
+        /// <summary>
+        /// This method returns the number of LoadRegions in the GameWorld.
+        /// </summary>
+        /// <returns>The number of LoadRegions in the GameWorld.</returns>
+        public static int getLoadRegionCount() {
+            return loadRegionHashlist.Count;
+        }
 
-        #endregion
+        public static System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>.ValueCollection getLoadRegionList() {
+            return loadRegionHashlist.Values;
+        }
 
         #endregion
 

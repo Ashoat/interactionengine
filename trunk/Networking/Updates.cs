@@ -163,6 +163,7 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+
         }
 
     }
@@ -173,6 +174,8 @@ namespace InteractionEngine.Networking {
     /// </summary>
     internal class CreateObject : Update {
 
+        
+        public static System.Collections.Generic.List<EventHandling.EventMethod> onCreateObject = new System.Collections.Generic.List<InteractionEngine.EventHandling.EventMethod>();
         // Contains the ID of the LoadRegion this GameObject will be assigned to.
         // Used for making sure every GameObject has a home.
         private int loadRegionID;
@@ -186,10 +189,11 @@ namespace InteractionEngine.Networking {
         // Used for letting the client know what the current state of the GameObject is.
         private System.Collections.Generic.Dictionary<int, object> fieldValues;
 
+        /// <summary>
         /// Construct this Update.
         /// This constructor should only be used on the server side.
         /// </summary>
-        /// <param name="loadRegionID">The ID of the LoadRegion we want to delete.</param>
+        /// <param name="loadRegionID">The ID of the LoadRegion this GameObject will be assigned to.</param>
         /// <param name="gameObjectID">The ID to assign this GameObject.</param>
         /// <param name="classHash">A string identifying the GameObject subclass this CreateObject is instantiating.</param>
         /// <param name="fieldValues">A dictionary pointing field IDs to their values.</param>
@@ -247,6 +251,10 @@ namespace InteractionEngine.Networking {
         internal void executeUpdate() {
             if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+            Constructs.GameObject gameObject = Constructs.GameObject.factoryList[this.classHash](GameWorld.GameWorld.getLoadRegion(this.loadRegionID), this.gameObjectID);
+            foreach (System.Collections.Generic.KeyValuePair<int, object> pair in fieldValues) {
+                gameObject.getField(pair.Key).setValue(pair.Value);
+            }
         }
 
     }
