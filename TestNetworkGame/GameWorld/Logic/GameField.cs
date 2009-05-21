@@ -3,7 +3,7 @@ using InteractionEngine.Constructs;
 using InteractionEngine.EventHandling;
 using InteractionEngine.Networking;
 using InteractionEngine.UserInterface;
-using InteractionEngine.UserInterface.TwoDimensional;
+using TestNetworkGame.Graphics;
 
 namespace TestNetworkGame.Logic {
 
@@ -41,6 +41,7 @@ namespace TestNetworkGame.Logic {
         /// Pretty much the constructor. It'll be called every time this object is instantiated.
         /// </summary>
         public override void construct() {
+            location = new Location(this);
         }
 
         /// <summary>
@@ -56,8 +57,8 @@ namespace TestNetworkGame.Logic {
         /// Returns the Graphics module of this GameObject.
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.
-        private Graphics graphics;
-        public Graphics getGraphics() {
+        private GameFieldGraphics graphics;
+        public GameFieldGraphics getGraphics() {
             return graphics;
         }
 
