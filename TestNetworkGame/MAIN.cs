@@ -20,6 +20,8 @@ namespace TestNetworkGame {
             LoadRegion loadRegion = LoadRegion.createLoadRegion();
             // Set up the GameField.
             GameField gameField = GameObject.createGameObject<GameField>(loadRegion);
+
+            
         }
 
     }

@@ -35,22 +35,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Field.png">
+    <Compile Include="tictactoe_board.PNG">
       <Name>Field</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="O.png">
-      <Name>O</Name>
+    <Compile Include="tictactoe_x.PNG">
+      <Name>X</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="X.png">
-      <Name>X</Name>
+    <Compile Include="tictactoe_o.PNG">
+      <Name>O</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -17,3 +17,13 @@ C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Interacti
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\Field.xnb
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\O.xnb
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\X.xnb
+D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\TestNetworkGame.exe
+D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\TestNetworkGame.pdb
+D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\Content\Field.xnb
+D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\Content\X.xnb
+D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\Content\O.xnb
+D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\TestNetworkGame.exe
+D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\TestNetworkGame.pdb
+D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\InteractionEngine.pdb
+D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
