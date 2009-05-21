@@ -87,8 +87,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameWorld\Graphics\2D\ClickySpot.cs" />
     <Compile Include="GameWorld\Graphics\2D\GameField.cs" />
+    <Compile Include="GameWorld\Graphics\2D\O.cs" />
+    <Compile Include="GameWorld\Graphics\2D\X.cs" />
+    <Compile Include="GameWorld\Graphics\ClickySpot.cs" />
     <Compile Include="GameWorld\Graphics\GameField.cs" />
+    <Compile Include="GameWorld\Graphics\GamePiece.cs" />
+    <Compile Include="GameWorld\Logic\ClickySpot.cs" />
     <Compile Include="GameWorld\Logic\GameField.cs" />
     <Compile Include="GameWorld\Logic\O.cs" />
     <Compile Include="GameWorld\Logic\X.cs" />

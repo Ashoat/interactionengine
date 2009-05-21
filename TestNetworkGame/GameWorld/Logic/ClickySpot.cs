@@ -6,10 +6,12 @@ using InteractionEngine.UserInterface;
 using TestNetworkGame.Graphics;
 using TestNetworkGame.Graphics.TwoDimensional;
 using TestNetworkGame.Modules;
+using InteractionEngine.UserInterface.TwoDimensional;
+using InteractionEngine.Constructs.Datatypes;
 
 namespace TestNetworkGame.Logic {
 
-    public class O : GameObject, GamePieceable {
+    public class ClickySpot : GameObject, Interactable {
 
         #region FACTORY
 
@@ -18,12 +20,12 @@ namespace TestNetworkGame.Logic {
         /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
         /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
         /// </summary>
-        public O() {
+        public ClickySpot() {
         }
 
         // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
         // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
-        public const string realHash = "O";
+        public const string realHash = "ClickySpot";
         public override string classHash {
             get { return realHash; }
         }
@@ -31,8 +33,8 @@ namespace TestNetworkGame.Logic {
         /// <summary>
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
-        static O() {
-            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<O>));
+        static ClickySpot() {
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<ClickySpot>));
         }
 
         #endregion
@@ -44,9 +46,22 @@ namespace TestNetworkGame.Logic {
         /// </summary>
         public override void construct() {
             location = new Location(this);
-            graphics = new OGraphics2D(this);
-            gamePiece = new GamePiece();
-            gamePiece.display = new InteractionEngine.Constructs.Datatypes.UpdatableBoolean(this);
+            this.addEventMethod("handleClick", this.handleClick);
+            graphics = new ClickySpotGraphics2D(this);
+            this.currentO = new UpdatableBoolean(this);
+            currentO.value = false;
+        }
+
+        public void setPosition(int startingXPos, int startingYPos) {
+            graphics.setPosition(startingXPos, startingYPos);
+        }
+
+        private O oPiece;
+        private X xPiece;
+
+        public void relateToGamePieces(O o, X x) {
+            oPiece = o;
+            xPiece = x;
         }
 
         /// <summary>
@@ -62,22 +77,28 @@ namespace TestNetworkGame.Logic {
         /// Returns the Graphics module of this GameObject.
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.</returns>
-        private GamePieceGraphics graphics;
+        private ClickySpotGraphics graphics;
         public InteractionEngine.UserInterface.Graphics getGraphics() {
             return graphics;
         }
 
-        /// <summary>
-        /// Returns the GamePiece module of this GameObject.
-        /// </summary>
-        /// <returns>The GamePiece module associated with this GameObject.</returns>
-        private GamePiece gamePiece;
-        public GamePiece getGamePiece() {
-            return gamePiece;
+        public Event getEvent(int invoker) {
+            if (invoker == UserInterface2D.MOUSE_LEFT_CLICK) return new Event(this.id, "handleClick", null);
+            else return null;
         }
 
-        public void setPosition(int startingXPos, int startingYPos) {
-            graphics.setPosition(startingXPos, startingYPos);
+        private UpdatableBoolean currentO;
+
+        public void handleClick(Client client, object parameter) {
+            if (!currentO.value && oPiece != null) {
+                oPiece.getGamePiece().display.value = true;
+                xPiece.getGamePiece().display.value = false;
+                currentO.value = true;
+            } else if (xPiece != null) {
+                oPiece.getGamePiece().display.value = false;
+                xPiece.getGamePiece().display.value = true;
+                currentO.value = false;
+            }
         }
 
     }

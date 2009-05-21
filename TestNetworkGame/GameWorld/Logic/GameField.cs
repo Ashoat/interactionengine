@@ -49,7 +49,7 @@ namespace TestNetworkGame.Logic {
         /// <summary>
         /// Returns the Location module of this GameObject.
         /// </summary>
-        /// <returns>The Location module associated with this GameObject.
+        /// <returns>The Location module associated with this GameObject.</returns>
         private Location location;
         public Location getLocation() {
             return location;
@@ -58,7 +58,7 @@ namespace TestNetworkGame.Logic {
         /// <summary>
         /// Returns the Graphics module of this GameObject.
         /// </summary>
-        /// <returns>The Graphics module associated with this GameObject.
+        /// <returns>The Graphics module associated with this GameObject.</returns>
         private GameFieldGraphics graphics;
         public InteractionEngine.UserInterface.Graphics getGraphics() {
             return graphics;
