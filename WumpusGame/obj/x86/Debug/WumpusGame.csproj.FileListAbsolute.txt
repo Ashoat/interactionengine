@@ -24,3 +24,5 @@ D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\De
 D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Button.xnb
 D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Bat.xnb
 D:\Development\InteractionEngine 2.0\WumpusGame\WumpusGame\WumpusGame\bin\x86\Debug\Content\Inventory.xnb
+C:\Users\Ashoat\Desktop\Bluestone Coding\WumpusGame\obj\x86\Debug\WumpusGame.exe
+C:\Users\Ashoat\Desktop\Bluestone Coding\WumpusGame\obj\x86\Debug\WumpusGame.pdb
