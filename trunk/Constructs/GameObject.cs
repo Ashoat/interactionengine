@@ -124,7 +124,7 @@ namespace InteractionEngine.Constructs {
                 return realID;
             }
             set {
-                if (realID == -1) id = value;
+                if (realID == -1) realID = value;
             }
         }
 

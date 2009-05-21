@@ -36,7 +36,7 @@ namespace InteractionEngine.Constructs.Datatypes {
                 return realID;
             }
             set {
-                if (realID == -1) id = value;
+                if (realID == -1) realID = value;
             }
         }
         // Contains a reference to this Updatable's FieldContainer.
