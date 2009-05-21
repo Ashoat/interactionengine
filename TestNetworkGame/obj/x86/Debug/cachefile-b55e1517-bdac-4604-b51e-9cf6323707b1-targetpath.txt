@@ -1,3 +1,5 @@
 Content\Field.xnb
 Content\O.xnb
 Content\X.xnb
+Content\Host.xnb
+Content\Join.xnb

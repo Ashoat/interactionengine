@@ -27,3 +27,5 @@ D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\TestNetworkGame.pdb
 D:\t09\InteractionEngine\TestNetworkGame\bin\x86\Debug\InteractionEngine.pdb
 D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\ResolveAssemblyReference.cache
 D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\Host.xnb
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\Join.xnb
