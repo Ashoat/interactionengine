@@ -86,6 +86,8 @@ namespace InteractionEngine {
         /// <param name="GameTime">The current game time.</param>
         public static void run(Microsoft.Xna.Framework.GameTime gameTime) {
             gameTimeField = gameTime;
+            if (userInterface == null) throw new System.Exception("The game developer screwed up. They never gave us a UI!");
+            userInterface.startInputOutput();
             if (status == Status.SINGLE_PLAYER) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
@@ -95,7 +97,7 @@ namespace InteractionEngine {
                 processEvents(events);
                 // Output graphics
                 userInterface.output();
-             } else if (status == Status.MULTIPLAYER_SERVERCLIENT) {
+            } else if (status == Status.MULTIPLAYER_SERVERCLIENT) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
                 // Get Events from the InteractionEngine
@@ -157,7 +159,7 @@ namespace InteractionEngine {
         /// This method adds an Event to the EventCache.
         /// </summary>
         /// <param name="theEvent">The Event to add to the EventCache.</param>
-        internal static void addEvent(EventHandling.Event theEvent) {
+        public static void addEvent(EventHandling.Event theEvent) {
             eventCache.Add(theEvent);
         }
 
@@ -300,6 +302,14 @@ namespace InteractionEngine {
             return gameObjectHashlist.Count;
         }
 
+        /// <summary>
+        /// Get a list of all the GameObjects in the GameWorld.
+        /// </summary>
+        /// <returns>All the GameObjects in the GameWorld.</returns>
+        public static System.Collections.Generic.Dictionary<int, Constructs.GameObjectable>.ValueCollection getGameObjectList() {
+            return gameObjectHashlist.Values;
+        }
+
         #endregion
 
         #region LoadRegion Hashlist
@@ -353,6 +363,10 @@ namespace InteractionEngine {
             return loadRegionHashlist.Count;
         }
 
+        /// <summary>
+        /// Get a list of all the LoadRegions in the GameWorld.
+        /// </summary>
+        /// <returns>All the LoadRegions in the GameWorld.</returns>
         public static System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>.ValueCollection getLoadRegionList() {
             return loadRegionHashlist.Values;
         }

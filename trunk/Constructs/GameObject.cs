@@ -83,6 +83,14 @@ namespace InteractionEngine.Constructs {
         Constructs.Datatypes.Updatable getField(int id);
 
         /// <summary>
+        /// Returns a dictionary of all field ID's pointing to their realValue (cast an on object).
+        /// Used mainly for when a client needs to be sent an already existing LoadRegion and all its already existing GameObjects.
+        /// See LoadRegion.sendToClient().
+        /// </summary>
+        /// <returns>All this object's fields.</returns>
+        System.Collections.Generic.Dictionary<int, object> getFieldValues();
+
+        /// <summary>
         /// Adds an event to the eventHashlist.
         /// </summary>
         /// <param name="hash">The string that represents the event.</param>
@@ -322,6 +330,19 @@ namespace InteractionEngine.Constructs {
         public Constructs.Datatypes.Updatable getField(int id) {
             if (fieldHashlist.ContainsKey(id)) return fieldHashlist[id];
             else return null;
+        }
+
+        /// <summary>
+        /// Returns a dictionary of all field ID's pointing to their realValue (cast an on object).
+        /// Used mainly for when a client needs to be sent an already existing LoadRegion and all its already existing GameObjects.
+        /// See LoadRegion.sendToClient().
+        /// </summary>
+        /// <returns>All this object's fields.</returns>
+        public System.Collections.Generic.Dictionary<int, object> getFieldValues() {
+            System.Collections.Generic.Dictionary<int, object> returnList = new System.Collections.Generic.Dictionary<int, object>();
+            foreach (System.Collections.Generic.KeyValuePair<int, Constructs.Datatypes.Updatable> pair in fieldHashlist)
+                returnList.Add(pair.Key, pair.Value.getValue());
+            return returnList;
         }
 
         #endregion

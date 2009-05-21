@@ -123,6 +123,21 @@ namespace InteractionEngine.Constructs {
 
         #endregion
 
+        /// <summary>
+        /// This method is utilized inside the GameWorld to send a client a LoadRegion and all its GameObjects.
+        /// NEVER CALL THIS FROM A MULTIPLAYER_CLIENT! (Or a SINGLE_PLAYER for that matter.)
+        /// </summary>
+        /// <param name="client"></param>
+        public void sentToClient(Networking.Client client) {
+            // The easy part. Send them the LoadRegion.
+            client.sendUpdate(new Networking.CreateRegion(id));
+            // Now we have to package up every object in the LoadRegion! Yay!
+            foreach (int gameObjectID in objects) {
+                GameObjectable gameObject = Engine.getGameObject(gameObjectID);
+                if (gameObject != null) client.sendUpdate(new Networking.CreateObject(id, gameObjectID, gameObject.classHash, gameObject.getFieldValues()));
+            }
+        }
+
         #region Object List
 
         /**
