@@ -43,11 +43,17 @@ namespace InteractionEngine.UserInterface {
         /// </summary>
         public UserInterface() {
             inputDetector = new System.Threading.Thread(new System.Threading.ThreadStart(runRetrieveInput));
-            inputDetector.Start();
         }
 
         /// <summary>
-        /// Continuous loop that calls the retrieveInput(System.Collections.Generic.List<EventHandling.Event>) method repeatedly,
+        /// Start the thread!
+        /// </summary>
+        internal void startInputOutput() {
+            if (inputDetector.ThreadState == System.Threading.ThreadState.Unstarted) inputDetector.Start();
+        }
+
+        /// <summary>
+        /// Continuous loop that calls the retrieveInput() method repeatedly,
         /// and stuffs the new events into the eventList, for the GameWorld to later fetch via the input() method.
         /// This method should run in its own thread, if that isn't clear already.
         /// </summary>

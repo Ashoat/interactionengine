@@ -54,6 +54,14 @@ namespace InteractionEngine.Constructs.Datatypes {
         }
 
         /// <summary>
+        /// Register a change of value of this Updatable to potentially be sent to clients in an UPDATE_FIELD transfer code.
+        /// </summary>
+        protected void registerUpdate() {
+            if (Engine.status == Engine.Status.MULTIPLAYER_SERVER || Engine.status == Engine.Status.MULTIPLAYER_SERVERCLIENT)
+                gameObject.getLoadRegion().registerUpdate(this);
+        }
+
+        /// <summary>
         /// Gets the value of this Updatable as an object so we can send it across to a client in an UPDATE_FIELD transfer code.
         /// This method should only ever be executed on the server.
         /// </summary>
@@ -105,7 +113,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.gameObject.getLoadRegion().registerUpdate(this);
+                registerUpdate();
             }
         }
 
@@ -170,7 +178,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.gameObject.getLoadRegion().registerUpdate(this);
+                registerUpdate();
             }
         }
 
@@ -232,7 +240,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.gameObject.getLoadRegion().registerUpdate(this);
+                registerUpdate();
             }
         }
 
@@ -294,7 +302,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.gameObject.getLoadRegion().registerUpdate(this);
+                registerUpdate();
             }
         }
 
@@ -356,7 +364,7 @@ namespace InteractionEngine.Constructs.Datatypes {
             set {
                 if (realValue == value) return;
                 realValue = value;
-                this.gameObject.getLoadRegion().registerUpdate(this);
+                registerUpdate();
             }
         }
 

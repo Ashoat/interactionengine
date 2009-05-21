@@ -36,24 +36,11 @@ namespace InteractionEngine {
             graphics = new Microsoft.Xna.Framework.GraphicsDeviceManager(this);
             // Specify the folder in the project where sprites, models, etc. are stored.
             Content.RootDirectory = "Content";
-            // Add the GamerServciesComponent to the Game class. Check MSDN's Programming Guide for XNA Networking for more information.
-            Components.Add(new Microsoft.Xna.Framework.GamerServices.GamerServicesComponent(this));
-            // Create the network session.
-            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.SINGLE_PLAYER) {
-                session = Microsoft.Xna.Framework.Net.NetworkSession.Create(Microsoft.Xna.Framework.Net.NetworkSessionType.SystemLink, 1, 4);
-                session.AllowHostMigration = false;
-                session.AllowJoinInProgress = false;
-                /*session.GameEnded += new System.EventHandler<Microsoft.Xna.Framework.Net.GameEndedEventArgs>();
-                session.GamerJoined += new System.EventHandler<Microsoft.Xna.Framework.Net.GamerJoinedEventArgs>();
-                session.GamerLeft += new System.EventHandler<Microsoft.Xna.Framework.Net.GamerLeftEventArgs>();
-                session.GameStarted += new System.EventHandler<Microsoft.Xna.Framework.Net.GameStartedEventArgs>();
-                session.SessionEnded += new System.EventHandler<Microsoft.Xna.Framework.Net.NetworkSessionEndedEventArgs>();*/
-            }
             this.IsMouseVisible = true;
         }
 
         /// <summary>
-        /// Instantiate all the LoadRegions, etc. that MUST HAVE GUARANTEED ORDER!!!
+        /// Initialize stuff, I guess?
         /// </summary>
         protected override void Initialize() {
             base.Initialize();
@@ -68,11 +55,9 @@ namespace InteractionEngine {
             this.graphics.PreferredBackBufferHeight = height;
             this.graphics.ApplyChanges();
             this.graphics.GraphicsDevice.Clear(this.color);
-            // TODO: i = 1?
-            for (int i = 1; i < Engine.getGameObjectCount(); i++) {
-                InteractionEngine.Constructs.GameObjectable oneOfThem = Engine.getGameObject(i);
-                if (oneOfThem is UserInterface.Graphable) {
-                    ((UserInterface.Graphable)oneOfThem).getGraphics().loadContent();
+            foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) { 
+                if (gameObject is UserInterface.Graphable) {
+                    ((UserInterface.Graphable)gameObject).getGraphics().loadContent();
                 }
             }
         }

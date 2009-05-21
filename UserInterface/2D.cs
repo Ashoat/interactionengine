@@ -130,13 +130,10 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         /// </summary>
         public override void output() {
             this.spriteBatch.Begin();
-            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
-                for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
-                    // Go through every GameObject and see if they have something to output
-                    if (gameObject is Graphable)
-                        ((Graphable)gameObject).getGraphics().onDraw();
-                }
+            // Go through every GameObject and see if they have something to output
+            foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()){
+                if (gameObject is Graphable)
+                    ((Graphable)gameObject).getGraphics().onDraw();
             }
             this.spriteBatch.End();
         }
@@ -210,6 +207,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             width.value = 0;
             height = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject);
             height.value = 0;
+            loadBounds();
         }
 
 
