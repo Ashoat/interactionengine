@@ -142,10 +142,18 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         }
 
         /// <summary>
+        /// Set the window size.
+        /// </summary>
+        /// <param name="width">The width of the window.</param>
+        /// <param name="height">The height of the window</param>
+        public void setWindowSize(int width, int height) {
+            Engine.game.setWindowSize(width, height);
+        }
+
+        /// <summary>
         /// Initialize stuff.
         /// </summary>
         public override void initialize() {
-            Engine.game.setWindowSize(1000, 1100);
             Engine.game.setBackgroundColor(Microsoft.Xna.Framework.Graphics.Color.White);
             this.spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(InteractionEngine.Engine.game.GraphicsDevice);
         }
@@ -160,7 +168,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
 
         // Contains a reference to this Graphics module's GameObject.
         // Used for proper Updatable construction.
-        private Constructs.GameObject gameObject;
+        public readonly Constructs.GameObject gameObject;
         // Contains the Updatable X position of this object.
         // Used for updating position vector information.
         public Constructs.Datatypes.UpdatableDouble xPos;
@@ -178,6 +186,13 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         // [0]: upper left corner, [1]: upper right corner, [2]: lower left corner, [3]: lower right corner
         // [x][0]: x-coordinate, [x][1]: y-coordinate
         public Vector3[] corners;
+        // Contains the width of this GameObject.
+        // Used primarily for calculating Interactables.
+        public Constructs.Datatypes.UpdatableDouble width;
+        // Contains the height of this GameObject.
+        // Used primarily for calculating Interactables.
+        public Constructs.Datatypes.UpdatableDouble height;
+
 
         /// <summary>
         /// Loads the sprite from XNA's ContentPipeline.
@@ -191,17 +206,21 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             yPos.value = 0;
             rotation = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject);
             rotation.value = 0;
+            width = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject);
+            width.value = 0;
+            height = new InteractionEngine.Constructs.Datatypes.UpdatableDouble(gameObject);
+            height.value = 0;
         }
 
 
         /// <summary>
         /// Reload the bounds after changing the texture or the position.
         /// </summary>
-        private void loadBounds() {
+        public void loadBounds() {
             corners = new Vector3[]{ new Vector3((float) xPos.value, (float) yPos.value, 0f),
-                                     new Vector3((float) xPos.value, (float) (yPos.value + texture.Height), 0f),
-                                     new Vector3((float) (xPos.value + texture.Width), (float) yPos.value, 0f),
-                                     new Vector3((float) (xPos.value + texture.Width), (float) (yPos.value + texture.Height), 0f) };
+                                     new Vector3((float) xPos.value, (float) (yPos.value + height.value), 0f),
+                                     new Vector3((float) (xPos.value + width.value), (float) yPos.value, 0f),
+                                     new Vector3((float) (xPos.value + width.value), (float) (yPos.value + height.value), 0f) };
         }
 
         /// <summary>
@@ -219,7 +238,16 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         /// <param name="textureFileName">The file name of the texture to load.</param>
         public void loadTexture(string textureFileName) {
             texture = InteractionEngine.Engine.game.Content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(textureFileName);
-            this.loadBounds();
+        }
+
+        /// <summary>
+        /// Calculate the bounds from the height and width of the texture.
+        /// </summary>
+        public void calculateBoundsFromTexture() {
+            if (!hasTexture()) return;
+            height.value = texture.Height;
+            width.value = texture.Width;
+            loadBounds();
         }
 
         /// <summary>
