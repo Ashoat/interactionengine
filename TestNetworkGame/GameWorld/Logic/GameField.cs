@@ -4,6 +4,7 @@ using InteractionEngine.EventHandling;
 using InteractionEngine.Networking;
 using InteractionEngine.UserInterface;
 using TestNetworkGame.Graphics;
+using TestNetworkGame.Graphics.TwoDimensional;
 
 namespace TestNetworkGame.Logic {
 
@@ -42,6 +43,7 @@ namespace TestNetworkGame.Logic {
         /// </summary>
         public override void construct() {
             location = new Location(this);
+            graphics = new GameFieldGraphics2D(this);
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace TestNetworkGame.Logic {
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.
         private GameFieldGraphics graphics;
-        public GameFieldGraphics getGraphics() {
+        public InteractionEngine.UserInterface.Graphics getGraphics() {
             return graphics;
         }
 

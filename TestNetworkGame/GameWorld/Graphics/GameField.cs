@@ -4,7 +4,7 @@
 
         void onDraw();
 
-        void loadContents();
+        void loadContent();
 
     }
 

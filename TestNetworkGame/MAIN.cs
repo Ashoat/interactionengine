@@ -5,6 +5,7 @@ using InteractionEngine.Networking;
 using InteractionEngine.UserInterface.TwoDimensional;
 using System;
 using System.Collections.Generic;
+using TestNetworkGame.Logic;
 
 namespace TestNetworkGame {
 
@@ -15,6 +16,10 @@ namespace TestNetworkGame {
             Engine.game = new InteractionGame();
             // Set up the UI.
             Engine.userInterface = new UserInterface2D();
+            // Set up the LoadRegion.
+            LoadRegion loadRegion = LoadRegion.createLoadRegion();
+            // Set up the GameField.
+            GameField gameField = GameObject.createGameObject<GameField>(loadRegion);
         }
 
     }

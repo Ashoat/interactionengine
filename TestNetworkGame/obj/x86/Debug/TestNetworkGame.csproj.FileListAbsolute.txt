@@ -14,3 +14,6 @@ C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\TestNetwo
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\TestNetworkGame.pdb
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\InteractionEngine.dll
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\InteractionEngine.pdb
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\Field.xnb
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\O.xnb
+C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\X.xnb
