@@ -23,6 +23,7 @@ namespace TestNetworkGame.Graphics.TwoDimensional {
         /// Blah!
         /// </summary>
         public override void onDraw() {
+            base.loadBounds();
         }
 
         /// <summary>
