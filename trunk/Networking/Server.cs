@@ -43,13 +43,15 @@ namespace InteractionEngine.Networking {
         /// Connect to a server at the specified IP.
         /// </summary>
         /// <param name="ipAddress">The IP address where we can find the server at.</param>
-        public Server(int ipAddress) {
-            if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVERCLIENT)
+        public Server(string ipAddress) {
+            if (InteractionEngine.Engine.status == Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new System.Exception("The game developer screwed up. They shouldn't be insantiating a Server object on a server.");
-            this.tcpClient = new System.Net.Sockets.TcpClient(new System.Net.IPEndPoint((long)ipAddress, Client.listeningPort));
+            this.tcpClient = new System.Net.Sockets.TcpClient();
+            this.tcpClient.Connect(new System.Net.IPEndPoint(System.Net.IPAddress.Parse(ipAddress), Client.listeningPort));
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
             this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
             this.updateReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readUpdates));
+            this.updateReaderThread.Start();
         }
 
         /// <summary>
@@ -59,6 +61,7 @@ namespace InteractionEngine.Networking {
         public void sendEvent(EventHandling.Event eventObject) {
             writer.Write(eventObject.gameObjectID);
             writer.Write(eventObject.eventHash);
+            if (eventObject.parameter == null) eventObject.parameter = new object();
             formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);
         }
 

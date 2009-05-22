@@ -34,6 +34,9 @@ namespace InteractionEngine.Networking {
         // Contains a list of Events that need to be triggered when a Client quits.
         // Used so that the GameWorld can deal with Client quitting however it wants.
         public static System.Collections.Generic.List<EventHandling.Event> onQuit = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
+        // Contains the thread that handles listening on the port.
+        // Used for concurrently listening so that we don't have to wait for the main game loop to let in a new connection.
+        private static System.Threading.Thread listenerThread;
 
         /// <summary>
         /// Start listening for new clients to connect using the set port. 
@@ -44,6 +47,9 @@ namespace InteractionEngine.Networking {
                 throw new System.Exception("The game developer screwed up. They shouldn't be telling a client to start listening for connections!");
             if (tcpListener != null) return;
             tcpListener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Any, portNumber);
+            tcpListener.Start();
+            listenerThread = new System.Threading.Thread(new System.Threading.ThreadStart(checkForNewConnections));
+            listenerThread.Start();
         }
 
         /// <summary>
@@ -75,12 +81,17 @@ namespace InteractionEngine.Networking {
         /// </summary>
         internal static void checkForNewConnections() {
             if (tcpListener == null) return;
-            while (tcpListener.Pending()) {
+            while (true) {
+                if(!tcpListener.Pending()) continue;
                 Client newClient = new Client(tcpListener.AcceptTcpClient());
-                clientList.Add(newClient);
+                lock (clientList) {
+                    clientList.Add(newClient);
+                }
                 // Trigger the onJoin Events.
-                foreach (EventHandling.Event eventObject in onJoin)
+                foreach (EventHandling.Event eventObject in onJoin) {
+                    eventObject.parameter = (object)newClient;
                     InteractionEngine.Engine.addEvent(eventObject);
+                }
             }
         }
 
@@ -116,6 +127,7 @@ namespace InteractionEngine.Networking {
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
             this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
             this.eventReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readEvents));
+            this.eventReaderThread.Start();
         }
 
         /// <summary>
@@ -162,39 +174,22 @@ namespace InteractionEngine.Networking {
          * Contains a reference to all the LoadRegions this user is in.
          * Used for sending output to the User, figuring out what to display, etc.
          */
-        private System.Collections.Generic.List<Constructs.LoadRegion> loadRegionList = new System.Collections.Generic.List<InteractionEngine.Constructs.LoadRegion>();
+        private System.Collections.Generic.Dictionary<int, Constructs.LoadRegion> loadRegionHashlist = new System.Collections.Generic.Dictionary<int, InteractionEngine.Constructs.LoadRegion>();
 
         /// <summary>
         /// Adds a LoadRegion to this User's LoadRegion list. 
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to be added</param>
         public void addLoadRegion(Constructs.LoadRegion loadRegion) {
-            loadRegionList.Add(loadRegion);
+            loadRegionHashlist.Add(loadRegion.id, loadRegion);
         }
 
         /// <summary>
         /// Removes a LoadRegion from this User's list of LoadRegions. 
         /// </summary>
-        /// <param name="index">The index of the LoadRegion to be removed</param>
-        public void removeLoadRegion(int index) {
-            loadRegionList.RemoveAt(index);
-        }
-
-        /// <summary>
-        /// Removes a LoadRegion from this User's list of LoadRegions.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to be removed.</param>
-        public void removeLoadRegion(InteractionEngine.Constructs.LoadRegion loadRegion) {
-            loadRegionList.Remove(loadRegion);
-        }
-
-        /// <summary>
-        /// Get a LoadRegion from this User's list of LoadRegions.
-        /// </summary>
-        /// <param name="index">The index of the LoadRegion.</param>
-        /// <returns>The LoadRegion being fetched.</returns>
-        public Constructs.LoadRegion getLoadRegion(int index) {
-            return loadRegionList[index];
+        /// <param name="id">The ID of the LoadRegion to be removed</param>
+        public void removeLoadRegion(int id) {
+            if(loadRegionHashlist.ContainsKey(id)) loadRegionHashlist.Remove(id);
         }
 
         /// <summary>
@@ -202,15 +197,15 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <returns>The number of LoadRegions this User has.</returns>
         public int getLoadRegionCount() {
-            return loadRegionList.Count;
+            return loadRegionHashlist.Count;
         }
 
         /// <summary>
         /// Get the LoadRegion list in read-only form.
         /// </summary>
         /// <returns>The LoadRegion list in read-only form.</returns>
-        public System.Collections.Generic.IList<Constructs.LoadRegion> getLoadRegionList() {
-            return loadRegionList.AsReadOnly();
+        public System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>.ValueCollection getLoadRegionList() {
+            return loadRegionHashlist.Values;
         }
 
         #endregion
