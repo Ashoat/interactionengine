@@ -88,36 +88,32 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                     mouseRightClicked.RemoveAt(i);
                 }
             }
-            // Loop through all of the User's LoadRegions
-            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
-                // Loop through all the LoadRegion's GameObjects
-                for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
-                    // See if this GameObject can be interacted with.
-                    if (gameObject is Graphable) {
-                        Graphics2D graphics = (Graphics2D)((Graphable)gameObject).getGraphics();
-                        if (gameObject is EventHandling.Interactable) {
-                            EventHandling.Interactable interaction = (EventHandling.Interactable)gameObject;
-                            // Check to see if the mouse is intersecting the GameObject.
-                            if (graphics.contains(mouse.X, mouse.Y)) {
-                                // MOUSE_OVER?
-                                if (!mouseOvered.Contains(interaction)) {
-                                    mouseOvered.Add(interaction);
-                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_OVER);
-                                    if (evvie != null) newEvents.Add(evvie);
-                                }
-                                // MOUSE_LEFT_CLICK?
-                                if (mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseLeftClicked.Contains(interaction)) {
-                                    mouseLeftClicked.Add(interaction);
-                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK);
-                                    if (evvie != null) newEvents.Add(evvie);
-                                }
-                                // MOUSE_RIGHT_CLICK?
-                                if (mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseRightClicked.Contains(interaction)) {
-                                    mouseRightClicked.Add(interaction);
-                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK);
-                                    if (evvie != null) newEvents.Add(evvie);
-                                }
+            // Loop through all the GameObjects
+            foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
+                // See if this GameObject can be interacted with.
+                if (gameObject is Graphable) {
+                    Graphics2D graphics = (Graphics2D)((Graphable)gameObject).getGraphics();
+                    if (gameObject is EventHandling.Interactable) {
+                        EventHandling.Interactable interaction = (EventHandling.Interactable)gameObject;
+                        // Check to see if the mouse is intersecting the GameObject.
+                        if (graphics.contains(mouse.X, mouse.Y)) {
+                            // MOUSE_OVER?
+                            if (!mouseOvered.Contains(interaction)) {
+                                mouseOvered.Add(interaction);
+                                EventHandling.Event evvie = interaction.getEvent(MOUSE_OVER);
+                                if (evvie != null) newEvents.Add(evvie);
+                            }
+                            // MOUSE_LEFT_CLICK?
+                            if (mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseLeftClicked.Contains(interaction)) {
+                                mouseLeftClicked.Add(interaction);
+                                EventHandling.Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK);
+                                if (evvie != null) newEvents.Add(evvie);
+                            }
+                            // MOUSE_RIGHT_CLICK?
+                            if (mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseRightClicked.Contains(interaction)) {
+                                mouseRightClicked.Add(interaction);
+                                EventHandling.Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK);
+                                if (evvie != null) newEvents.Add(evvie);
                             }
                         }
                     }

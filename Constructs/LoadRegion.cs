@@ -109,7 +109,9 @@ namespace InteractionEngine.Constructs {
         public void deconstruct() {
             // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return;
-            foreach (int gameObjectID in objects) InteractionEngine.Engine.getGameObject(gameObjectID).deconstruct();
+            System.Collections.Generic.List<int> tempList = new System.Collections.Generic.List<int>();
+            tempList.AddRange(objects);
+            foreach (int gameObjectID in tempList) InteractionEngine.Engine.getGameObject(gameObjectID).deconstruct();
             this.addUpdate(new Networking.DeleteRegion(this.id));
             this.internalDeconstruct();
         }
@@ -123,12 +125,17 @@ namespace InteractionEngine.Constructs {
 
         #endregion
 
+        #region Client Communication
+
         /// <summary>
         /// This method is utilized inside the GameWorld to send a client a LoadRegion and all its GameObjects.
+        /// It will make sure that client's copy of the LoadRegion stays synchronized.
         /// NEVER CALL THIS FROM A MULTIPLAYER_CLIENT! (Or a SINGLE_PLAYER for that matter.)
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="client">The client to give the LoadRegion to.</param>
         public void sentToClient(Networking.Client client) {
+            if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("The game developer screwed up. They shouldn't called LoadRegion.sendToClient() on a client.");
             // The easy part. Send them the LoadRegion.
             client.sendUpdate(new Networking.CreateRegion(id));
             // Now we have to package up every object in the LoadRegion! Yay!
@@ -136,7 +143,25 @@ namespace InteractionEngine.Constructs {
                 GameObjectable gameObject = Engine.getGameObject(gameObjectID);
                 if (gameObject != null) client.sendUpdate(new Networking.CreateObject(id, gameObjectID, gameObject.classHash, gameObject.getFieldValues()));
             }
+            // Add the LoadRegion to the local list of LoadRegions for this client, so we know we need to update the client with this LoadRegion.
+            client.addLoadRegion(this);
         }
+
+        /// <summary>
+        /// This method is utilized inside the GameWorld to remove a synchronized LoadRegion from a client.
+        /// NEVER CALL THIS FROM A MULTIPLAYER_CLIENT! (Or a SINGLE_PLAYER for that matter.)
+        /// </summary>
+        /// <param name="client">The client to give the LoadRegion to.</param>
+        public void removeFromClient(Networking.Client client) {
+            if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new System.Exception("The game developer screwed up. They shouldn't called LoadRegion.sendToClient() on a client.");
+            // Send them a DeleteRegion
+            client.sendUpdate(new Networking.DeleteRegion(id));
+            // Remove the LoadRegion from the local list of LoadRegions for this client, so we don't try to update them regarding it.
+            client.removeLoadRegion(id);
+        }
+
+        #endregion
 
         #region Object List
 

@@ -23,7 +23,7 @@ namespace InteractionEngine.Networking {
     /// <summary>
     /// An interface representing an "update" from the Server.
     /// </summary>
-    internal abstract class Update {
+    public abstract class Update {
 
         /// <summary>
         /// Transfer code constants.
@@ -57,7 +57,7 @@ namespace InteractionEngine.Networking {
     /// <summary>
     /// Represents an Update from the server that directs the client to instantiate a new LoadRegion.
     /// </summary>
-    internal class CreateRegion : Update {
+    public class CreateRegion : Update {
 
         // Contains a list of EventMethods that get triggered when this EventHandling.Event is executed.
         // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
@@ -102,7 +102,7 @@ namespace InteractionEngine.Networking {
             writer.Write(Update.CREATE_REGION);
             writer.Write(this.loadRegionID);
         }
-
+        
         /// <summary>
         /// Execute the update this class contains.
         /// This method should only be used on the client side.
@@ -111,8 +111,9 @@ namespace InteractionEngine.Networking {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
             if (InteractionEngine.Engine.getLoadRegion(this.loadRegionID) != null) return;
-            new Constructs.LoadRegion(this.loadRegionID);
+            Constructs.LoadRegion loadRegion = new Constructs.LoadRegion(this.loadRegionID);
             foreach (EventHandling.Event eventObject in onCreateRegion) {
+                eventObject.parameter = (object)loadRegion;
                 Engine.addEvent(eventObject);
             }
         }
@@ -122,7 +123,7 @@ namespace InteractionEngine.Networking {
     /// <summary>
     /// Represents an Update from the server that directs the client to delete an existing LoadRegion.
     /// </summary>
-    internal class DeleteRegion : Update {
+    public class DeleteRegion : Update {
 
         // Contains the ID of the LoadRegion we want to delete.
         // Used for identifying the LoadRegion set for deletion.
@@ -182,7 +183,7 @@ namespace InteractionEngine.Networking {
     /// Represents an Update from the server that directs the client to instantiate a specified GameObject in the specified LoadRegion.
     /// Also contains a list of values to set for the GameObject's fields.
     /// </summary>
-    internal class CreateObject : Update {
+    public class CreateObject : Update {
         
         // Contains a list of EventMethods that get triggered when this EventHandling.Event is executed.
         // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
@@ -230,7 +231,9 @@ namespace InteractionEngine.Networking {
             loadRegionID = reader.ReadInt32();
             gameObjectID = reader.ReadInt32();
             classHash = reader.ReadString();
-            for (int i = 0; i < reader.ReadInt32(); i++)
+            int numberOfObjects = reader.ReadInt32();
+            fieldValues = new System.Collections.Generic.Dictionary<int, object>();
+            for (int i = 0; i < numberOfObjects; i++)
                 fieldValues.Add(reader.ReadInt32(), formatter.Deserialize(stream));
         }
 
@@ -251,7 +254,8 @@ namespace InteractionEngine.Networking {
             writer.Write(this.fieldValues.Count);
             foreach (System.Collections.Generic.KeyValuePair<int, object> pair in fieldValues) {
                 writer.Write(pair.Key);
-                formatter.Serialize(stream, pair.Value);
+                if (pair.Value == null) formatter.Serialize(stream, new object());
+                else formatter.Serialize(stream, pair.Value);
             }
         }
 
@@ -272,6 +276,7 @@ namespace InteractionEngine.Networking {
                 field.setValue(pair.Value);
             }
             foreach (EventHandling.Event eventObject in onCreateObject) {
+                eventObject.parameter = (object)gameObject;
                 Engine.addEvent(eventObject);
             }
         }
@@ -281,7 +286,7 @@ namespace InteractionEngine.Networking {
     /// <summary>
     /// Represents an Update from the server that directs the client to delete an existing GameObject.
     /// </summary>
-    internal class DeleteObject : Update {
+    public class DeleteObject : Update {
 
         // Contains the ID of the GameObject we want to delete.
         // Used for identifying the GameObject set for deletion.
@@ -340,7 +345,7 @@ namespace InteractionEngine.Networking {
     /// <summary>
     /// Represents an update from the server that directs the client to move a GameObject from one LoadRegion to another.
     /// </summary>
-    internal class MoveObject : Update {
+    public class MoveObject : Update {
 
         // Contains the ID of the GameObject we want to move.
         // Used for identifying the GameObject set to be moved.
@@ -407,7 +412,7 @@ namespace InteractionEngine.Networking {
     /// <summary>
     /// Represents an update from the server that directs the client to change the value of an Updatable field.
     /// </summary>
-    internal class UpdateField : Update {
+    public class UpdateField : Update {
 
         // Contains the ID of the FieldContainer containing the specified Updatable.
         // Used for grabbing the Updatable.
@@ -462,6 +467,7 @@ namespace InteractionEngine.Networking {
             writer.Write(Update.UPDATE_FIELD);
             writer.Write(this.fieldContainerID);
             writer.Write(this.fieldID);
+            if (newValue == null) newValue = new object();
             formatter.Serialize(stream, newValue);
         }
 

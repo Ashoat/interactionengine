@@ -113,10 +113,10 @@ namespace InteractionEngine {
             } else if (status == Status.MULTIPLAYER_CLIENT) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
-                // Get Events from the InteractionEngine
-                events.AddRange(getEvents());
                 // Send Events to be processed remotely by the server
                 sendInput(events);
+                // Get Events from the InteractionEngine
+                events.AddRange(getEvents());
                 // Process the Events locally
                 processEvents(events);
                 // Recieve and process updates from the server
@@ -185,7 +185,7 @@ namespace InteractionEngine {
 
         // Contains a reference to the Server object.
         // Used for handling basic networking operations for clients.
-        private static Networking.Server server;
+        public static Networking.Server server;
 
         /// <summary>
         /// Send a byte array to the server containing called events. This method is only used on the client.

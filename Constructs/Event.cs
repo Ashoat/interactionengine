@@ -38,8 +38,7 @@ namespace InteractionEngine.EventHandling {
         public readonly string eventHash;
         // Contains extra information for the event.
         // Used when extra information needs to be passed with the event.
-        // Note: must be serializable.
-        public readonly object parameter;
+        public object parameter;
 
         /// <summary>
         /// Constructs the event.
