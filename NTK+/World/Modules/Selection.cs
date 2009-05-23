@@ -15,9 +15,9 @@
 
 using InteractionEngine.Constructs.Datatypes;
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
+using InteractionEngine;
 using Microsoft.Xna.Framework;
-using InteractionEngine.Client;
+using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace NTKPlusGame.World.Modules {
@@ -50,9 +50,9 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="reader">The reader from which to read teh field datas.</param>
         internal Selection(GameObject gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) {
             /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)GameWorld.createField(reader);
+            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
             roomSelection = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == GameWorld.UPDATE_FIELD) GameWorld.updateField(reader);
+            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
             else reader.Position--;
             this.gameObject = gameObject;*/
         }
@@ -62,7 +62,7 @@ namespace NTKPlusGame.World.Modules {
     /**
      * Implemented by GameObjects that have the Selection module.
      */
-    public interface Selectable : InteractionEngine.Client.ThreeDimensional.Interactable3D {
+    public interface Selectable : InteractionEngine.UserInterface.ThreeDimensional.Interactable3D {
 
         /// <summary>
         /// Returns the Selection module of this GameObject.

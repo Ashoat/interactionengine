@@ -78,7 +78,7 @@ namespace InteractionEngine.UserInterface {
         /// Also, clears eventList of all events.
         /// </summary>
         /// <returns>The events that are being called. Each includes a GameObject ID and an event hash.</returns>
-        public System.Collections.Generic.List<EventHandling.Event> input() {
+        public virtual System.Collections.Generic.List<EventHandling.Event> input() {
             System.Collections.Generic.List<EventHandling.Event> eventExport;
             lock (eventList) {
                 eventExport = new System.Collections.Generic.List<EventHandling.Event>(eventList);
@@ -148,6 +148,8 @@ namespace InteractionEngine.UserInterface {
         /// Pretty much the constructor. It'll be called every time this object is instantiated.
         /// </summary>
         public override void construct() {
+            this.focusHolder = new InteractionEngine.Constructs.Datatypes.UpdatableGameObject<Keyboardable>(this);
+            this.addEventMethod(EVENT_HASH, new InteractionEngine.EventHandling.EventMethod(keyPressed));
         }
 
         private const string EVENT_HASH = "Key";
@@ -189,7 +191,7 @@ namespace InteractionEngine.UserInterface {
         /// </summary>
         /// <param name="newFocusHolder">The new holder of the keyboard focus.</param>
         public void getFocus(Keyboardable newFocusHolder) {
-            focusHolder.value.focusLost(newFocusHolder);
+            if (focusHolder.value != null) focusHolder.value.focusLost(newFocusHolder);
             this.focusHolder.value = newFocusHolder;
         }
 

@@ -15,7 +15,7 @@
 
 using InteractionEngine.Constructs.Datatypes;
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
+using InteractionEngine;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System;
@@ -110,9 +110,9 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="reader">The reader from which to read teh field datas.</param>
         protected internal Stats(GameObject gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) {
             /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)GameWorld.createField(reader);
+            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
             roomStats = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == GameWorld.UPDATE_FIELD) GameWorld.updateField(reader);
+            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
             else reader.Position--;
             this.gameObject = gameObject;*/
         }
@@ -147,25 +147,17 @@ namespace NTKPlusGame.World.Modules {
 
             // Contains the next StatModification
             // Used for linked-list implementation
-            private readonly UpdatableGameObject<StatModification> nextModification;
+            private UpdatableGameObject<StatModification> nextModification;
 
             /// <summary>
             /// Server-side constructor.
             /// </summary>
             /// <param name="loadRegion"></param>
-            protected StatModification(LoadRegion loadRegion)
-                : base(loadRegion) {
-                nextModification = new UpdatableGameObject<StatModification>(this);
+            public override void  construct() {
+                this.nextModification = new UpdatableGameObject<StatModification>(this);
             }
 
-            /// <summary>
-            /// Client-side constructor.
-            /// </summary>
-            /// <param name="loadRegion"></param>
-            /// <param name="id"></param>
-            protected StatModification(LoadRegion loadRegion, int id)
-                : base(loadRegion, id) {
-                // TODO
+            protected StatModification() {
             }
 
             /// <summary>
@@ -229,78 +221,51 @@ namespace NTKPlusGame.World.Modules {
         }
 
         public class SimpleTimedStatModification : StatModification {
-            
+
+
             #region FACTORY
 
-        // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
-        // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
-        internal const string classHash = "SimpleTimedStatModification";
+            /// <summary>
+            /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+            /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+            /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
+            /// </summary>
+            public SimpleTimedStatModification() {
+            }
 
-        /// <summary>
-        /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
-        /// </summary>
-        static SimpleTimedStatModification() {
-            GameObject.factoryList.Add(classHash, new GameObjectFactory(makeSimpleTimedStatModification));
-        }
-
-        /// <summary>
-        /// A factory method that creates and returns a new instance of SimpleTimedStatModification. Used by the client when the server requests it to make a new GameObject.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
-        /// <returns>A new instance of SimpleTimedStatModification.</returns>
-        static SimpleTimedStatModification makeSimpleTimedStatModification(LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            if (GameWorld.status != GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
-            SimpleTimedStatModification gameObject = new SimpleTimedStatModification(loadRegion, id);
-            // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
-            return gameObject;
-        }
-
-        /// <summary>
-        /// Constructs a GameObject and assigns it an ID.
-        /// This is the constructor that should be used if and only if you are a MULTIPLAYER_CLIENT.
-        /// Furthermore, it is only called by the GameObjectFactory method.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        private SimpleTimedStatModification(LoadRegion loadRegion, int id)
-            : base(loadRegion, id) {
-        }
-
-        /// <summary>
-        /// Returns the class hash. 
-        /// </summary>
-        /// <returns>The class hash. Do we really have to tell you everything twice?</returns>
-        public override string getClassHash() {
-            return classHash;
-        }
-
-        #endregion
-
-            private readonly UpdatableDouble expirationTime;
-            private readonly UpdatableInteger amount;
-            private readonly UpdatableString statType;
-            private readonly UpdatableString description;
+            // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
+            // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
+            public const string realHash = "SimpleTimedStatModification";
+            public override string classHash {
+                get { return realHash; }
+            }
 
             /// <summary>
-            /// 
+            /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
             /// </summary>
-            /// <param name="loadRegion"></param>
-            /// <param name="statType">The type of the stat.</param>
-            /// <param name="amount"></param>
-            /// <param name="duration">Duration of the stat modification in seconds</param>
-            /// <param name="description"></param>
-            public SimpleTimedStatModification(LoadRegion loadRegion, StatType statType, int amount, double duration, string description)
-                : base(loadRegion) {
+            static SimpleTimedStatModification() {
+                GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<SimpleTimedStatModification>));
+            }
+
+            #endregion
+
+            private UpdatableDouble expirationTime;
+            private UpdatableInteger amount;
+            private UpdatableString statType;
+            private UpdatableString description;
+
+            public override void construct() {
+                base.construct();
                 this.statType = new UpdatableString(this);
                 this.amount = new UpdatableInteger(this);
                 this.expirationTime = new UpdatableDouble(this);
                 this.description = new UpdatableString(this);
+            }
+
+            public void initialize(LoadRegion loadRegion, StatType statType, int amount, double duration, string description) {
                 this.statType.value = statType.ToString();
                 this.amount.value = amount;
-                this.expirationTime.value = GameWorld.gameTime.TotalRealTime.TotalMilliseconds + duration * 1000;
+                this.expirationTime.value = Engine.gameTime.TotalRealTime.TotalMilliseconds + duration * 1000;
                 this.description.value = description;
             }
 
@@ -309,7 +274,7 @@ namespace NTKPlusGame.World.Modules {
             }
 
             protected override bool isExpired(Stats stats) {
-                return GameWorld.gameTime.TotalRealTime.TotalMilliseconds >= this.expirationTime.value;
+                return Engine.gameTime.TotalRealTime.TotalMilliseconds >= this.expirationTime.value;
             }
 
             public override string getDescription() {

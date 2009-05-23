@@ -6,15 +6,15 @@
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\Content\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\Ashoat\Desktop\InteractionEngine\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\Woofy\Desktop\interactionengine2\trunk\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Woofy\Desktop\interactionengine2\trunk\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Woofy\Desktop\interactionengine2\trunk\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Woofy\Desktop\interactionengine2\trunk\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
         <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2009-05-16T11:45:50.7265297-07:00</Value>
+        <Value>2009-03-30T15:26:49.825644-07:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

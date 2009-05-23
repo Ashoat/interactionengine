@@ -16,15 +16,14 @@
 \*••••••••••••••••••••••••••••••••••••••••*/
 
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
-using System.Collections.Generic;
+using InteractionEngine;
 using System;
-using InteractionEngine.Constructs.Datatypes;
 using Microsoft.Xna.Framework;
-using InteractionEngine.Client;
-using InteractionEngine.Client.ThreeDimensional;
+using InteractionEngine.UserInterface.ThreeDimensional;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
+using InteractionEngine.EventHandling;
+using InteractionEngine.Networking;
 
 namespace NTKPlusGame.World {
 
@@ -32,49 +31,26 @@ namespace NTKPlusGame.World {
 
         #region FACTORY
 
+        /// <summary>
+        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+        /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+        /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
+        /// </summary>
+        public Terrain() {
+        }
+
         // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
         // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
-        internal const string classHash = "Terrain";
+        public const string realHash = "Terrain";
+        public override string classHash {
+            get { return realHash; }
+        }
 
         /// <summary>
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static Terrain() {
-            GameObject.factoryList.Add(classHash, new GameObjectFactory(makeTerrain));
-        }
-
-        /// <summary>
-        /// A factory method that creates and returns a new instance of Terrain. Used by the client when the server requests it to make a new GameObject.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
-        /// <returns>A new instance of Terrain.</returns>
-        static Terrain makeTerrain(LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            if (GameWorld.status != GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
-            Terrain Terrain = new Terrain(loadRegion, id);
-            // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
-            return Terrain;
-        }
-
-        /// <summary>
-        /// Constructs a GameObject and assigns it an ID.
-        /// This is the constructor that should be used if and only if you are a MULTIPLAYER_CLIENT.
-        /// Furthermore, it is only called by the GameObjectFactory method.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        private Terrain(LoadRegion loadRegion, int id)
-            : base(loadRegion, id) {
-        }
-
-        /// <summary>
-        /// Returns the class hash. 
-        /// </summary>
-        /// <returns>The class hash. Do we really have to tell you everything twice?</returns>
-        public override string getClassHash() {
-            return classHash;
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Terrain>));
         }
 
         #endregion
@@ -110,7 +86,7 @@ namespace NTKPlusGame.World {
         /// Returns the Location module of this GameObject.
         /// </summary>
         /// <returns>The Location module associated with this GameObject.
-        private readonly Location location;
+        private Location location;
         public Location getLocation() {
             return location;
         }
@@ -120,7 +96,7 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.
         private TerrainGraphics graphics;
-        public InteractionEngine.Client.Graphics getGraphics() {
+        public InteractionEngine.UserInterface.Graphics getGraphics() {
             return graphics;
         }
         public Graphics3D getGraphics3D()
@@ -136,14 +112,16 @@ namespace NTKPlusGame.World {
         /// Constructs a Terrain.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        public Terrain(TerrainedLoadRegion loadRegion, float blockScaleF, float heightScaleF)
-            : base(loadRegion) {
+        public override void construct() {
             this.location = new Location(this);
             this.graphics = new TerrainGraphics(this);
-            this.addEvent(TERRAIN_CLICKED_HASH, new EventMethod(onClicked));
+            this.addEventMethod(TERRAIN_CLICKED_HASH, new EventMethod(onClicked));
+
+        }
+        
+        public void initialize(float blockScaleF, float heightScaleF, LoadRegion terrainedLoadRegion) {
             this.blockScale = blockScaleF;
             this.heightScale = heightScaleF;
-            loadRegion.initialize(this);
         }
 
         /// <summary>
@@ -155,7 +133,7 @@ namespace NTKPlusGame.World {
         /// <param name="position">The position where the interaction happened, if applicable.</param>
         /// <returns>An Event.</returns>
         public Event getEvent(int invoker, Vector3 coordinates) {
-            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) return new Event(this.getID(), TERRAIN_CLICKED_HASH, coordinates);
+            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) return new Event(this.id, TERRAIN_CLICKED_HASH, coordinates);
             return null;
         }
 
@@ -163,8 +141,9 @@ namespace NTKPlusGame.World {
         /// Handler for when the terrain gets clicked.
         /// </summary>
         /// <param name="param">The Vector3 representing the location where the Terrain was clicked.</param>
-        public void onClicked(object param) {
-            new DebugSphere(this.getLoadRegion(), (Vector3)param, 1f);
+        public void onClicked(Client client, object param) {
+            DebugSphere sphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
+            sphere.setPosition((Vector3)param, 1f);
             NTKPlusUser.localUser.selectionFocus.addOnlyAsSecondSelection(this, param);
         }
 
@@ -422,8 +401,7 @@ namespace NTKPlusGame.World {
             this.Effect.UpdateFromActiveCamera();
             Effect actualEffect = this.Effect.Effect;
             actualEffect.Begin();
-            foreach (EffectPass pass in actualEffect.CurrentTechnique.Passes)
-            {
+            foreach (EffectPass pass in actualEffect.CurrentTechnique.Passes) {
                 pass.Begin();
                 // Draw the mesh
                 UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
@@ -439,8 +417,8 @@ namespace NTKPlusGame.World {
             effect = new ModelEffect();
             effect.Initialize(UserInterface3D.user.camera);
 
-            Texture2D texAsset = GameWorld.game.Content.Load<Texture2D>("Amazonia"); //tex1.png //Amazonia.jpg
-            Texture2D mapAsset = GameWorld.game.Content.Load<Texture2D>("heightImage"); //heightImage
+            Texture2D texAsset = Engine.game.Content.Load<Texture2D>("Amazonia"); //tex1.png //Amazonia.jpg
+            Texture2D mapAsset = Engine.game.Content.Load<Texture2D>("heightImage"); //heightImage
 
             this.LoadHeightmapFromImage(mapAsset);
             this.LoadTexture(texAsset);
@@ -449,7 +427,7 @@ namespace NTKPlusGame.World {
             this.GenerateVertices();
             this.GenerateNormals();
 
-            this.SetData(GameWorld.game.GraphicsDevice);
+            this.SetData(Engine.game.GraphicsDevice);
             this.InitDefaultEffectVal();
         }
 
@@ -497,14 +475,13 @@ namespace NTKPlusGame.World {
                 this.gameObject = gameObject;
             }
 
-            public override void onDraw()
-            {
+            public override void onDraw() {
                 gameObject.onDraw();
             }
 
             public override void loadContent() {
                 // TODO: this.
-                UserInterface3D.user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GameWorld.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+                UserInterface3D.user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
                 gameObject.loadContent();
                 //base.loadContent();
             }

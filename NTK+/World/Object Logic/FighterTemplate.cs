@@ -16,10 +16,10 @@
 \*••••••••••••••••••••••••••••••••••••••••*/
 
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
-using InteractionEngine.Client;
+using InteractionEngine;
+using InteractionEngine.UserInterface;
 using NTKPlusGame.World.Modules;
-using InteractionEngine.Client.ThreeDimensional;
+using InteractionEngine.UserInterface.ThreeDimensional;
 using System;
 using InteractionEngine.Constructs.Datatypes;
 
@@ -32,13 +32,13 @@ namespace NTKPlusGame.World {
     public abstract class FighterTemplate : WalkerTemplate, Attackable {
 
         // Specifies this GameObject's current target of attack.
-        protected readonly UpdatableGameObject<Combatable> target;
+        protected UpdatableGameObject<Combatable> target;
 
         /// <summary>
         /// Returns the Attack module of this GameObject.
         /// </summary>
         /// <returns>The Attack module associated with this GameObject.
-        private readonly Attack attack;
+        private Attack attack;
         public Attack getAttack() {
             return attack;
         }
@@ -47,17 +47,20 @@ namespace NTKPlusGame.World {
         /// Returns the Combat module of this GameObject.
         /// </summary>
         /// <returns>The Combat module associated with this GameObject.
-        private readonly Combat combat;
+        private Combat combat;
         public Combat getCombat() {
             return combat;
+        }
+
+        public FighterTemplate() {
+
         }
 
         /// <summary>
         /// Constructs a new FighterTemplate.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        public FighterTemplate(TerrainedLoadRegion loadRegion)
-            : base(loadRegion) {
+        public override void construct() {
             combat = new Combat(this);
             attack = new Attack(this);
             this.target = new UpdatableGameObject<Combatable>(this);

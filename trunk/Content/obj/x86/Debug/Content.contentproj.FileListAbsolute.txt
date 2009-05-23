@@ -4,3 +4,4 @@ C:\Users\Woofy\Desktop\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAsse
 D:\t09\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Ashoat\Desktop\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Ashoat\Desktop\InteractionEngine\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Woofy\Desktop\interactionengine2\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache

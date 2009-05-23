@@ -16,9 +16,11 @@
 \*••••••••••••••••••••••••••••••••••••••••*/
 
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
+using InteractionEngine;
 using NTKPlusGame.World.Modules;
-using InteractionEngine.Client;
+using InteractionEngine.UserInterface;
+using InteractionEngine.EventHandling;
+using InteractionEngine.Networking;
 
 namespace NTKPlusGame.World {
 
@@ -27,49 +29,26 @@ namespace NTKPlusGame.World {
 
         #region FACTORY
 
+        /// <summary>
+        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+        /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+        /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
+        /// </summary>
+        public InfoDisplayBox() {
+        }
+
         // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
         // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
-        internal const string classHash = "InfoDisplayBox";
+        public const string realHash = "InfoDisplayBox";
+        public override string classHash {
+            get { return realHash; }
+        }
 
         /// <summary>
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static InfoDisplayBox() {
-            GameObject.factoryList.Add(classHash, new GameObjectFactory(makeInfoDisplayBox));
-        }
-
-        /// <summary>
-        /// A factory method that creates and returns a new instance of InfoDisplayBox. Used by the client when the server requests it to make a new GameObject.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
-        /// <returns>A new instance of InfoDisplayBox.</returns>
-        static InfoDisplayBox makeInfoDisplayBox(LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            if (GameWorld.status != GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
-            InfoDisplayBox gameObject = new InfoDisplayBox(loadRegion, id);
-            // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
-            return gameObject;
-        }
-
-        /// <summary>
-        /// Constructs a GameObject and assigns it an ID.
-        /// This is the constructor that should be used if and only if you are a MULTIPLAYER_CLIENT.
-        /// Furthermore, it is only called by the GameObjectFactory method.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        private InfoDisplayBox(LoadRegion loadRegion, int id)
-            : base(loadRegion, id) {
-        }
-
-        /// <summary>
-        /// Returns the class hash. 
-        /// </summary>
-        /// <returns>The class hash. Do we really have to tell you everything twice?</returns>
-        public override string getClassHash() {
-            return classHash;
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<InfoDisplayBox>));
         }
 
         #endregion
@@ -80,7 +59,7 @@ namespace NTKPlusGame.World {
         /// Returns the Location module of this GameObject.
         /// </summary>
         /// <returns>The Location module associated with this GameObject.
-        private readonly Location location;
+        private Location location;
         public Location getLocation() {
             return location;
         }
@@ -89,8 +68,8 @@ namespace NTKPlusGame.World {
         /// Returns the Graphics module of this GameObject.
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.
-        private InteractionEngine.Client.Graphics graphics;
-        public InteractionEngine.Client.Graphics getGraphics() {
+        private InteractionEngine.UserInterface.Graphics graphics;
+        public InteractionEngine.UserInterface.Graphics getGraphics() {
             return graphics;
         }
 
@@ -98,14 +77,13 @@ namespace NTKPlusGame.World {
         /// Constructs a new InfoDisplayBox.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        public InfoDisplayBox(LoadRegion loadRegion)
-            : base(loadRegion) {
+        public override void construct() {
             this.location = new Location(this);
             this.graphics = null; // TODO
-            this.addEvent(DESCRIPTION_CHANGE_EVENT_HASH, new EventMethod(changeActiveDescription));
+            this.addEventMethod(DESCRIPTION_CHANGE_EVENT_HASH, new EventMethod(changeActiveDescription));
         }
 
-        public void changeActiveDescription(object param) {
+        public void changeActiveDescription(Client client, object param) {
             string description = (string)param;
             // TODO
         }

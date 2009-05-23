@@ -15,14 +15,14 @@
 using InteractionEngine.Constructs;
 namespace NTKPlusGame.World {
 
-    public class TerrainedLoadRegion : LoadRegion {
+    /**public class TerrainedLoadRegion : LoadRegion {
 
         private Terrain terrain;
 
         /// <summary>
         /// Construct this TerrainedLoadRegion.
         /// </summary>
-        public TerrainedLoadRegion() : base() {
+        public TerrainedLoadRegion() {
         }
 
         /// <summary>
@@ -41,6 +41,6 @@ namespace NTKPlusGame.World {
             return terrain;
         }
 
-    }
+    }*/
 
 }

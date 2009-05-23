@@ -16,10 +16,10 @@
 \*••••••••••••••••••••••••••••••••••••••••*/
 
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
-using InteractionEngine.Client;
+using InteractionEngine;
+using InteractionEngine.UserInterface;
 using NTKPlusGame.World.Modules;
-using InteractionEngine.Client.ThreeDimensional;
+using InteractionEngine.UserInterface.ThreeDimensional;
 using Microsoft.Xna.Framework;
 
 namespace NTKPlusGame.World {
@@ -43,12 +43,12 @@ namespace NTKPlusGame.World {
 
         public NTKPlusUser()
             : base() {
-            this.selectionFocus = new SelectionFocus(this.localLoadRegion);
-            this.keyboardFocus = new KeyboardFocus(this.localLoadRegion);
-            this.infoDisplayBox = new InfoDisplayBox(this.localLoadRegion);
-            this.keyboardCameraControl = new KeyboardCameraControl(this.localLoadRegion);
+            this.selectionFocus = GameObject.createGameObject<SelectionFocus>(this.localLoadRegion);
+            this.keyboardFocus = GameObject.createGameObject<KeyboardFocus>(this.localLoadRegion);
+            this.infoDisplayBox = GameObject.createGameObject<InfoDisplayBox>(this.localLoadRegion);
+            this.keyboardCameraControl = GameObject.createGameObject<KeyboardCameraControl>(this.localLoadRegion);
             this.keyboardFocus.getFocus(keyboardCameraControl);
-            ((UserInterface3D)GameWorld.userInterface).registerKeyboardFocus(keyboardFocus);
+            ((UserInterface3D)Engine.userInterface).registerKeyboardFocus(keyboardFocus);
         }
 
 

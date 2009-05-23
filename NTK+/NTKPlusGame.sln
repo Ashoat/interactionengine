@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C# Express 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTKPlusGame", "NTKPlusGame.csproj", "{7357ED0E-7CFF-466E-9C68-62EC73164DBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractionEngine", "..\testInteractionEngine\InteractionEngine.csproj", "{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractionEngine", "..\trunk\InteractionEngine.csproj", "{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

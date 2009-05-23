@@ -17,6 +17,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using InteractionEngine.Constructs;
 
 namespace InteractionEngine.Client.ThreeDimensional {
 
@@ -259,18 +260,18 @@ namespace InteractionEngine.Client.ThreeDimensional {
         private EffectPool effectPool;
 
         public float Alpha = 1f;
-        public Vector3 AmbientLightColor = Vector3.One;
+        public Vector3 AmbientLightColor = Vector3.Zero;
         public EffectTechnique CurrentTechnique;
         public Vector3 DiffuseColor = Vector3.One;
         public Vector3 EmissiveColor;// = Vector3.One;
-        public Vector3 FogColor = Vector3.One;
+        public Vector3 FogColor = Vector3.Zero;
         public bool FogEnabled;
         public float FogEnd;
         public float FogStart;
-        public bool LightingEnabled = true;
+        public bool LightingEnabled = false;
         public bool PreferPerPixelLighting;
-        public Vector3 SpecularColor = Vector3.One;
-        public float SpecularPower = 1;
+        public Vector3 SpecularColor = Vector3.Zero;
+        public float SpecularPower = 1f;
         public Texture2D Texture;
         public bool TextureEnabled;
         public bool VertexColorEnabled;
@@ -561,49 +562,26 @@ namespace InteractionEngine.Client.ThreeDimensional {
 
         #region FACTORY
 
+        /// <summary>
+        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+        /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+        /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
+        /// </summary>
+        public Camera() {
+        }
+
         // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
         // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
-        internal const string classHash = "Camera";
+        public const string realHash = "Camera";
+        public override string classHash {
+            get { return realHash; }
+        }
 
         /// <summary>
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static Camera() {
-            InteractionEngine.Constructs.GameObject.factoryList.Add(classHash, new InteractionEngine.Constructs.GameObjectFactory(makeCamera));
-        }
-
-        /// <summary>
-        /// A factory method that creates and returns a new instance of Camera. Used by the client when the server requests it to make a new GameObject.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
-        /// <returns>A new instance of Camera.</returns>
-        static Camera makeCamera(InteractionEngine.Constructs.LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            if (GameWorld.GameWorld.status != GameWorld.GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
-            Camera camera = new Camera(loadRegion, id);
-            // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
-            return camera;
-        }
-
-        /// <summary>
-        /// Constructs a GameObject and assigns it an ID.
-        /// This is the constructor that should be used if and only if you are a MULTIPLAYER_CLIENT.
-        /// Furthermore, it is only called by the GameObjectFactory method.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        private Camera(InteractionEngine.Constructs.LoadRegion loadRegion, int id)
-            : base(loadRegion, id) {
-        }
-
-        /// <summary>
-        /// Returns the class hash. 
-        /// </summary>
-        /// <returns>The class hash. Do we really have to tell you everything twice?</returns>
-        public override string getClassHash() {
-            return classHash;
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Camera>));
         }
 
         #endregion

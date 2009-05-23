@@ -16,11 +16,13 @@
 \*••••••••••••••••••••••••••••••••••••••••*/
 
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
-using InteractionEngine.Client;
+using InteractionEngine;
+using InteractionEngine.UserInterface;
 using NTKPlusGame.World.Modules;
-using InteractionEngine.Client.ThreeDimensional;
+using InteractionEngine.UserInterface.ThreeDimensional;
 using Microsoft.Xna.Framework;
+using InteractionEngine.EventHandling;
+using InteractionEngine.Networking;
 
 namespace NTKPlusGame.World {
 
@@ -35,13 +37,13 @@ namespace NTKPlusGame.World {
         /// Returns the Graphics module of this GameObject.
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.</returns>
-        public abstract InteractionEngine.Client.Graphics getGraphics();
+        public abstract InteractionEngine.UserInterface.Graphics getGraphics();
 
         /// <summary>
         /// Returns the Selection module of this GameObject.
         /// </summary>
         /// <returns>The Selection module associated with this GameObject.
-        private readonly Selection selection;
+        private Selection selection;
         public Selection getSelection() {
             return selection;
         }
@@ -50,7 +52,7 @@ namespace NTKPlusGame.World {
         /// Returns the Stats module of this GameObject.
         /// </summary>
         /// <returns>The Stats module associated with this GameObject.
-        private readonly Stats stats;
+        private Stats stats;
         public Stats getStats() {
             return stats;
         }
@@ -59,7 +61,7 @@ namespace NTKPlusGame.World {
         /// Returns the TerrainMovement module of this GameObject.
         /// </summary>
         /// <returns>The TerrainMovement module associated with this GameObject.
-        private readonly TerrainMovement terrainMovement;
+        private TerrainMovement terrainMovement;
         public Location getLocation() {
             return terrainMovement;
         }
@@ -69,35 +71,30 @@ namespace NTKPlusGame.World {
         public TerrainMovement getTerrainMovement() {
             return terrainMovement;
         }
-        private readonly TerrainedLoadRegion loadRegion;
-        public TerrainedLoadRegion getTerrainedLoadRegion() {
-            return loadRegion;
+        private Terrain terrain;
+        public Terrain getTerrain() {
+            return terrain;
         }
 
         public abstract Graphics3D getGraphics3D();
+
+        public WalkerTemplate() {
+
+        }
+
+        public virtual void initialize(Terrain terrain) {
+            this.terrain = terrain;
+        }
 
         /// <summary>
         /// Constructs a new WalkerTemplate.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        public WalkerTemplate(TerrainedLoadRegion loadRegion)
-            : base(loadRegion) {
-            this.loadRegion = loadRegion;
+        public override void construct() {
             this.selection = new Selection(this);
             this.stats = new Stats(this);
             this.terrainMovement = new TerrainMovement(this);
-            this.addEvent(MOVE_EVENT_HASH, new EventMethod(onSelected));
-        }
-        
-        /// <summary>
-        /// Constructs a GameObject and assigns it an ID.
-        /// This is the constructor that should be used if and only if you are a MULTIPLAYER_CLIENT.
-        /// Furthermore, it is only called by the GameObjectFactory method.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        protected WalkerTemplate(LoadRegion loadRegion, int id)
-            : base(loadRegion, id) {
+            this.addEventMethod(MOVE_EVENT_HASH, new EventMethod(onSelected));
         }
 
         /// <summary>
@@ -110,7 +107,7 @@ namespace NTKPlusGame.World {
         /// <returns>An Event.</returns>
         public virtual Event getEvent(int invoker, Vector3 coordinates) {
             if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS)
-                return new Event(this.getID(), MOVE_EVENT_HASH, null);
+                return new Event(this.id, MOVE_EVENT_HASH, null);
             else return null;
         }
 
@@ -118,7 +115,7 @@ namespace NTKPlusGame.World {
         /// EventMethod method... handles click events by registering this GameObject with the SelectionFocus.
         /// </summary>
         /// <param name="selectedBy">Um... probably null I guess.</param>
-        public virtual void onSelected(object selectedBy) {
+        public virtual void onSelected(Client client, object selectedBy) {
             NTKPlusUser.localUser.selectionFocus.addSelection(this, null);
         }
 

@@ -1,15 +1,16 @@
 ﻿// blah blah comments go here.
 
 using InteractionEngine.Constructs;
-using InteractionEngine.Server;
-using InteractionEngine.Client.ThreeDimensional;
-using InteractionEngine.GameWorld;
+using InteractionEngine.Networking;
+using InteractionEngine.UserInterface.ThreeDimensional;
+using InteractionEngine;
 using System;
 using NTKPlusGame.World;
-using InteractionEngine.Client;
+using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using InteractionEngine.Constructs.Datatypes;
+using InteractionEngine.EventHandling;
 
 
 namespace Game
@@ -19,47 +20,48 @@ namespace Game
     {
 
         static NTKPlusUser user;
-        static TerrainedLoadRegion terrainedLoadRegion;
+        static LoadRegion loadRegion;
 
         public static void Main()
         {
-            // Initialize the GameWorld.
-            GameWorld.game = new InteractionGame();
-            GameWorld.status = GameWorld.Status.SINGLE_PLAYER;
-            GameWorld.game.setWindowSize(1000, 1100);
-            GameWorld.game.setBackgroundColor(Microsoft.Xna.Framework.Graphics.Color.AliceBlue);
+            // Initialize the Engine.
+            Engine.game = new InteractionGame();
+            Engine.status = Engine.Status.SINGLE_PLAYER;
+            Engine.game.setWindowSize(1000, 1100);
+            Engine.game.setBackgroundColor(Microsoft.Xna.Framework.Graphics.Color.AliceBlue);
             // Initialize the user and their personal LoadRegion.
-            GameWorld.userInterface = new UserInterface3D();
+            UserInterface3D interface3D = new UserInterface3D();
+            Engine.userInterface = interface3D;
             user = new NTKPlusUser();
             NTKPlusUser.localUser = user;
-            GameWorld.user = user;
-            terrainedLoadRegion = new TerrainedLoadRegion();
-            GameWorld.addLoadRegion(terrainedLoadRegion);
-            user.addLoadRegion(terrainedLoadRegion);
+            UserInterface3D.user = user;
+            loadRegion = LoadRegion.createLoadRegion();
 
             Vector3 cameraPos = new Vector3(75, 40, 75); //30
 
             user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
 
-            new Terrain(terrainedLoadRegion, 2f, .1f);
-            new Human(terrainedLoadRegion);
+            Terrain terrain = GameObject.createGameObject<Terrain>(loadRegion);
+            terrain.initialize(2f, .1f, loadRegion);
+            Human human = GameObject.createGameObject<Human>(loadRegion);
+            human.initialize(terrain);
 
-            //GameWorld.game.initializeMethod = new InitializeMethod(initializeStuff);
+            //Engine.game.initializeMethod = new InitializeMethod(initializeStuff);
 
-            GameWorld.game.Run();
+            Engine.game.Run();
         }
 
         public static void initializeStuff() {
 
-            user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GameWorld.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
-            GameWorld.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
+            user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+            Engine.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
 
-            GameWorld.game.GraphicsDevice.RenderState.AlphaBlendEnable = true;
-            GameWorld.game.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha; // source rgb * source alpha
-            GameWorld.game.GraphicsDevice.RenderState.AlphaSourceBlend = Blend.One; // don't modify source alpha
-            GameWorld.game.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha; // dest rgb * (255 - source alpha)
-            GameWorld.game.GraphicsDevice.RenderState.AlphaDestinationBlend = Blend.InverseSourceAlpha; // dest alpha * (255 - source alpha)
-            GameWorld.game.GraphicsDevice.RenderState.BlendFunction = BlendFunction.Add; // add source and dest results
+            Engine.game.GraphicsDevice.RenderState.AlphaBlendEnable = true;
+            Engine.game.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha; // source rgb * source alpha
+            Engine.game.GraphicsDevice.RenderState.AlphaSourceBlend = Blend.One; // don't modify source alpha
+            Engine.game.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha; // dest rgb * (255 - source alpha)
+            Engine.game.GraphicsDevice.RenderState.AlphaDestinationBlend = Blend.InverseSourceAlpha; // dest alpha * (255 - source alpha)
+            Engine.game.GraphicsDevice.RenderState.BlendFunction = BlendFunction.Add; // add source and dest results
 
         }
 
@@ -67,64 +69,41 @@ namespace Game
 
     public class Human : WalkerTemplate {
 
-        
+
         #region FACTORY
+
+        /// <summary>
+        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+        /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+        /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
+        /// </summary>
+        public Human() {
+        }
 
         // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
         // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
-        internal const string classHash = "Human";
+        public const string realHash = "Human";
+        public override string classHash {
+            get { return realHash; }
+        }
 
         /// <summary>
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static Human() {
-            GameObject.factoryList.Add(classHash, new GameObjectFactory(makeHuman));
-        }
-
-        /// <summary>
-        /// A factory method that creates and returns a new instance of Human. Used by the client when the server requests it to make a new GameObject.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        /// <param name="reader">The PacketReader from which we will read the fields of the newly constructed GameObject.</param>
-        /// <returns>A new instance of Human.</returns>
-        static Human makeHuman(LoadRegion loadRegion, int id, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            if (GameWorld.status != GameWorld.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
-            Human human = new Human(loadRegion, id);
-            // ORDER OF STUFF (where you used the reader to construct datatypes, used factory methods exclusively. also, construct modules and their datatypes here too.)
-            return human;
-        }
-
-        /// <summary>
-        /// Constructs a GameObject and assigns it an ID.
-        /// This is the constructor that should be used if and only if you are a MULTIHuman_CLIENT.
-        /// Furthermore, it is only called by the GameObjectFactory method.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /// <param name="id">This GameObject's ID.</param>
-        private Human(LoadRegion loadRegion, int id)
-            : base(loadRegion, id) {
-        }
-
-        /// <summary>
-        /// Returns the class hash. 
-        /// </summary>
-        /// <returns>The class hash. Do we really have to tell you everything twice?</returns>
-        public override string getClassHash() {
-            return classHash;
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Human>));
         }
 
         #endregion
 
 
-        private readonly UpdatableGameObject<DebugSphere> debugSphere;
+        private UpdatableGameObject<DebugSphere> debugSphere;
 
         /// <summary>
         /// Returns the Graphics module of this GameObject.
         /// </summary>
         /// <returns>The Selection module associated with this GameObject.
-        private readonly Graphics3D graphics;
+        private Graphics3D graphics;
         public override Graphics getGraphics() {
             return graphics;
         }
@@ -132,8 +111,9 @@ namespace Game
             return graphics;
         }
 
-        public Human(TerrainedLoadRegion loadRegion) : base(loadRegion) {
-            ModelEffect modelEffect = new ModelEffect(); // new Graphics3D.ModelEffect(GameWorld.game.GraphicsDevice, null);
+        public override void construct() {
+            base.construct();
+            ModelEffect modelEffect = new ModelEffect(); // new Graphics3D.ModelEffect(Engine.game.GraphicsDevice, null);
             modelEffect.SpecularColor = new Vector3(.1f, .3f, .6f);
             modelEffect.SpecularPower = 10f;
             modelEffect.setTextureName("Images\\human_texture");
@@ -146,7 +126,7 @@ namespace Game
             this.getLocation().yaw = MathHelper.Pi;
             Console.WriteLine(this.getLocation().getPoint());
 
-            DebugSphere newDebugSphere = new DebugSphere(loadRegion, new Vector3(), 0);
+            DebugSphere newDebugSphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
 
             this.debugSphere = new UpdatableGameObject<DebugSphere>(this, newDebugSphere);
         }

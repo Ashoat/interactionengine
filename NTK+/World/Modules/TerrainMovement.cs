@@ -15,7 +15,7 @@
 
 using InteractionEngine.Constructs.Datatypes;
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
+using InteractionEngine;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System;
@@ -76,7 +76,7 @@ namespace NTKPlusGame.World.Modules {
             this.yaw = (float)Math.Atan2(direction.X, direction.Z);
 			this.targetPosition.value = target;
             this.isMoving.value = true;
-			this.lastUpdate.value = GameWorld.gameTime.TotalRealTime.TotalMilliseconds;
+			this.lastUpdate.value = Engine.gameTime.TotalRealTime.TotalMilliseconds;
 		}
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace NTKPlusGame.World.Modules {
         public void startTracking(Locatable target, float trackingDistance) {
             this.targetGameObject.value = target;
             this.isMoving.value = true;
-            this.lastUpdate.value = GameWorld.gameTime.TotalRealTime.TotalMilliseconds;
+            this.lastUpdate.value = Engine.gameTime.TotalRealTime.TotalMilliseconds;
         }
 		
         /// <summary>
@@ -116,7 +116,7 @@ namespace NTKPlusGame.World.Modules {
         }
 
 		private void updateTerrainMovement() {
-			double currentTime = GameWorld.gameTime.TotalRealTime.TotalMilliseconds;
+			double currentTime = Engine.gameTime.TotalRealTime.TotalMilliseconds;
 			double timeElapsed = currentTime - this.lastUpdate.value;
 			if (timeElapsed != 0) {
 				// Calculate the displacement actually traveled
@@ -145,9 +145,9 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="reader">The reader from which to read teh field datas.</param>
         protected internal TerrainMovement(TerrainMovable gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) : base(gameObject, reader) {
             /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)GameWorld.createField(reader);
+            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
             roomTerrainMovement = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == GameWorld.UPDATE_FIELD) GameWorld.updateField(reader);
+            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
             else reader.Position--;
             this.gameObject = gameObject;*/
         }

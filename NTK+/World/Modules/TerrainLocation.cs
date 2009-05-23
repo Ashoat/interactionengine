@@ -15,7 +15,7 @@
 
 using InteractionEngine.Constructs.Datatypes;
 using InteractionEngine.Constructs;
-using InteractionEngine.GameWorld;
+using InteractionEngine;
 using Microsoft.Xna.Framework;
 
 namespace NTKPlusGame.World.Modules {
@@ -39,7 +39,8 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="gameObject">The GameObject whose Location this is.</param>
         public TerrainLocation(TerrainLocatable gameObject) : base(gameObject) {
             this.gameObject = gameObject;
-            grounded = new UpdatableBoolean(gameObject, true);
+            grounded = new UpdatableBoolean(gameObject);
+            grounded.value = true;
         }
 
         /// <summary>
@@ -49,9 +50,9 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="reader">The reader from which to read teh field datas.</param>
         internal TerrainLocation(TerrainLocatable gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) : base(gameObject) {
             /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)GameWorld.createField(reader);
+            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
             roomLocation = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == GameWorld.UPDATE_FIELD) GameWorld.updateField(reader);
+            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
             else reader.Position--;
             this.gameObject = gameObject;*/
         }
@@ -67,7 +68,7 @@ namespace NTKPlusGame.World.Modules {
             if (grounded.value) {
                 Vector3 position = base.getPoint();
                 // Calculate the z-translation based on the terrain.
-                float y = gameObject.getTerrainedLoadRegion().getTerrain().getHeight(position.X + dx, position.Z + dz);
+                float y = gameObject.getTerrain().getHeight(position.X + dx, position.Z + dz);
                 float dy = y - position.Y;
                 // Apply translation
                 Vector3 translation = position; // recycling the Vector3 object
@@ -86,7 +87,7 @@ namespace NTKPlusGame.World.Modules {
             if (grounded.value) {
                 float x = position.X;
                 float z = position.Z;
-                float y = this.gameObject.getTerrainedLoadRegion().getTerrain().getHeight(position.X, position.Z);
+                float y = this.gameObject.getTerrain().getHeight(position.X, position.Z);
                 base.moveTo(new Vector3(x, y, z));
             } else {
                 base.moveTo(position);
@@ -135,7 +136,7 @@ namespace NTKPlusGame.World.Modules {
         /// <returns>The Location module associated with this GameObject.
         TerrainLocation getTerrainLocation();
 
-        TerrainedLoadRegion getTerrainedLoadRegion();
+        Terrain getTerrain();
 
     }
 
