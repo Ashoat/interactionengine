@@ -166,13 +166,14 @@ namespace InteractionEngine.Constructs {
 
         /// <summary>
         /// A factory method that creates and returns a new instance of this GameObject. Used by the client when the server requests it to make a new GameObject.
+        /// NEVER CALL FROM THE GAMEWORLD!
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
         /// <param name="id">This GameObject's ID.</param>
         /// <returns>A new instance of this LoadRegion.</returns>
         public static Type createFromUpdate<Type>(InteractionEngine.Constructs.LoadRegion loadRegion, int id) where Type : GameObject, new() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("You're not a client, so why are you calling the GameObject factory method?");
+                throw new GameWorldException("You should never call GameObject.createFromUpdate<Type>(LoadRegion, int) from the GameWorld. It is exclusively for internal InteractionEngine use as a factory method for GameObjects.");
             Type gameObject = new Type();
             // Set this GameObject's ID.
             gameObject.id = id;
@@ -180,7 +181,7 @@ namespace InteractionEngine.Constructs {
             InteractionEngine.Engine.addGameObject(gameObject);
             // Add and assign it to the LoadRegion.
             loadRegion.addObject(gameObject.id);
-            gameObject.loadRegion = loadRegion;
+            gameObject.loadRegion = loadRegion; 
             // Setup its fields.
             gameObject.construct();
             // Return it!
@@ -303,7 +304,7 @@ namespace InteractionEngine.Constructs {
 
         // Contains the lowest available ID for the next Updatable.
         // Used for knowing what ID the Server should assign a new Updatable.
-        private static int nextID = 0;
+        private int nextID = 0;
 
         /// <summary>
         /// This adds a field to the field table. If you are a server, it assigns an ID to the field if one is not present.

@@ -74,7 +74,7 @@ namespace InteractionEngine.Networking {
         /// <param name="loadRegionID">The ID to assign this LoadRegion.</param>
         internal CreateRegion(int loadRegionID) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             this.loadRegionID = loadRegionID;
         }
 
@@ -85,8 +85,13 @@ namespace InteractionEngine.Networking {
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal CreateRegion(System.IO.BinaryReader reader) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
-            loadRegionID = reader.ReadInt32();
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
+            try {
+                loadRegionID = reader.ReadInt32();
+            // The connection was closed.
+            } catch (System.IO.IOException e) {
+                Engine.status = Engine.Status.SINGLE_PLAYER;
+            }
         }
 
         /// <summary>
@@ -98,7 +103,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             writer.Write(Update.CREATE_REGION);
             writer.Write(this.loadRegionID);
         }
@@ -109,7 +114,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             if (InteractionEngine.Engine.getLoadRegion(this.loadRegionID) != null) return;
             Constructs.LoadRegion loadRegion = new Constructs.LoadRegion(this.loadRegionID);
             foreach (EventHandling.Event eventObject in onCreateRegion) {
@@ -136,7 +141,7 @@ namespace InteractionEngine.Networking {
         /// <param name="loadRegionID">The ID of the LoadRegion we want to delete.</param>
         internal DeleteRegion(int loadRegionID) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             this.loadRegionID = loadRegionID;
         }
 
@@ -147,7 +152,7 @@ namespace InteractionEngine.Networking {
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal DeleteRegion(System.IO.BinaryReader reader) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             loadRegionID = reader.ReadInt32();
         }
 
@@ -160,7 +165,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             writer.Write(Update.DELETE_REGION);
             writer.Write(this.loadRegionID);
         }
@@ -171,7 +176,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
             if(loadRegion == null) return;
             loadRegion.internalDeconstruct();
@@ -211,7 +216,7 @@ namespace InteractionEngine.Networking {
         /// <param name="fieldValues">A dictionary pointing field IDs to their values.</param>
         internal CreateObject(int loadRegionID, int gameObjectID, string classHash, System.Collections.Generic.Dictionary<int, object> fieldValues) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             this.loadRegionID = loadRegionID;
             this.gameObjectID = gameObjectID;
             this.classHash = classHash;
@@ -227,7 +232,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can deserialize objects from the NetworkStream.</param>
         internal CreateObject(System.IO.BinaryReader reader, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             loadRegionID = reader.ReadInt32();
             gameObjectID = reader.ReadInt32();
             classHash = reader.ReadString();
@@ -246,7 +251,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             writer.Write(Update.CREATE_OBJECT);
             writer.Write(this.loadRegionID);
             writer.Write(this.gameObjectID);
@@ -265,7 +270,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             if (InteractionEngine.Engine.getGameObject(this.gameObjectID) != null) return;
             Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
             if (loadRegion == null) return;
@@ -299,7 +304,7 @@ namespace InteractionEngine.Networking {
         /// <param name="gameObjectID">The ID of the GameObject we want to delete.</param>
         internal DeleteObject(int gameObjectID) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             this.gameObjectID = gameObjectID;
         }
 
@@ -310,7 +315,7 @@ namespace InteractionEngine.Networking {
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal DeleteObject(System.IO.BinaryReader reader) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             gameObjectID = reader.ReadInt32();
         }
 
@@ -323,7 +328,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             writer.Write(Update.DELETE_OBJECT);
             writer.Write(this.gameObjectID);
         }
@@ -334,7 +339,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.gameObjectID);
             if (gameObject == null) return;
             if (gameObject is Constructs.GameObject) ((Constructs.GameObject)gameObject).internalDeconstruct();
@@ -362,7 +367,7 @@ namespace InteractionEngine.Networking {
         /// <param name="loadRegionID">The ID of the LoadRegion we want to delete.</param>
         internal MoveObject(int gameObjectID, int loadRegionID) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             this.gameObjectID = gameObjectID;
             this.loadRegionID = loadRegionID;
         }
@@ -374,7 +379,7 @@ namespace InteractionEngine.Networking {
         /// <param name="reader">The BinaryReader containing the information needed to instantiate this class.</param>
         internal MoveObject(System.IO.BinaryReader reader) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             gameObjectID = reader.ReadInt32();
             loadRegionID = reader.ReadInt32();
         }
@@ -388,7 +393,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             writer.Write(Update.MOVE_OBJECT);
             writer.Write(this.gameObjectID);
             writer.Write(this.loadRegionID);
@@ -400,7 +405,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.gameObjectID);
             Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
             if (gameObject == null || loadRegion == null) return;
@@ -433,7 +438,7 @@ namespace InteractionEngine.Networking {
         /// <param name="newValue">The new value for this Updatable, cast as an object.</param>
         internal UpdateField(int fieldContainerID, int fieldID, object newValue) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             this.fieldContainerID = fieldContainerID;
             this.fieldID = fieldID;
             this.newValue = newValue;
@@ -448,7 +453,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can deserialize objects from the NetworkStream.</param>
         internal UpdateField(System.IO.BinaryReader reader, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             fieldContainerID = reader.ReadInt32();
             fieldID = reader.ReadInt32();
             newValue = formatter.Deserialize(stream);
@@ -463,7 +468,7 @@ namespace InteractionEngine.Networking {
         /// <param name="formatter">The BinaryFormatter that can serialize objects to the NetworkStream.</param>
         internal override void sendUpdate(System.IO.BinaryWriter writer, System.Net.Sockets.NetworkStream stream, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             writer.Write(Update.UPDATE_FIELD);
             writer.Write(this.fieldContainerID);
             writer.Write(this.fieldID);
@@ -477,7 +482,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         internal override void executeUpdate() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(this.fieldContainerID);
             if (gameObject == null) return;
             Constructs.Datatypes.Updatable updatable = gameObject.getField(this.fieldID);

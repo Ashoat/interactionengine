@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Constructs\Datatypes.cs" />
     <Compile Include="Constructs\Event.cs" />
+    <Compile Include="InteractionEngine\Exceptions.cs" />
     <Compile Include="Constructs\GameObject.cs" />
     <Compile Include="Constructs\LoadRegion.cs" />
     <Compile Include="Constructs\Location.cs" />

@@ -19,8 +19,6 @@ namespace InteractionEngine {
      */
     public static class Engine {
 
-        // TODO: Make a central reference for all GameObject factories, pointing types (string) to GameObject factory methods.
-
         #region XNA Configuration
 
         /**
@@ -31,9 +29,6 @@ namespace InteractionEngine {
         // Contains a reference to the XNA Game object.
         // Used by various XNA components. See XNA documentation.
         public static InteractionGame game;
-        // Contains a reference to the XNA object for the local gamer, which contains methods for sending and recieving data.
-        // Used for sending and recieving data.
-        internal static Microsoft.Xna.Framework.Net.LocalNetworkGamer gamer;
         // Contains the current game time.
         // Used for letting GameObjects know what the time is (it's game time).
         private static Microsoft.Xna.Framework.GameTime gameTimeField;
@@ -52,9 +47,6 @@ namespace InteractionEngine {
          *                 
          * This is where all the action starts.
          */
-        // Contains a boolean telling the GameWorld whether or not the run loop needs to be run.
-        // Used for starting and ending the use of the GameWorld class. 
-        public static bool gameRunning = true;
         // Contains an enum telling the InteractionEngine what status this user is running as.
         // Used for distinguishing server/client-specific actions within the run loop.
         public enum Status {
@@ -86,7 +78,7 @@ namespace InteractionEngine {
         /// <param name="GameTime">The current game time.</param>
         public static void run(Microsoft.Xna.Framework.GameTime gameTime) {
             gameTimeField = gameTime;
-            if (userInterface == null) throw new System.Exception("The game developer screwed up. They never gave us a UI!");
+            if (userInterface == null) throw new GameWorldException("You cannot call Engine.game.Run() before you assign a UserInterface object to Engine.userInterface.");
             userInterface.startInputOutput();
             if (status == Status.SINGLE_PLAYER) {
                 // Get Events from the GameWorld
@@ -260,7 +252,7 @@ namespace InteractionEngine {
          * Used for having a synchronized method of referring to GameObjects across the network.
          * All GameObjects add themselves to this list in their constructors.
          */
-        private static System.Collections.Generic.Dictionary<int, Constructs.GameObjectable> gameObjectHashlist = new System.Collections.Generic.Dictionary<int, Constructs.GameObjectable>();
+        private static System.Collections.Generic.SortedDictionary<int, Constructs.GameObjectable> gameObjectHashlist = new System.Collections.Generic.SortedDictionary<int, Constructs.GameObjectable>();
         // Contains the lowest available ID for the next GameObject.
         // Used for knowing what ID the Server should assign a new GameObject.
         private static int nextGameObjectID = 0;
@@ -306,8 +298,13 @@ namespace InteractionEngine {
         /// Get a list of all the GameObjects in the GameWorld.
         /// </summary>
         /// <returns>All the GameObjects in the GameWorld.</returns>
-        public static System.Collections.Generic.Dictionary<int, Constructs.GameObjectable>.ValueCollection getGameObjectList() {
-            return gameObjectHashlist.Values;
+        public static Constructs.GameObjectable[] getGameObjectList() {
+            // Copy over to prevent 
+            Constructs.GameObjectable[] gameObjectArray = new Constructs.GameObjectable[gameObjectHashlist.Count];
+            lock (gameObjectHashlist) {
+                gameObjectHashlist.Values.CopyTo(gameObjectArray, 0);
+            }
+            return gameObjectArray;
         }
 
         #endregion

@@ -43,20 +43,30 @@ namespace InteractionEngine.Networking {
         /// This method can only be called by a server's GameWorld!
         /// </summary>
         public static void startListening() {
-            if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("The game developer screwed up. They shouldn't be telling a client to start listening for connections!");
-            if (tcpListener != null) return;
+            if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
+                throw new GameWorldException("You cannot call Client.startListening() on a client. That method is designed for the server - it listens for new clients attempting to make connections.");
             tcpListener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Any, portNumber);
-            tcpListener.Start();
+            try {
+                tcpListener.Start();
+            } catch (System.Net.Sockets.SocketException e) {
+                throw new InteractionEngineException("You have probably tried to run two copies of the Interaction Engine on the same port from the same machine. This is not supported. For more information, see the inner exception.", e);
+            }
             listenerThread = new System.Threading.Thread(new System.Threading.ThreadStart(checkForNewConnections));
-            listenerThread.Start();
+            try {
+                listenerThread.Start();
+            } catch (System.OutOfMemoryException e) {
+                throw new InteractionEngineException("There is insufficient memory on your system to run the Interaction Engine.", e);
+            }
         }
 
         /// <summary>
         /// Stop listening for new clients to connect.
         /// </summary>
         public static void stopListening() {
-            tcpListener = null;
+            if (tcpListener != null) {
+                listenerThread.Abort();
+                tcpListener.Stop();
+            }
         }
 
         /// <summary>
@@ -64,8 +74,8 @@ namespace InteractionEngine.Networking {
         /// Used for opening up a socket.
         /// If you are currently listening for connections, setting this will stop that process. You will have to restart it.
         /// </summary>
-        private static int portNumber = 1337;
-        public static int listeningPort {
+        private static ushort portNumber = 1337;
+        public static ushort listeningPort {
             get {
                 return portNumber;
             }
@@ -83,14 +93,18 @@ namespace InteractionEngine.Networking {
             if (tcpListener == null) return;
             while (true) {
                 if(!tcpListener.Pending()) continue;
-                Client newClient = new Client(tcpListener.AcceptTcpClient());
-                lock (clientList) {
-                    clientList.Add(newClient);
-                }
-                // Trigger the onJoin Events.
-                foreach (EventHandling.Event eventObject in onJoin) {
-                    eventObject.parameter = (object)newClient;
-                    InteractionEngine.Engine.addEvent(eventObject);
+                try {
+                    Client newClient = new Client(tcpListener.AcceptTcpClient());
+                    lock (clientList) {
+                        clientList.Add(newClient);
+                    }
+                    // Trigger the onJoin Events.
+                    foreach (EventHandling.Event eventObject in onJoin) {
+                        eventObject.parameter = (object)newClient;
+                        InteractionEngine.Engine.addEvent(eventObject);
+                    }
+                } catch (System.Net.Sockets.SocketException e) {
+                    throw new InteractionEngineException("A client tried to connect, but something failed. See the inner exception for more details.", e);
                 }
             }
         }
@@ -127,7 +141,24 @@ namespace InteractionEngine.Networking {
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
             this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
             this.eventReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readEvents));
-            this.eventReaderThread.Start();
+            try {
+                this.eventReaderThread.Start();
+            } catch (System.OutOfMemoryException e) {
+                throw new InteractionEngineException("There is insufficient memory on your system to run the Interaction Engine.", e);
+            }
+        }
+
+        /// <summary>
+        /// This method closes the current Client object.
+        /// </summary>
+        public void disconnect() {
+            this.tcpClient.Close();
+            clientList.Remove(this);
+            // Trigger the onQuit Events.
+            foreach (EventHandling.Event eventObject in onQuit) {
+                eventObject.parameter = (object)this;
+                InteractionEngine.Engine.addEvent(eventObject);
+            }
         }
 
         /// <summary>
@@ -144,10 +175,16 @@ namespace InteractionEngine.Networking {
         private void readEvents() {
             // TODO: handle IO exceptions
             while (true) {
-                int gameObjectID = reader.ReadInt32();
-                string eventHash = reader.ReadString();
-                object parameter = formatter.Deserialize(tcpClient.GetStream());
-                lock (eventBuffer) eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
+                try {
+                    int gameObjectID = reader.ReadInt32();
+                    string eventHash = reader.ReadString();
+                    object parameter = formatter.Deserialize(tcpClient.GetStream());
+                    lock (eventBuffer) eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
+                // The connection was closed.
+                } catch (System.IO.IOException) {
+                    disconnect();
+                    break;
+                }
             }
         }
 
