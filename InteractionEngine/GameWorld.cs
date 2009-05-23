@@ -262,10 +262,16 @@ namespace InteractionEngine {
         /// </summary>
         /// <param name="gameObject">The GameObject to be added.</param>
         public static void addGameObject(Constructs.GameObjectable gameObject) {
-            // This will only work if the GameObject doesn't already have an ID.
-            // Since on a MULTIPLAYER_CLIENT this ID would have already been set, nothing will happen in that case.
-            gameObject.id = nextGameObjectID++;
             gameObjectHashlist.Add(gameObject.id, gameObject);
+        }
+
+        /// <summary>
+        /// Assign an ID to a GameObject. Should only ever be called on a server, but it won't work if it's called otherwise so whatever.
+        /// </summary>
+        /// <param name="gameObject"></param>
+        public static void assignGameObjectID(Constructs.GameObjectable gameObject) {
+            // This will only work if the GameObject doesn't already have an ID.
+            gameObject.id = nextGameObjectID++;
         }
 
         /// <summary>
@@ -299,9 +305,10 @@ namespace InteractionEngine {
         /// </summary>
         /// <returns>All the GameObjects in the GameWorld.</returns>
         public static Constructs.GameObjectable[] getGameObjectList() {
+            Constructs.GameObjectable[] gameObjectArray;
             // Copy over to prevent 
-            Constructs.GameObjectable[] gameObjectArray = new Constructs.GameObjectable[gameObjectHashlist.Count];
             lock (gameObjectHashlist) {
+                gameObjectArray = new Constructs.GameObjectable[gameObjectHashlist.Count];
                 gameObjectHashlist.Values.CopyTo(gameObjectArray, 0);
             }
             return gameObjectArray;
