@@ -15,7 +15,7 @@ using InteractionEngine.Constructs.Datatypes;
 namespace Game
 {
 
-    public class main
+    public class TestGame
     {
 
         static NTKPlusUser user;
@@ -53,6 +53,14 @@ namespace Game
 
             user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GameWorld.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
             GameWorld.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
+
+            GameWorld.game.GraphicsDevice.RenderState.AlphaBlendEnable = true;
+            GameWorld.game.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha; // source rgb * source alpha
+            GameWorld.game.GraphicsDevice.RenderState.AlphaSourceBlend = Blend.One; // don't modify source alpha
+            GameWorld.game.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha; // dest rgb * (255 - source alpha)
+            GameWorld.game.GraphicsDevice.RenderState.AlphaDestinationBlend = Blend.InverseSourceAlpha; // dest alpha * (255 - source alpha)
+            GameWorld.game.GraphicsDevice.RenderState.BlendFunction = BlendFunction.Add; // add source and dest results
+
         }
 
     }

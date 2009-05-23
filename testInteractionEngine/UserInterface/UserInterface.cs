@@ -24,6 +24,10 @@ namespace InteractionEngine.Client {
      */
     public class Event {
 
+        static int nextId = 0;
+
+        public int id = nextId++;
+
         // Contains a reference to a GameObject.
         // Used for knowing where to find the EventHashlist for this Event.
         public int gameObjectID;
@@ -44,6 +48,7 @@ namespace InteractionEngine.Client {
             this.gameObjectID = gameObjectID;
             this.eventHash = hash;
             this.parameter = parameter;
+            System.Console.WriteLine("Event ID " + id + " created.");
         }
 
     }
@@ -95,7 +100,7 @@ namespace InteractionEngine.Client {
         /// Also, clears eventList of all events.
         /// </summary>
         /// <returns>The events that are being called. Each includes a GameObject ID and an event hash.</returns>
-        public System.Collections.Generic.List<Event> input() {
+        public virtual System.Collections.Generic.List<Event> input() {
             System.Collections.Generic.List<Event> eventExport;
             lock (eventList) {
                 eventExport = new System.Collections.Generic.List<Event>(eventList);

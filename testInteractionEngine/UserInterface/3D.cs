@@ -156,22 +156,20 @@ namespace InteractionEngine.Client.ThreeDimensional {
         }
 
         private KeyboardFocus kf;
-        private Microsoft.Xna.Framework.Input.KeyboardState previousKeyboard;
+        private const int repeatDelay = 200;
+        private Dictionary<Microsoft.Xna.Framework.Input.Keys, double> repeatTimes = new Dictionary<Microsoft.Xna.Framework.Input.Keys, double>();
         public void registerKeyboardFocus(KeyboardFocus kf) {
             this.kf = kf;
         }
         private void checkKeyboard(System.Collections.Generic.List<Event> newEvents) {
             if (this.kf == null) return;
             Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
-            if (this.previousKeyboard == null) this.previousKeyboard = keyboard;
-//            Console.WriteLine(keyboard.GetPressedKeys());
-            if (keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up)) Console.WriteLine("UP!");
-            else if (keyboard.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Up)) Console.WriteLine("NOT UP!");
-            else Console.WriteLine("WEIRD!");
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
-                if (previousKeyboard.IsKeyUp(key)) newEvents.Add(this.kf.getEvent((int)key));
+                if (!repeatTimes.ContainsKey(key) || repeatTimes[key] < GameWorld.GameWorld.gameTime.TotalRealTime.TotalMilliseconds) {
+                    newEvents.Add(this.kf.getEvent((int)key));
+                    repeatTimes[key] = GameWorld.GameWorld.gameTime.TotalRealTime.TotalMilliseconds + repeatDelay;
+                }
             }
-            this.previousKeyboard = keyboard;
         }
 
         /// <summary>
@@ -181,10 +179,8 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
         protected override void retrieveInput(System.Collections.Generic.List<Event> newEvents) {
-            lock (keyboardEvents) {
-                newEvents.AddRange(keyboardEvents);
-                keyboardEvents.Clear();
-            }
+
+            //Console.WriteLine("User interface iteration");
 
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
@@ -218,13 +214,18 @@ namespace InteractionEngine.Client.ThreeDimensional {
             }
         }
 
+        public override List<Event> input() {
+            List<Event> events = base.input();
+                checkKeyboard(keyboardEvents);
+                events.AddRange(keyboardEvents);
+                keyboardEvents.Clear();
+            return events;
+        }
+
         /// <summary>
         /// Output stuff.
         /// </summary>
         public override void output() {
-            lock (keyboardEvents) {
-                checkKeyboard(keyboardEvents);
-            }
             // Loop through the user's LoadRegions
             foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.user.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions

@@ -92,6 +92,7 @@ namespace InteractionEngine.GameWorld {
         /// </summary>
         /// <param name="GameTime">The current game time.</param>
         public static void run(Microsoft.Xna.Framework.GameTime gameTime) {
+            //System.Console.WriteLine("Game world iteration");
             gameTimeField = gameTime;
             if (status == Status.SINGLE_PLAYER) {
                 // Get and process input from the local client
@@ -369,7 +370,9 @@ namespace InteractionEngine.GameWorld {
         private static void processEvents(System.Collections.Generic.List<Client.Event> events) {
             foreach (Client.Event eventObject in events) {
                 if (eventObject != null) {
+                    System.Console.WriteLine("Event ID " + eventObject.id + " executing.");
                     GameWorld.getObject(eventObject.gameObjectID).getEvent(eventObject.eventHash)(eventObject.parameter);
+                    System.Console.WriteLine("Event ID " + eventObject.id + " executed.");
                 }
             }
         }

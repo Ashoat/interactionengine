@@ -433,6 +433,9 @@ namespace NTKPlusGame.World {
         }
 
         private void loadContent() {
+
+            Game.TestGame.initializeStuff();
+
             effect = new ModelEffect();
             effect.Initialize(UserInterface3D.user.camera);
 
@@ -474,7 +477,6 @@ namespace NTKPlusGame.World {
                     topPoint = midPoint;
             }
             Vector3 finalPoint = (topPoint + botPoint) / 2;
-            Console.WriteLine(finalPoint);
             return finalPoint; //the last point seen above the terrain.
         }
 
