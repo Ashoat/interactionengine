@@ -670,7 +670,7 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Constructs a new UpdatableGameObject. 
         /// </summary>
         /// <param name="owner">The FieldContainer to which this field belongs. NOT the value of this field.</param>
-        public UpdatableGameObject(GameObject owner) {
+        public UpdatableGameObject(GameObjectable owner) {
             realValue = new UpdatableInteger(owner);
             realValue.setValue((object)-1);
         }

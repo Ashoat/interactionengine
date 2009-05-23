@@ -16,7 +16,9 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using InteractionEngine.EventHandling;
+using InteractionEngine.Constructs;
 
 namespace InteractionEngine.UserInterface.ThreeDimensional {
 
@@ -25,13 +27,13 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
     /// </summary>
     public class UserInterface3D : UserInterface {
 
-        // Contains the SpriteBatch this UserInterface uses to draw its GameObjects.
-        // Used for drawing GameObjects to the screen.
-        public Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
+        public static User3D user;
+        public static GraphicsDevice graphicsDevice;
+
         // Contain lists of Interactables that had been MOUSEMASK_OVER'd and MOUSEMASK_CLICK'd in the last iteration of input().
         // Used for knowing when to invoke MOUSEMASK_OUT and MOUSEMASK_RELEASE events.
-        private System.Collections.Generic.Dictionary<Interactable, int> eventsAwaitingReset = new System.Collections.Generic.Dictionary<Interactable, int>();
-        
+        private System.Collections.Generic.Dictionary<Interactable3D, int> eventsAwaitingReset = new System.Collections.Generic.Dictionary<Interactable3D, int>();
+
         // This specifies the bits that represent unique positive mouse buttons or actions (right-click, mouse-over, etc)
         public const int MOUSEMASK_ACTION = (1 << 4) - 1;
         // This specifies the bit that represents a reversal of the positive mouse actions (right-release, mouse-out, etc)
@@ -61,6 +63,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         public const int MOUSEMASK_LEFT_RELEASE = MOUSEMASK_LEFT_PRESS + MOUSEMASK_RESET;
         public const int MOUSEMASK_OUT = MOUSEMASK_OVER + MOUSEMASK_RESET;
 
+        private List<InteractionEngine.EventHandling.Event> keyboardEvents = new List<InteractionEngine.EventHandling.Event>();
 
         public static bool testMask(int val, int mask) {
             return (val & mask) == mask;
@@ -84,47 +87,50 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// and removes from the list of held events.
         /// </summary>
         /// <param name="newEvents">The list into which newly detected events are to be inserted.</param>
-        private void resetEvents(System.Collections.Generic.List<EventHandling.Event> newEvents, Ray ray) {
+        private void resetEvents(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents, Ray ray) {
             // Check states of mouse input
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             bool leftReleased = mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released;
             bool rightReleased = mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released;
             // Loop through list and test to see if any are ready to receive a RELEASE or OUT event
-            System.Collections.Generic.LinkedList<Interactable> removals = new System.Collections.Generic.LinkedList<Interactable>();
-            foreach (Interactable interactable in eventsAwaitingReset.Keys) {
+            System.Collections.Generic.LinkedList<Interactable3D> removals = new System.Collections.Generic.LinkedList<Interactable3D>();
+            foreach (Interactable3D interactable in eventsAwaitingReset.Keys) {
                 int eveCode = eventsAwaitingReset[interactable];
                 if (testMask(eveCode, MOUSEMASK_LEFT_PRESS)) {
                     if (leftReleased) {
-                        EventHandling.Event evvie = interactable.getEvent(MOUSEMASK_LEFT_RELEASE);
-                        newEvents.Add(evvie);
-                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_LEFT_PRESS);
+                        Event evvie = interactable.getEvent(MOUSEMASK_LEFT_RELEASE, new Vector3());
+                        if (evvie != null) newEvents.Add(evvie);
+                        //                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_LEFT_PRESS);
+                        removals.AddLast(interactable);
                     }
                 }
                 if (testMask(eveCode, MOUSEMASK_RIGHT_PRESS)) {
                     if (rightReleased) {
-                        EventHandling.Event evvie = interactable.getEvent(MOUSEMASK_RIGHT_RELEASE);
-                        newEvents.Add(evvie);
-                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_RIGHT_PRESS);
+                        Event evvie = interactable.getEvent(MOUSEMASK_RIGHT_RELEASE, new Vector3());
+                        if (evvie != null) newEvents.Add(evvie);
+                        //                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_RIGHT_PRESS);
+                        removals.AddLast(interactable);
                     }
                 }
                 if (testMask(eveCode, MOUSEMASK_OVER)) {
                     Graphics3D graphics = (Graphics3D)interactable.getGraphics();
                     if (graphics.intersects(ray) == -1) {
-                        EventHandling.Event evvie = interactable.getEvent(MOUSEMASK_OUT);
-                        newEvents.Add(evvie);
-                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_OVER);
+                        Event evvie = interactable.getEvent(MOUSEMASK_OUT, new Vector3());
+                        if (evvie != null) newEvents.Add(evvie);
+                        //                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_OVER);
+                        removals.AddLast(interactable);
                     }
                 }
                 if ((eventsAwaitingReset[interactable] & MOUSEMASK_ACTION) == 0) removals.AddLast(interactable);
             }
             // Remove ones that no longer have any mouse events to resetS
-            foreach (Interactable removal in removals) {
+            foreach (Interactable3D removal in removals) {
                 eventsAwaitingReset.Remove(removal);
             }
 
         }
 
-        private void checkInteractableForInteraction(System.Collections.Generic.List<EventHandling.Event> newEvents, Ray ray, Interactable interaction) {
+        private void checkInteractableForInteraction(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents, Ray ray, Interactable3D interaction) {
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             Graphics3D graphics = (Graphics3D)interaction.getGraphics();
             // Check to see if the mouse is intersecting the GameObject.
@@ -133,97 +139,367 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                 // MOUSEMASK_OVER?
                 if (!testMask(alreadyEvented, MOUSEMASK_OVER)) {
                     eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_OVER);
-                    EventHandling.Event evvie = interaction.getEvent(MOUSEMASK_OVER);
+                    Event evvie = interaction.getEvent(MOUSEMASK_OVER, graphics.intersectionPoint(ray) ?? new Vector3());
                     if (evvie != null) newEvents.Add(evvie);
                 }
                 // MOUSEMASK_LEFT_CLICK?
                 if (!testMask(alreadyEvented, MOUSEMASK_LEFT_PRESS) && mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
                     eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_LEFT_PRESS);
-                    EventHandling.Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS);
+                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS, graphics.intersectionPoint(ray) ?? new Vector3());
                     if (evvie != null) newEvents.Add(evvie);
                 }
                 // MOUSEMASK_RIGHT_CLICK?
                 if (!testMask(alreadyEvented, MOUSEMASK_LEFT_PRESS) && mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
                     eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_LEFT_PRESS);
-                    EventHandling.Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS);
+                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS, graphics.intersectionPoint(ray) ?? new Vector3());
                     if (evvie != null) newEvents.Add(evvie);
+                }
+            }
+        }
+
+        private KeyboardFocus kf;
+        private const int repeatDelay = 200;
+        private Dictionary<Microsoft.Xna.Framework.Input.Keys, double> repeatTimes = new Dictionary<Microsoft.Xna.Framework.Input.Keys, double>();
+        public void registerKeyboardFocus(KeyboardFocus kf) {
+            this.kf = kf;
+        }
+        private void checkKeyboard(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents) {
+            if (this.kf == null) return;
+            Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+            foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
+                if (!repeatTimes.ContainsKey(key) || repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
+                    newEvents.Add(this.kf.getEvent((int)key));
+                    repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatDelay;
                 }
             }
         }
 
         /// <summary>
         /// Checks state of user input devices to see if an input event should be triggered.
-        /// If so, collects the EventHandling.Event objects and inserts them into the given list.
+        /// If so, collects the Event objects and inserts them into the given list.
         /// Make it quick!
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
-        protected override void retrieveInput(System.Collections.Generic.List<EventHandling.Event> newEvents) {
+        protected override void retrieveInput(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents) {
+
+            //Console.WriteLine("User interface iteration");
+
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            Ray ray = new Ray(); // TODO: PREETUM figure out how to get the useful ray here.
+
+            //            System.Console.WriteLine(mouse.LeftButton);
+
+            Vector3 near = new Vector3(mouse.X, mouse.Y, 0f);
+            Vector3 far = new Vector3(mouse.X, mouse.Y, 1f);
+            Matrix world = user.worldTransform;
+
+            Vector3 nearPt = graphicsDevice.Viewport.Unproject(near, user.camera.Projection, user.camera.View, world);
+            Vector3 farPt = graphicsDevice.Viewport.Unproject(far, user.camera.Projection, user.camera.View, world);
+
+            Vector3 dir = farPt - nearPt;
+            dir.Normalize();
+
+            Ray ray = new Ray(user.camera.Position, dir);
+
             // Reset old events
             resetEvents(newEvents, ray);
             // Loop through all of the User's LoadRegions
             foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through all the LoadRegion's GameObjects
-                for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
+                foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
                     // See if this GameObject can be interacted with.
-                    if (gameObject is Interactable) {
-                        checkInteractableForInteraction(newEvents, ray, (Interactable)gameObject);
+                    if (gameObject is Interactable3D) {
+                        checkInteractableForInteraction(newEvents, ray, (Interactable3D)gameObject);
                     }
                 }
             }
+        }
+
+        public override List<InteractionEngine.EventHandling.Event> input() {
+            List<InteractionEngine.EventHandling.Event> events = base.input();
+            checkKeyboard(keyboardEvents);
+            events.AddRange(keyboardEvents);
+            keyboardEvents.Clear();
+            return events;
         }
 
         /// <summary>
         /// Output stuff.
         /// </summary>
         public override void output() {
-            this.spriteBatch.Begin();
             // Loop through the user's LoadRegions
             foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
-                for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
-                    // Go through every GameObject and see if they have something to output
+                foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
                     if (gameObject is Graphable)
                         ((Graphable)gameObject).getGraphics().onDraw();
                 }
             }
-            this.spriteBatch.End();
+
         }
 
         /// <summary>
         /// Initialize stuff.
         /// </summary>
         public override void initialize() {
-            this.spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(InteractionEngine.Engine.game.GraphicsDevice);
+            graphicsDevice = InteractionEngine.Engine.game.GraphicsDevice;
+            user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), InteractionEngine.Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+            InteractionEngine.Engine.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
+            base.initialize();
         }
 
     }
 
-    public abstract class Graphics3D : Graphics {
+
+    public class ModelEffect {
+
+        private BasicEffect basicEffect;
+        private EffectPool effectPool;
+
+        public float Alpha = 1f;
+        public Vector3 AmbientLightColor = Vector3.Zero;
+        public EffectTechnique CurrentTechnique;
+        public Vector3 DiffuseColor = Vector3.One;
+        public Vector3 EmissiveColor;// = Vector3.One;
+        public Vector3 FogColor = Vector3.Zero;
+        public bool FogEnabled;
+        public float FogEnd;
+        public float FogStart;
+        public bool LightingEnabled = false;
+        public bool PreferPerPixelLighting;
+        public Vector3 SpecularColor = Vector3.Zero;
+        public float SpecularPower = 1f;
+        public Texture2D Texture;
+        public bool TextureEnabled;
+        public bool VertexColorEnabled;
+        public Matrix World = Matrix.Identity;
+
+        private string textureName;
+        private bool enableDefaultLighting;
+
+        /// <summary>
+        /// NOTE: Any additions to the used properties of this class MUST BE ADDED to HelperClass.CloneModelEffect(...)
+        /// </summary>
+        //private Camera activeCamera;
+        private Camera activeCamera;
+        public Camera ActiveCamera {
+            set {
+                activeCamera = value;
+                UpdateFromActiveCamera();
+            }
+            get {
+                return activeCamera;
+            }
+        }
+        public void UpdateFromActiveCamera() {
+            if (basicEffect == null) return;
+            basicEffect.View = activeCamera.View;
+            basicEffect.Projection = activeCamera.Projection;
+        }
+
+        public ModelEffect(EffectPool effectPool)
+            : this() {
+            this.effectPool = effectPool;
+        }
+
+        public ModelEffect(EffectPool effectPool, ModelEffect source)
+            : this(effectPool) {
+            this.CloneFrom(source);
+        }
+
+        public ModelEffect() {
+
+        }
+
+        public void Initialize(Camera camera) {
+            this.basicEffect = new BasicEffect(InteractionEngine.Engine.game.GraphicsDevice, effectPool);
+            this.CommitProperties();
+            this.ActiveCamera = camera;
+            this.setTextureName(this.textureName);
+            if (this.enableDefaultLighting) this.basicEffect.EnableDefaultLighting();
+        }
+
+        public void setTextureName(string textureName) {
+            this.textureName = textureName;
+            if (basicEffect != null && this.textureName != null) {
+                this.Texture = InteractionEngine.Engine.game.Content.Load<Texture2D>(this.textureName);
+                basicEffect.Texture = this.Texture;
+            }
+        }
+
+        public void CommitProperties() {
+            if (basicEffect == null) return;
+            basicEffect.Alpha = this.Alpha;
+            basicEffect.AmbientLightColor = this.AmbientLightColor;
+            if (this.CurrentTechnique != null) basicEffect.CurrentTechnique = this.CurrentTechnique;
+            basicEffect.DiffuseColor = this.DiffuseColor;
+            basicEffect.EmissiveColor = this.EmissiveColor;
+            basicEffect.FogColor = this.FogColor;
+            basicEffect.FogEnabled = this.FogEnabled;
+            basicEffect.FogEnd = this.FogEnd;
+            basicEffect.FogStart = this.FogStart;
+            basicEffect.LightingEnabled = this.LightingEnabled;
+            basicEffect.PreferPerPixelLighting = this.PreferPerPixelLighting;
+            basicEffect.SpecularColor = this.SpecularColor;
+            basicEffect.SpecularPower = this.SpecularPower;
+            basicEffect.Texture = this.Texture;
+            basicEffect.TextureEnabled = this.TextureEnabled;
+            basicEffect.VertexColorEnabled = this.VertexColorEnabled;
+            basicEffect.World = this.World;
+        }
+
+        public void CloneFrom(ModelEffect source) {
+            this.ActiveCamera = source.ActiveCamera;
+            this.Alpha = source.Alpha;
+            this.AmbientLightColor = source.AmbientLightColor;
+            this.CurrentTechnique = source.CurrentTechnique;
+            this.DiffuseColor = source.DiffuseColor;
+            this.EmissiveColor = source.EmissiveColor;
+            this.FogColor = source.FogColor;
+            this.FogEnabled = source.FogEnabled;
+            this.FogEnd = source.FogEnd;
+            this.FogStart = source.FogStart;
+            this.LightingEnabled = source.LightingEnabled;
+            this.PreferPerPixelLighting = source.PreferPerPixelLighting;
+            this.SpecularColor = source.SpecularColor;
+            this.SpecularPower = source.SpecularPower;
+            this.Texture = source.Texture;
+            this.TextureEnabled = source.TextureEnabled;
+            this.VertexColorEnabled = source.VertexColorEnabled;
+            this.World = source.World;
+        }
+
+        public void EnableDefaultLighting() {
+            if (this.basicEffect != null) this.basicEffect.EnableDefaultLighting();
+            else this.enableDefaultLighting = true;
+        }
+
+        public Effect Effect {
+            get { return basicEffect; }
+        }
+
+    }
+
+    public class Graphics3D : Graphics {
+
+
+        private ModelEffect effect;
+
+        private string modelName;
+
+        private Model model;
+
+        private Matrix worldLocal;
+
+        private float scale = 1f;
+
+        private BoundingSphere baseBoundingSphere;
 
         // Contains a reference to this Graphics module's GameObject.
         // Used for proper Updatable construction.
-        private Graphable gameObject;
+        private Graphable3D gameObject;
 
         /// <summary>
         /// Constructs the Graphics3D
         /// </summary>
         /// <param name="textureFileName">The filename of this GameObject's texture.</param>
-        public Graphics3D(Graphable gameObject) {
+        public Graphics3D(Graphable3D gameObject, ModelEffect effect, string modelName) {
             this.gameObject = gameObject;
+
+            this.effect = effect;
+
+            this.modelName = modelName;
+
+            this.worldLocal = Matrix.Identity;
+
+            if (InteractionEngine.Engine.game.GraphicsDevice != null) loadContent();
+
+        }
+
+        public ModelEffect Effect {
+            get { return this.effect; }
+        }
+
+        public Matrix World {
+            get { return this.effect.World; }
+        }
+
+        public BoundingSphere BoundingSphere {
+            get { return new BoundingSphere(baseBoundingSphere.Center + this.gameObject.getLocation().getPoint(), baseBoundingSphere.Radius * this.scale); }
+        }
+
+        public void calculateBoundingSphere() {
+            BoundingSphere welded = this.model.Meshes[0].BoundingSphere;
+            foreach (ModelMesh mesh in this.model.Meshes) {
+                welded = BoundingSphere.CreateMerged(welded, mesh.BoundingSphere);
+            }
+            this.baseBoundingSphere = welded;
+        }
+
+        private void updateWorld() {
+            this.worldLocal = localWorld();
+            effect.World = worldContainer(Matrix.Identity); // UserInterface3D.user.worldTransform);
+        }
+
+        /// <summary>
+        /// ports the local world matrix to the [terrain] container
+        /// </summary>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        private Matrix worldContainer(Matrix container) {
+            return localWorld() * container;
+        }
+
+        /// <summary>
+        /// scale, rotate, and translation. change this to add features
+        /// </summary>
+        /// <returns></returns>
+        private Matrix localWorld() {
+            return Matrix.CreateScale(this.scale) * Matrix.CreateRotationY(this.gameObject.getLocation().yaw) * Matrix.CreateTranslation(this.gameObject.getLocation().getPoint()); //add more later. scale + rotate.
+        }
+
+        public void SetScale(float scale) {
+            this.scale = scale;
+            updateWorld();
         }
 
         /// <summary>
         /// Draw this Graphics3D onto the screen
         /// </summary>
         public virtual void onDraw() {
-            // This is where you draw stuff onto the screen!
-            // Get the necessary information out of the ContentPipeline and by having a few fields if necessary
-            // Make sure that all the fields are readonly. If you have to be able to change a field, make it an Updatable.
+            foreach (ModelMesh mesh in this.model.Meshes) {
+                foreach (BasicEffect effect in mesh.Effects) {
+
+                    effect.World = worldContainer(UserInterface3D.user.worldTransform); // so that the scale and stuff changes when the terrain scale changes
+
+
+                    effect.Projection = UserInterface3D.user.camera.Projection;
+                    effect.View = UserInterface3D.user.camera.View;
+                    effect.EnableDefaultLighting();
+
+                    //
+                    //Now copy all data from the ModelEffect to this BasicEffect
+                    //
+                    effect.Alpha = this.effect.Alpha;
+                    effect.AmbientLightColor = this.effect.AmbientLightColor;
+                    if (this.effect.CurrentTechnique != null) effect.CurrentTechnique = this.effect.CurrentTechnique;
+                    effect.DiffuseColor = this.effect.DiffuseColor;
+                    effect.EmissiveColor = this.effect.EmissiveColor;
+                    effect.FogColor = this.effect.FogColor;
+                    effect.FogEnabled = this.effect.FogEnabled;
+                    effect.FogEnd = this.effect.FogEnd;
+                    effect.FogStart = this.effect.FogStart;
+                    //effect.LightingEnabled = this.effect.LightingEnabled;
+                    effect.PreferPerPixelLighting = this.effect.PreferPerPixelLighting;
+                    effect.SpecularColor = this.effect.SpecularColor;
+                    effect.SpecularPower = this.effect.SpecularPower;
+                    effect.Texture = this.effect.Texture;
+                    effect.TextureEnabled = this.effect.TextureEnabled;
+                    effect.VertexColorEnabled = this.effect.VertexColorEnabled;
+                }
+
+                mesh.Draw();
+            }
         }
 
         /// <summary>
@@ -232,22 +508,44 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         /// <param name="ray">The ray</param>
         /// <returns>The distance at which the ray intersects this GameObject, or -1 if it does not intersect.</returns>
-        public int intersects(Ray ray) {
-            // TODO
-            return -1;
+        public virtual float? intersects(Ray ray) {
+            //foreach (ModelMesh mesh in model.Meshes)
+            //{
+            float? distance = ray.Intersects(this.BoundingSphere);
+            if (distance.HasValue) return distance;
+            //}
+            return null;
+        }
+
+        public virtual Vector3? intersectionPoint(Ray ray) {
+            float? distance = this.intersects(ray);
+            if (distance.HasValue) return ray.Position + ray.Direction * distance;
+            return null;
         }
 
         /// <summary>
         /// Called during InteractionGame's LoadContent loop.
         /// </summary>
         public virtual void loadContent() {
-            // TODO
+            this.model = InteractionEngine.Engine.game.Content.Load<Model>(modelName);
+            effect.Initialize(UserInterface3D.user.camera);
+            this.calculateBoundingSphere();
             // Also, remove "virtual" unless the plan is to subclass this.
         }
 
     }
 
-    public class Camera : InteractionEngine.Constructs.GameObject, InteractionEngine.Constructs.Locatable {
+    public interface Graphable3D : Graphable {
+
+        /// <summary>
+        /// Gets the Graphics3D module from this GameObject.
+        /// </summary>
+        /// <returns>The Graphics3D class.</returns>
+        Graphics3D getGraphics3D();
+
+    }
+
+    public class Camera : InteractionEngine.Constructs.GameObject {
 
         #region FACTORY
 
@@ -270,60 +568,184 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static Camera() {
-            Constructs.GameObject.factoryList.Add(realHash, new InteractionEngine.Constructs.GameObjectFactory(Constructs.GameObject.createFromUpdate<Camera>));
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Camera>));
         }
 
         #endregion
 
+        float fovy;
+        float aspectRatio;
+        float nearPlane;
+        float farPlane;
+
+        Matrix projectionMatrix;
+        Matrix viewMatrix;
+
+        Vector3 position, target;
+        Vector3 heading, strafe, up;
+
+        BoundingFrustum frustum;
+
+        public Vector3 Target {
+            get { return target; }
+            set {
+                target = value;
+                updateCamera();
+            }
+        }
+
+        public Vector3 Heading {
+            get {
+                return heading;
+            }
+            set {
+                heading = value;
+                heading.Normalize();
+                updateCamera();
+            }
+        }
+
+        public Matrix Projection {
+            get {
+                return projectionMatrix;
+            }
+            set {
+                projectionMatrix = value;
+                updateCamera();
+            }
+        }
+        public Matrix View {
+            get {
+                return viewMatrix;
+            }
+            set {
+                viewMatrix = value;
+                updateCamera();
+            }
+        }
+        public BoundingFrustum Frustrum {
+            get {
+                updateCamera();
+                return frustum;
+            }
+        }
+
+        public Vector3 Position {
+            get { return position; }
+        }
+
+        public void SetPerspectiveFov(float fovy, float aspectRatio, float nearPlane, float farPlane) {
+            this.fovy = fovy;
+            this.aspectRatio = aspectRatio;
+            this.farPlane = farPlane;
+            this.nearPlane = nearPlane;
+            updateCamera();
+        }
+        public void SetLookAt(Vector3 cameraPos, Vector3 cameraTarget, Vector3 cameraUp) {
+            this.position = cameraPos;
+            this.target = cameraTarget;
+            this.heading = this.target - this.position;
+            heading.Normalize();
+            this.up = cameraUp;
+            this.strafe = Vector3.Cross(heading, up);
+            updateCamera();
+        }
         /// <summary>
-        /// This method creates all of this GameObject's fields in constant order. 
-        /// Instantiate modules and their fields here too.
-        /// Pretty much the constructor. It'll be called every time this object is instantiated.
+        /// Moves the camera + displaces the camera target accordingly
         /// </summary>
+        /// <param name="cameraPos"></param>
+        public void SetPosition(Vector3 cameraPos) {
+            target += cameraPos - position;
+            position = cameraPos;
+            updateCamera();
+        }
+        /// <summary>
+        /// Moves the camera, without displacing the target.
+        /// </summary>
+        /// <param name="cameraPos"></param>
+        public void SetPositionLockTarget(Vector3 cameraPos) {
+            position = cameraPos;
+            updateCamera();
+        }
+
+        public void SetTargetDisplacePosition(Vector3 tar) {
+            position += tar - target;
+            target = tar;
+            updateCamera();
+        }
+
+        /// <summary>
+        /// Rotates camera (orbit) around position (axis: y)
+        /// </summary>
+        /// <param name="posRot"></param>
+        /// <param name="rot"></param>
+        public void RotateUponPosition(Vector3 posRot, float rot) {
+            position = Vector3.Transform((posRot - position), Matrix.CreateRotationY(MathHelper.ToRadians(rot))) + position;
+            updateCamera();
+        }
+
+        /// <summary>
+        /// DIE!
+        /// </summary>
+        /// <param name="posRot"></param>
+        /// <param name="axis"></param>
+        /// <param name="rot"></param>
+        public void RotateUponAxis(Vector3 posRot, Vector3 axis, float rot) {
+            Vector3 relPosition = position - posRot;
+            if (relPosition.Equals(Vector3.Zero)) return;
+            position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(axis, MathHelper.ToRadians(rot))) + posRot;
+            updateCamera();
+        }
+        public void ChangeAzimuth(Vector3 posRot, Vector3 axis, float amount) {
+            Vector3 relPosition = position - posRot;
+            Vector3 azimuthAxis = Vector3.Cross(relPosition, axis);
+            if (azimuthAxis.Equals(Vector3.Zero)) return;
+            azimuthAxis.Normalize();
+            position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(azimuthAxis, MathHelper.ToRadians(amount))) + posRot;
+            updateCamera();
+        }
+        private void updateCamera() {
+            //projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fovy), aspectRatio, nearPlane, farPlane);
+            viewMatrix = Matrix.CreateLookAt(position, target, up);
+            frustum = new BoundingFrustum(viewMatrix * projectionMatrix);
+        }
+
         public override void construct() {
         }
-
-        /// <summary>
-        /// Returns the Location module of this GameObject.
-        /// </summary>
-        /// <returns>The Location module associated with this GameObject.
-        private InteractionEngine.Constructs.Location location;
-        public InteractionEngine.Constructs.Location getLocation() {
-            return location;
-        }
-
-        // You can't use a constructor anymore. Use a factory, like in GameObject.
-
-        /// <summary>
-        /// Constructs a new Camera.
-        /// </summary>
-        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
-        /*public Camera(Constructs.LoadRegion loadRegion)
-            : base(loadRegion) {
-            location = new Constructs.Location(this);
-        }*/
-
-
-        // TODO: do stuff
 
 
     }
 
-    /*public class User3D : InteractionEngine.Server.User {
+
+    /**
+     * Implemented by GameObjects that can be interacted with.
+     */
+    public interface Interactable3D : Graphable3D {
+
+        /// <summary>
+        /// Gets an Event from this Interactable module.
+        /// </summary>
+        /// <param name="invoker">The invoker of this Event. If you have multiple possible invokers (ie. mouse click and mouse over) then we recommend you define constants for them.</param>
+        /// <param name="user">The User that invokes this Event. Needed often for associating User invokers with GameObject invokers.</param>
+        /// <param name="position">The position where the interaction happened, if applicable.</param>
+        /// <returns>An Event.</returns>
+        InteractionEngine.EventHandling.Event getEvent(int invoker, Vector3 position);
+
+    }
+
+    public class User3D {
 
         public readonly Constructs.LoadRegion localLoadRegion;
         public readonly Camera camera;
+        public Matrix worldTransform = Matrix.Identity;
 
-        public User3D()
-            : base() {
-            this.localLoadRegion = new Constructs.LoadRegion();
-            this.camera = new Camera(this.localLoadRegion);
-            this.addLoadRegion(this.localLoadRegion);
-            this.addPermission(this.camera);
+        public User3D() {
+            this.localLoadRegion = Constructs.LoadRegion.createLoadRegion();
+            this.camera = GameObject.createGameObject<Camera>(this.localLoadRegion);
         }
 
 
-    }*/
+    }
 
 
 }
