@@ -51,10 +51,10 @@
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\Content\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\Ashoat\desktop\Bluestone Coding\TestNetworkGame\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Ashoat\desktop\Bluestone Coding\TestNetworkGame\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Ashoat\desktop\Bluestone Coding\TestNetworkGame\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Ashoat\desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>

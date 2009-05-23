@@ -50,6 +50,7 @@ namespace TestNetworkGame.Logic {
             this.addEventMethod("handleClick", this.handleClick);
             this.addEventMethod("returnAfterClick", ((JoinGraphics2D)this.graphics).returnAfterClick);
             this.addEventMethod("getHostedRegion", this.getHostedRegion);
+            this.addEventMethod("handleDroppedConnection", this.handleDroppedConnection);
         }
 
         public void setPosition(int startingXPos, int startingYPos) {
@@ -97,13 +98,18 @@ namespace TestNetworkGame.Logic {
             Engine.status = Engine.Status.MULTIPLAYER_CLIENT;
             Engine.server = new Server("127.0.0.1");
             // Make sure we know what region is the hosted region so we can kill it later
-            CreateRegion.onCreateRegion.Add(new Event(this.id, "getHostedRegion", null)); 
+            CreateRegion.onCreateRegion.Add(new Event(this.id, "getHostedRegion", null));
+            Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
         }
 
         private LoadRegion hostedRegion;
 
         public void getHostedRegion(Client client, object parameter) {
             if (parameter is LoadRegion) hostedRegion = (LoadRegion)parameter;
+        }
+
+        public void handleDroppedConnection(Client client, object parameter) {
+            disconnect();
         }
 
         public void disconnect() {

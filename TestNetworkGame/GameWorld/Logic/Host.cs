@@ -128,7 +128,7 @@ namespace TestNetworkGame.Logic {
             if (parameter is Client) {
                 Client realClient = (Client)parameter;
                 hostedRegion.sentToClient(realClient);
-                foreach(GameObjectable gameObject in Engine.getGameObjectList()){
+                foreach (GameObjectable gameObject in Engine.getGameObjectList()) {
                     if (hostedRegion.containsObject(gameObject.id))
                         realClient.addPermission(gameObject.id);
                 }
@@ -136,6 +136,7 @@ namespace TestNetworkGame.Logic {
         }
 
         public void disconnect() {
+            Client.stopListening();
             if (hostedRegion == null) return;
             hostedRegion.deconstruct();
             hostedRegion = null;
