@@ -60,6 +60,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             // Loop through previously clicked/over'd GameObjects to see if they have been released/out'd.
             for (int i = mouseOvered.Count - 1; i >= 0; i--) {
                 EventHandling.Interactable interactable = mouseOvered[i];
+                if (!(((Graphable)interactable).getGraphics() is Graphics2D)) continue;
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_OUT?
                 if (!graphics.contains(mouse.X, mouse.Y)) {
@@ -70,6 +71,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             }
             for (int i = mouseLeftClicked.Count - 1; i >= 0; i--) {
                 EventHandling.Interactable interactable = mouseLeftClicked[i];
+                if (!(((Graphable)interactable).getGraphics() is Graphics2D)) continue;
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_LEFT_RELEASE?
                 if (!graphics.contains(mouse.X, mouse.Y) || mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released) {
@@ -80,6 +82,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             }
             for (int i = mouseRightClicked.Count - 1; i >= 0; i--) {
                 EventHandling.Interactable interactable = mouseRightClicked[i];
+                if (!(((Graphable)interactable).getGraphics() is Graphics2D)) continue;
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_RIGHT_RELEASE?
                 if (!graphics.contains(mouse.X, mouse.Y) || mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released) {
@@ -92,6 +95,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
                 // See if this GameObject can be interacted with.
                 if (gameObject is Graphable) {
+                    if (!(((Graphable)gameObject).getGraphics() is Graphics2D)) continue;
                     Graphics2D graphics = (Graphics2D)((Graphable)gameObject).getGraphics();
                     if (gameObject is EventHandling.Interactable) {
                         EventHandling.Interactable interaction = (EventHandling.Interactable)gameObject;

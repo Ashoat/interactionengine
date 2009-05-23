@@ -98,7 +98,7 @@ namespace InteractionEngine.Constructs {
         /// <param name="id">The ID to assign this LoadRegion, provided by the server.</param>
         internal LoadRegion(int id) : base() {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
-                throw new System.Exception("Something is wrong with the InteractionEngine. This is probably our bad. Sorry.");
+                throw new InteractionEngineException("LoadRegion constructors should never be called, except by the LoadRegion.createLoadRegion() method and its overload. Please use one of those to construct a LoadRegion.");
             this.id = id;
             InteractionEngine.Engine.addLoadRegion(this);
         }
@@ -135,7 +135,7 @@ namespace InteractionEngine.Constructs {
         /// <param name="client">The client to give the LoadRegion to.</param>
         public void sentToClient(Networking.Client client) {
             if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("The game developer screwed up. They shouldn't called LoadRegion.sendToClient() on a client.");
+                throw new GameWorldException("LoadRegion.sendToClient(Client) can only be called from the GameWorld by a server. Please note that the majority of EventMethods execute on both the server and client. Two notable exceptions are EventMethods triggered by Client.onJoin and Client.onQuit. You can also: 1) Manually check Engine.status within the EventMethod, 2) Make sure only the MULTIPLAYER_SERVERCLIENT can trigger the event from the UI, or 3) Call the EventMethod from the EventCache, and make sure it is only added to the EventCache on the server.");
             // The easy part. Send them the LoadRegion.
             client.sendUpdate(new Networking.CreateRegion(id));
             // Now we have to package up every object in the LoadRegion! Yay!
@@ -154,7 +154,7 @@ namespace InteractionEngine.Constructs {
         /// <param name="client">The client to give the LoadRegion to.</param>
         public void removeFromClient(Networking.Client client) {
             if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("The game developer screwed up. They shouldn't called LoadRegion.sendToClient() on a client.");
+                throw new GameWorldException("LoadRegion.removeFromClient(Client) can only be called from the GameWorld by a server. Please note that the majority of EventMethods execute on both the server and client. Two notable exceptions are EventMethods triggered by Client.onJoin and Client.onQuit. You can also: 1) Manually check Engine.status within the EventMethod, 2) Make sure only the MULTIPLAYER_SERVERCLIENT can trigger the event from the UI, or 3) Call the EventMethod from the EventCache, and make sure it is only added to the EventCache on the server.");
             // Send them a DeleteRegion
             client.sendUpdate(new Networking.DeleteRegion(id));
             // Remove the LoadRegion from the local list of LoadRegions for this client, so we don't try to update them regarding it.

@@ -49,7 +49,11 @@ namespace InteractionEngine.UserInterface {
         /// Start the thread!
         /// </summary>
         internal void startInputOutput() {
-            if (inputDetector.ThreadState == System.Threading.ThreadState.Unstarted) inputDetector.Start();
+            try {
+                if (inputDetector.ThreadState == System.Threading.ThreadState.Unstarted) inputDetector.Start();
+            } catch (System.OutOfMemoryException e) {
+                throw new InteractionEngineException("There is insufficient memory on your system to run the Interaction Engine.", e);
+            }
         }
 
         /// <summary>

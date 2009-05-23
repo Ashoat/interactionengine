@@ -38,20 +38,37 @@ namespace InteractionEngine.Networking {
         // Contains the list of Updates that have been read by the updateReaderThread.
         // Used for passing events from the reader thread to the main game thread.
         private System.Collections.Generic.List<Update> updateBuffer = new System.Collections.Generic.List<Update>();
+        // Contains a list of Events that need to be triggered when the connection ends.
+        // Used so that the GameWorld can deal with the connection however it wants.
+        public static System.Collections.Generic.List<EventHandling.Event> onDisconnect = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
 
         /// <summary>
         /// Connect to a server at the specified IP.
         /// </summary>
         /// <param name="ipAddress">The IP address where we can find the server at.</param>
         public Server(string ipAddress) {
-            if (InteractionEngine.Engine.status == Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == Engine.Status.MULTIPLAYER_SERVERCLIENT)
-                throw new System.Exception("The game developer screwed up. They shouldn't be insantiating a Server object on a server.");
+            if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_CLIENT)
+                throw new GameWorldException("You can only construct a Server object on a client. This object is intended to manage interfacing with the server for a client.");
             this.tcpClient = new System.Net.Sockets.TcpClient();
             this.tcpClient.Connect(new System.Net.IPEndPoint(System.Net.IPAddress.Parse(ipAddress), Client.listeningPort));
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
             this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
             this.updateReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readUpdates));
             this.updateReaderThread.Start();
+        }
+
+        /// <summary>
+        /// This method closes the current Server object.
+        /// </summary>
+        public void disconnect() {
+            this.tcpClient.Close();
+            Engine.server = null;
+            Engine.status = Engine.Status.SINGLE_PLAYER;
+            // Trigger the onQuit Events.
+            foreach (EventHandling.Event eventObject in onDisconnect) {
+                eventObject.parameter = (object)this;
+                InteractionEngine.Engine.addEvent(eventObject);
+            }
         }
 
         /// <summary>
@@ -71,32 +88,38 @@ namespace InteractionEngine.Networking {
         private void readUpdates() {
             // TODO: handle IO exceptions
             while (true) {
-                byte transferCode = reader.ReadByte();
-                switch (transferCode) {
-                    case Update.CREATE_REGION:
-                        Update createRegion = new CreateRegion(reader);
-                        lock (updateBuffer) updateBuffer.Add(createRegion);
-                        break;
-                    case Update.DELETE_REGION:
-                        Update deleteRegion = new DeleteRegion(reader);
-                        lock (updateBuffer) updateBuffer.Add(deleteRegion);
-                        break;
-                    case Update.CREATE_OBJECT:
-                        Update createObject = new CreateObject(reader, tcpClient.GetStream(), formatter);
-                        lock (updateBuffer) updateBuffer.Add(createObject);
-                        break;
-                    case Update.DELETE_OBJECT:
-                        Update deleteObject = new DeleteObject(reader);
-                        lock (updateBuffer) updateBuffer.Add(deleteObject);
-                        break;
-                    case Update.MOVE_OBJECT:
-                        Update moveObject = new MoveObject(reader);
-                        lock (updateBuffer) updateBuffer.Add(moveObject);
-                        break;
-                    case Update.UPDATE_FIELD:
-                        Update updateField = new UpdateField(reader, tcpClient.GetStream(), formatter);
-                        lock (updateBuffer) updateBuffer.Add(updateField);
-                        break;
+                try {
+                    byte transferCode = reader.ReadByte();
+                    switch (transferCode) {
+                        case Update.CREATE_REGION:
+                            Update createRegion = new CreateRegion(reader);
+                            lock (updateBuffer) updateBuffer.Add(createRegion);
+                            break;
+                        case Update.DELETE_REGION:
+                            Update deleteRegion = new DeleteRegion(reader);
+                            lock (updateBuffer) updateBuffer.Add(deleteRegion);
+                            break;
+                        case Update.CREATE_OBJECT:
+                            Update createObject = new CreateObject(reader, tcpClient.GetStream(), formatter);
+                            lock (updateBuffer) updateBuffer.Add(createObject);
+                            break;
+                        case Update.DELETE_OBJECT:
+                            Update deleteObject = new DeleteObject(reader);
+                            lock (updateBuffer) updateBuffer.Add(deleteObject);
+                            break;
+                        case Update.MOVE_OBJECT:
+                            Update moveObject = new MoveObject(reader);
+                            lock (updateBuffer) updateBuffer.Add(moveObject);
+                            break;
+                        case Update.UPDATE_FIELD:
+                            Update updateField = new UpdateField(reader, tcpClient.GetStream(), formatter);
+                            lock (updateBuffer) updateBuffer.Add(updateField);
+                            break;
+                    }
+                // The server dropped the connection.
+                } catch (System.IO.IOException) {
+                    disconnect();
+                    break;
                 }
             }
         }
