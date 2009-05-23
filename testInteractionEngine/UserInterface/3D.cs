@@ -729,6 +729,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         public void RotateUponAxis(Vector3 posRot, Vector3 axis, float rot)
         {
             Vector3 relPosition = position - posRot;
+            if (relPosition.Equals(Vector3.Zero)) return;
             position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(axis, MathHelper.ToRadians(rot))) + posRot;
             updateCamera();
         }
