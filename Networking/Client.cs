@@ -166,7 +166,16 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="update"></param>
         internal void sendUpdate(Update update) {
-            update.sendUpdate(writer, tcpClient.GetStream(), formatter);
+            try {
+                update.sendUpdate(writer, tcpClient.GetStream(), formatter);
+            // The connection was closed.
+            } catch (System.IO.IOException) {
+                eventReaderThread.Abort();
+                disconnect();
+            } catch (System.Runtime.Serialization.SerializationException) {
+                eventReaderThread.Abort();
+                disconnect();
+            }
         }
 
         /// <summary>
@@ -182,6 +191,9 @@ namespace InteractionEngine.Networking {
                     lock (eventBuffer) eventBuffer.Add(new InteractionEngine.EventHandling.Event(gameObjectID, eventHash, parameter));
                 // The connection was closed.
                 } catch (System.IO.IOException) {
+                    disconnect();
+                    break;
+                } catch (System.Runtime.Serialization.SerializationException) {
                     disconnect();
                     break;
                 }

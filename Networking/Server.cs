@@ -76,10 +76,19 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="eventObject">The EventHandling.Event to send across.</param>
         public void sendEvent(EventHandling.Event eventObject) {
-            writer.Write(eventObject.gameObjectID);
-            writer.Write(eventObject.eventHash);
-            if (eventObject.parameter == null) eventObject.parameter = new object();
-            formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);
+            try {
+                writer.Write(eventObject.gameObjectID);
+                writer.Write(eventObject.eventHash);
+                if (eventObject.parameter == null) eventObject.parameter = new object();
+                formatter.Serialize(tcpClient.GetStream(), eventObject.parameter);
+            // The server dropped the connection.
+            } catch (System.IO.IOException) {
+                updateReaderThread.Abort();
+                disconnect();
+            } catch (System.Runtime.Serialization.SerializationException) {
+                updateReaderThread.Abort();
+                disconnect();
+            }
         }
 
         /// <summary>
@@ -118,6 +127,9 @@ namespace InteractionEngine.Networking {
                     }
                 // The server dropped the connection.
                 } catch (System.IO.IOException) {
+                    disconnect();
+                    break;
+                } catch (System.Runtime.Serialization.SerializationException) {
                     disconnect();
                     break;
                 }
