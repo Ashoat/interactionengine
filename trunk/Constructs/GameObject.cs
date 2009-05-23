@@ -177,7 +177,7 @@ namespace InteractionEngine.Constructs {
             Type gameObject = new Type();
             // Set this GameObject's ID.
             gameObject.id = id;
-            // Add this FieldContainer to the GameWorld. This will NOT set its ID.
+            // Add this FieldContainer to the GameWorld. 
             InteractionEngine.Engine.addGameObject(gameObject);
             // Add and assign it to the LoadRegion.
             loadRegion.addObject(gameObject.id);
@@ -213,10 +213,9 @@ namespace InteractionEngine.Constructs {
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return null;
             // Otherwise, we are a server. Let's go!
             Type returnObject = new Type();
-            // Add this FieldContainer to the GameWorld. This will set its ID.
-            InteractionEngine.Engine.addGameObject(returnObject);
-            // Add and assign it to the LoadRegion.
-            loadRegion.addObject(returnObject.id);
+            // Set its ID.
+            InteractionEngine.Engine.assignGameObjectID(returnObject);
+            // Assign its LoadRegion.
             returnObject.loadRegion = loadRegion;
             // Add a CreateObject to the LoadRegion's Update Buffer so that all the clients get the update.
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVER || InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT) {
@@ -229,6 +228,10 @@ namespace InteractionEngine.Constructs {
             }
             // Setup its fields.
             returnObject.construct();
+            // Add it the GameObject Hashlist. Do this at the end to avoid synchronization errors!
+            InteractionEngine.Engine.addGameObject(returnObject);
+            // Add it to the LoadRegion.
+            loadRegion.addObject(returnObject.id);
             return returnObject;
         }
 
