@@ -164,7 +164,7 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="param">The Vector3 representing the location where the Terrain was clicked.</param>
         public void onClicked(object param) {
-            new DebugSphere(this.getLoadRegion(), (Vector3)param, 0.1f);
+            new DebugSphere(this.getLoadRegion(), (Vector3)param, 1f);
             NTKPlusUser.localUser.selectionFocus.addOnlyAsSecondSelection(this, param);
         }
 
@@ -404,7 +404,7 @@ namespace NTKPlusGame.World {
             effect.Texture = tex;
             effect.SpecularColor = new Vector3(.4f, .4f, .4f);
             effect.PreferPerPixelLighting = true;
-            effect.SpecularPower = 4f;
+            effect.SpecularPower = 30f;
             effect.CommitProperties();
             //effect.FogEnabled = true;
             //effect.FogColor = Vector3.Zero;

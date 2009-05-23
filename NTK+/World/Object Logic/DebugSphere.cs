@@ -100,7 +100,8 @@ namespace NTKPlusGame.World {
             this.location = new Location(this);
             ModelEffect modelEffect = new ModelEffect();
             modelEffect.SpecularColor = new Vector3(.1f, .3f, .6f);
-            modelEffect.SpecularPower = 1f;
+            modelEffect.AmbientLightColor = new Vector3(.6f, .3f, .1f);
+            modelEffect.SpecularPower = 30f;
             modelEffect.CommitProperties();
             this.graphics3D = new Graphics3D(this, modelEffect, "Models\\sphere180");
             this.location.move(position);

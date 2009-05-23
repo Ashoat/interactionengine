@@ -308,6 +308,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         }
 
         public ModelEffect() {
+
         }
 
         public void Initialize(Camera camera) {
