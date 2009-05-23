@@ -112,7 +112,7 @@ namespace InteractionEngine {
                 // Process the Events locally
                 processEvents(events);
                 // Recieve and process updates from the server
-                receiveUpdate();
+                if (status == Status.MULTIPLAYER_CLIENT) receiveUpdate();
                 // Output graphics
                 userInterface.output();
             } else if (status == Status.MULTIPLAYER_SERVER) {
@@ -309,7 +309,8 @@ namespace InteractionEngine {
             // Copy over to prevent 
             lock (gameObjectHashlist) {
                 gameObjectArray = new Constructs.GameObjectable[gameObjectHashlist.Count];
-                gameObjectHashlist.Values.CopyTo(gameObjectArray, 0);
+                int i = 0;
+                foreach(Constructs.GameObjectable gameObject in gameObjectHashlist.Values) gameObjectArray[i++] = gameObject;
             }
             return gameObjectArray;
         }

@@ -86,12 +86,7 @@ namespace InteractionEngine.Networking {
         internal CreateRegion(System.IO.BinaryReader reader) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
-            try {
-                loadRegionID = reader.ReadInt32();
-            // The connection was closed.
-            } catch (System.IO.IOException e) {
-                Engine.status = Engine.Status.SINGLE_PLAYER;
-            }
+            loadRegionID = reader.ReadInt32();
         }
 
         /// <summary>

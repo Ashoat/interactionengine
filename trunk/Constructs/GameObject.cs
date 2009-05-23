@@ -241,7 +241,7 @@ namespace InteractionEngine.Constructs {
         public void deconstruct() {
             // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return;
-            this.loadRegion.addUpdate(new Networking.DeleteObject(this.id));
+            if (Engine.status == Engine.Status.MULTIPLAYER_SERVER || Engine.status == Engine.Status.MULTIPLAYER_SERVERCLIENT) this.loadRegion.addUpdate(new Networking.DeleteObject(this.id));
             internalDeconstruct();
         }
 
@@ -278,7 +278,7 @@ namespace InteractionEngine.Constructs {
         public void move(LoadRegion newLoadRegion) {
             // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return;
-            this.loadRegion.addUpdate(new Networking.MoveObject(this.id, newLoadRegion.id));
+            if (Engine.status == Engine.Status.MULTIPLAYER_SERVER || Engine.status == Engine.Status.MULTIPLAYER_SERVERCLIENT) this.loadRegion.addUpdate(new Networking.MoveObject(this.id, newLoadRegion.id));
             this.internalMove(newLoadRegion);
         }
 

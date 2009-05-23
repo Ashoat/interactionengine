@@ -112,7 +112,7 @@ namespace InteractionEngine.Constructs {
             System.Collections.Generic.List<int> tempList = new System.Collections.Generic.List<int>();
             tempList.AddRange(objects);
             foreach (int gameObjectID in tempList) InteractionEngine.Engine.getGameObject(gameObjectID).deconstruct();
-            this.addUpdate(new Networking.DeleteRegion(this.id));
+            if (Engine.status == Engine.Status.MULTIPLAYER_SERVER || Engine.status == Engine.Status.MULTIPLAYER_SERVERCLIENT) this.addUpdate(new Networking.DeleteRegion(this.id));
             this.internalDeconstruct();
         }
 
