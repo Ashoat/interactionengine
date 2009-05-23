@@ -164,6 +164,7 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="param">The Vector3 representing the location where the Terrain was clicked.</param>
         public void onClicked(object param) {
+            new DebugSphere(this.getLoadRegion(), (Vector3)param, 0.1f);
             NTKPlusUser.localUser.selectionFocus.addOnlyAsSecondSelection(this, param);
         }
 
@@ -171,13 +172,13 @@ namespace NTKPlusGame.World {
         /// Returns the height of the terrain map at the given point.
         /// </summary>
         /// <param name="x">The x-coordinate of the point to look up.</param>
-        /// <param name="y">The y-coordinate of the point to look up.</param>
+        /// <param name="y">The z-coordinate of the point to look up.</param>
         /// <returns>The height of the terrain map at the given point.</returns>
         public float getHeight(float x, float y)
         {
             //return Vector3.Transform(vertices[128 + vertexCountX * 128].Position, this.WorldMatrix).Y;
             // Check if the object is inside the grid
-            Vector2 pos = new Vector2(this.getLocation().getPoint().X, this.getLocation().getPoint().Y);
+            Vector2 pos = new Vector2(x, y);
             if (isOnTerrain(pos))
             {
                 //pos += this.Size / 2;
@@ -185,6 +186,7 @@ namespace NTKPlusGame.World {
                 Vector2 posRel = pos - blockPos * blockScale;
 
                 int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
+                if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; // default value
                 float height1 = vertices[vertexIndex + 1].Position.Y;
                 float height2 = vertices[vertexIndex].Position.Y;
                 float height3 = vertices[vertexIndex + vertexCountX + 1].Position.Y;

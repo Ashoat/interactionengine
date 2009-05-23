@@ -29,3 +29,16 @@ D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\ResolveAssemblyReference.
 D:\t09\InteractionEngine\TestNetworkGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\Host.xnb
 C:\Users\Ashoat\Desktop\Bluestone Coding\TestNetworkGame\bin\x86\Debug\Content\Join.xnb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\Content\Field.xnb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\Content\O.xnb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\Content\X.xnb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\Content\Host.xnb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\Content\Join.xnb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\TestNetworkGame.exe
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\TestNetworkGame.pdb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\InteractionEngine.dll
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\bin\x86\Debug\InteractionEngine.pdb
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\obj\x86\Debug\TestNetworkGame.exe
+C:\Users\Woofy\Desktop\interactionengine2\TestNetworkGame\obj\x86\Debug\TestNetworkGame.pdb

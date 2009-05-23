@@ -16,6 +16,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace InteractionEngine.Client.ThreeDimensional {
 
@@ -60,6 +61,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         public const int MOUSEMASK_LEFT_RELEASE = MOUSEMASK_LEFT_PRESS + MOUSEMASK_RESET;
         public const int MOUSEMASK_OUT = MOUSEMASK_OVER + MOUSEMASK_RESET;
 
+        private List<Event> keyboardEvents = new List<Event>();
 
         public static bool testMask(int val, int mask) {
             return (val & mask) == mask;
@@ -163,6 +165,9 @@ namespace InteractionEngine.Client.ThreeDimensional {
             Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
             if (this.previousKeyboard == null) this.previousKeyboard = keyboard;
 //            Console.WriteLine(keyboard.GetPressedKeys());
+            if (keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up)) Console.WriteLine("UP!");
+            else if (keyboard.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Up)) Console.WriteLine("NOT UP!");
+            else Console.WriteLine("WEIRD!");
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
                 if (previousKeyboard.IsKeyUp(key)) newEvents.Add(this.kf.getEvent((int)key));
             }
@@ -176,7 +181,10 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
         protected override void retrieveInput(System.Collections.Generic.List<Event> newEvents) {
-            this.checkKeyboard(newEvents);
+            lock (keyboardEvents) {
+                newEvents.AddRange(keyboardEvents);
+                keyboardEvents.Clear();
+            }
 
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
@@ -214,6 +222,9 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// Output stuff.
         /// </summary>
         public override void output() {
+            lock (keyboardEvents) {
+                checkKeyboard(keyboardEvents);
+            }
             // Loop through the user's LoadRegions
             foreach (Constructs.LoadRegion loadRegion in GameWorld.GameWorld.user.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
@@ -400,6 +411,8 @@ namespace InteractionEngine.Client.ThreeDimensional {
             this.modelName = modelName;
 
             this.worldLocal = Matrix.Identity;
+
+            if (GameWorld.GameWorld.game.GraphicsDevice != null) loadContent();
 
         }
 
@@ -606,68 +619,62 @@ namespace InteractionEngine.Client.ThreeDimensional {
 
         BoundingFrustum frustum;
 
-        public Vector3 Heading
-        {
-            get
-            {
+        public Vector3 Target {
+            get { return target; }
+            set {
+                target = value;
+                updateCamera();
+            }
+        }
+
+        public Vector3 Heading {
+            get {
                 return heading;
             }
-            set
-            {
+            set {
                 heading = value;
                 heading.Normalize();
                 updateCamera();
             }
         }
 
-        public Matrix Projection
-        {
-            get
-            {
+        public Matrix Projection {
+            get {
                 return projectionMatrix;
             }
-            set
-            {
+            set {
                 projectionMatrix = value;
                 updateCamera();
             }
         }
-        public Matrix View
-        {
-            get
-            {
+        public Matrix View {
+            get {
                 return viewMatrix;
             }
-            set
-            {
+            set {
                 viewMatrix = value;
                 updateCamera();
             }
         }
-        public BoundingFrustum Frustrum
-        {
-            get
-            {
+        public BoundingFrustum Frustrum {
+            get {
                 updateCamera();
                 return frustum;
             }
         }
 
-        public Vector3 Position
-        {
+        public Vector3 Position {
             get { return position; }
         }
 
-        public void SetPerspectiveFov(float fovy, float aspectRatio, float nearPlane, float farPlane)
-        {
+        public void SetPerspectiveFov(float fovy, float aspectRatio, float nearPlane, float farPlane) {
             this.fovy = fovy;
             this.aspectRatio = aspectRatio;
             this.farPlane = farPlane;
             this.nearPlane = nearPlane;
             updateCamera();
         }
-        public void SetLookAt(Vector3 cameraPos, Vector3 cameraTarget, Vector3 cameraUp)
-        {
+        public void SetLookAt(Vector3 cameraPos, Vector3 cameraTarget, Vector3 cameraUp) {
             this.position = cameraPos;
             this.target = cameraTarget;
             this.heading = this.target - this.position;
@@ -680,8 +687,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         /// Moves the camera + displaces the camera target accordingly
         /// </summary>
         /// <param name="cameraPos"></param>
-        public void SetPosition(Vector3 cameraPos)
-        {
+        public void SetPosition(Vector3 cameraPos) {
             target += cameraPos - position;
             position = cameraPos;
             updateCamera();
@@ -730,6 +736,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
         {
             Vector3 relPosition = position - posRot;
             Vector3 azimuthAxis = Vector3.Cross(relPosition, axis);
+            if (azimuthAxis.Equals(Vector3.Zero)) return;
             azimuthAxis.Normalize();
             position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(azimuthAxis, MathHelper.ToRadians(amount))) + posRot;
             updateCamera();

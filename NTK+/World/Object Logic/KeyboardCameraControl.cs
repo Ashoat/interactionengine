@@ -94,10 +94,10 @@ namespace NTKPlusGame.World {
 
         public void keyPressed(Microsoft.Xna.Framework.Input.Keys key) {
             Camera camera = NTKPlusUser.localUser.camera;
-            if (key == Keys.Up) camera.ChangeAzimuth(camera.Position, Vector3.Up, 0.1f);
-            if (key == Keys.Down) camera.ChangeAzimuth(camera.Position, Vector3.Up, -0.1f);
-            if (key == Keys.Left) camera.RotateUponAxis(camera.Position, Vector3.Up, 0.1f);
-            if (key == Keys.Right) camera.RotateUponAxis(camera.Position, Vector3.Up, 0.1f);
+            if (key == Keys.Up) camera.ChangeAzimuth(camera.Target, Vector3.Up, 1f);
+            if (key == Keys.Down) camera.ChangeAzimuth(camera.Target, Vector3.Up, 1f);
+            if (key == Keys.Left) camera.RotateUponAxis(camera.Target, Vector3.Up, 1f);
+            if (key == Keys.Right) camera.RotateUponAxis(camera.Target, Vector3.Up, 1f);
         }
 
         public void focusLost(Keyboardable newFocusHolder) {
