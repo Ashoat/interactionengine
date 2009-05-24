@@ -120,6 +120,7 @@ namespace InteractionEngine.UserInterface.Audio {
         /// </summary>
         internal void output() {
             System.Collections.Generic.List<Microsoft.Xna.Framework.Audio.Cue> currentSounds = new System.Collections.Generic.List<Microsoft.Xna.Framework.Audio.Cue>(activeSounds);
+            if (camera == null) return;
             foreach (Microsoft.Xna.Framework.Audio.Cue sound in currentSounds) {
                 if (sound.IsStopped) activeSounds.Remove(sound);
                 else {
