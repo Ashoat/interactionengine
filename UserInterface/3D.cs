@@ -106,24 +106,6 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         }
 
-        private void checkInteractableForInteraction(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents, Ray ray, Interactable interaction) {
-            Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            // Check to see if the mouse is intersecting the GameObject.
-            Vector3? point = null;
-            if (interaction is Interactable3D) {
-                Graphics3D graphics = ((Interactable3D)interaction).getGraphics3D();
-                point = graphics.intersectionPoint(ray);
-            } else {
-                Graphics2D graphics = ((Interactable2D)interaction).getGraphics2D();
-                if (graphics.Visible) point = graphics.intersectionPoint(mouse.X, mouse.Y);
-            }
-            if (point.HasValue) {
-                foreach (MouseMaskTest maskTest in this.maskTests) {
-                    maskTest.testAndRetrievePositiveEvent(eventsAwaitingReset, newEvents, interaction, mouse, ray, point.Value);
-                }
-            }
-        }
-
         private class MouseMaskTest {
             public delegate bool IsActivated(MouseState mouse);
             int mask;
@@ -155,6 +137,8 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             new MouseMaskTest(MOUSEMASK_RIGHT_PRESS, (MouseState mouse) => mouse.RightButton == ButtonState.Pressed),
         };
 
+        #region Keyboard Stuff
+
         private KeyboardFocus kf;
         private const int repeatDelay = 20;
         private Dictionary<Microsoft.Xna.Framework.Input.Keys, double> repeatTimes = new Dictionary<Microsoft.Xna.Framework.Input.Keys, double>();
@@ -172,6 +156,8 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             }
         }
 
+        #endregion
+
         /// <summary>
         /// Checks state of user input devices to see if an input event should be triggered.
         /// If so, collects the Event objects and inserts them into the given list.
@@ -179,14 +165,23 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
         protected override void retrieveInput(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents) {
-
-            //Console.WriteLine("User interface iteration");
-
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            Ray ray = this.calculateMouseRay(mouse);
 
-            //            System.Console.WriteLine(mouse.LeftButton);
+            // Reset old events
+            resetEvents(newEvents, ray);
 
+            Vector3 point;
+            Interactable interaction = this.findClosestIntersectedInteractable(ray, mouse, out point);
+            if (interaction != null) {
+                foreach (MouseMaskTest maskTest in this.maskTests) {
+                    maskTest.testAndRetrievePositiveEvent(eventsAwaitingReset, newEvents, interaction, mouse, ray, point);
+                }
+            }
+        }
+
+        private Ray calculateMouseRay(MouseState mouse) {
             Vector3 near = new Vector3(mouse.X, mouse.Y, 0f);
             Vector3 far = new Vector3(mouse.X, mouse.Y, 1f);
             Matrix world = user.worldTransform;
@@ -197,24 +192,54 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             Vector3 dir = farPt - nearPt;
             dir.Normalize();
 
-            Ray ray = new Ray(user.camera.Position, dir);
+            return new Ray(user.camera.getLocation().Position, dir);
+        }
 
-            // Reset old events
-            resetEvents(newEvents, ray);
+        private Interactable findClosestIntersectedInteractable(Ray ray, MouseState mouse, out Vector3 intersectionPoint) {
+            Interactable3D closest3DInteractable = null;
+            float closest3DDistance = 0;
+            Interactable2D closest2DInteractable = null;
+            float closest2DLayerDepth = 0;
             // Loop through all of the User's LoadRegions
             foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through all the LoadRegion's GameObjects
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
                     // See if this GameObject can be interacted with.
                     if (gameObject is Interactable3D) {
-                        checkInteractableForInteraction(newEvents, ray, (Interactable3D)gameObject);
+                        Interactable3D interaction = (Interactable3D)gameObject;
+                        float? distance = interaction.getGraphics3D().intersects(ray);
+                        if (distance.HasValue && distance.Value < closest3DDistance) {
+                            closest3DInteractable = interaction;
+                            closest3DDistance = distance.Value;
+                        }
                     }
+                    if (gameObject is Interactable2D) {
+                        Interactable2D interaction = (Interactable2D)gameObject;
+                        if (interaction.getGraphics2D().LayerDepth > closest2DLayerDepth) {
+                            if (interaction.getGraphics2D().intersectionPoint(mouse.X, mouse.Y).HasValue) {
+                                closest2DInteractable = interaction;
+                                closest2DLayerDepth = interaction.getGraphics2D().LayerDepth;
+                            }
+                        }
+                    }
+                    // End checking gameObject
                 }
             }
+            if (closest2DInteractable != null) {
+                intersectionPoint = closest2DInteractable.getGraphics2D().intersectionPoint(mouse.X, mouse.Y).Value;
+                return closest2DInteractable;
+            } else if (closest3DInteractable != null) {
+                intersectionPoint = closest3DInteractable.getGraphics3D().intersectionPoint(ray).Value;
+                return closest3DInteractable;
+            }
+            intersectionPoint = Vector3.Zero;
+            return null;
         }
 
         public override List<InteractionEngine.EventHandling.Event> input() {
+            // Get mouse events
             List<InteractionEngine.EventHandling.Event> events = base.input();
+            // Get keyboard events
             List<InteractionEngine.EventHandling.Event> keyboardEvents = new List<InteractionEngine.EventHandling.Event>();
             checkKeyboard(keyboardEvents);
             events.AddRange(keyboardEvents);
@@ -426,7 +451,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         }
 
         public BoundingSphere BoundingSphere {
-            get { return new BoundingSphere(baseBoundingSphere.Center + this.gameObject.getLocation().getPoint(), baseBoundingSphere.Radius * this.scale); }
+            get { return new BoundingSphere(baseBoundingSphere.Center + this.gameObject.getLocation().Position, baseBoundingSphere.Radius * this.scale); }
         }
 
         public void calculateBoundingSphere() {
@@ -456,7 +481,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         /// <returns></returns>
         private Matrix localWorld() {
-            return Matrix.CreateScale(this.scale) * Matrix.CreateRotationY(this.gameObject.getLocation().yaw) * Matrix.CreateTranslation(this.gameObject.getLocation().getPoint()); //add more later. scale + rotate.
+            return Matrix.CreateScale(this.scale) * Matrix.CreateRotationY(this.gameObject.getLocation().yaw) * Matrix.CreateTranslation(this.gameObject.getLocation().Position); //add more later. scale + rotate.
         }
 
         public void SetScale(float scale) {
@@ -541,7 +566,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
     }
 
-    public class Camera : InteractionEngine.Constructs.GameObject {
+    public class Camera : InteractionEngine.Constructs.GameObject, Locatable {
 
         #region FACTORY
 
@@ -577,26 +602,19 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         Matrix projectionMatrix;
         Matrix viewMatrix;
 
-        Vector3 position, target;
-        Vector3 heading, strafe, up;
+        Vector3 target;
 
         BoundingFrustum frustum;
+
+        private Location location;
+        public Location getLocation() {
+            return location;
+        }
 
         public Vector3 Target {
             get { return target; }
             set {
                 target = value;
-                updateCamera();
-            }
-        }
-
-        public Vector3 Heading {
-            get {
-                return heading;
-            }
-            set {
-                heading = value;
-                heading.Normalize();
                 updateCamera();
             }
         }
@@ -626,10 +644,6 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             }
         }
 
-        public Vector3 Position {
-            get { return position; }
-        }
-
         public void SetPerspectiveFov(float fovy, float aspectRatio, float nearPlane, float farPlane) {
             this.fovy = fovy;
             this.aspectRatio = aspectRatio;
@@ -638,12 +652,10 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             updateCamera();
         }
         public void SetLookAt(Vector3 cameraPos, Vector3 cameraTarget, Vector3 cameraUp) {
-            this.position = cameraPos;
+            this.location.Position = cameraPos;
             this.target = cameraTarget;
-            this.heading = this.target - this.position;
-            heading.Normalize();
-            this.up = cameraUp;
-            this.strafe = Vector3.Cross(heading, up);
+            Vector3 heading = cameraTarget - cameraPos;
+            Vector3 strafe = Vector3.Cross(heading, cameraUp);
             updateCamera();
         }
         /// <summary>
@@ -651,8 +663,8 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         /// <param name="cameraPos"></param>
         public void SetPosition(Vector3 cameraPos) {
-            target += cameraPos - position;
-            position = cameraPos;
+            target += cameraPos - this.location.Position;
+            this.location.Position = cameraPos;
             updateCamera();
         }
         /// <summary>
@@ -660,7 +672,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         /// <param name="cameraPos"></param>
         public void SetPositionLockTarget(Vector3 cameraPos) {
-            position = cameraPos;
+            this.location.Position = cameraPos;
             updateCamera();
         }
 
@@ -674,7 +686,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         }
 
         public void SetTargetDisplacePosition(Vector3 tar) {
-            position += tar - target;
+            this.location.Position += tar - target;
             target = tar;
             updateCamera();
         }
@@ -685,7 +697,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="posRot"></param>
         /// <param name="rot"></param>
         public void RotateUponPosition(Vector3 posRot, float rot) {
-            position = Vector3.Transform((posRot - position), Matrix.CreateRotationY(MathHelper.ToRadians(rot))) + position;
+            this.location.Position = Vector3.Transform((posRot - this.location.Position), Matrix.CreateRotationY(MathHelper.ToRadians(rot))) + this.location.Position;
             updateCamera();
         }
 
@@ -696,26 +708,27 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="axis"></param>
         /// <param name="rot"></param>
         public void RotateUponAxis(Vector3 posRot, Vector3 axis, float rot) {
-            Vector3 relPosition = position - posRot;
+            Vector3 relPosition = this.location.Position - posRot;
             if (relPosition.Equals(Vector3.Zero)) return;
-            position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(axis, MathHelper.ToRadians(rot))) + posRot;
+            this.location.Position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(axis, MathHelper.ToRadians(rot))) + posRot;
             updateCamera();
         }
         public void ChangeAzimuth(Vector3 posRot, Vector3 axis, float amount) {
-            Vector3 relPosition = position - posRot;
+            Vector3 relPosition = this.location.Position - posRot;
             Vector3 azimuthAxis = Vector3.Cross(relPosition, axis);
             if (azimuthAxis.Equals(Vector3.Zero)) return;
             azimuthAxis.Normalize();
-            position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(azimuthAxis, MathHelper.ToRadians(amount))) + posRot;
+            this.location.Position = Vector3.Transform(relPosition, Matrix.CreateFromAxisAngle(azimuthAxis, MathHelper.ToRadians(amount))) + posRot;
             updateCamera();
         }
         private void updateCamera() {
             //projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fovy), aspectRatio, nearPlane, farPlane);
-            viewMatrix = Matrix.CreateLookAt(position, target, up);
+            viewMatrix = Matrix.CreateLookAt(this.location.Position, target, this.location.Top);
             frustum = new BoundingFrustum(viewMatrix * projectionMatrix);
         }
 
         public override void construct() {
+            this.location = new Location(this);
         }
 
 
@@ -750,6 +763,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         private Color[] pixels;
         private bool visible = true;
         private float scale = 1;
+        private float layerDepth = 0;
 
         /// <summary>
         /// Loads the sprite from XNA's ContentPipeline.
@@ -783,17 +797,21 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             set { this.scale = value; }
         }
 
+        public float LayerDepth {
+            get { return this.layerDepth; }
+            set { this.layerDepth = value; }
+        }
+
         /// <summary>
         /// Draw this Graphics2D onto the SpriteBatch.
         /// </summary>
         public virtual void onDraw() {
             if (this.texture == null || !this.visible) return;
             SpriteBatch spriteBatch = ((UserInterface3D)InteractionEngine.Engine.userInterface).spriteBatch;
-            Vector3 position3 = this.gameObject.getLocation().getPoint();
+            Vector3 position3 = this.gameObject.getLocation().Position;
             Vector2 position = new Vector2(position3.X, position3.Y);
             float rotationRadians = this.gameObject.getLocation().yaw ;
             Vector2 origin = Vector2.Zero;
-            float layerDepth = 0;
             spriteBatch.Draw(texture, position, (Rectangle?)null, Color.White, rotationRadians,
                 origin, scale, SpriteEffects.None, layerDepth);
         }
@@ -805,7 +823,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="y">The y-coordinate of the point.</param>
         /// <returns>True if the point is within the Graphics2D's boundaries; false otherwise.</returns>
         public Vector3? intersectionPoint(double x, double y) {
-            Vector3 location3 = this.gameObject.getLocation().getPoint();
+            Vector3 location3 = this.gameObject.getLocation().Position;
             Vector3 inversePosition = Vector3.Multiply(location3, -1);
             Matrix inverseRotation = Matrix.CreateRotationZ(-this.gameObject.getLocation().yaw);
             Vector3 vector = new Vector3((float)x, (float)y, 0f);

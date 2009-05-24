@@ -127,13 +127,13 @@ namespace InteractionEngine.UserInterface.Audio {
                     InteractionEngine.Constructs.Location location = gameObject.getLocation();
                     Microsoft.Xna.Framework.Audio.AudioEmitter emitter = new Microsoft.Xna.Framework.Audio.AudioEmitter();
                     emitter.Position = location.Position;
-                    emitter.Forward = location.Forward;
-                    emitter.Up = location.Up;
+                    emitter.Forward = location.Heading;
+                    emitter.Up = location.Top;
                     InteractionEngine.Constructs.Location cameraLocation = camera.getLocation();
                     Microsoft.Xna.Framework.Audio.AudioListener listener = new Microsoft.Xna.Framework.Audio.AudioListener();
                     listener.Position = cameraLocation.Position;
-                    listener.Forward = cameraLocation.Forward;
-                    listener.Up = cameraLocation.Up;
+                    listener.Forward = cameraLocation.Heading;
+                    listener.Up = cameraLocation.Top;
                     sound.Apply3D(listener, emitter);
                 }
             }
