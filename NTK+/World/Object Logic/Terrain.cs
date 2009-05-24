@@ -401,13 +401,13 @@ namespace NTKPlusGame.World {
             UserInterface3D.graphicsDevice.Indices = ib;
 
             this.Effect.UpdateFromActiveCamera();
-            Effect actualEffect = this.Effect.Effect;
+            BasicEffect actualEffect = this.Effect.Effect;
             actualEffect.Begin();
             foreach (EffectPass pass in actualEffect.CurrentTechnique.Passes) {
                 pass.Begin();
                 // Draw the mesh
                 //UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
-                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles/3);
+                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles/30);
                 pass.End();
             }
             actualEffect.End();

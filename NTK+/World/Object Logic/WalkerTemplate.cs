@@ -119,8 +119,8 @@ namespace NTKPlusGame.World {
         /// false if the SelectionFocus should be transferred to the new selection.</returns>
         public virtual bool acceptSecondSelection(GameObjectable second, object param) {
             if (second is Terrain && param is Vector3) {
-                //this.getTerrainMovement().startWalking((Vector3)param);
-                this.getTerrainMovement().moveTo((Vector3)param);
+                this.getTerrainMovement().startWalking((Vector3)param);
+                //this.getTerrainMovement().moveTo((Vector3)param);
                 return true;
             }
             return false;
