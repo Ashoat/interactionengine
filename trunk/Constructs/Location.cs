@@ -12,7 +12,8 @@
 | * Location                     Class     |
 | * Locatable                    Interface |
 \*••••••••••••••••••••••••••••••••••••••••*/
-
+using System;
+using Microsoft.Xna.Framework;
 namespace InteractionEngine.Constructs {
 
     /**
@@ -68,10 +69,19 @@ namespace InteractionEngine.Constructs {
             this.rotation.value = new Microsoft.Xna.Framework.Vector3(yaw, pitch, roll);
         }
 
+        private Vector2 getEulerRotation(Vector3 vect)
+        {
+            float yaw = (float)System.Math.Atan2(vect.X, vect.Z);
+            float pitch = (float)System.Math.Atan2(vect.Y, new Microsoft.Xna.Framework.Vector2(vect.X, vect.Z).Length());
+            //float roll = (float)System.Math.Atan2(this.strafe.value.Y, new Microsoft.Xna.Framework.Vector2(this.strafe.value.X, this.strafe.value.Z).Length());
+            return new Vector2(yaw, pitch);
+        }
+
         // In radians
         public virtual Microsoft.Xna.Framework.Vector3 EulerRotation {
             get { return rotation.value; }
-            set {
+            set
+            {
                 this.rotation.value = value;
                 calculateHeadingAndStrafe();
             }
@@ -79,18 +89,23 @@ namespace InteractionEngine.Constructs {
 
         public virtual Microsoft.Xna.Framework.Vector3 Heading {
             get { return heading.value; }
-            set {
+            set 
+            {
+                Vector2 currRot = this.getEulerRotation(this.heading.value);
+                Vector2 diffRot = this.getEulerRotation(value) - currRot;
+
+                Vector2 strafeRot = this.getEulerRotation(this.strafe.value) + diffRot;
+                Vector3 strafe = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationX(strafeRot.Y) * Matrix.CreateRotationY(strafeRot.X));
+
+                this.strafe.value = strafe;
                 this.heading.value = value;
                 calculateEulerRotation();
             }
         }
 
+
         public virtual Microsoft.Xna.Framework.Vector3 Strafe {
             get { return strafe.value; }
-            set {
-                this.strafe.value = value;
-                calculateEulerRotation();
-            }
         }
 
         // In radians
