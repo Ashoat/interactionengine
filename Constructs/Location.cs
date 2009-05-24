@@ -61,10 +61,12 @@ namespace InteractionEngine.Constructs {
             return point.value;
         }
 
+        // In radians
         public virtual Microsoft.Xna.Framework.Vector3 getHeading() {
             return heading.value;
         }
 
+        // In radians
         public virtual float yaw {
             get { return this.heading.value.X; }
             set { this.heading.value = new Microsoft.Xna.Framework.Vector3(value, this.heading.value.Y, this.heading.value.Z); }

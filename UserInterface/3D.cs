@@ -19,6 +19,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using InteractionEngine.EventHandling;
 using InteractionEngine.Constructs;
+using Microsoft.Xna.Framework.Input;
 
 namespace InteractionEngine.UserInterface.ThreeDimensional {
 
@@ -29,10 +30,11 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         public static User3D user;
         public static GraphicsDevice graphicsDevice;
+        public SpriteBatch spriteBatch;
 
         // Contain lists of Interactables that had been MOUSEMASK_OVER'd and MOUSEMASK_CLICK'd in the last iteration of input().
         // Used for knowing when to invoke MOUSEMASK_OUT and MOUSEMASK_RELEASE events.
-        private System.Collections.Generic.Dictionary<Interactable3D, int> eventsAwaitingReset = new System.Collections.Generic.Dictionary<Interactable3D, int>();
+        private System.Collections.Generic.Dictionary<Interactable, int> eventsAwaitingReset = new System.Collections.Generic.Dictionary<Interactable, int>();
 
         // This specifies the bits that represent unique positive mouse buttons or actions (right-click, mouse-over, etc)
         public const int MOUSEMASK_ACTION = (1 << 4) - 1;
@@ -63,8 +65,6 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         public const int MOUSEMASK_LEFT_RELEASE = MOUSEMASK_LEFT_PRESS + MOUSEMASK_RESET;
         public const int MOUSEMASK_OUT = MOUSEMASK_OVER + MOUSEMASK_RESET;
 
-        private List<InteractionEngine.EventHandling.Event> keyboardEvents = new List<InteractionEngine.EventHandling.Event>();
-
         public static bool testMask(int val, int mask) {
             return (val & mask) == mask;
         }
@@ -90,75 +90,73 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         private void resetEvents(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents, Ray ray) {
             // Check states of mouse input
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            bool leftReleased = mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released;
-            bool rightReleased = mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released;
             // Loop through list and test to see if any are ready to receive a RELEASE or OUT event
-            System.Collections.Generic.LinkedList<Interactable3D> removals = new System.Collections.Generic.LinkedList<Interactable3D>();
-            foreach (Interactable3D interactable in eventsAwaitingReset.Keys) {
-                int eveCode = eventsAwaitingReset[interactable];
-                if (testMask(eveCode, MOUSEMASK_LEFT_PRESS)) {
-                    if (leftReleased) {
-                        Event evvie = interactable.getEvent(MOUSEMASK_LEFT_RELEASE, new Vector3());
-                        if (evvie != null) newEvents.Add(evvie);
-                        //                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_LEFT_PRESS);
-                        removals.AddLast(interactable);
-                    }
+            System.Collections.Generic.Dictionary<Interactable, int> removals = new Dictionary<Interactable, int>();
+            foreach (Interactable interaction in eventsAwaitingReset.Keys) {
+                int alreadyEvented = eventsAwaitingReset[interaction];
+                foreach (MouseMaskTest maskTest in this.maskTests) {
+                    maskTest.testAndRetrieveNegativeEvent(removals, newEvents, interaction, mouse, alreadyEvented);
                 }
-                if (testMask(eveCode, MOUSEMASK_RIGHT_PRESS)) {
-                    if (rightReleased) {
-                        Event evvie = interactable.getEvent(MOUSEMASK_RIGHT_RELEASE, new Vector3());
-                        if (evvie != null) newEvents.Add(evvie);
-                        //                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_RIGHT_PRESS);
-                        removals.AddLast(interactable);
-                    }
-                }
-                if (testMask(eveCode, MOUSEMASK_OVER)) {
-                    Graphics3D graphics = (Graphics3D)interactable.getGraphics();
-                    if (graphics.intersects(ray) == -1) {
-                        Event evvie = interactable.getEvent(MOUSEMASK_OUT, new Vector3());
-                        if (evvie != null) newEvents.Add(evvie);
-                        //                        eventsAwaitingReset[interactable] = unsetMask(eveCode, MOUSEMASK_OVER);
-                        removals.AddLast(interactable);
-                    }
-                }
-                if ((eventsAwaitingReset[interactable] & MOUSEMASK_ACTION) == 0) removals.AddLast(interactable);
             }
-            // Remove ones that no longer have any mouse events to resetS
-            foreach (Interactable3D removal in removals) {
-                eventsAwaitingReset.Remove(removal);
+            // Remove ones that no longer have any mouse events to reset
+            foreach (KeyValuePair<Interactable, int> removal in removals) {
+                if (!testMask(removal.Value, MOUSEMASK_ACTION)) eventsAwaitingReset.Remove(removal.Key);
+                else eventsAwaitingReset[removal.Key] = removal.Value;
             }
 
         }
 
-        private void checkInteractableForInteraction(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents, Ray ray, Interactable3D interaction) {
+        private void checkInteractableForInteraction(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents, Ray ray, Interactable interaction) {
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            Graphics3D graphics = (Graphics3D)interaction.getGraphics();
             // Check to see if the mouse is intersecting the GameObject.
-            if (graphics.intersects(ray) >= 0) {
-                int alreadyEvented = eventsAwaitingReset.ContainsKey(interaction) ? eventsAwaitingReset[interaction] : 0;
-                // MOUSEMASK_OVER?
-                if (!testMask(alreadyEvented, MOUSEMASK_OVER)) {
-                    eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_OVER);
-                    Event evvie = interaction.getEvent(MOUSEMASK_OVER, graphics.intersectionPoint(ray) ?? new Vector3());
-                    if (evvie != null) newEvents.Add(evvie);
-                }
-                // MOUSEMASK_LEFT_CLICK?
-                if (!testMask(alreadyEvented, MOUSEMASK_LEFT_PRESS) && mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
-                    eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_LEFT_PRESS);
-                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS, graphics.intersectionPoint(ray) ?? new Vector3());
-                    if (evvie != null) newEvents.Add(evvie);
-                }
-                // MOUSEMASK_RIGHT_CLICK?
-                if (!testMask(alreadyEvented, MOUSEMASK_LEFT_PRESS) && mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
-                    eventsAwaitingReset[interaction] = setMask(alreadyEvented, MOUSEMASK_LEFT_PRESS);
-                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_PRESS, graphics.intersectionPoint(ray) ?? new Vector3());
-                    if (evvie != null) newEvents.Add(evvie);
+            Vector3? point = null;
+            if (interaction is Interactable3D) {
+                Graphics3D graphics = ((Interactable3D)interaction).getGraphics3D();
+                point = graphics.intersectionPoint(ray);
+            } else {
+                Graphics2D graphics = ((Interactable2D)interaction).getGraphics2D();
+                if (graphics.Visible) point = graphics.intersectionPoint(mouse.X, mouse.Y);
+            }
+            if (point.HasValue) {
+                foreach (MouseMaskTest maskTest in this.maskTests) {
+                    maskTest.testAndRetrievePositiveEvent(eventsAwaitingReset, newEvents, interaction, mouse, ray, point.Value);
                 }
             }
         }
+
+        private class MouseMaskTest {
+            public delegate bool IsActivated(MouseState mouse);
+            int mask;
+            IsActivated isActivated;
+            public MouseMaskTest(int mask, IsActivated isActivated) {
+                this.mask = mask;
+                this.isActivated = isActivated;
+            }
+            public void testAndRetrievePositiveEvent(Dictionary<Interactable, int> eventsAwaitingReset, List<Event> newEvents, Interactable interaction, MouseState mouse, Ray ray, Vector3 point) {
+                int alreadyEvented = eventsAwaitingReset.ContainsKey(interaction) ? eventsAwaitingReset[interaction] : 0; 
+                if (!testMask(alreadyEvented, mask) && isActivated(mouse)) {
+                    eventsAwaitingReset[interaction] = setMask(alreadyEvented, mask);
+                    Event evvie = interaction.getEvent(mask, point);
+                    if (evvie != null) newEvents.Add(evvie);
+                }
+            }
+            public void testAndRetrieveNegativeEvent(Dictionary<Interactable, int> removals, List<Event> newEvents, Interactable interaction, MouseState mouse, int alreadyEvented) {
+                if (testMask(alreadyEvented, mask) && !isActivated(mouse)) {
+                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_RELEASE, Vector3.Zero);
+                    if (evvie != null) newEvents.Add(evvie);
+                    removals.Add(interaction, unsetMask(alreadyEvented, mask));
+                }
+            }
+        }
+
+        private MouseMaskTest[] maskTests = new MouseMaskTest[] {
+            new MouseMaskTest(MOUSEMASK_OVER, (MouseState mouse) => true),
+            new MouseMaskTest(MOUSEMASK_LEFT_PRESS, (MouseState mouse) => mouse.LeftButton == ButtonState.Pressed),
+            new MouseMaskTest(MOUSEMASK_RIGHT_PRESS, (MouseState mouse) => mouse.RightButton == ButtonState.Pressed),
+        };
 
         private KeyboardFocus kf;
-        private const int repeatDelay = 200;
+        private const int repeatDelay = 20;
         private Dictionary<Microsoft.Xna.Framework.Input.Keys, double> repeatTimes = new Dictionary<Microsoft.Xna.Framework.Input.Keys, double>();
         public void registerKeyboardFocus(KeyboardFocus kf) {
             this.kf = kf;
@@ -217,9 +215,9 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         public override List<InteractionEngine.EventHandling.Event> input() {
             List<InteractionEngine.EventHandling.Event> events = base.input();
+            List<InteractionEngine.EventHandling.Event> keyboardEvents = new List<InteractionEngine.EventHandling.Event>();
             checkKeyboard(keyboardEvents);
             events.AddRange(keyboardEvents);
-            keyboardEvents.Clear();
             return events;
         }
 
@@ -231,7 +229,11 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
-                    if (gameObject is Graphable)
+                    if (gameObject is Graphable3D)
+                        ((Graphable)gameObject).getGraphics().onDraw();
+                }
+                foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
+                    if (gameObject is Graphable2D)
                         ((Graphable)gameObject).getGraphics().onDraw();
                 }
             }
@@ -243,8 +245,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         public override void initialize() {
             graphicsDevice = InteractionEngine.Engine.game.GraphicsDevice;
-            user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), InteractionEngine.Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
-            InteractionEngine.Engine.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
+            spriteBatch = new SpriteBatch(graphicsDevice);
             base.initialize();
         }
 
@@ -509,12 +510,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="ray">The ray</param>
         /// <returns>The distance at which the ray intersects this GameObject, or -1 if it does not intersect.</returns>
         public virtual float? intersects(Ray ray) {
-            //foreach (ModelMesh mesh in model.Meshes)
-            //{
-            float? distance = ray.Intersects(this.BoundingSphere);
-            if (distance.HasValue) return distance;
-            //}
-            return null;
+            return ray.Intersects(this.BoundingSphere);
         }
 
         public virtual Vector3? intersectionPoint(Ray ray) {
@@ -720,18 +716,113 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
     /**
      * Implemented by GameObjects that can be interacted with.
      */
-    public interface Interactable3D : Graphable3D {
-
-        /// <summary>
-        /// Gets an Event from this Interactable module.
-        /// </summary>
-        /// <param name="invoker">The invoker of this Event. If you have multiple possible invokers (ie. mouse click and mouse over) then we recommend you define constants for them.</param>
-        /// <param name="user">The User that invokes this Event. Needed often for associating User invokers with GameObject invokers.</param>
-        /// <param name="position">The position where the interaction happened, if applicable.</param>
-        /// <returns>An Event.</returns>
-        InteractionEngine.EventHandling.Event getEvent(int invoker, Vector3 position);
+    public interface Interactable3D : Interactable, Graphable3D {
 
     }
+
+    public interface Interactable2D : Interactable, Graphable2D {
+
+    }
+
+
+    /**
+     * Contains all graphics information and methods neccessary to drawing a GameObject in a 2D environment.
+     * Could effectively be called a "Sprite" class.
+     */
+    public class Graphics2D : Graphics {
+
+        // Contains a reference to this Graphics module's GameObject.
+        // Used for proper Updatable construction.
+        public readonly Graphable2D gameObject;
+        // Contains texture information for the sprite.
+        // Used for drawing the sprite.
+        private Microsoft.Xna.Framework.Graphics.Texture2D texture;
+        private string textureName;
+        private Color[] pixels;
+        private bool visible = true;
+        private float scale = 1;
+
+        /// <summary>
+        /// Loads the sprite from XNA's ContentPipeline.
+        /// </summary>
+        /// <param name="textureFileName">The filename of this GameObject's texture.</param>
+        public Graphics2D(Graphable2D gameObject, string textureName) {
+            this.gameObject = gameObject;
+            this.textureName = textureName;
+            if (Engine.game.GraphicsDevice != null) this.loadContent();
+        }
+
+        public Graphics2D(Graphable2D gameObject) {
+            this.gameObject = gameObject;
+        }
+
+        public string TextureName {
+            get { return textureName; }
+            set {
+                this.textureName = value;
+                if (Engine.game.GraphicsDevice != null) this.loadContent();
+            }
+        }
+
+        public bool Visible {
+            get { return visible; }
+            set { this.visible = value; }
+        }
+
+        public float Scale {
+            get { return this.scale; }
+            set { this.scale = value; }
+        }
+
+        /// <summary>
+        /// Draw this Graphics2D onto the SpriteBatch.
+        /// </summary>
+        public virtual void onDraw() {
+            if (this.texture == null || !this.visible) return;
+            SpriteBatch spriteBatch = ((UserInterface3D)InteractionEngine.Engine.userInterface).spriteBatch;
+            Vector3 position3 = this.gameObject.getLocation().getPoint();
+            Vector2 position = new Vector2(position3.X, position3.Y);
+            float rotationRadians = this.gameObject.getLocation().yaw ;
+            Vector2 origin = Vector2.Zero;
+            float layerDepth = 0;
+            spriteBatch.Draw(texture, position, (Rectangle?)null, Color.White, rotationRadians,
+                origin, scale, SpriteEffects.None, layerDepth);
+        }
+
+        /// <summary>
+        /// Returns true if a point is contained within this Graphics2D.
+        /// </summary>
+        /// <param name="x">The x-coordinate of the point.</param>
+        /// <param name="y">The y-coordinate of the point.</param>
+        /// <returns>True if the point is within the Graphics2D's boundaries; false otherwise.</returns>
+        public Vector3? intersectionPoint(double x, double y) {
+            Vector3 location3 = this.gameObject.getLocation().getPoint();
+            Vector3 inversePosition = Vector3.Multiply(location3, -1);
+            Matrix inverseRotation = Matrix.CreateRotationZ(-this.gameObject.getLocation().yaw);
+            Vector3 vector = new Vector3((float)x, (float)y, 0f);
+            vector = Vector3.Transform(vector, inverseRotation) + inversePosition;
+            int index = (int)vector.X * texture.Width + (int)vector.Y;
+            const int alphaLimit = 10;
+            if ((index < 0) || (index >= pixels.Length) || (pixels[index].A < alphaLimit)) return null;
+            return vector;
+        }
+
+        /// <summary>
+        /// Called during InteractionGame's LoadContent loop.
+        /// </summary>
+        public virtual void loadContent() {
+            texture = InteractionEngine.Engine.game.Content.Load<Texture2D>(textureName);
+            pixels = new Color[texture.Width * texture.Height];
+            texture.GetData<Color>(pixels);
+        }
+
+    }
+
+    public interface Graphable2D : Graphable {
+        Graphics2D getGraphics2D();
+    }
+
+
 
     public class User3D {
 

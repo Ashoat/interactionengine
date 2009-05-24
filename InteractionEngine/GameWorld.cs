@@ -269,7 +269,9 @@ namespace InteractionEngine {
         /// </summary>
         /// <param name="gameObject">The GameObject to be added.</param>
         public static void addGameObject(Constructs.GameObjectable gameObject) {
-            gameObjectHashlist.Add(gameObject.id, gameObject);
+            lock (gameObjectHashlist) {
+                gameObjectHashlist.Add(gameObject.id, gameObject);
+            }
         }
 
         /// <summary>
