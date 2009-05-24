@@ -96,10 +96,14 @@ namespace TestNetworkGame.Logic {
             }
             // Do the real stuff.b
             Engine.status = Engine.Status.MULTIPLAYER_CLIENT;
-            Engine.server = new Server("127.0.0.1");
-            // Make sure we know what region is the hosted region so we can kill it later
-            CreateRegion.onCreateRegion.Add(new Event(this.id, "getHostedRegion", null));
-            Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
+            try {
+                Engine.server = new Server("127.0.0.1");
+                // Make sure we know what region is the hosted region so we can kill it later
+                CreateRegion.onCreateRegion.Add(new Event(this.id, "getHostedRegion", null));
+                Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
+            } catch (GameWorldException) {
+                Engine.status = Engine.Status.SINGLE_PLAYER;
+            }
         }
 
         private LoadRegion hostedRegion;
