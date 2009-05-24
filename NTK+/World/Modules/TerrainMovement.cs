@@ -137,20 +137,6 @@ namespace NTKPlusGame.World.Modules {
 				this.lastUpdate.value = currentTime;
 			}
 		}
-		
-        /// <summary>
-        /// Constructor for the client-side.
-        /// </summary>
-        /// <param name="gameObject">The GameObject of whose TerrainMovement this is.</param>
-        /// <param name="reader">The reader from which to read teh field datas.</param>
-        protected internal TerrainMovement(TerrainMovable gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) : base(gameObject, reader) {
-            /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
-            roomTerrainMovement = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
-            else reader.Position--;
-            this.gameObject = gameObject;*/
-        }
 
     }
 

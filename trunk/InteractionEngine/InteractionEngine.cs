@@ -51,8 +51,8 @@ namespace InteractionEngine {
         /// WTF?!?!?!? NOTHING!!!
         /// </summary>
         protected override void LoadContent() {
-            this.graphics.PreferredBackBufferWidth = width;
-            this.graphics.PreferredBackBufferHeight = height;
+            if (width > 0) this.graphics.PreferredBackBufferWidth = width;
+            if (height > 0) this.graphics.PreferredBackBufferHeight = height;
             this.graphics.ApplyChanges();
             this.graphics.GraphicsDevice.Clear(this.color);
             foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) { 
@@ -69,7 +69,8 @@ namespace InteractionEngine {
         /// <param name="width"></param>
         /// <param name="height"></param>
         public void setWindowSize(int width, int height) {
-            this.height = height; this.width = width;
+            this.height = height;
+            this.width = width;
         }
 
         Microsoft.Xna.Framework.Graphics.Color color;

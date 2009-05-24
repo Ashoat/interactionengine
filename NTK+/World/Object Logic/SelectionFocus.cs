@@ -83,9 +83,13 @@ namespace NTKPlusGame.World {
             Selectable previous = currentlySelected.value;
             if (previous == null) {
                 this.currentlySelected.value = newSelection;
+            //    if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
             } else {
                 bool actionAccepted = previous.acceptSecondSelection(newSelection, param);
-                if (!actionAccepted) this.currentlySelected.value = newSelection;
+                if (!actionAccepted) {
+                    this.currentlySelected.value = newSelection;
+           //         if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
+                }
             }
         }
 

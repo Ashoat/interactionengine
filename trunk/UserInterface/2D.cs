@@ -64,7 +64,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_OUT?
                 if (!graphics.contains(mouse.X, mouse.Y)) {
-                    EventHandling.Event evvie = interactable.getEvent(MOUSE_OUT);
+                    EventHandling.Event evvie = interactable.getEvent(MOUSE_OUT, new Vector3(mouse.X, mouse.Y, 0));
                     if (evvie != null) newEvents.Add(evvie);
                     mouseOvered.RemoveAt(i);
                 }
@@ -75,7 +75,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_LEFT_RELEASE?
                 if (!graphics.contains(mouse.X, mouse.Y) || mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released) {
-                    EventHandling.Event evvie = interactable.getEvent(MOUSE_LEFT_RELEASE);
+                    EventHandling.Event evvie = interactable.getEvent(MOUSE_LEFT_RELEASE, new Vector3(mouse.X, mouse.Y, 0));
                     if (evvie != null) newEvents.Add(evvie);
                     mouseLeftClicked.RemoveAt(i);
                 }
@@ -86,7 +86,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                 Graphics2D graphics = (Graphics2D)((Graphable)interactable).getGraphics();
                 // MOUSE_RIGHT_RELEASE?
                 if (!graphics.contains(mouse.X, mouse.Y) || mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released) {
-                    EventHandling.Event evvie = interactable.getEvent(MOUSE_RIGHT_RELEASE);
+                    EventHandling.Event evvie = interactable.getEvent(MOUSE_RIGHT_RELEASE, new Vector3(mouse.X, mouse.Y, 0));
                     if (evvie != null) newEvents.Add(evvie);
                     mouseRightClicked.RemoveAt(i);
                 }
@@ -104,19 +104,19 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                             // MOUSE_OVER?
                             if (!mouseOvered.Contains(interaction)) {
                                 mouseOvered.Add(interaction);
-                                EventHandling.Event evvie = interaction.getEvent(MOUSE_OVER);
+                                EventHandling.Event evvie = interaction.getEvent(MOUSE_OVER, new Vector3(mouse.X, mouse.Y, 0));
                                 if (evvie != null) newEvents.Add(evvie);
                             }
                             // MOUSE_LEFT_CLICK?
                             if (mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseLeftClicked.Contains(interaction)) {
                                 mouseLeftClicked.Add(interaction);
-                                EventHandling.Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK);
+                                EventHandling.Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK, new Vector3(mouse.X, mouse.Y, 0));
                                 if (evvie != null) newEvents.Add(evvie);
                             }
                             // MOUSE_RIGHT_CLICK?
                             if (mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseRightClicked.Contains(interaction)) {
                                 mouseRightClicked.Add(interaction);
-                                EventHandling.Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK);
+                                EventHandling.Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK, new Vector3(mouse.X, mouse.Y, 0));
                                 if (evvie != null) newEvents.Add(evvie);
                             }
                         }

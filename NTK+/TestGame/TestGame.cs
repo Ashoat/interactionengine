@@ -27,7 +27,7 @@ namespace Game
             // Initialize the Engine.
             Engine.game = new InteractionGame();
             Engine.status = Engine.Status.SINGLE_PLAYER;
-            Engine.game.setWindowSize(1000, 1100);
+            //Engine.game.setWindowSize(1000, 1100);
             Engine.game.setBackgroundColor(Microsoft.Xna.Framework.Graphics.Color.AliceBlue);
             // Initialize the user and their personal LoadRegion.
             UserInterface3D interface3D = new UserInterface3D();
@@ -132,8 +132,8 @@ namespace Game
         }
 
         public override Event getEvent(int invoker, Vector3 position) {
-            this.debugSphere.value.setPosition(this.graphics.BoundingSphere.Center, this.graphics.BoundingSphere.Radius);
             return base.getEvent(invoker, position);
+            //this.debugSphere.value.setPosition(this.graphics.BoundingSphere.Center, this.graphics.BoundingSphere.Radius);
         }
 
     }

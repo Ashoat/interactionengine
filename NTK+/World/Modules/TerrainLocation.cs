@@ -44,20 +44,6 @@ namespace NTKPlusGame.World.Modules {
         }
 
         /// <summary>
-        /// Constructor for the client-side.
-        /// </summary>
-        /// <param name="gameObject">The GameObject of whose Location this is.</param>
-        /// <param name="reader">The reader from which to read teh field datas.</param>
-        internal TerrainLocation(TerrainLocatable gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) : base(gameObject) {
-            /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
-            roomLocation = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
-            else reader.Position--;
-            this.gameObject = gameObject;*/
-        }
-
-        /// <summary>
         /// Translates this Location along the horizontal plane.
         /// Also adjusts to the altitude of the terrain if this Location is grounded.
         /// </summary>

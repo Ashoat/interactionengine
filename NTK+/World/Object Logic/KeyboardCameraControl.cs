@@ -65,16 +65,14 @@ namespace NTKPlusGame.World {
         public override void construct() {
         }
 
-
-
         #region Keyboardable Members
 
         public void keyPressed(Microsoft.Xna.Framework.Input.Keys key) {
             Camera camera = NTKPlusUser.localUser.camera;
-            if (key == Keys.Up) camera.ChangeAzimuth(camera.Target, Vector3.Up, 10f);
-            if (key == Keys.Down) camera.ChangeAzimuth(camera.Target, Vector3.Up, 10f);
-            if (key == Keys.Left) camera.RotateUponAxis(camera.Target, Vector3.Up, 10f);
-            if (key == Keys.Right) camera.RotateUponAxis(camera.Target, Vector3.Up, 10f);
+            if (key == Keys.Up) camera.ChangeAzimuth(camera.Target, Vector3.Up, 4f);
+            if (key == Keys.Down) camera.ChangeAzimuth(camera.Target, Vector3.Up, -4f);
+            if (key == Keys.Left) camera.RotateUponAxis(camera.Target, Vector3.Up, 4f);
+            if (key == Keys.Right) camera.RotateUponAxis(camera.Target, Vector3.Up, -4);
         }
 
         public void focusLost(Keyboardable newFocusHolder) {

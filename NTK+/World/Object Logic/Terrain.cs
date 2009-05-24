@@ -373,16 +373,18 @@ namespace NTKPlusGame.World {
             ib.SetData<int>(indices);
         }
 
-        private void InitDefaultEffectVal()
-        {
+        private void InitDefaultEffectVal() {
+
+            effect = new ModelEffect();
+            effect.Initialize(UserInterface3D.user.camera);
             //updateWorld();
 
-            effect.EnableDefaultLighting();
+            //effect.EnableDefaultLighting();
             //effect.PreferPerPixelLighting = true;
             effect.TextureEnabled = true;
             effect.Texture = tex;
             effect.SpecularColor = new Vector3(.4f, .4f, .4f);
-            effect.PreferPerPixelLighting = true;
+            //effect.PreferPerPixelLighting = true;
             effect.SpecularPower = 30f;
             effect.CommitProperties();
             //effect.FogEnabled = true;
@@ -404,7 +406,8 @@ namespace NTKPlusGame.World {
             foreach (EffectPass pass in actualEffect.CurrentTechnique.Passes) {
                 pass.Begin();
                 // Draw the mesh
-                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
+                //UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
+                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles/3);
                 pass.End();
             }
             actualEffect.End();
@@ -413,9 +416,6 @@ namespace NTKPlusGame.World {
         private void loadContent() {
 
             Game.TestGame.initializeStuff();
-
-            effect = new ModelEffect();
-            effect.Initialize(UserInterface3D.user.camera);
 
             Texture2D texAsset = Engine.game.Content.Load<Texture2D>("Amazonia"); //tex1.png //Amazonia.jpg
             Texture2D mapAsset = Engine.game.Content.Load<Texture2D>("heightImage"); //heightImage
@@ -476,7 +476,7 @@ namespace NTKPlusGame.World {
             }
 
             public override void onDraw() {
-                gameObject.onDraw();
+               gameObject.onDraw();
             }
 
             public override void loadContent() {

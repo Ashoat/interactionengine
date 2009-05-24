@@ -29,46 +29,10 @@ namespace NTKPlusGame.World.Modules {
      * -- Bounding box/sphere
      */
 
-    public class Selection {
-
-        // Contains a reference to the GameObject this Selection module is associated with.
-        // Used for constructing Updatables.
-        private readonly Selectable gameObject;
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="gameObject">The GameObject whose Selection this is.</param>
-        public Selection(Selectable gameObject) {
-            this.gameObject = gameObject;
-        }
-
-        /// <summary>
-        /// Constructor for the client-side.
-        /// </summary>
-        /// <param name="gameObject">The GameObject of whose Selection this is.</param>
-        /// <param name="reader">The reader from which to read teh field datas.</param>
-        internal Selection(GameObject gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
-            roomSelection = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
-            else reader.Position--;
-            this.gameObject = gameObject;*/
-        }
-
-    }
-
     /**
      * Implemented by GameObjects that have the Selection module.
      */
     public interface Selectable : InteractionEngine.UserInterface.ThreeDimensional.Interactable3D {
-
-        /// <summary>
-        /// Returns the Selection module of this GameObject.
-        /// </summary>
-        /// <returns>The Selection module associated with this GameObject.
-        Selection getSelection();
 
         /// <summary>
         /// Handles the event where another GameObject is selected while this one possesses the SelectionFocus.

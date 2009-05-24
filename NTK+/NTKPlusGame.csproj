@@ -92,7 +92,6 @@
     <Compile Include="World\Modules\Combat.cs" />
     <Compile Include="World\Modules\TerrainMovement.cs" />
     <Compile Include="World\NTKPlusUser.cs" />
-    <Compile Include="World\Modules\Physics.cs" />
     <Compile Include="World\Modules\Selection.cs" />
     <Compile Include="World\Modules\Stats.cs" />
     <Compile Include="World\Modules\TerrainLocation.cs" />

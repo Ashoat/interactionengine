@@ -56,7 +56,7 @@ namespace InteractionEngine.UserInterface.Text {
                         ((Graphable)gameObject).getGraphics().onDraw();
                     // Go through every GameObject and see if they can be interacted with
                     if (gameObject is InteractionEngine.EventHandling.Interactable)
-                        options.Add(((InteractionEngine.EventHandling.Interactable)gameObject).getEvent(TEXT_EVENT_CHOSEN));
+                        options.Add(((InteractionEngine.EventHandling.Interactable)gameObject).getEvent(TEXT_EVENT_CHOSEN, Microsoft.Xna.Framework.Vector3.Zero));
                 }
             }
             for (int i = 0; i < options.Count; i++)

@@ -40,15 +40,6 @@ namespace NTKPlusGame.World {
         public abstract InteractionEngine.UserInterface.Graphics getGraphics();
 
         /// <summary>
-        /// Returns the Selection module of this GameObject.
-        /// </summary>
-        /// <returns>The Selection module associated with this GameObject.
-        private Selection selection;
-        public Selection getSelection() {
-            return selection;
-        }
-
-        /// <summary>
         /// Returns the Stats module of this GameObject.
         /// </summary>
         /// <returns>The Stats module associated with this GameObject.
@@ -91,7 +82,6 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
         public override void construct() {
-            this.selection = new Selection(this);
             this.stats = new Stats(this);
             this.terrainMovement = new TerrainMovement(this);
             this.addEventMethod(MOVE_EVENT_HASH, new EventMethod(onSelected));

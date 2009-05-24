@@ -21,11 +21,15 @@ using NTKPlusGame.World.Modules;
 using InteractionEngine.UserInterface;
 using InteractionEngine.EventHandling;
 using InteractionEngine.Networking;
+using InteractionEngine.UserInterface.ThreeDimensional;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using InteractionEngine.Constructs.Datatypes;
 
 namespace NTKPlusGame.World {
 
 
-    public class InfoDisplayBox : GameObject, Locatable { //, Graphable {
+    public class InfoDisplayBox : GameObject, Locatable, Graphable2D {
 
         #region FACTORY
 
@@ -55,6 +59,8 @@ namespace NTKPlusGame.World {
 
         public const string DESCRIPTION_CHANGE_EVENT_HASH = "description change";
 
+        private UpdatableGameObject<InfoDisplayable> onDisplay;
+
         /// <summary>
         /// Returns the Location module of this GameObject.
         /// </summary>
@@ -68,8 +74,11 @@ namespace NTKPlusGame.World {
         /// Returns the Graphics module of this GameObject.
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.
-        private InteractionEngine.UserInterface.Graphics graphics;
+        private InfoDisplayBoxGraphics graphics;
         public InteractionEngine.UserInterface.Graphics getGraphics() {
+            return graphics;
+        }
+        public Graphics2D getGraphics2D() {
             return graphics;
         }
 
@@ -79,16 +88,67 @@ namespace NTKPlusGame.World {
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
         public override void construct() {
             this.location = new Location(this);
-            this.graphics = null; // TODO
+            this.graphics = new InfoDisplayBoxGraphics(this);
+
             this.addEventMethod(DESCRIPTION_CHANGE_EVENT_HASH, new EventMethod(changeActiveDescription));
         }
 
         public void changeActiveDescription(Client client, object param) {
             string description = (string)param;
-            // TODO
+            this.graphics.description = description;
         }
 
-        // TODO
+        public void setDisplayedObject(InfoDisplayable display) {
+            this.onDisplay.value = display;
+            this.graphics.description = display.getInfoDisplay().Description;
+            this.graphics.name = display.getInfoDisplay().DisplayName;
+            this.graphics.faceIcon = Engine.game.Content.Load<Texture2D>(display.getInfoDisplay().FaceIcon);
+            // TODO: tabs
+        }
+
+    }
+
+    public class InfoDisplayBoxGraphics : Graphics2D {
+
+        public string name;
+        public string description;
+        public Texture2D faceIcon;
+        private SpriteFont font;
+        private readonly Vector2 namePosition = new Vector2(20, 400);
+        private readonly Vector2 descriptionPosition = new Vector2(20, 480);
+        private readonly Vector2 faceIconPosition = new Vector2(20, 420);
+        private readonly Color textColor = Color.White;
+
+        public InfoDisplayBoxGraphics(InfoDisplayBox gameObject)
+            : base(gameObject, "") {
+
+        }
+
+        public override void onDraw() {
+            base.onDraw();
+
+            SpriteBatch spriteBatch = ((UserInterface3D)Engine.userInterface).spriteBatch;
+
+            // print name
+            spriteBatch.DrawString(font, name, namePosition, textColor);
+
+            // print description
+            string[] lines = description.Split(new char[] { '\n' });
+            Vector2 linePosition = descriptionPosition;
+            foreach (string line in lines) {
+                spriteBatch.DrawString(font, line, linePosition, textColor);
+                linePosition.Y += font.LineSpacing;
+            }
+
+            // draw face icon
+            spriteBatch.Draw(faceIcon, faceIconPosition, Color.White);
+
+        }
+
+        public override void loadContent() {
+            base.loadContent();
+            font = Engine.game.Content.Load<SpriteFont>("");
+        }
 
     }
 

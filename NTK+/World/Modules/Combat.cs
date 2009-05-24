@@ -46,20 +46,6 @@ namespace NTKPlusGame.World.Modules {
             gameObject.getStats().registerStatType(Combat.HEALTH_STAT);
         }
 
-        /// <summary>
-        /// Constructor for the client-side.
-        /// </summary>
-        /// <param name="gameObject">The GameObject of whose Combat this is.</param>
-        /// <param name="reader">The reader from which to read teh field datas.</param>
-        internal Combat(GameObject gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
-            roomCombat = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
-            else reader.Position--;
-            this.gameObject = gameObject;*/
-        }
-
         public int getHealth() {
             return this.gameObject.getStats().getStat(Combat.HEALTH_STAT);
         }

@@ -25,6 +25,7 @@ using InteractionEngine.UserInterface;
 using InteractionEngine.UserInterface.ThreeDimensional;
 using System;
 using InteractionEngine.EventHandling;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace NTKPlusGame.World.Modules {
 
@@ -57,27 +58,28 @@ namespace NTKPlusGame.World.Modules {
             this.description = new UpdatableString(gameObject);
         }
 
-        /// <summary>
-        /// Constructor for the client-side.
-        /// </summary>
-        /// <param name="gameObject">The GameObject of whose InfoDisplay this is.</param>
-        /// <param name="reader">The reader from which to read teh field datas.</param>
-        internal InfoDisplay(GameObject gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
-            roomInfoDisplay = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
-            else reader.Position--;
-            this.gameObject = gameObject;*/
+        public string FaceIcon {
+            get { return this.faceIcon.value; }
+            set { this.faceIcon.value = value; }
         }
-
-        // TODO
+        public string DisplayName {
+            get { return this.displayName.value; }
+            set { this.displayName.value = value; }
+        }
+        public string Description {
+            get { return this.description.value; }
+            set { this.description.value = value; }
+        }
 
     }
 
     public class InfoTab {
+        private const int MAXIMUM_BUTTONS = 10;
+        private const int BUTTON_LENGTH = 50;
+        private const int BUTTON_PADDING = 10;
+        private static readonly Vector2 tabPaneOrigin = new Vector2(80, 400);
+
         private readonly string name;
-        private const int MAXIMUM_BUTTONS = 8;
         // TODO: Updatable?
         private readonly UpdatableGameObject<InfoButton>[] buttons = new UpdatableGameObject<InfoButton>[MAXIMUM_BUTTONS];
         private int buttonCount = 0;
@@ -91,14 +93,30 @@ namespace NTKPlusGame.World.Modules {
 
         public void addInfoButton(InfoButton button) {
             if (buttonCount == MAXIMUM_BUTTONS) throw new Exception("Too many buttons in a tab!");
+            button.getLocation().moveTo(calculatePositionOfButton(buttonCount));
             buttons[buttonCount++].value = button;
         }
+
+        private Vector3 calculatePositionOfButton(int index) {
+            return new Vector3(tabPaneOrigin.X + (BUTTON_LENGTH+BUTTON_PADDING)*(index%5), tabPaneOrigin.Y + (BUTTON_LENGTH+BUTTON_PADDING)*(index/5), 0);
+        }
+
+        public void setVisible(bool visible) {
+            foreach (UpdatableGameObject<InfoButton> button in buttons) {
+                if (button.value != null) button.value.getGraphics2D().Visible = visible;
+            }
+        }
+
+        public void onDraw(SpriteBatch spriteBatch, SpriteFont spriteFont) {
+
+        }
+
 
         // TODO
 
     }
 
-    public class InfoButton : GameObject, Interactable {
+    public class InfoButton : GameObject, Interactable2D {
 
         #region FACTORY
 
@@ -128,7 +146,6 @@ namespace NTKPlusGame.World.Modules {
 
         private GameObject gameObject;
         private string onClickHash;
-        private string imageResource;
         private string name;
         private string description;
 
@@ -145,29 +162,35 @@ namespace NTKPlusGame.World.Modules {
         /// Returns the Graphics module of this GameObject.
         /// </summary>
         /// <returns>The Graphics module associated with this GameObject.
-        private InteractionEngine.UserInterface.Graphics graphics;
+        private InteractionEngine.UserInterface.ThreeDimensional.Graphics2D graphics2D;
         public InteractionEngine.UserInterface.Graphics getGraphics() {
-            return graphics;
+            return graphics2D;
+        }
+        public InteractionEngine.UserInterface.ThreeDimensional.Graphics2D getGraphics2D() {
+            return graphics2D;
         }
 
         public override void construct() {
             this.location = new Location(this);
-            this.graphics = null; // TODO
+            this.graphics2D = new Graphics2D(this);
         }
             
         protected void initialize(GameObject gameObject, string onClickHash, string imageResource, string name, string description) {
             this.gameObject = gameObject;
             this.onClickHash = onClickHash;
-            this.imageResource = imageResource;
             this.name = name;
             this.description = description;
+            this.graphics2D.TextureName = imageResource;
         }
 
-        public Event getEvent(int invoker) {
-            if (invoker == UserInterface3D.setMask(UserInterface3D.MOUSEMASK_LEFT_PRESS, UserInterface3D.MOUSEMASK_OVER)) {
+        public Event getEvent(int invoker, Vector3 param) {
+            if (invoker == UserInterface3D.MOUSEMASK_OVER) {
                 return new Event(NTKPlusUser.localUser.infoDisplayBox.id, InfoDisplayBox.DESCRIPTION_CHANGE_EVENT_HASH, this.name + "\n" + this.description);
             }
-            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
+            else if (invoker == UserInterface3D.MOUSEMASK_OUT) {
+                return new Event(NTKPlusUser.localUser.infoDisplayBox.id, InfoDisplayBox.DESCRIPTION_CHANGE_EVENT_HASH, "");
+            }
+            else if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
                 return new Event(gameObject.id, onClickHash, null);
             }
             return null;

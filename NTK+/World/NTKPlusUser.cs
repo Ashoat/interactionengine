@@ -45,7 +45,7 @@ namespace NTKPlusGame.World {
             : base() {
             this.selectionFocus = GameObject.createGameObject<SelectionFocus>(this.localLoadRegion);
             this.keyboardFocus = GameObject.createGameObject<KeyboardFocus>(this.localLoadRegion);
-            this.infoDisplayBox = GameObject.createGameObject<InfoDisplayBox>(this.localLoadRegion);
+         //   this.infoDisplayBox = GameObject.createGameObject<InfoDisplayBox>(this.localLoadRegion);
             this.keyboardCameraControl = GameObject.createGameObject<KeyboardCameraControl>(this.localLoadRegion);
             this.keyboardFocus.getFocus(keyboardCameraControl);
             ((UserInterface3D)Engine.userInterface).registerKeyboardFocus(keyboardFocus);

@@ -103,20 +103,6 @@ namespace NTKPlusGame.World.Modules {
             this.stats[stat].value += modification;
         }
 
-        /// <summary>
-        /// Constructor for the client-side.
-        /// </summary>
-        /// <param name="gameObject">The GameObject of whose Stats this is.</param>
-        /// <param name="reader">The reader from which to read teh field datas.</param>
-        protected internal Stats(GameObject gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)Engine.createField(reader);
-            roomStats = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == Engine.UPDATE_FIELD) Engine.updateField(reader);
-            else reader.Position--;
-            this.gameObject = gameObject;*/
-        }
-
         /**
          * Class representing type of stat... basically encapsulates a string, but with stricter type-safety.
          * Meant to be used as a static readonly variable.

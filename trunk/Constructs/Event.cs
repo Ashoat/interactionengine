@@ -65,7 +65,7 @@ namespace InteractionEngine.EventHandling {
         /// <param name="invoker">The invoker of this Event. If you have multiple possible invokers (ie. mouse click and mouse over) then we recommend you define constants for them.</param>
         /// <param name="user">The User that invokes this Event. Needed often for associating User invokers with GameObject invokers.</param>
         /// <returns>An Event.</returns>
-        Event getEvent(int invoker);
+        Event getEvent(int invoker, Microsoft.Xna.Framework.Vector3 param);
 
     }
 
