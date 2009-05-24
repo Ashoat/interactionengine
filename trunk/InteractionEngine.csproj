@@ -99,6 +99,7 @@
     <Compile Include="Networking\Client.cs" />
     <Compile Include="UserInterface\2D.cs" />
     <Compile Include="UserInterface\3D.cs" />
+    <Compile Include="UserInterface\Audio.cs" />
     <Compile Include="UserInterface\Graphics.cs" />
     <Compile Include="UserInterface\Text.cs" />
     <Compile Include="UserInterface\UserInterface.cs" />

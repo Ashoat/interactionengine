@@ -42,7 +42,7 @@ namespace InteractionEngine.Networking {
         // Used so that the GameWorld can deal with the connection however it wants.
         public static System.Collections.Generic.List<EventHandling.Event> onDisconnect = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
 
-        /// <summary>
+        /// <summary>i
         /// Connect to a server at the specified IP.
         /// </summary>
         /// <param name="ipAddress">The IP address where we can find the server at.</param>
@@ -50,7 +50,11 @@ namespace InteractionEngine.Networking {
             if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_CLIENT)
                 throw new GameWorldException("You can only construct a Server object on a client. This object is intended to manage interfacing with the server for a client.");
             this.tcpClient = new System.Net.Sockets.TcpClient();
-            this.tcpClient.Connect(new System.Net.IPEndPoint(System.Net.IPAddress.Parse(ipAddress), Client.listeningPort));
+            try {
+                this.tcpClient.Connect(new System.Net.IPEndPoint(System.Net.IPAddress.Parse(ipAddress), Client.listeningPort));
+            } catch (System.Net.Sockets.SocketException e) {
+                throw new GameWorldException("The specified client could not be connected to.", e);
+            }
             this.reader = new System.IO.BinaryReader(tcpClient.GetStream());
             this.writer = new System.IO.BinaryWriter(tcpClient.GetStream());
             this.updateReaderThread = new System.Threading.Thread(new System.Threading.ThreadStart(readUpdates));

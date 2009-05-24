@@ -214,13 +214,15 @@ namespace InteractionEngine {
         /// Get and process all Events sent by Clients.
         /// </summary>
         private static void handleInput() {
-            foreach (Networking.Client client in Networking.Client.clientList) {
-                // Get the events.
-                System.Collections.Generic.List<EventHandling.Event> events = client.getEvents();
-                // Process the events.
-                foreach (EventHandling.Event eventObject in events) {
-                    if (eventObject != null && client.hasPermission(eventObject.gameObjectID))
-                        Engine.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(client, eventObject.parameter);
+            lock (Networking.Client.clientList) {
+                foreach (Networking.Client client in Networking.Client.clientList) {
+                    // Get the events.
+                    System.Collections.Generic.List<EventHandling.Event> events = client.getEvents();
+                    // Process the events.
+                    foreach (EventHandling.Event eventObject in events) {
+                        if (eventObject != null && client.hasPermission(eventObject.gameObjectID))
+                            Engine.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(client, eventObject.parameter);
+                    }
                 }
             }
         }
@@ -229,16 +231,21 @@ namespace InteractionEngine {
         /// Send an update to every User. This method is only used on the server.
         /// </summary>
         private static void sendUpdates() {
-            // Send an update to every client.
-            foreach (Networking.Client client in Networking.Client.clientList) {
-                // Update each of the client's LoadRegions.
-                foreach (InteractionEngine.Constructs.LoadRegion loadRegion in client.getLoadRegionList()) {
-                    foreach (Networking.Update update in loadRegion.getUpdates())
-                        client.sendUpdate(update);
+            lock (Networking.Client.clientList) {
+                // Send an update to every client.
+                foreach (Networking.Client client in Networking.Client.clientList) {
+                    // Update each of the client's LoadRegions.
+                    foreach (InteractionEngine.Constructs.LoadRegion loadRegion in client.getLoadRegionList()) {
+                        foreach (Networking.Update update in loadRegion.getUpdates())
+                            client.sendUpdate(update);
+                    }
                 }
             }
             // Reset the cache in every LoadRegion.
-            foreach (Constructs.LoadRegion region in getLoadRegionList()) region.resetBuffer();
+            System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>.ValueCollection loadRegionList = getLoadRegionList();
+            lock (loadRegionList) {
+                foreach (Constructs.LoadRegion region in loadRegionList) region.resetBuffer();
+            }
         }
 
         #endregion

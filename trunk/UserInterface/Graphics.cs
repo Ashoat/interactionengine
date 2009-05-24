@@ -9,7 +9,6 @@
 |                                          |
 |••••••••••••••••••••••••••••••••••••••••••|
 | CLIENT                                   |
-| * Interactable                 Interface |
 | * Graphics                     Interface |
 | * Graphable                    Interface |
 \*••••••••••••••••••••••••••••••••••••••••*/
