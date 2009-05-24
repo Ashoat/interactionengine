@@ -664,6 +664,15 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             updateCamera();
         }
 
+        /// <summary>
+        /// Zooms in/out.
+        /// </summary>
+        /// <param name="dist"></param>
+        public void Zoom(float dist)
+        {
+            SetPositionLockTarget(this.Position + dist * this.Heading);
+        }
+
         public void SetTargetDisplacePosition(Vector3 tar) {
             position += tar - target;
             target = tar;
