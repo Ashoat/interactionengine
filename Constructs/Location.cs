@@ -18,7 +18,6 @@ namespace InteractionEngine.Constructs {
     /**
      * Holds all information and methods regarding location.
      */
-    
     public class Location {
 
         // Contains a reference to the GameObject this Location module is associated with.
@@ -26,8 +25,10 @@ namespace InteractionEngine.Constructs {
         private Locatable gameObject;
         // Contains this location in the form of a three-dimensional point.
         private InteractionEngine.Constructs.Datatypes.UpdatableVector point;
-        // Contains the heading of this point. Yaw, pitch, and roll, in that order
+        // Contains the rotation of this point. Yaw, pitch, and roll, in that order
+        private InteractionEngine.Constructs.Datatypes.UpdatableVector rotation;
         private InteractionEngine.Constructs.Datatypes.UpdatableVector heading;
+        private InteractionEngine.Constructs.Datatypes.UpdatableVector strafe;
 
         /// <summary>
         /// Constructor.
@@ -36,21 +37,7 @@ namespace InteractionEngine.Constructs {
         public Location(Locatable gameObject) {
             this.gameObject = gameObject;
             this.point = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
-            this.heading = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
-        }
-
-        /// <summary>
-        /// Constructor for the client-side.
-        /// </summary>
-        /// <param name="gameObject">The GameObject of whose Location this is.</param>
-        /// <param name="reader">The reader from which to read teh field datas.</param>
-        internal Location(GameObject gameObject, Microsoft.Xna.Framework.Net.PacketReader reader) {
-            /*byte transferCode = reader.ReadByte();
-            UpdatableInteger intty = (UpdatableInteger)GameWorld.createField(reader);
-            roomLocation = new UpdatableGameObject<Room>(intty);
-            if (reader.ReadByte() == GameWorld.UPDATE_FIELD) GameWorld.updateField(reader);
-            else reader.Position--;
-            this.gameObject = gameObject;*/
+            this.rotation = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
         }
 
         /// <summary>
@@ -61,23 +48,70 @@ namespace InteractionEngine.Constructs {
             return point.value;
         }
 
+        private void calculateHeadingAndStrafe() {
+            Microsoft.Xna.Framework.Vector3 defaultHeading = Microsoft.Xna.Framework.Vector3.Forward;
+            Microsoft.Xna.Framework.Matrix pitchRotation = Microsoft.Xna.Framework.Matrix.CreateFromAxisAngle(Microsoft.Xna.Framework.Vector3.UnitX, this.pitch);
+            Microsoft.Xna.Framework.Matrix yawRotation = Microsoft.Xna.Framework.Matrix.CreateFromAxisAngle(Microsoft.Xna.Framework.Vector3.UnitY, this.yaw);
+            this.heading.value = Microsoft.Xna.Framework.Vector3.Transform(defaultHeading, pitchRotation * yawRotation);
+
+            Microsoft.Xna.Framework.Vector3 defaultStrafe = Microsoft.Xna.Framework.Vector3.Right;
+            Microsoft.Xna.Framework.Matrix rollRotation = Microsoft.Xna.Framework.Matrix.CreateFromAxisAngle(Microsoft.Xna.Framework.Vector3.UnitZ, this.roll);
+            this.strafe.value = Microsoft.Xna.Framework.Vector3.Transform(defaultStrafe, rollRotation * yawRotation);
+        }
+
+        private void calculateEulerRotation() {
+            float yaw = (float)System.Math.Atan2(this.heading.value.X, this.heading.value.Z);
+            float pitch = (float)System.Math.Atan2(this.heading.value.Y, new Microsoft.Xna.Framework.Vector2(this.heading.value.X, this.heading.value.Z).Length());
+            float roll = (float)System.Math.Atan2(this.strafe.value.Y, new Microsoft.Xna.Framework.Vector2(this.strafe.value.X, this.strafe.value.Z).Length());
+            this.rotation.value = new Microsoft.Xna.Framework.Vector3(yaw, pitch, roll);
+        }
+
         // In radians
-        public virtual Microsoft.Xna.Framework.Vector3 getHeading() {
-            return heading.value;
+        public virtual Microsoft.Xna.Framework.Vector3 EulerRotation {
+            get { return rotation.value; }
+            set {
+                this.rotation.value = value;
+                calculateHeadingAndStrafe();
+            }
+        }
+
+        public virtual Microsoft.Xna.Framework.Vector3 Heading {
+            get { return heading.value; }
+            set {
+                this.heading.value = value;
+                calculateEulerRotation();
+            }
+        }
+
+        public virtual Microsoft.Xna.Framework.Vector3 Strafe {
+            get { return strafe.value; }
+            set {
+                this.strafe.value = value;
+                calculateEulerRotation();
+            }
         }
 
         // In radians
         public virtual float yaw {
-            get { return this.heading.value.X; }
-            set { this.heading.value = new Microsoft.Xna.Framework.Vector3(value, this.heading.value.Y, this.heading.value.Z); }
+            get { return this.rotation.value.X; }
+            set {
+                this.rotation.value = new Microsoft.Xna.Framework.Vector3(value, this.rotation.value.Y, this.rotation.value.Z);
+                calculateHeadingAndStrafe();
+            }
         }
         public virtual float pitch {
-            get { return this.heading.value.Y; }
-            set { this.heading.value = new Microsoft.Xna.Framework.Vector3(this.heading.value.X, value, this.heading.value.Z); }
+            get { return this.rotation.value.Y; }
+            set {
+                this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.rotation.value.X, value, this.rotation.value.Z);
+                calculateHeadingAndStrafe();
+            }
         }
         public virtual float roll {
-            get { return this.heading.value.Z; }
-            set { this.heading.value = new Microsoft.Xna.Framework.Vector3(this.heading.value.X, this.heading.value.Y, value); }
+            get { return this.rotation.value.Z; }
+            set {
+                this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.rotation.value.X, this.rotation.value.Y, value);
+                calculateHeadingAndStrafe();
+            }
         }
 
         public virtual void moveTo(Microsoft.Xna.Framework.Vector3 position) {

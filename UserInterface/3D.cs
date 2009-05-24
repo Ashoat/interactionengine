@@ -261,18 +261,18 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         public Vector3 AmbientLightColor = Vector3.Zero;
         public EffectTechnique CurrentTechnique;
         public Vector3 DiffuseColor = Vector3.One;
-        public Vector3 EmissiveColor;// = Vector3.One;
+        public Vector3 EmissiveColor = Vector3.Zero;
         public Vector3 FogColor = Vector3.Zero;
-        public bool FogEnabled;
-        public float FogEnd;
-        public float FogStart;
+        public bool FogEnabled = false;
+        public float FogEnd = 1.0f;
+        public float FogStart = 0f;
         public bool LightingEnabled = false;
-        public bool PreferPerPixelLighting;
+        public bool PreferPerPixelLighting = false;
         public Vector3 SpecularColor = Vector3.Zero;
         public float SpecularPower = 1f;
-        public Texture2D Texture;
-        public bool TextureEnabled;
-        public bool VertexColorEnabled;
+        public Texture2D Texture = null;
+        public bool TextureEnabled = false;
+        public bool VertexColorEnabled = false;
         public Matrix World = Matrix.Identity;
 
         private string textureName;
@@ -375,7 +375,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             else this.enableDefaultLighting = true;
         }
 
-        public Effect Effect {
+        public BasicEffect Effect {
             get { return basicEffect; }
         }
 
