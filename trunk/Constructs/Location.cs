@@ -12,8 +12,7 @@
 | * Location                     Class     |
 | * Locatable                    Interface |
 \*••••••••••••••••••••••••••••••••••••••••*/
-using System;
-using Microsoft.Xna.Framework;
+
 namespace InteractionEngine.Constructs {
 
     /**
@@ -47,8 +46,9 @@ namespace InteractionEngine.Constructs {
         /// Returns the point represented by this Location.
         /// </summary>
         /// <returns>The point represented by this Location.</returns>
-        public virtual Microsoft.Xna.Framework.Vector3 getPoint() {
-            return point.value;
+        public virtual Microsoft.Xna.Framework.Vector3 Position {
+            get { return this.point.value; }
+            set { this.point.value = value; }
         }
 
         private void calculateHeadingAndStrafe() {
@@ -69,19 +69,29 @@ namespace InteractionEngine.Constructs {
             this.rotation.value = new Microsoft.Xna.Framework.Vector3(yaw, pitch, roll);
         }
 
-        private Vector2 getEulerRotation(Vector3 vect)
-        {
-            float yaw = (float)System.Math.Atan2(vect.X, vect.Z);
-            float pitch = (float)System.Math.Atan2(vect.Y, new Microsoft.Xna.Framework.Vector2(vect.X, vect.Z).Length());
-            //float roll = (float)System.Math.Atan2(this.strafe.value.Y, new Microsoft.Xna.Framework.Vector2(this.strafe.value.X, this.strafe.value.Z).Length());
-            return new Vector2(yaw, pitch);
+        private void calculateNewHeading(Microsoft.Xna.Framework.Vector3 newHeading) {
+            float newYaw = (float)System.Math.Atan2(newHeading.X, newHeading.Z);
+            float newPitch = (float)System.Math.Atan2(newHeading.Y, new Microsoft.Xna.Framework.Vector2(newHeading.X, newHeading.Z).Length());
+            this.rotation.value = new Microsoft.Xna.Framework.Vector3(newYaw, newPitch, this.roll);
+            calculateHeadingAndStrafe();
+        }
+        private void calculateNewStrafe(Microsoft.Xna.Framework.Vector3 newStrafe) {
+            float newYaw = (float)System.Math.Atan2(newStrafe.Z, -newStrafe.X);
+            float newRoll = (float)System.Math.Atan2(newStrafe.Y, new Microsoft.Xna.Framework.Vector2(newStrafe.X, newStrafe.Z).Length());
+            this.rotation.value = new Microsoft.Xna.Framework.Vector3(newYaw, this.pitch, newRoll);
+            calculateHeadingAndStrafe();
+        }
+        private void calculateNewTop(Microsoft.Xna.Framework.Vector3 newTop) {
+            float newPitch = (float)System.Math.Atan2(new Microsoft.Xna.Framework.Vector2(newTop.X, newTop.Z).Length(), newTop.Y);
+            float newRoll = (float)System.Math.Atan2(new Microsoft.Xna.Framework.Vector2(newTop.X, newTop.Z).Length(), newTop.Y);
+            this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.yaw, newPitch, newRoll);
+            calculateHeadingAndStrafe();
         }
 
         // In radians
         public virtual Microsoft.Xna.Framework.Vector3 EulerRotation {
             get { return rotation.value; }
-            set
-            {
+            set {
                 this.rotation.value = value;
                 calculateHeadingAndStrafe();
             }
@@ -89,23 +99,26 @@ namespace InteractionEngine.Constructs {
 
         public virtual Microsoft.Xna.Framework.Vector3 Heading {
             get { return heading.value; }
-            set 
-            {
-                Vector2 currRot = this.getEulerRotation(this.heading.value);
-                Vector2 diffRot = this.getEulerRotation(value) - currRot;
-
-                Vector2 strafeRot = this.getEulerRotation(this.strafe.value) + diffRot;
-                Vector3 strafe = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationX(strafeRot.Y) * Matrix.CreateRotationY(strafeRot.X));
-
-                this.strafe.value = strafe;
-                this.heading.value = value;
-                calculateEulerRotation();
+            set {
+                this.calculateNewHeading(value);
             }
         }
 
-
         public virtual Microsoft.Xna.Framework.Vector3 Strafe {
             get { return strafe.value; }
+            set {
+                this.calculateNewStrafe(value);
+            }
+        }
+
+        public virtual Microsoft.Xna.Framework.Vector3 Top {
+            get { return Microsoft.Xna.Framework.Vector3.Cross(heading.value, strafe.value); }
+        }
+
+        public virtual void setHeadingAndStrafe(Microsoft.Xna.Framework.Vector3 newHeading, Microsoft.Xna.Framework.Vector3 newStrafe) {
+            this.heading.value = newHeading;
+            this.strafe.value = newStrafe;
+            this.calculateEulerRotation();
         }
 
         // In radians
@@ -129,10 +142,6 @@ namespace InteractionEngine.Constructs {
                 this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.rotation.value.X, this.rotation.value.Y, value);
                 calculateHeadingAndStrafe();
             }
-        }
-
-        public virtual void moveTo(Microsoft.Xna.Framework.Vector3 position) {
-            this.point.value = position;
         }
 
         /// <summary>

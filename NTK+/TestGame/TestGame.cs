@@ -124,7 +124,7 @@ namespace Game
             this.graphics = new Graphics3D(this, modelEffect, "Models\\Borat");
             this.graphics.SetScale(3f);
             this.getLocation().yaw = MathHelper.Pi;
-            Console.WriteLine(this.getLocation().getPoint());
+            Console.WriteLine(this.getLocation().Position);
 
             DebugSphere newDebugSphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
 

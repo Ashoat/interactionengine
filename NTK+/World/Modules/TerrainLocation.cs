@@ -52,7 +52,7 @@ namespace NTKPlusGame.World.Modules {
         /// <returns>The change in height effected during the move.</returns>
         public float move(float dx, float dz) {
             if (grounded.value) {
-                Vector3 position = base.getPoint();
+                Vector3 position = base.Position;
                 // Calculate the z-translation based on the terrain.
                 float y = gameObject.getTerrain().getHeight(position.X + dx, position.Z + dz);
                 float dy = y - position.Y;
@@ -69,14 +69,17 @@ namespace NTKPlusGame.World.Modules {
             }
         }
 
-        public override void moveTo(Vector3 position) {
-            if (grounded.value) {
-                float x = position.X;
-                float z = position.Z;
-                float y = this.gameObject.getTerrain().getHeight(position.X, position.Z);
-                base.moveTo(new Vector3(x, y, z));
-            } else {
-                base.moveTo(position);
+        public override Vector3 Position {
+            get { return base.Position; }
+            set {
+                if (grounded.value) {
+                    float x = value.X;
+                    float z = value.Z;
+                    float y = this.gameObject.getTerrain().getHeight(value.X, value.Z);
+                    base.Position = (new Vector3(x, y, z));
+                } else {
+                    base.Position = (value);
+                }
             }
         }
 

@@ -29,7 +29,7 @@ namespace NTKPlusGame.World.Modules {
 		
 		public const string SPEED_STRING = "Movement speed";
 		public readonly Stats.StatType SPEED_STAT = new Stats.StatType(SPEED_STRING);
-		private const float speedRatio = 0.0001f;
+		private const float speedRatio = 0.002f;
 
         /// <summary>
         /// Triggered when this GameObject arrives at the destination towards which it was headed.
@@ -72,7 +72,7 @@ namespace NTKPlusGame.World.Modules {
         /// </summary>
         /// <param name="target">The location to go to.</param>
 		public void startWalking(Vector3 target) {
-            Vector3 direction = target - base.getPoint();
+            Vector3 direction = target - base.Position;
             this.yaw = (float)Math.Atan2(direction.X, direction.Z);
 			this.targetPosition.value = target;
             this.isMoving.value = true;
@@ -95,17 +95,20 @@ namespace NTKPlusGame.World.Modules {
         /// Returns the point represented by this Location.
         /// </summary>
         /// <returns>The point represented by this Location.</returns>
-		public override Vector3 getPoint() {
-			if (this.isMoving.value) {
-				updateTerrainMovement();
-			}
-			return base.getPoint();
+		public override Vector3 Position {
+            get {
+                if (this.isMoving.value) {
+                    updateTerrainMovement();
+                }
+                return base.Position;
+            }
+            set { base.Position = value; }
 		}
 
         private Vector3 getVectorToTarget() {
-            if (this.targetGameObject.value == null) return this.targetPosition.value - base.getPoint();
+            if (this.targetGameObject.value == null) return this.targetPosition.value - base.Position;
             else {
-                Vector3 toTarget = this.targetGameObject.value.getLocation().getPoint() - base.getPoint();
+                Vector3 toTarget = this.targetGameObject.value.getLocation().Position - base.Position;
                 if (this.targetTrackingDistance.value != 0) {
                     double originalLength = toTarget.Length();
                     double desiredLength = originalLength - this.targetTrackingDistance.value;

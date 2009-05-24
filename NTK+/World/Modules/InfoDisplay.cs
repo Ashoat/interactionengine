@@ -93,7 +93,7 @@ namespace NTKPlusGame.World.Modules {
 
         public void addInfoButton(InfoButton button) {
             if (buttonCount == MAXIMUM_BUTTONS) throw new Exception("Too many buttons in a tab!");
-            button.getLocation().moveTo(calculatePositionOfButton(buttonCount));
+            button.getLocation().Position = (calculatePositionOfButton(buttonCount));
             buttons[buttonCount++].value = button;
         }
 

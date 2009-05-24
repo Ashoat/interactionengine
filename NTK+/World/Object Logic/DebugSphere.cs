@@ -84,7 +84,7 @@ namespace NTKPlusGame.World {
         }
 
         public void setPosition(Vector3 position, float radius) {
-            this.location.moveTo(position);
+            this.location.Position = position;
             this.graphics3D.SetScale(radius);
         }
 
