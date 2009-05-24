@@ -38,6 +38,8 @@ namespace InteractionEngine.Constructs {
             this.gameObject = gameObject;
             this.point = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
             this.rotation = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
+            this.heading = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
+            this.strafe = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
         }
 
         /// <summary>
