@@ -3,7 +3,7 @@
   <Asset Type="Graphics:NodeContent">
     <Name>Box01</Name>
     <Identity>
-      <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\Content\Models\Cube.X</SourceFilename>
+      <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\Content\Models\Cube.X</SourceFilename>
       <SourceTool>XImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>

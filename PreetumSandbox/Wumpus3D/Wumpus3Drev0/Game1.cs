@@ -97,6 +97,7 @@ namespace Wumpus3Drev0
             terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
 
             graphics.GraphicsDevice.RenderState.CullMode = CullMode.None;
+            
             graphics.GraphicsDevice.RenderState.AlphaBlendEnable = true;
             graphics.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
             graphics.GraphicsDevice.RenderState.AlphaSourceBlend = Blend.One;
@@ -124,6 +125,12 @@ namespace Wumpus3Drev0
             
             model.SetScale(3f); //3
             model.RotationOffset = MathHelper.Pi;
+
+            Animation anim = new Animation("walk");
+            anim.Frames.Add(Content.Load<Model>("Models\\human4"));
+            anim.Frames.Add(Content.Load<Model>("Models\\sphere180"));
+            anim.Frames.Add(Content.Load<Model>("Models\\masterchief2"));
+            model.Animations.Add(anim);
 
             //
             //
@@ -177,14 +184,32 @@ namespace Wumpus3Drev0
                     camera.Zoom(-1.5f);
                 if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
                     camera.Zoom(1.5f);
-                if (Keyboard.GetState().IsKeyDown(Keys.A))
-                    model.Move(-Vector2.UnitX / 2);  //model.Position2 -= Vector2.UnitX / 3;
+
+                /*if (Keyboard.GetState().IsKeyDown(Keys.A))
+                    model.Move(-Vector2.UnitX / 2);  
                 if (Keyboard.GetState().IsKeyDown(Keys.D))
-                    model.Move(Vector2.UnitX / 2); //model.Position2 += Vector2.UnitX / 3;
-                if (Keyboard.GetState().IsKeyDown(Keys.W))
-                    model.Move(-Vector2.UnitY / 2); //model.Position2 -= Vector2.UnitY / 3;
-                if (Keyboard.GetState().IsKeyDown(Keys.S))
-                    model.Move(Vector2.UnitY / 2);  //model.Position2 += Vector2.UnitY / 3;           
+                    model.Move(Vector2.UnitX / 2);*/
+
+                if (Keyboard.GetState().IsKeyDown(Keys.W) || Keyboard.GetState().IsKeyDown(Keys.S))
+                {
+                    model.StartAnimation("walk");
+                    if (Keyboard.GetState().IsKeyDown(Keys.W))
+                        model.Move(-Vector2.UnitY / 2);
+                    if (Keyboard.GetState().IsKeyDown(Keys.S))
+                        model.Move(Vector2.UnitY / 2);
+                }
+                else
+                {
+                    model.StopAnimation();
+                }
+
+
+
+
+                if (Keyboard.GetState().IsKeyDown(Keys.X))
+                    model.StartAnimation("walk");
+                if (Keyboard.GetState().IsKeyDown(Keys.C))
+                    model.StopAnimation();
 
             }
 
@@ -236,7 +261,7 @@ namespace Wumpus3Drev0
             terrain.Draw();
             model.Draw();
             //skySphere.Draw();
-            frc.Draw(gameTime);
+            frc.Draw();
 
             /*Matrix cubeWorld = Matrix.CreateScale(model.BoundingSphere.Radius) * Matrix.CreateTranslation(model.BoundingSphere.Center);
             foreach (ModelMesh mesh in cube.Meshes)

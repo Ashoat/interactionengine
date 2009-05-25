@@ -157,6 +157,11 @@ namespace Wumpus3Drev0
             this.SetPosition(Vector2.Zero);
         }
 
+        public GameModel(Model model, ModelEffect effect, Terrain terrain, GraphicsDevice device)
+            : this(model, new List<Animation>(), effect, terrain, device)
+        {
+        }
+
         public void SetPosition(Vector2 pos)
         {
             posAbs = (new Vector3(pos.X, terrain.getHeight(pos), pos.Y));
@@ -232,7 +237,8 @@ namespace Wumpus3Drev0
         }
         public void StopAnimation()
         {
-            animState = AnimationState.Stopping;
+            if (animState == AnimationState.Started)
+                animState = AnimationState.Stopping;
         }
 
         public Animation GetAnimationByName(string name)

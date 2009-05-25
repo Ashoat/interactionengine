@@ -2,13 +2,26 @@
 <XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
   <Asset Type="Pipeline:BuildItemCollection">
     <Item>
+      <Source>Models\Cube.X</Source>
+      <Name>Models\cube</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\Models\cube.xnb</Output>
+      <Time>2009-05-16T20:54:34.266-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Models\Cube_0.xml</Key>
+        <Value>2009-05-17T23:43:30.807-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
       <Source>Terrain3.png</Source>
       <Name>TerrainTex</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\TerrainTex.xnb</Output>
-      <Time>2008-03-29T01:24:30-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\TerrainTex.xnb</Output>
+      <Time>2009-05-16T20:54:41.623-07:00</Time>
     </Item>
     <Item>
       <Source>borat_code.jpg</Source>
@@ -16,8 +29,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\borat_code.xnb</Output>
-      <Time>2009-03-03T21:49:56.966-08:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\borat_code.xnb</Output>
+      <Time>2009-05-16T20:54:41.607-07:00</Time>
     </Item>
     <Item>
       <Source>heightImage.png</Source>
@@ -25,8 +38,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\heightImage.xnb</Output>
-      <Time>2009-04-14T13:16:24.304-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\heightImage.xnb</Output>
+      <Time>2009-05-16T20:54:41.912-07:00</Time>
     </Item>
     <Item>
       <Source>heightImage2.png</Source>
@@ -34,8 +47,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\heightImage2.xnb</Output>
-      <Time>2009-04-14T12:37:04.996-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\heightImage2.xnb</Output>
+      <Time>2009-05-16T20:54:41.602-07:00</Time>
     </Item>
     <Item>
       <Source>tex1.png</Source>
@@ -43,8 +56,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\tex1.xnb</Output>
-      <Time>2009-04-14T13:23:54.184-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\tex1.xnb</Output>
+      <Time>2009-05-16T20:54:41.611-07:00</Time>
     </Item>
     <Item>
       <Source>Amazonia.jpg</Source>
@@ -52,8 +65,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\Amazonia.xnb</Output>
-      <Time>2009-04-14T13:44:25.247-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\Amazonia.xnb</Output>
+      <Time>2009-05-16T20:54:41.906-07:00</Time>
     </Item>
     <Item>
       <Source>terragen1.png</Source>
@@ -61,8 +74,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\terragen1.xnb</Output>
-      <Time>2009-04-14T19:13:14.026-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\terragen1.xnb</Output>
+      <Time>2009-05-16T20:54:41.63-07:00</Time>
     </Item>
     <Item>
       <Source>terragenTex1.png</Source>
@@ -70,8 +83,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\terragenTex1.xnb</Output>
-      <Time>2009-04-14T19:00:26.317-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\terragenTex1.xnb</Output>
+      <Time>2009-05-16T20:54:41.902-07:00</Time>
     </Item>
     <Item>
       <Source>Images\human_texture.jpg</Source>
@@ -79,21 +92,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
-      <Time>2009-04-26T18:42:40.091-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Models\Cube.X</Source>
-      <Name>Models\cube</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\Models\cube.xnb</Output>
-      <Time>2009-04-03T23:36:25.429-07:00</Time>
-      <Dependency>
-        <Key>obj\x86\Debug\Models\Cube_0.xml</Key>
-        <Value>2009-05-15T16:06:55.96-07:00</Value>
-      </Dependency>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
+      <Time>2009-05-16T20:54:34.914-07:00</Time>
     </Item>
     <Item>
       <Source>Models\human4.fbx</Source>
@@ -101,11 +101,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\Models\human4.xnb</Output>
-      <Time>2009-04-26T01:14:25.9513221-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\Models\human4.xnb</Output>
+      <Time>2009-05-16T20:54:34.28-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\human4_0.xml</Key>
-        <Value>2009-05-15T16:06:57.15-07:00</Value>
+        <Value>2009-05-17T23:43:33.762-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -114,11 +114,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\Models\Borat.xnb</Output>
-      <Time>2009-04-26T18:42:28.303-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\Models\Borat.xnb</Output>
+      <Time>2009-05-16T20:54:34.273-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\Borat_0.xml</Key>
-        <Value>2009-05-15T16:06:57.319-07:00</Value>
+        <Value>2009-05-17T23:43:33.915-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -127,11 +127,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
-      <Time>2009-04-21T13:13:35.4759643-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
+      <Time>2009-05-16T20:54:34.29-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\sphere180_0.xml</Key>
-        <Value>2009-05-15T16:06:57.423-07:00</Value>
+        <Value>2009-05-17T23:43:34.017-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -139,38 +139,38 @@
       <Importer>XImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\Cube_0.xml</Output>
-      <Time>2009-04-03T23:36:25.429-07:00</Time>
+      <Time>2009-05-16T20:54:34.266-07:00</Time>
     </Item>
     <Item>
       <Source>Models\human4.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\human4_0.xml</Output>
-      <Time>2009-04-26T01:14:25.9513221-07:00</Time>
+      <Time>2009-05-16T20:54:34.28-07:00</Time>
     </Item>
     <Item>
       <Source>Models\Borat.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\Borat_0.xml</Output>
-      <Time>2009-04-26T18:42:28.303-07:00</Time>
+      <Time>2009-05-16T20:54:34.273-07:00</Time>
     </Item>
     <Item>
       <Source>Models\sphere180.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\sphere180_0.xml</Output>
-      <Time>2009-04-21T13:13:35.4759643-07:00</Time>
+      <Time>2009-05-16T20:54:34.29-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\Content\</RootDirectory>
-      <LoggerRootDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\</LoggerRootDirectory>
-      <IntermediateDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest2\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\t09\InteractionEngine\PreetumSandbox\XNA_3D\HeightMapTest1\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>

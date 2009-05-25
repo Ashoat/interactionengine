@@ -90,6 +90,7 @@ namespace HeightMapTest1
             modelEffect.TextureEnabled = true;
             //modelEffect.Texture = null;
             modelEffect.SpecularPower = 1f;
+            modelEffect.ActiveCamera = camera;
             //modelEffect.EnableDefaultLighting(); //doesn't do anything. draw method does this automatically
             
             //model = new GameModel(Content.Load<Model>("human4"), modelEffect, terrain, GraphicsDevice);

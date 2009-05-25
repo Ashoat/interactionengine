@@ -46,7 +46,7 @@ namespace Wumpus3Drev0
         }
 
 
-        public void Draw(GameTime gameTime)
+        public void Draw()
         {
             frameCounter++;
 
