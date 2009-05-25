@@ -43,7 +43,7 @@ namespace Wumpus3Drev0
 
         public void Update()
         {
-            /*if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 Ray mouseRay = getMouseRay();
                 if (this.selectedModel != null)
@@ -53,8 +53,8 @@ namespace Wumpus3Drev0
                     {
                         if (!this.selectedModel.RayIntersects(mouseRay))
                         {
-                            selectedModel.MoveTo(new Vector2(intersect.Value.X, intersect.Value.Z), 0.001f);
-                            //selectedModel.SetTarget(new Vector2(intersect.Value.X, intersect.Value.Z));
+                            selectedModel.SetTarget(new Vector2(intersect.Value.X, intersect.Value.Z));
+                            selectedModel.SetPosition(new Vector2(intersect.Value.X, intersect.Value.Z));
                         }
                     }
                 }
@@ -68,11 +68,6 @@ namespace Wumpus3Drev0
                     }
                 }
             }
-
-            foreach (GameModel model in this.models)
-            {
-                model.UpdateMove();
-            }*/
 
         }
 

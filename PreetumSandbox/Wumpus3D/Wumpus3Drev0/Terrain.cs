@@ -367,7 +367,7 @@ namespace Wumpus3Drev0
                 else
                     topPoint = midPoint;
             }
-            return prevPoint; //the last point seen above the terrain.
+            return topPoint; //the last point seen above the terrain.
         }
 
     }

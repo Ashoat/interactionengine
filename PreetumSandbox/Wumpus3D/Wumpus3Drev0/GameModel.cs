@@ -122,6 +122,21 @@ namespace Wumpus3Drev0
             get { return this.getBoundingSphere(); }
         }
 
+        public Model CurrentModel
+        {
+            get
+            {
+                if (animState != AnimationState.Started)
+                {
+                    return model;
+                }
+                else
+                {
+                    return this.CurrentAnimation.CurrentFrame;
+                }
+            }
+        }
+
         public BasicCamera Camera
         {
             get { return this.effect.ActiveCamera; }
@@ -129,8 +144,8 @@ namespace Wumpus3Drev0
 
         public BoundingSphere getBoundingSphere()
         {
-            BoundingSphere welded = this.CurrentAnimation.CurrentFrame.Meshes[0].BoundingSphere;
-            foreach (ModelMesh mesh in this.CurrentAnimation.CurrentFrame.Meshes)
+            BoundingSphere welded = this.CurrentModel.Meshes[0].BoundingSphere;
+            foreach (ModelMesh mesh in this.CurrentModel.Meshes)
             {
                 welded = BoundingSphere.CreateMerged(welded, mesh.BoundingSphere);
             }
@@ -223,10 +238,11 @@ namespace Wumpus3Drev0
 
         public bool RayIntersects(Ray ray)
         {
-            foreach (ModelMesh mesh in this.CurrentAnimation.CurrentFrame.Meshes)
+            foreach (ModelMesh mesh in this.CurrentModel.Meshes)
             {
-                if(ray.Intersects(this.BoundingSphere) != null) return true;
+                if (ray.Intersects(new BoundingSphere(mesh.BoundingSphere.Center + this.Position3, mesh.BoundingSphere.Radius * this.scale)) != null) return true;
             }
+            //if (ray.Intersects(this.BoundingSphere) != null) return true;
             return false;
         }
 
@@ -239,6 +255,11 @@ namespace Wumpus3Drev0
         {
             if (animState == AnimationState.Started)
                 animState = AnimationState.Stopping;
+        }
+        public void ForceStopAnimation()
+        {
+            animState = AnimationState.Stopped;
+            this.CurrentAnimation.Index = 0;
         }
 
         public Animation GetAnimationByName(string name)
@@ -267,7 +288,7 @@ namespace Wumpus3Drev0
                     //
                     //Now copy all data from the ModelEffect to this BasicEffect
                     //
-
+                    
                     effect.Alpha = this.effect.Alpha;
                     effect.AmbientLightColor = this.effect.AmbientLightColor;
                     //effect.CurrentTechnique = this.effect.CurrentTechnique;
@@ -284,7 +305,7 @@ namespace Wumpus3Drev0
                     effect.Texture = this.effect.Texture;
                     effect.TextureEnabled = this.effect.TextureEnabled;
                     effect.VertexColorEnabled = this.effect.VertexColorEnabled;
-
+                    
                 }
 
                 mesh.Draw();

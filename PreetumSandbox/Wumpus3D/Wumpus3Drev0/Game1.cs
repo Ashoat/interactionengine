@@ -94,10 +94,11 @@ namespace Wumpus3Drev0
 
             terrain = new Terrain(GraphicsDevice, camera, texImage, tex, 3f, .13f); //2
             terrain.Effect.SpecularPower = 40f;
-            terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
+            //terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
 
             graphics.GraphicsDevice.RenderState.CullMode = CullMode.None;
-            
+            graphics.GraphicsDevice.RenderState.DepthBufferEnable = true;
+
             graphics.GraphicsDevice.RenderState.AlphaBlendEnable = true;
             graphics.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
             graphics.GraphicsDevice.RenderState.AlphaSourceBlend = Blend.One;
@@ -118,9 +119,9 @@ namespace Wumpus3Drev0
             modelEffect.Alpha = 1f;
             modelEffect.ActiveCamera = camera;
 
-            //modelEffect.EnableDefaultLighting(); //doesn't do anything. draw method does this automatically
+            modelEffect.EnableDefaultLighting(); //doesn't do anything. draw method does this automatically
 
-            //model = new GameModel(Content.Load<Model>("human4"), modelEffect, terrain, GraphicsDevice);
+            //model = new GameModel(Content.Load<Model>("Models\\human4"), modelEffect, terrain, GraphicsDevice);
             model = new GameModel(Content.Load<Model>("Models\\human"), new List<Animation>(), modelEffect, terrain, GraphicsDevice);
             
             model.SetScale(3f); //3
@@ -137,7 +138,7 @@ namespace Wumpus3Drev0
             //
 
             UI = new UserInterface(camera, GraphicsDevice);
-            //UI.Add(this.model);
+            UI.Add(this.model);
             //
             skySphere = new SkySphere(Content.Load<Model>("Models\\sphereHP"), modelEffect);
             skySphere.Orgin = Vector3.Zero;
@@ -194,29 +195,26 @@ namespace Wumpus3Drev0
                 {
                     model.StartAnimation("walk");
                     if (Keyboard.GetState().IsKeyDown(Keys.W))
-                        model.Move(-Vector2.UnitY / 2);
+                        model.Move(-Vector2.UnitY *2);
                     if (Keyboard.GetState().IsKeyDown(Keys.S))
-                        model.Move(Vector2.UnitY / 2);
+                        model.Move(Vector2.UnitY *2);
                 }
                 else
-                {
                     model.StopAnimation();
-                }
 
 
 
 
                 if (Keyboard.GetState().IsKeyDown(Keys.X))
                     model.StartAnimation("walk");
-                if (Keyboard.GetState().IsKeyDown(Keys.C))
-                    model.StopAnimation();
 
             }
 
             model.Move(Vector2.Reflect(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left, Vector2.UnitY));
             model.Rotation += -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X / 20;
             //camera.SetTargetDisplacePosition(model.Position3);
-            camera.SetTargetLockPosition(model.Position3);
+            //camera.SetTargetLockPosition(model.Position3);
+            
             //
 
             /*
@@ -256,14 +254,22 @@ namespace Wumpus3Drev0
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1, 0);
+            //GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            terrain.Draw();
-            model.Draw();
-            //skySphere.Draw();
             frc.Draw();
 
-            /*Matrix cubeWorld = Matrix.CreateScale(model.BoundingSphere.Radius) * Matrix.CreateTranslation(model.BoundingSphere.Center);
+            GraphicsDevice.RenderState.CullMode = CullMode.None;
+            GraphicsDevice.RenderState.DepthBufferEnable = true;
+
+            terrain.Draw();
+            GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
+            GraphicsDevice.RenderState.DepthBufferEnable = true;
+
+            model.Draw();
+            //skySphere.Draw();
+
+            Matrix cubeWorld = Matrix.CreateScale(model.BoundingSphere.Radius) * Matrix.CreateTranslation(model.BoundingSphere.Center);
             foreach (ModelMesh mesh in cube.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -273,8 +279,8 @@ namespace Wumpus3Drev0
                     effect.Projection = terrain.Camera.Projection;
                     effect.World = cubeWorld;
                 }
-                //mesh.Draw();
-            }*/
+                mesh.Draw();
+            }
 
             base.Draw(gameTime);
         }

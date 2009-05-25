@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Animation.cs" />
     <Compile Include="BasicCamera.cs" />
+    <Compile Include="Terrain_old.cs" />
     <Compile Include="FrameRateCounter.cs" />
     <Compile Include="SkySphere.cs" />
     <Compile Include="GameModel.cs" />
