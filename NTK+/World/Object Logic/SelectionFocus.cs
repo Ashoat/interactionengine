@@ -58,7 +58,9 @@ namespace NTKPlusGame.World {
         #endregion
 
 
-        private UpdatableGameObject<Selectable> currentlySelected;
+        private const int maxSelections = 50;
+        private UpdatableInteger numberSelected;
+        private UpdatableGameObject<Selectable>[] currentlySelected = new UpdatableGameObject<Selectable>[maxSelections];
 
         /*••••••••••••••••••••••••••••••••••••••••*\
           MEMBERS
@@ -69,7 +71,8 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
         public override void construct() {
-            currentlySelected = new UpdatableGameObject<Selectable>(this);
+            for (int i = 0; i < maxSelections; i++) this.currentlySelected[i] = new UpdatableGameObject<Selectable>(this);
+            this.numberSelected = new UpdatableInteger(this);
         }
 
         /// <summary>
@@ -80,22 +83,30 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="newSelection">The new Selectable that had been clicked on.</param>
         public void addSelection(Selectable newSelection, object param) {
-            Selectable previous = currentlySelected.value;
+            Selectable previous = currentlySelected[0].value;
             if (previous == null) {
-                this.currentlySelected.value = newSelection;
+                this.currentlySelected[0].value = newSelection;
+                this.numberSelected.value = 1;
             //    if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
             } else {
-                bool actionAccepted = previous.acceptSecondSelection(newSelection, param);
+                bool actionAccepted = false;
+                for (int i = 0; i < numberSelected.value; i++) actionAccepted |= currentlySelected[i].value.acceptSecondSelection(newSelection, param);
                 if (!actionAccepted) {
-                    this.currentlySelected.value = newSelection;
+                    this.currentlySelected[0].value = newSelection;
+                    this.numberSelected.value = 1;
            //         if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
                 }
             }
         }
 
+        // no nulls allowed
+        public void setMultipleSelections(Selectable[] selections) {
+            numberSelected.value = selections.Length;
+            for (int i = 0; i < selections.Length; i++) currentlySelected[i].value = selections[i];
+        }
+
         public void addOnlyAsSecondSelection(GameObject secondSelection, object param) {
-            Selectable previous = currentlySelected.value;
-            if (previous != null) previous.acceptSecondSelection(secondSelection, param);
+            for (int i = 0; i < numberSelected.value; i++) currentlySelected[i].value.acceptSecondSelection(secondSelection, param);
         }
 
         /// <summary>

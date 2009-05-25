@@ -89,11 +89,14 @@ namespace InteractionEngine.Constructs {
             calculateHeadingAndStrafe();
         }
 
-        // In radians
+        private float radiansToDegrees = 180 / Microsoft.Xna.Framework.MathHelper.Pi;
+        private float degreesToRadians = Microsoft.Xna.Framework.MathHelper.Pi / 180;
+
+        // In degrees, stored as radians
         public virtual Microsoft.Xna.Framework.Vector3 EulerRotation {
-            get { return rotation.value; }
+            get { return Microsoft.Xna.Framework.Vector3.Multiply(rotation.value, radiansToDegrees); }
             set {
-                this.rotation.value = value;
+                this.rotation.value = Microsoft.Xna.Framework.Vector3.Multiply(value, degreesToRadians);
                 calculateHeadingAndStrafe();
             }
         }
@@ -117,30 +120,33 @@ namespace InteractionEngine.Constructs {
         }
 
         public virtual void setHeadingAndStrafe(Microsoft.Xna.Framework.Vector3 newHeading, Microsoft.Xna.Framework.Vector3 newStrafe) {
+            newHeading.Normalize();
+            newStrafe.Normalize();
+            if (System.Math.Abs(Microsoft.Xna.Framework.Vector3.Cross(newHeading, newStrafe).LengthSquared() - 1) > 0.0001f) throw new System.Exception("Heading and strafe not at right angles");
             this.heading.value = newHeading;
             this.strafe.value = newStrafe;
             this.calculateEulerRotation();
         }
 
-        // In radians
+        // In degrees, stored as radians
         public virtual float yaw {
-            get { return this.rotation.value.X; }
+            get { return this.rotation.value.X * radiansToDegrees; }
             set {
-                this.rotation.value = new Microsoft.Xna.Framework.Vector3(value, this.rotation.value.Y, this.rotation.value.Z);
+                this.rotation.value = new Microsoft.Xna.Framework.Vector3(value * degreesToRadians, this.rotation.value.Y, this.rotation.value.Z);
                 calculateHeadingAndStrafe();
             }
         }
         public virtual float pitch {
-            get { return this.rotation.value.Y; }
+            get { return this.rotation.value.Y * radiansToDegrees; }
             set {
-                this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.rotation.value.X, value, this.rotation.value.Z);
+                this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.rotation.value.X, value * degreesToRadians, this.rotation.value.Z);
                 calculateHeadingAndStrafe();
             }
         }
         public virtual float roll {
-            get { return this.rotation.value.Z; }
+            get { return this.rotation.value.Z * radiansToDegrees; }
             set {
-                this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.rotation.value.X, this.rotation.value.Y, value);
+                this.rotation.value = new Microsoft.Xna.Framework.Vector3(this.rotation.value.X, this.rotation.value.Y, value * degreesToRadians);
                 calculateHeadingAndStrafe();
             }
         }

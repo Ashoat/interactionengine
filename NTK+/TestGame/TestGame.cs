@@ -45,6 +45,7 @@ namespace Game
             terrain.initialize(2f, .1f, loadRegion);
             Human human = GameObject.createGameObject<Human>(loadRegion);
             human.initialize(terrain);
+            FrameRateCounter frameRateCounter = GameObject.createGameObject<FrameRateCounter>(loadRegion);
 
             //Engine.game.initializeMethod = new InitializeMethod(initializeStuff);
 
@@ -53,19 +54,18 @@ namespace Game
 
         public static void initializeStuff() {
 
-            user.camera.SetPerspectiveFov(MathHelper.ToRadians(45f), Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+            user.camera.SetPerspectiveFov(45f, Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
             Vector3 cameraPos = new Vector3(75, 40, 75); //30
             user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
-            user.camera.Zoom(1000);
             Engine.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
 
+            Engine.game.GraphicsDevice.RenderState.DepthBufferEnable = true;
             Engine.game.GraphicsDevice.RenderState.AlphaBlendEnable = true;
             Engine.game.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha; // source rgb * source alpha
             Engine.game.GraphicsDevice.RenderState.AlphaSourceBlend = Blend.One; // don't modify source alpha
             Engine.game.GraphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha; // dest rgb * (255 - source alpha)
             Engine.game.GraphicsDevice.RenderState.AlphaDestinationBlend = Blend.InverseSourceAlpha; // dest alpha * (255 - source alpha)
             Engine.game.GraphicsDevice.RenderState.BlendFunction = BlendFunction.Add; // add source and dest results
-
         }
 
     }
@@ -100,7 +100,7 @@ namespace Game
         #endregion
 
 
-        private UpdatableGameObject<DebugSphere> debugSphere;
+     //   private UpdatableGameObject<DebugSphere> debugSphere;
 
         /// <summary>
         /// Returns the Graphics module of this GameObject.
@@ -128,9 +128,9 @@ namespace Game
             this.graphics.SetScale(3f);
             this.getLocation().yaw = MathHelper.Pi;
 
-            DebugSphere newDebugSphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
+          //  DebugSphere newDebugSphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
 
-            this.debugSphere = new UpdatableGameObject<DebugSphere>(this, newDebugSphere);
+          //  this.debugSphere = new UpdatableGameObject<DebugSphere>(this, newDebugSphere);
         }
 
         public override Event getEvent(int invoker, Vector3 position) {

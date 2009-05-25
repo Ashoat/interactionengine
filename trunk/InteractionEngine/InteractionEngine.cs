@@ -91,6 +91,7 @@ namespace InteractionEngine {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(Microsoft.Xna.Framework.GameTime gameTime) {
+            if (Microsoft.Xna.Framework.Input.GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed) this.Exit();
             this.graphics.GraphicsDevice.Clear(this.color);
             Engine.run(gameTime);
             base.Update(gameTime);

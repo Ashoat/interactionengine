@@ -29,7 +29,7 @@ namespace NTKPlusGame.World {
     /// <summary>
     /// A template for 'em walkin' types.
     /// </summary>
-    public abstract class WalkerTemplate : GameObject, TerrainMovable {
+    public abstract class WalkerTemplate : GameObject, TerrainMovable, Graphable3D {
 
         private const string MOVE_EVENT_HASH = "move";
 
@@ -75,6 +75,7 @@ namespace NTKPlusGame.World {
 
         public virtual void initialize(Terrain terrain) {
             this.terrain = terrain;
+            this.terrainMovement.Position = Vector3.Zero;
         }
 
         /// <summary>
@@ -96,9 +97,29 @@ namespace NTKPlusGame.World {
         /// <param name="position">The position where the interaction happened, if applicable.</param>
         /// <returns>An Event.</returns>
         public virtual Event getEvent(int invoker, Vector3 coordinates) {
-            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS)
+            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
                 return new Event(this.id, MOVE_EVENT_HASH, null);
-            else return null;
+            } else if (invoker == UserInterface3D.MOUSEMASK_OVER) {
+                //this.getGraphics3D().Effect.AmbientLightColor = highlight(this.getGraphics3D().Effect.AmbientLightColor, 0.5f);
+                //this.getGraphics3D().Effect.DiffuseColor = highlight(this.getGraphics3D().Effect.DiffuseColor, 0.5f);
+                //this.getGraphics3D().Effect.SpecularColor = highlight(this.getGraphics3D().Effect.SpecularColor, 0.5f);
+                this.getGraphics3D().Effect.SpecularPower *= 0.05f;
+                this.getGraphics3D().Effect.CommitProperties();
+                return null;
+            } else if (invoker == UserInterface3D.MOUSEMASK_OUT) {
+                //this.getGraphics3D().Effect.AmbientLightColor = highlight(this.getGraphics3D().Effect.AmbientLightColor, 2f);
+                //this.getGraphics3D().Effect.DiffuseColor = highlight(this.getGraphics3D().Effect.DiffuseColor, 2f);
+                //this.getGraphics3D().Effect.SpecularColor = highlight(this.getGraphics3D().Effect.SpecularColor, 2f);
+                this.getGraphics3D().Effect.SpecularPower *= 20f;
+                this.getGraphics3D().Effect.CommitProperties();
+                return null;
+            } else return null;
+        }
+
+        private Vector3 highlight(Vector3 input, float scale) {
+            Vector3 inverse = Vector3.One - input;
+            inverse = Vector3.Multiply(inverse, scale);
+            return Vector3.One - inverse;
         }
 
         /// <summary>

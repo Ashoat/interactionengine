@@ -89,7 +89,7 @@ namespace NTKPlusGame.World {
         public override void construct() {
             this.location = new Location(this);
             this.graphics = new InfoDisplayBoxGraphics(this);
-
+            this.onDisplay = new UpdatableGameObject<InfoDisplayable>(this);
             this.addEventMethod(DESCRIPTION_CHANGE_EVENT_HASH, new EventMethod(changeActiveDescription));
         }
 
@@ -113,10 +113,13 @@ namespace NTKPlusGame.World {
         public string name;
         public string description;
         public Texture2D faceIcon;
+        public string[] tabs;
         private SpriteFont font;
         private readonly Vector2 namePosition = new Vector2(20, 400);
         private readonly Vector2 descriptionPosition = new Vector2(20, 480);
         private readonly Vector2 faceIconPosition = new Vector2(20, 420);
+        private readonly Vector2 tabPosition = new Vector2(100, 420);
+        private const int tabWidth = 100;
         private readonly Color textColor = Color.White;
 
         public InfoDisplayBoxGraphics(InfoDisplayBox gameObject)
@@ -147,7 +150,81 @@ namespace NTKPlusGame.World {
 
         public override void loadContent() {
             base.loadContent();
-            font = Engine.game.Content.Load<SpriteFont>("");
+            font = Engine.game.Content.Load<SpriteFont>("SpriteFont1");
+        }
+
+    }
+
+    public class InfoBoxTab : GameObject, Interactable2D {
+        
+        #region FACTORY
+
+        /// <summary>
+        /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+        /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+        /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
+        /// </summary>
+        public InfoBoxTab() {
+        }
+
+        // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
+        // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
+        public const string realHash = "InfoBoxTab";
+        public override string classHash {
+            get { return realHash; }
+        }
+
+        /// <summary>
+        /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
+        /// </summary>
+        static InfoBoxTab() {
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<InfoDisplayBox>));
+        }
+
+        #endregion
+
+        private const string TAB_CHANGE = "tab change";
+
+        /// <summary>
+        /// Returns the Location module of this GameObject.
+        /// </summary>
+        /// <returns>The Location module associated with this GameObject.
+        private Location location;
+        public Location getLocation() {
+            return location;
+        }
+
+        /// <summary>
+        /// Returns the Graphics module of this GameObject.
+        /// </summary>
+        /// <returns>The Graphics module associated with this GameObject.
+        private Graphics2D graphics;
+        public InteractionEngine.UserInterface.Graphics getGraphics() {
+            return graphics;
+        }
+        public Graphics2D getGraphics2D() {
+            return graphics;
+        }
+
+        /// <summary>
+        /// Constructs a new InfoDisplayBox.
+        /// </summary>
+        /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
+        public override void construct() {
+            this.location = new Location(this);
+            this.graphics = new Graphics2D(this);
+            this.addEventMethod(TAB_CHANGE, new EventMethod(onTabClicked));
+        }
+
+        public Event getEvent(int invoker, Vector3 coordinates) {
+            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
+                return new Event(this.id, TAB_CHANGE, null);
+            }
+            return null;
+        }
+
+        public void onTabClicked(Client client, object param) {
+
         }
 
     }

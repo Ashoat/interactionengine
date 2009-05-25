@@ -99,8 +99,7 @@ namespace NTKPlusGame.World {
         public InteractionEngine.UserInterface.Graphics getGraphics() {
             return graphics;
         }
-        public Graphics3D getGraphics3D()
-        {
+        public Graphics3D getGraphics3D() {
             return graphics;
         }
 
@@ -118,7 +117,7 @@ namespace NTKPlusGame.World {
             this.addEventMethod(TERRAIN_CLICKED_HASH, new EventMethod(onClicked));
 
         }
-        
+
         public void initialize(float blockScaleF, float heightScaleF, LoadRegion terrainedLoadRegion) {
             this.blockScale = blockScaleF;
             this.heightScale = heightScaleF;
@@ -144,6 +143,8 @@ namespace NTKPlusGame.World {
         public void onClicked(Client client, object param) {
             DebugSphere sphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
             sphere.setPosition((Vector3)param, 1f);
+            Vector3 position = sphere.getLocation().Position;
+            Console.WriteLine(position.Y + ", " + this.getHeight(position.X, position.Z));
             NTKPlusUser.localUser.selectionFocus.addOnlyAsSecondSelection(this, param);
         }
 
@@ -153,52 +154,41 @@ namespace NTKPlusGame.World {
         /// <param name="x">The x-coordinate of the point to look up.</param>
         /// <param name="y">The z-coordinate of the point to look up.</param>
         /// <returns>The height of the terrain map at the given point.</returns>
-        public float getHeight(float x, float y)
-        {
+        public float getHeight(float x, float y) {
             //return Vector3.Transform(vertices[128 + vertexCountX * 128].Position, this.WorldMatrix).Y;
             // Check if the object is inside the grid
             Vector2 pos = new Vector2(x, y);
-            if (isOnTerrain(pos))
-            {
-                //pos += this.Size / 2;
-                Vector2 blockPos = new Vector2((int)(x / blockScale), (int)(y / blockScale));
+            if (isOnTerrain(pos)) {
+                pos += this.Size / 2;
+                Vector2 blockPos = new Vector2((int)(pos.X / blockScale), (int)(pos.Y / blockScale));
                 Vector2 posRel = pos - blockPos * blockScale;
 
                 int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
-                if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; // default value
+                if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return -1; // default value
                 float height1 = vertices[vertexIndex + 1].Position.Y;
                 float height2 = vertices[vertexIndex].Position.Y;
                 float height3 = vertices[vertexIndex + vertexCountX + 1].Position.Y;
                 float height4 = vertices[vertexIndex + vertexCountX].Position.Y;
 
-                float heightHxLz = vertices[vertexIndex + 1].Position.Y;
-                float heightLxLz = vertices[vertexIndex].Position.Y;
-                float heightHxHz = vertices[vertexIndex + vertexCountX + 1].Position.Y;
-                float heightLxHz = vertices[vertexIndex + vertexCountX].Position.Y;
-
                 bool aboveLowerTri = posRel.X < posRel.Y;
                 float heightIncX, heightIncY;
-                if (aboveLowerTri)
-                {
+                if (aboveLowerTri) {
                     heightIncX = height3 - height4;
                     heightIncY = height4 - height2;
-                }
-                else
-                {
+                } else {
                     heightIncX = height1 - height2;
                     heightIncY = height3 - height1;
                 }
                 float lerpHeight = height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
                 return lerpHeight;
             }
-            return 20; //default value
+            return -1; //default value
         }
 
 
         public bool isOnTerrain(Vector2 pos) {
             if (pos.X > -this.Size.X / 2 && pos.X < this.Size.X / 2 &&
-                pos.Y > -this.Size.Y / 2 && pos.Y < this.Size.Y / 2)
-            {
+                pos.Y > -this.Size.Y / 2 && pos.Y < this.Size.Y / 2) {
                 return true;
             }
             return false;
@@ -217,55 +207,44 @@ namespace NTKPlusGame.World {
             return true;
         }
 
-        public Vector2 Size
-        {
-            get
-            {
+        public Vector2 Size {
+            get {
                 return new Vector2(vertexCountX * blockScale, vertexCountZ * blockScale);
             }
         }
 
-        public VertexBuffer VertexBuffer
-        {
+        public VertexBuffer VertexBuffer {
             get { return vb; }
         }
-        public IndexBuffer IndexBuffer
-        {
+        public IndexBuffer IndexBuffer {
             get { return ib; }
         }
-        public Texture2D Texture
-        {
+        public Texture2D Texture {
             get { return tex; }
             set { tex = value; }
         }
-        public Camera Camera
-        {
+        public Camera Camera {
             get { return effect.ActiveCamera; }
         }
 
-        public Matrix WorldMatrix
-        {
+        public Matrix WorldMatrix {
             get { return effect.World; }
             //set { effect.World = value; }
         }
 
-        public ModelEffect Effect
-        {
+        public ModelEffect Effect {
             get { return this.effect; }
         }
 
-        private void LoadTexture(Texture2D asset)
-        {
+        private void LoadTexture(Texture2D asset) {
             tex = asset;
         }
 
-        private void LoadHeightmapFromImage(Texture2D asset)
-        {
+        private void LoadHeightmapFromImage(Texture2D asset) {
             Color[] map = new Color[asset.Width * asset.Height];
             asset.GetData<Color>(map);
             heightMap = new byte[map.Length];
-            for (int i = 0; i < heightMap.Length; i++)
-            {
+            for (int i = 0; i < heightMap.Length; i++) {
                 heightMap[i] = map[i].R;
             }
 
@@ -277,8 +256,7 @@ namespace NTKPlusGame.World {
             //texImage.Dispose();
         }
 
-        private void LoadHeightmapFromRaw(FileStream fileStream)
-        {
+        private void LoadHeightmapFromRaw(FileStream fileStream) {
             //FileStream fileStream = File.OpenRead(this.Content.RootDirectory + "/" + filename);
             heightMap = new byte[fileStream.Length];
             fileStream.Read(heightMap, 0, (int)fileStream.Length);
@@ -290,16 +268,14 @@ namespace NTKPlusGame.World {
             numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
         }
 
-        private void GenerateIndices()
-        {
+        private void GenerateIndices() {
             int numIndices = numTriangles * 3;
             indices = new int[numIndices];
 
             int indicesCount = 0;
             for (int i = 0; i < (vertexCountZ - 1); i++) //pg 273-274
             {
-                for (int j = 0; j < (vertexCountX - 1); j++)
-                {
+                for (int j = 0; j < (vertexCountX - 1); j++) {
                     int index = j + i * vertexCountZ;
                     // First triangle
                     indices[indicesCount++] = index;
@@ -314,15 +290,12 @@ namespace NTKPlusGame.World {
         }
 
 
-        private void GenerateVertices()
-        {
+        private void GenerateVertices() {
             vertices = new VertexPositionNormalTexture[numVertices];
 
             int vertexCount = 0;
-            for (float i = 0; i < vertexCountZ; i++)
-            {
-                for (float j = 0; j < vertexCountX; j++)
-                {
+            for (float i = 0; i < vertexCountZ; i++) {
+                for (float j = 0; j < vertexCountX; j++) {
                     vertices[vertexCount].Position = new Vector3((j - vertexCountX / 2) * blockScale, heightMap[vertexCount] * heightScale, (i - vertexCountZ / 2) * blockScale);
                     vertices[vertexCount].TextureCoordinate = new Vector2(j / vertexCountX, i / vertexCountZ);
                     vertexCount++;
@@ -330,8 +303,7 @@ namespace NTKPlusGame.World {
             }
         }
 
-        private void GenerateNormals()
-        {
+        private void GenerateNormals() {
             //
             //Yo! Iz mah normalz!
             //pg 277.
@@ -339,8 +311,7 @@ namespace NTKPlusGame.World {
              * Each vertex can be shared by multiple triangles.
              * foreach triangle, add the normal of the tringle to the normals of each vertex. then normalize
              */
-            for (int i = 0; i < indices.Length; i += 3)
-            {
+            for (int i = 0; i < indices.Length; i += 3) {
                 Vector3 v1 = vertices[indices[i]].Position;
                 Vector3 v2 = vertices[indices[i + 1]].Position;
                 Vector3 v3 = vertices[indices[i + 2]].Position;
@@ -355,15 +326,13 @@ namespace NTKPlusGame.World {
                 vertices[indices[i + 2]].Normal += normal;
             }
 
-            for (int i = 0; i < vertices.Length; i++)
-            {
+            for (int i = 0; i < vertices.Length; i++) {
                 vertices[i].Normal.Normalize();
             }
         }
 
 
-        private void SetData(GraphicsDevice device)
-        {
+        private void SetData(GraphicsDevice device) {
             vb = new VertexBuffer(device, numVertices * VertexPositionNormalTexture.SizeInBytes,
                 BufferUsage.WriteOnly);
             vb.SetData<VertexPositionNormalTexture>(vertices);
@@ -394,8 +363,7 @@ namespace NTKPlusGame.World {
         }
 
 
-        public void onDraw()
-        {
+        public void onDraw() {
             UserInterface3D.graphicsDevice.VertexDeclaration = new VertexDeclaration(UserInterface3D.graphicsDevice, VertexPositionNormalTexture.VertexElements);
             UserInterface3D.graphicsDevice.Vertices[0].SetSource(vb, 0, VertexPositionNormalTexture.SizeInBytes);
             UserInterface3D.graphicsDevice.Indices = ib;
@@ -407,7 +375,7 @@ namespace NTKPlusGame.World {
                 pass.Begin();
                 // Draw the mesh
                 //UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
-                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles/3);
+                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
                 pass.End();
             }
             actualEffect.End();
@@ -429,6 +397,16 @@ namespace NTKPlusGame.World {
 
             this.SetData(Engine.game.GraphicsDevice);
             this.InitDefaultEffectVal();
+
+
+            Console.WriteLine(this.getHeight(0, 0) + "");
+        }
+
+        public float getHeight(Vector3 pos) {
+            return getHeight(pos.X, pos.Z);
+        }
+        public bool isOnTerrain(Vector3 pos) {
+            return isOnTerrain(new Vector2(pos.X, pos.Z));
         }
 
         private Vector3? intersectionPoint(Ray ray) {
@@ -439,7 +417,7 @@ namespace NTKPlusGame.World {
 
             currPoint += rayStep;
 
-            while (currPoint.Y > this.getHeight(currPoint.X, currPoint.Z) && this.isOnTerrain(new Vector2(currPoint.X, currPoint.Z))) {
+            while (currPoint.Y > this.getHeight(currPoint) && this.isOnTerrain(currPoint)) {
                 prevPoint = currPoint;
                 currPoint += rayStep;
             }
@@ -449,7 +427,7 @@ namespace NTKPlusGame.World {
             Vector3 botPoint = currPoint;
             for (int i = 0; i < 8; i++) {
                 Vector3 midPoint = (topPoint + botPoint) / 2;
-                if (midPoint.Y < this.getHeight(midPoint.X, midPoint.Z))
+                if (midPoint.Y < this.getHeight(midPoint))
                     botPoint = midPoint;
                 else
                     topPoint = midPoint;
@@ -465,8 +443,7 @@ namespace NTKPlusGame.World {
         }
 
 
-        class TerrainGraphics : Graphics3D
-        {
+        class TerrainGraphics : Graphics3D {
 
             private Terrain gameObject;
 
@@ -476,7 +453,7 @@ namespace NTKPlusGame.World {
             }
 
             public override void onDraw() {
-               gameObject.onDraw();
+                gameObject.onDraw();
             }
 
             public override void loadContent() {
