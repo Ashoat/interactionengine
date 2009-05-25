@@ -144,6 +144,9 @@ namespace Wumpus3Drev0
             skySphere = new SkySphere(Content.Load<Model>("Models\\sphereHP"), modelEffect);
             skySphere.Orgin = Vector3.Zero;
             skySphere.SetScale(100f);
+
+            //
+
         }
 
         /// <summary>
