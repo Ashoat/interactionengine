@@ -98,10 +98,11 @@ namespace InteractionEngine {
         }
 
         /// <summary>
-        /// We override it so that it doesn't keep clearing the screen in its almighty annoyance.
+     //   /// We override it so that it doesn't keep clearing the screen in its almighty annoyance.
         /// </summary>
         /// <param name="gameTime"></param>
         protected override void Draw(Microsoft.Xna.Framework.GameTime gameTime) {
+            Engine.draw(gameTime);
         }
 
     }
