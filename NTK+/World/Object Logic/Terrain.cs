@@ -269,23 +269,25 @@ namespace NTKPlusGame.World {
         }
 
         private void GenerateIndices() {
-            int numIndices = numTriangles * 3;
-            indices = new int[numIndices];
+            indices = new int[vertexCountX * 2 * (vertexCountZ - 1)];
 
-            int indicesCount = 0;
-            for (int i = 0; i < (vertexCountZ - 1); i++) //pg 273-274
-            {
-                for (int j = 0; j < (vertexCountX - 1); j++) {
-                    int index = j + i * vertexCountZ;
-                    // First triangle
-                    indices[indicesCount++] = index;
-                    indices[indicesCount++] = index + 1;
-                    indices[indicesCount++] = index + vertexCountX + 1;
-                    // Second triangle
-                    indices[indicesCount++] = index + vertexCountX + 1;
-                    indices[indicesCount++] = index + vertexCountX;
-                    indices[indicesCount++] = index;
+            int i = 0;
+            int z = 0;
+
+            while (z < vertexCountZ - 1) {
+                for (int x = vertexCountZ - 1; x >= 0; x--) {
+                    indices[i++] = x + z * vertexCountX;
+                    indices[i++] = x + (z + 1) * vertexCountX;
                 }
+                z++;
+
+                if (z >= vertexCountZ - 1) break; //or continue. it really doesnt matter
+
+                for (int x = 0; x < vertexCountZ; x++) {
+                    indices[i++] = x + (z + 1) * vertexCountX;
+                    indices[i++] = x + z * vertexCountX;
+                }
+                z++;
             }
         }
 
@@ -337,8 +339,7 @@ namespace NTKPlusGame.World {
                 BufferUsage.WriteOnly);
             vb.SetData<VertexPositionNormalTexture>(vertices);
 
-            ib = new IndexBuffer(device, numTriangles * 3 * sizeof(int), BufferUsage.WriteOnly,
-                IndexElementSize.ThirtyTwoBits);
+            ib = new IndexBuffer(device, typeof(int), indices.Length, BufferUsage.WriteOnly);
             ib.SetData<int>(indices);
         }
 
@@ -364,18 +365,20 @@ namespace NTKPlusGame.World {
 
 
         public void onDraw() {
+            UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace; //or null
+            UserInterface3D.graphicsDevice.RenderState.DepthBufferEnable = true;
+
             UserInterface3D.graphicsDevice.VertexDeclaration = new VertexDeclaration(UserInterface3D.graphicsDevice, VertexPositionNormalTexture.VertexElements);
             UserInterface3D.graphicsDevice.Vertices[0].SetSource(vb, 0, VertexPositionNormalTexture.SizeInBytes);
             UserInterface3D.graphicsDevice.Indices = ib;
 
-            this.Effect.UpdateFromActiveCamera();
-            BasicEffect actualEffect = this.Effect.Effect;
+            effect.UpdateFromActiveCamera();
+            BasicEffect actualEffect = effect.Effect;
             actualEffect.Begin();
             foreach (EffectPass pass in actualEffect.CurrentTechnique.Passes) {
                 pass.Begin();
                 // Draw the mesh
-                //UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
-                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
+                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, numVertices, 0, numTriangles);
                 pass.End();
             }
             actualEffect.End();

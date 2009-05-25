@@ -205,6 +205,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             float closest3DDistance = float.PositiveInfinity;
             Interactable2D closest2DInteractable = null;
             float closest2DLayerDepth = 0;
+            Vector3 intersection2D = Vector3.Zero;
             // Loop through all of the User's LoadRegions
             foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through all the LoadRegion's GameObjects
@@ -221,9 +222,11 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                     if (gameObject is Interactable2D) {
                         Interactable2D interaction = (Interactable2D)gameObject;
                         if (interaction.getGraphics2D().LayerDepth > closest2DLayerDepth) {
-                            if (interaction.getGraphics2D().intersectionPoint(mouse.X, mouse.Y).HasValue) {
+                            Vector3? pointClicked = interaction.getGraphics2D().intersectionPoint(mouse.X, mouse.Y);
+                            if (pointClicked.HasValue) {
                                 closest2DInteractable = interaction;
                                 closest2DLayerDepth = interaction.getGraphics2D().LayerDepth;
+                                intersection2D = pointClicked.Value;
                             }
                         }
                     }
@@ -231,11 +234,10 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                 }
             }
             if (closest2DInteractable != null) {
-                intersectionPoint = closest2DInteractable.getGraphics2D().intersectionPoint(mouse.X, mouse.Y).Value;
+                intersectionPoint = intersection2D;
                 return closest2DInteractable;
             } else if (closest3DInteractable != null) {
-                intersectionPoint = closest3DInteractable.getGraphics3D().intersectionPoint(ray).Value;
-            //    Console.WriteLine(closest3DInteractable + ", " + intersectionPoint);
+                intersectionPoint = ray.Position + closest3DDistance * ray.Direction;
                 return closest3DInteractable;
             }
             intersectionPoint = Vector3.Zero;
