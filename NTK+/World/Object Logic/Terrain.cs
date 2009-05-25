@@ -407,7 +407,7 @@ namespace NTKPlusGame.World {
                 pass.Begin();
                 // Draw the mesh
                 //UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
-                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles/30);
+                UserInterface3D.graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles/3);
                 pass.End();
             }
             actualEffect.End();
@@ -481,7 +481,6 @@ namespace NTKPlusGame.World {
 
             public override void loadContent() {
                 // TODO: this.
-                UserInterface3D.user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
                 gameObject.loadContent();
                 //base.loadContent();
             }

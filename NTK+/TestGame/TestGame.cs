@@ -53,7 +53,10 @@ namespace Game
 
         public static void initializeStuff() {
 
-            user.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+            user.camera.SetPerspectiveFov(MathHelper.ToRadians(45f), Engine.game.GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+            Vector3 cameraPos = new Vector3(75, 40, 75); //30
+            user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
+            user.camera.Zoom(1000);
             Engine.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
 
             Engine.game.GraphicsDevice.RenderState.AlphaBlendEnable = true;
@@ -124,7 +127,6 @@ namespace Game
             this.graphics = new Graphics3D(this, modelEffect, "Models\\Borat");
             this.graphics.SetScale(3f);
             this.getLocation().yaw = MathHelper.Pi;
-            Console.WriteLine(this.getLocation().Position);
 
             DebugSphere newDebugSphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
 

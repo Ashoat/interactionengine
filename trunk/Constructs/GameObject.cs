@@ -360,6 +360,7 @@ namespace InteractionEngine.Constructs {
          * Used for transferring a reference to a method across a network, as transferring delegate references wouldn't work for obvious reasons.
          * It is only used on client GameWorld.
          */
+        [System.NonSerialized]
         public System.Collections.Generic.Dictionary<string, InteractionEngine.EventHandling.EventMethod> eventHashlist = new System.Collections.Generic.Dictionary<string, InteractionEngine.EventHandling.EventMethod>();
 
         /// <summary>
