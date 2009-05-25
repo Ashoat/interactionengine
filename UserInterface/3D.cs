@@ -254,12 +254,11 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
-                    if (gameObject is Graphable3D)
-                        ((Graphable)gameObject).getGraphics().onDraw();
+                    if (gameObject is Audio.Audible3D) ((Audio.Audible3D)gameObject).getAudio3D().output();
+                    if (gameObject is Graphable3D) ((Graphable)gameObject).getGraphics().onDraw();
                 }
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
-                    if (gameObject is Graphable2D)
-                        ((Graphable)gameObject).getGraphics().onDraw();
+                    if (gameObject is Graphable2D) ((Graphable)gameObject).getGraphics().onDraw();
                 }
             }
 
