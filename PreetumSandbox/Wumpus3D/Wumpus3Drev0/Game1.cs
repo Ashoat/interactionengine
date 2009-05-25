@@ -94,7 +94,8 @@ namespace Wumpus3Drev0
 
             terrain = new Terrain(GraphicsDevice, camera, texImage, tex, 3f, .13f); //2
             terrain.Effect.SpecularPower = 40f;
-            //terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
+            terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
+            
 
             graphics.GraphicsDevice.RenderState.CullMode = CullMode.None;
             graphics.GraphicsDevice.RenderState.DepthBufferEnable = true;
