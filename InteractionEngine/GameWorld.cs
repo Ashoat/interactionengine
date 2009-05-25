@@ -80,6 +80,7 @@ namespace InteractionEngine {
             gameTimeField = gameTime;
             if (userInterface == null) throw new GameWorldException("You cannot call Engine.game.Run() before you assign a UserInterface object to Engine.userInterface.");
             userInterface.startInputOutput();
+            // Allows the game to exit
             if (status == Status.SINGLE_PLAYER) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();

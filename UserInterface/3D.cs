@@ -66,7 +66,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         public const int MOUSEMASK_OUT = MOUSEMASK_OVER + MOUSEMASK_RESET;
 
         public static bool testMask(int val, int mask) {
-            return (val & mask) == mask;
+            return (val & mask) != 0;
         }
 
         public static int toggleMask(int val, int mask) {
@@ -95,7 +95,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             foreach (Interactable interaction in eventsAwaitingReset.Keys) {
                 int alreadyEvented = eventsAwaitingReset[interaction];
                 foreach (MouseMaskTest maskTest in this.maskTests) {
-                    maskTest.testAndRetrieveNegativeEvent(removals, newEvents, interaction, mouse, alreadyEvented);
+                    maskTest.testAndRetrieveNegativeEvent(removals, newEvents, interaction, ray, mouse, alreadyEvented);
                 }
             }
             // Remove ones that no longer have any mouse events to reset
@@ -114,6 +114,11 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                 this.mask = mask;
                 this.isActivated = isActivated;
             }
+            public bool isStillMousedOver(Interactable interaction, Ray ray, MouseState mouse) {
+                if (interaction is Interactable3D) return ((Interactable3D)interaction).getGraphics3D().intersects(ray).HasValue;
+                if (interaction is Interactable2D) return ((Interactable2D)interaction).getGraphics2D().intersectionPoint(mouse.X, mouse.Y).HasValue;
+                return false;
+            }
             public void testAndRetrievePositiveEvent(Dictionary<Interactable, int> eventsAwaitingReset, List<Event> newEvents, Interactable interaction, MouseState mouse, Ray ray, Vector3 point) {
                 int alreadyEvented = eventsAwaitingReset.ContainsKey(interaction) ? eventsAwaitingReset[interaction] : 0; 
                 if (!testMask(alreadyEvented, mask) && isActivated(mouse)) {
@@ -122,9 +127,9 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                     if (evvie != null) newEvents.Add(evvie);
                 }
             }
-            public void testAndRetrieveNegativeEvent(Dictionary<Interactable, int> removals, List<Event> newEvents, Interactable interaction, MouseState mouse, int alreadyEvented) {
-                if (testMask(alreadyEvented, mask) && !isActivated(mouse)) {
-                    Event evvie = interaction.getEvent(MOUSEMASK_LEFT_RELEASE, Vector3.Zero);
+            public void testAndRetrieveNegativeEvent(Dictionary<Interactable, int> removals, List<Event> newEvents, Interactable interaction, Ray ray, MouseState mouse, int alreadyEvented) {
+                if (testMask(alreadyEvented, mask) && (!isActivated(mouse) || !isStillMousedOver(interaction, ray, mouse))) {
+                    Event evvie = interaction.getEvent(setMask(mask, MOUSEMASK_RESET), Vector3.Zero);
                     if (evvie != null) newEvents.Add(evvie);
                     removals.Add(interaction, unsetMask(alreadyEvented, mask));
                 }
@@ -168,7 +173,6 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             Ray ray = this.calculateMouseRay(mouse);
-
             // Reset old events
             resetEvents(newEvents, ray);
 
@@ -179,6 +183,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                     maskTest.testAndRetrievePositiveEvent(eventsAwaitingReset, newEvents, interaction, mouse, ray, point);
                 }
             }
+
         }
 
         private Ray calculateMouseRay(MouseState mouse) {
@@ -197,7 +202,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         private Interactable findClosestIntersectedInteractable(Ray ray, MouseState mouse, out Vector3 intersectionPoint) {
             Interactable3D closest3DInteractable = null;
-            float closest3DDistance = 0;
+            float closest3DDistance = float.PositiveInfinity;
             Interactable2D closest2DInteractable = null;
             float closest2DLayerDepth = 0;
             // Loop through all of the User's LoadRegions
@@ -230,6 +235,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                 return closest2DInteractable;
             } else if (closest3DInteractable != null) {
                 intersectionPoint = closest3DInteractable.getGraphics3D().intersectionPoint(ray).Value;
+            //    Console.WriteLine(closest3DInteractable + ", " + intersectionPoint);
                 return closest3DInteractable;
             }
             intersectionPoint = Vector3.Zero;
@@ -251,15 +257,14 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         public override void output() {
             // Loop through the user's LoadRegions
-            Console.WriteLine(user.camera.View + " " + user.camera.Projection);
             foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
                     if (gameObject is Audio.Audible3D) ((Audio.Audible3D)gameObject).getAudio3D().output();
-                    if (gameObject is Graphable3D) ((Graphable)gameObject).getGraphics().onDraw();
+                    if (gameObject is Graphable) ((Graphable)gameObject).getGraphics().onDraw();
                 }
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
-                    if (gameObject is Graphable2D) ((Graphable)gameObject).getGraphics().onDraw();
+                   // if (gameObject is Graphable2D) ((Graphable)gameObject).getGraphics().onDraw();
                 }
             }
 
@@ -636,6 +641,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             }
         }
 
+        // fovy in degrees
         public void SetPerspectiveFov(float fovy, float aspectRatio, float nearPlane, float farPlane) {
             this.fovy = fovy;
             this.aspectRatio = aspectRatio;
@@ -648,7 +654,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             this.location.Position = cameraPos;
             this.target = cameraTarget;
             Vector3 heading = cameraTarget - cameraPos;
-            Vector3 strafe = Vector3.Cross(cameraUp, heading);
+            Vector3 strafe = Vector3.Cross(heading, cameraUp);
             updateCamera();
         }
         /// <summary>
