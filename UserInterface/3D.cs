@@ -251,6 +251,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         public override void output() {
             // Loop through the user's LoadRegions
+            Console.WriteLine(user.camera.View + " " + user.camera.Projection);
             foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
                 // Loop through the GameObjects within those LoadRegions
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
@@ -622,18 +623,10 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             get {
                 return projectionMatrix;
             }
-            set {
-                projectionMatrix = value;
-                updateCamera();
-            }
         }
         public Matrix View {
             get {
                 return viewMatrix;
-            }
-            set {
-                viewMatrix = value;
-                updateCamera();
             }
         }
         public BoundingFrustum Frustrum {
@@ -648,13 +641,14 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             this.aspectRatio = aspectRatio;
             this.farPlane = farPlane;
             this.nearPlane = nearPlane;
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fovy), aspectRatio, nearPlane, farPlane);
             updateCamera();
         }
         public void SetLookAt(Vector3 cameraPos, Vector3 cameraTarget, Vector3 cameraUp) {
             this.location.Position = cameraPos;
             this.target = cameraTarget;
             Vector3 heading = cameraTarget - cameraPos;
-            Vector3 strafe = Vector3.Cross(heading, cameraUp);
+            Vector3 strafe = Vector3.Cross(cameraUp, heading);
             updateCamera();
         }
         /// <summary>
@@ -681,7 +675,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="dist"></param>
         public void Zoom(float dist)
         {
-            SetPositionLockTarget(this.Position + dist * this.Heading);
+            SetPositionLockTarget(this.location.Position + dist * this.location.Heading);
         }
 
         public void SetTargetDisplacePosition(Vector3 tar) {
@@ -721,7 +715,6 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             updateCamera();
         }
         private void updateCamera() {
-            //projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fovy), aspectRatio, nearPlane, farPlane);
             viewMatrix = Matrix.CreateLookAt(this.location.Position, target, this.location.Top);
             frustum = new BoundingFrustum(viewMatrix * projectionMatrix);
         }

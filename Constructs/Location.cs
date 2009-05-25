@@ -40,6 +40,7 @@ namespace InteractionEngine.Constructs {
             this.rotation = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
             this.heading = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
             this.strafe = new InteractionEngine.Constructs.Datatypes.UpdatableVector(gameObject);
+            this.calculateHeadingAndStrafe();
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace InteractionEngine.Constructs {
         }
 
         public virtual Microsoft.Xna.Framework.Vector3 Top {
-            get { return Microsoft.Xna.Framework.Vector3.Cross(heading.value, strafe.value); }
+            get { return Microsoft.Xna.Framework.Vector3.Cross(strafe.value, heading.value); }
         }
 
         public virtual void setHeadingAndStrafe(Microsoft.Xna.Framework.Vector3 newHeading, Microsoft.Xna.Framework.Vector3 newStrafe) {
