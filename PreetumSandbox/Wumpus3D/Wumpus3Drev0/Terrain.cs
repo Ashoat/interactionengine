@@ -134,29 +134,34 @@ namespace Wumpus3Drev0
             numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
         }
 
+
         private void GenerateIndices()
         {
-            int numIndices = numTriangles * 3;
-            indices = new int[numIndices];
+            indices = new int[vertexCountX * 2 * (vertexCountZ - 1)];
 
-            int indicesCount = 0;
-            for (int i = 0; i < (vertexCountZ - 1); i++) //pg 273-274
+            int i = 0;
+            int z = 0;
+
+            while (z < vertexCountZ - 1)
             {
-                for (int j = 0; j < (vertexCountX - 1); j++)
+                for (int x = vertexCountZ - 1; x >= 0; x--)
                 {
-                    int index = j + i * vertexCountZ;
-                    // First triangle
-                    indices[indicesCount++] = index;
-                    indices[indicesCount++] = index + 1;
-                    indices[indicesCount++] = index + vertexCountX + 1;
-                    // Second triangle
-                    indices[indicesCount++] = index + vertexCountX + 1;
-                    indices[indicesCount++] = index + vertexCountX;
-                    indices[indicesCount++] = index;
+                    indices[i++] = x + z * vertexCountX;
+                    indices[i++] = x + (z + 1) * vertexCountX;
                 }
-            }
-        }
+                z++;
 
+                if (z >= vertexCountZ - 1) break; //or continue. it really doesnt matter
+
+                for (int x = 0; x < vertexCountZ; x++)
+                {
+                    indices[i++] = x + (z + 1) * vertexCountX;
+                    indices[i++] = x + z * vertexCountX;
+                }
+                z++;
+            }
+
+        }
 
         private void GenerateVertices()
         {
@@ -176,35 +181,32 @@ namespace Wumpus3Drev0
 
         private void GenerateNormals()
         {
-            //
-            //Yo! Iz mah normalz!
-            //pg 277.
-            /*
-             * Each vertex can be shared by multiple triangles.
-             * foreach triangle, add the normal of the tringle to the normals of each vertex. then normalize
-             */
-            for (int i = 0; i < indices.Length; i += 3)
+            for(int i=0;i<vertices.Length;i++)
+                vertices[i].Normal = Vector3.Zero;
+
+            bool swapWinding = false;
+            for (int i = 2; i < indices.Length; i++)
             {
-                Vector3 v1 = vertices[indices[i]].Position;
-                Vector3 v2 = vertices[indices[i + 1]].Position;
-                Vector3 v3 = vertices[indices[i + 2]].Position;
+                Vector3 v1 = vertices[indices[i - 1]].Position - vertices[indices[i]].Position;
+                Vector3 v2 = vertices[indices[i - 2]].Position - vertices[indices[i]].Position;
+                Vector3 norm = Vector3.Cross(v1, v2);
+                norm.Normalize();
 
-                Vector3 vu = v3 - v1;
-                Vector3 vt = v2 - v1;
-                Vector3 normal = Vector3.Cross(vu, vt);
-                normal.Normalize();
+                if (swapWinding)
+                    norm *= -1;
 
-                vertices[indices[i]].Normal += normal;
-                vertices[indices[i + 1]].Normal += normal;
-                vertices[indices[i + 2]].Normal += normal;
+                if (!float.IsNaN(norm.X))
+                {
+                    vertices[indices[i]].Normal += norm;
+                    vertices[indices[i - 1]].Normal += norm;
+                    vertices[indices[i - 2]].Normal += norm;
+                }
+                swapWinding = !swapWinding;
             }
 
             for (int i = 0; i < vertices.Length; i++)
-            {
                 vertices[i].Normal.Normalize();
-            }
         }
-
 
         private void SetData(GraphicsDevice device)
         {
@@ -212,8 +214,9 @@ namespace Wumpus3Drev0
                 BufferUsage.WriteOnly);
             vb.SetData<VertexPositionNormalTexture>(vertices);
 
-            ib = new IndexBuffer(device, numTriangles * 3 * sizeof(int), BufferUsage.WriteOnly,
-                IndexElementSize.ThirtyTwoBits);
+            /*ib = new IndexBuffer(device, numTriangles * 3 * sizeof(int), BufferUsage.WriteOnly,
+                IndexElementSize.ThirtyTwoBits);*/
+            ib = new IndexBuffer(device, typeof(int), indices.Length, BufferUsage.WriteOnly);
             ib.SetData<int>(indices);
         }
 
@@ -261,6 +264,9 @@ namespace Wumpus3Drev0
 
         public void Draw()
         {
+            dev.RenderState.CullMode = CullMode.CullCounterClockwiseFace; //or null
+            dev.RenderState.DepthBufferEnable = true;
+
             dev.VertexDeclaration = new VertexDeclaration(dev, VertexPositionNormalTexture.VertexElements);
             dev.Vertices[0].SetSource(vb, 0, VertexPositionNormalTexture.SizeInBytes);
             dev.Indices = ib;
@@ -271,7 +277,7 @@ namespace Wumpus3Drev0
             {
                 pass.Begin();
                 // Draw the mesh
-                dev.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numTriangles);
+                dev.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, numVertices, 0, numTriangles);
                 pass.End();
             }
             effect.End();
@@ -300,42 +306,43 @@ namespace Wumpus3Drev0
             // Check if the object is inside the grid
             if (isOnTerrain(pos))
             {
-                try
+
+                pos += this.Size / 2;
+                Vector2 blockPos = new Vector2((int)(pos.X / blockScale), (int)(pos.Y / blockScale));
+                Vector2 posRel = pos - blockPos * blockScale;
+
+                int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
+                if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; //default value
+
+                float height1 = vertices[vertexIndex + 1].Position.Y;
+                float height2 = vertices[vertexIndex].Position.Y;
+                float height3 = vertices[vertexIndex + vertexCountX + 1].Position.Y;
+                float height4 = vertices[vertexIndex + vertexCountX].Position.Y;
+
+                float heightHxLz = vertices[vertexIndex + 1].Position.Y;
+                float heightLxLz = vertices[vertexIndex].Position.Y;
+                float heightHxHz = vertices[vertexIndex + vertexCountX + 1].Position.Y;
+                float heightLxHz = vertices[vertexIndex + vertexCountX].Position.Y;
+
+                bool aboveLowerTri = posRel.X < posRel.Y;
+                float heightIncX, heightIncY;
+                if (aboveLowerTri)
                 {
-                    pos += this.Size / 2;
-                    Vector2 blockPos = new Vector2((int)(pos.X / blockScale), (int)(pos.Y / blockScale));
-                    Vector2 posRel = pos - blockPos * blockScale;
-
-                    int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
-                    float height1 = vertices[vertexIndex + 1].Position.Y;
-                    float height2 = vertices[vertexIndex].Position.Y;
-                    float height3 = vertices[vertexIndex + vertexCountX + 1].Position.Y;
-                    float height4 = vertices[vertexIndex + vertexCountX].Position.Y;
-
-                    float heightHxLz = vertices[vertexIndex + 1].Position.Y;
-                    float heightLxLz = vertices[vertexIndex].Position.Y;
-                    float heightHxHz = vertices[vertexIndex + vertexCountX + 1].Position.Y;
-                    float heightLxHz = vertices[vertexIndex + vertexCountX].Position.Y;
-
-                    bool aboveLowerTri = posRel.X < posRel.Y;
-                    float heightIncX, heightIncY;
-                    if (aboveLowerTri)
-                    {
-                        heightIncX = height3 - height4;
-                        heightIncY = height4 - height2;
-                    }
-                    else
-                    {
-                        heightIncX = height1 - height2;
-                        heightIncY = height3 - height1;
-                    }
-                    float lerpHeight = height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
-                    return lerpHeight;
+                    heightIncX = height3 - height4;
+                    heightIncY = height4 - height2;
                 }
-                catch { }
+                else
+                {
+                    heightIncX = height1 - height2;
+                    heightIncY = height3 - height1;
+                }
+                float lerpHeight = height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
+                return lerpHeight;
+
             }
             return 20; //default value
         }
+
 
         public float getHeight(Vector3 pos)
         {

@@ -43,9 +43,22 @@ namespace Wumpus3Drev0
 
         public void Update()
         {
+            Ray mouseRay = getMouseRay();
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                Ray mouseRay = getMouseRay();
+                foreach (GameModel model in this.models)
+                {
+                    if (model.RayIntersects(mouseRay))
+                    {
+                        this.selectedModel = model;
+                        return;
+                    }
+                }
+                this.selectedModel = null;
+            }
+            else if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            {
+                
                 if (this.selectedModel != null)
                 {
                     Vector3? intersect = this.selectedModel.Terrain.RayIntersects(mouseRay);
@@ -58,15 +71,7 @@ namespace Wumpus3Drev0
                         }
                     }
                 }
-                this.selectedModel = null;
-                foreach (GameModel model in this.models)
-                {
-                    if (model.RayIntersects(mouseRay))
-                    {
-                        this.selectedModel = model;
-                        return;
-                    }
-                }
+               
             }
 
         }

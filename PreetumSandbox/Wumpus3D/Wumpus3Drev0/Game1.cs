@@ -203,10 +203,18 @@ namespace Wumpus3Drev0
                     model.StopAnimation();
 
 
-
-
                 if (Keyboard.GetState().IsKeyDown(Keys.X))
+                {
                     model.StartAnimation("walk");
+                    camera.SetTargetLockPosition(model.Position3);
+                }
+
+
+                if (Keyboard.GetState().IsKeyDown(Keys.D)) //dump debug info
+                {
+                    float height = terrain.getHeight(Vector2.Zero);
+                    System.Diagnostics.Debug.WriteLine(height);
+                }
 
             }
 
@@ -257,18 +265,21 @@ namespace Wumpus3Drev0
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1, 0);
             //GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            frc.Draw();
+            
 
-            GraphicsDevice.RenderState.CullMode = CullMode.None;
+            //GraphicsDevice.RenderState.CullMode = CullMode.None;
             GraphicsDevice.RenderState.DepthBufferEnable = true;
-
             terrain.Draw();
+
             GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
             GraphicsDevice.RenderState.DepthBufferEnable = true;
-
             model.Draw();
+
+            frc.Draw();
             //skySphere.Draw();
 
+            /*GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
+            GraphicsDevice.RenderState.DepthBufferEnable = true;
             Matrix cubeWorld = Matrix.CreateScale(model.BoundingSphere.Radius) * Matrix.CreateTranslation(model.BoundingSphere.Center);
             foreach (ModelMesh mesh in cube.Meshes)
             {
@@ -280,7 +291,7 @@ namespace Wumpus3Drev0
                     effect.World = cubeWorld;
                 }
                 mesh.Draw();
-            }
+            }*/
 
             base.Draw(gameTime);
         }
