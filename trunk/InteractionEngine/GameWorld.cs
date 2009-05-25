@@ -78,8 +78,8 @@ namespace InteractionEngine {
         /// <param name="GameTime">The current game time.</param>
         public static void run(Microsoft.Xna.Framework.GameTime gameTime) {
             gameTimeField = gameTime;
-            if (userInterface == null) throw new GameWorldException("You cannot call Engine.game.Run() before you assign a UserInterface object to Engine.userInterface.");
-            userInterface.startInputOutput();
+         //   if (userInterface == null) throw new GameWorldException("You cannot call Engine.game.Run() before you assign a UserInterface object to Engine.userInterface.");
+         //   userInterface.startInputOutput();
             // Allows the game to exit
             if (status == Status.SINGLE_PLAYER) {
                 // Get Events from the GameWorld
@@ -89,7 +89,7 @@ namespace InteractionEngine {
                 // Process the Events locally
                 processEvents(events);
                 // Output graphics
-                userInterface.output();
+         //       userInterface.output();
             } else if (status == Status.MULTIPLAYER_SERVERCLIENT) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
@@ -102,7 +102,7 @@ namespace InteractionEngine {
                 // Send updates to clients
                 sendUpdates();
                 // Output graphics
-                userInterface.output();
+         //       userInterface.output();
             } else if (status == Status.MULTIPLAYER_CLIENT) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
@@ -115,12 +115,21 @@ namespace InteractionEngine {
                 // Recieve and process updates from the server
                 if (status == Status.MULTIPLAYER_CLIENT) receiveUpdate();
                 // Output graphics
-                userInterface.output();
+          //      userInterface.output();
             } else if (status == Status.MULTIPLAYER_SERVER) {
                 // Get and handle Events from Clients
                 handleInput();
                 // Send updates to clients
                 sendUpdates();
+            }
+        }
+
+        internal static void draw(Microsoft.Xna.Framework.GameTime gameTime) {
+            gameTimeField = gameTime;
+            if (userInterface == null) throw new GameWorldException("You cannot call Engine.game.Run() before you assign a UserInterface object to Engine.userInterface.");
+            userInterface.startInputOutput();
+            if (status != Status.MULTIPLAYER_SERVER) {
+                userInterface.output();
             }
         }
 

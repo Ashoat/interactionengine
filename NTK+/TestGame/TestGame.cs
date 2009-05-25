@@ -59,6 +59,7 @@ namespace Game
             user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
             Engine.game.GraphicsDevice.RenderState.CullMode = CullMode.None;
 
+            Engine.game.GraphicsDevice.RenderState.MultiSampleAntiAlias = false;
             Engine.game.GraphicsDevice.RenderState.DepthBufferEnable = true;
             Engine.game.GraphicsDevice.RenderState.AlphaBlendEnable = true;
             Engine.game.GraphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha; // source rgb * source alpha

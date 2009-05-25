@@ -363,8 +363,9 @@ namespace NTKPlusGame.World {
             //effect.FogEnd = 3000;
         }
 
-
+        private int count = 0;
         public void onDraw() {
+
             UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace; //or null
             UserInterface3D.graphicsDevice.RenderState.DepthBufferEnable = true;
 
