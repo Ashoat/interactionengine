@@ -134,7 +134,70 @@ namespace Wumpus3Drev0
             numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
         }
 
+        private int getRandomWithinBounds(Random rand, int maxDiff) //returns a byte within -maxDiff, +maxDiff
+        {
+            return (int)rand.Next(-maxDiff, maxDiff);
+        }
+        private void GenerateRandomWalkMap(int width, int height, byte roughness)
+        {
 
+            Random rand = new Random();
+
+            /*byte[] randomWalk1 = new byte[width * height];
+ 
+            // execute 2d random walks on each ROW (+x)
+            
+            int h = 0, w = 0;
+            for (h = 0; h < height; h++)
+            {
+                rand = new Random(h * w);
+                randomWalk1[h * width] = (byte)rand.Next(0, 255); //set the first height of the row
+                for (w = 1; w < height; w++) //calc 2nd -> last heights
+                {
+                    randomWalk1[w + h * width] = (byte)(randomWalk1[(w-1) + h * width]+getRandomWithinBounds(rand, roughness));
+                }
+            }
+
+
+            heightMap = randomWalk1;
+            vertexCountX = width;
+            vertexCountZ = height;
+            numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
+            numVertices = heightMap.Length;
+            */
+        }
+        private int i = 0;
+        private void recurseMidFractalMap(ref byte[] map, int bot, int top, int mag, float magConst, Random rand) // a 1D map. 1D!!! || bot and top are index pointers. 'mag' is the magnitude of rand. modulation
+        {
+            i++;
+            if (top - bot <= 1)
+                return;
+            int midPt =(bot+top)/2;
+            int midVal = (map[bot] + map[top])/2;
+            int midNew = -1;
+            while (midNew < 0)
+            {
+                midNew = midVal + rand.Next(-mag, mag);
+            }
+            map[midPt] = (byte)midNew;
+            recurseMidFractalMap(ref map, bot, midPt, (int)(mag * magConst), magConst, rand);
+            recurseMidFractalMap(ref map, midPt, top, (int)(mag * magConst), magConst, rand);
+        }
+        private void GenerateMidFractalMap(int width, int height, int mag, float magConst)
+        {
+            heightMap = new byte[width * height];
+            for (int h = 0; h < height; h++)
+            {
+                byte[] row = new byte[width];
+                recurseMidFractalMap(ref row, 0, row.Length-1, mag, magConst, new Random(h));
+                for (int i = 0; i < width; i++)
+                    heightMap[i + h * width] = row[i];
+            }
+            vertexCountX = width;
+            vertexCountZ = height;
+            numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
+            numVertices = heightMap.Length;
+        }
         private void GenerateIndices()
         {
             indices = new int[vertexCountX * 2 * (vertexCountZ - 1)];
@@ -178,6 +241,7 @@ namespace Wumpus3Drev0
                 }
             }
         }
+
 
         private void GenerateNormals()
         {
@@ -242,7 +306,9 @@ namespace Wumpus3Drev0
 
             dev = device;
 
-            this.LoadHeightmapFromImage(mapAsset);
+            //this.LoadHeightmapFromImage(mapAsset);
+            //this.GenerateRandomWalkMap(128, 128, 20);
+            this.GenerateMidFractalMap(128, 128, 255, .6f);
             this.LoadTexture(texAsset);
 
             this.GenerateIndices();
@@ -259,10 +325,9 @@ namespace Wumpus3Drev0
 
             //this.SetScale(scale);
         }
-
-        public void Draw()
+        public void Draw(CullMode mode)
         {
-            dev.RenderState.CullMode = CullMode.CullCounterClockwiseFace; //or null
+            dev.RenderState.CullMode = mode; //or null
             dev.RenderState.DepthBufferEnable = true;
 
             dev.VertexDeclaration = new VertexDeclaration(dev, VertexPositionNormalTexture.VertexElements);
@@ -279,6 +344,10 @@ namespace Wumpus3Drev0
                 pass.End();
             }
             effect.End();
+        }
+        public void Draw()
+        {
+            this.Draw(CullMode.CullCounterClockwiseFace);
         }
 
         //

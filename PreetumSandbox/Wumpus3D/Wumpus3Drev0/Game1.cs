@@ -271,9 +271,8 @@ namespace Wumpus3Drev0
 
             
 
-            //GraphicsDevice.RenderState.CullMode = CullMode.None;
-            GraphicsDevice.RenderState.DepthBufferEnable = true;
-            terrain.Draw();
+
+            terrain.Draw(CullMode.None);
 
             GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
             GraphicsDevice.RenderState.DepthBufferEnable = true;
