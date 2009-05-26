@@ -48,9 +48,8 @@ namespace InteractionEngine.UserInterface.Text {
         public override void output() {
             if (!readyToOutput) return;
             options.Clear();
-            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
-                for (int i = 0; i < loadRegion.getObjectCount(); i++) {
-                    Constructs.GameObjectable gameObject = InteractionEngine.Engine.getGameObject(i);
+            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getGraphableLoadRegions()) {
+                foreach (Constructs.GameObject gameObject in loadRegion.getGameObjectArray()){
                     // Go through every GameObject and see if they have something to output
                     if (gameObject is Graphable)
                         ((Graphable)gameObject).getGraphics().onDraw();

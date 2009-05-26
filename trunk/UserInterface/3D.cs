@@ -207,9 +207,9 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             float closest2DLayerDepth = 0;
             Vector3 intersection2D = Vector3.Zero;
             // Loop through all of the User's LoadRegions
-            foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
+            foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getGraphableLoadRegions()) {
                 // Loop through all the LoadRegion's GameObjects
-                foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
+                foreach (Constructs.GameObjectable gameObject in loadRegion.getGameObjectArray()) {
                     // See if this GameObject can be interacted with.
                     if (gameObject is Interactable3D) {
                         Interactable3D interaction = (Interactable3D)gameObject;
@@ -259,14 +259,11 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         public override void output() {
             // Loop through the user's LoadRegions
-            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getLoadRegionList()) {
+            foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getGraphableLoadRegions()) {
                 // Loop through the GameObjects within those LoadRegions
-                foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
+                foreach (Constructs.GameObjectable gameObject in loadRegion.getGameObjectArray()) {
                     if (gameObject is Audio.Audible3D) ((Audio.Audible3D)gameObject).getAudio3D().output();
                     if (gameObject is Graphable) ((Graphable)gameObject).getGraphics().onDraw();
-                }
-                foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
-                   // if (gameObject is Graphable2D) ((Graphable)gameObject).getGraphics().onDraw();
                 }
             }
 

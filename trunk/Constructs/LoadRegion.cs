@@ -178,7 +178,9 @@ namespace InteractionEngine.Constructs {
         /// <param name="objectId">The id of the GameObject that enters the room.</param>
         /// <returns>A reference to this LoadRegion, so that the GameObject can assign it to its field.</returns>
         internal void addObject(int objectId) {
-            this.objects.Add(objectId);
+            lock (objects) {
+                this.objects.Add(objectId);
+            }
         }
 
         /// <summary>
@@ -187,7 +189,9 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <param name="objectId">The id of the GameObject that leaves the room.</param>
         internal void removeObject(int objectId) {
-            this.objects.Remove(objectId);
+            lock (objects) {
+                this.objects.Remove(objectId);
+            }
         }
 
         /// <summary>
@@ -200,11 +204,18 @@ namespace InteractionEngine.Constructs {
         }
 
         /// <summary>
-        /// This method returns the number of GameObjects in this LoadRegion.
+        /// This method returns an array of all the GameObjects in the LoadRegion.
         /// </summary>
-        /// <returns>The number of GameObjects in this LoadRegion.</returns>
-        public int getObjectCount() {
-            return this.objects.Count;
+        /// <returns>The GameObjects in this LoadRegion.</returns>
+        public Constructs.GameObjectable[] getGameObjectArray() {
+            Constructs.GameObjectable[] gameObjectArray;
+            // Copy over to prevent 
+            lock (objects) {
+                gameObjectArray = new Constructs.GameObjectable[objects.Count];
+                int i = 0;
+                foreach (int gameObject in objects) gameObjectArray[i++] = Engine.getGameObject(gameObject);
+            }
+            return gameObjectArray;
         }
 
         #endregion

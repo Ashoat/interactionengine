@@ -92,32 +92,34 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                 }
             }
             // Loop through all the GameObjects
-            foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) {
-                // See if this GameObject can be interacted with.
-                if (gameObject is Graphable) {
-                    if (!(((Graphable)gameObject).getGraphics() is Graphics2D)) continue;
-                    Graphics2D graphics = (Graphics2D)((Graphable)gameObject).getGraphics();
-                    if (gameObject is EventHandling.Interactable) {
-                        EventHandling.Interactable interaction = (EventHandling.Interactable)gameObject;
-                        // Check to see if the mouse is intersecting the GameObject.
-                        if (graphics.contains(mouse.X, mouse.Y)) {
-                            // MOUSE_OVER?
-                            if (!mouseOvered.Contains(interaction)) {
-                                mouseOvered.Add(interaction);
-                                EventHandling.Event evvie = interaction.getEvent(MOUSE_OVER, new Vector3(mouse.X, mouse.Y, 0));
-                                if (evvie != null) newEvents.Add(evvie);
-                            }
-                            // MOUSE_LEFT_CLICK?
-                            if (mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseLeftClicked.Contains(interaction)) {
-                                mouseLeftClicked.Add(interaction);
-                                EventHandling.Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK, new Vector3(mouse.X, mouse.Y, 0));
-                                if (evvie != null) newEvents.Add(evvie);
-                            }
-                            // MOUSE_RIGHT_CLICK?
-                            if (mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseRightClicked.Contains(interaction)) {
-                                mouseRightClicked.Add(interaction);
-                                EventHandling.Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK, new Vector3(mouse.X, mouse.Y, 0));
-                                if (evvie != null) newEvents.Add(evvie);
+            foreach (Constructs.LoadRegion loadRegion in Engine.getGraphableLoadRegions()) {
+                foreach (Constructs.GameObjectable gameObject in loadRegion.getGameObjectArray()) {
+                    // See if this GameObject can be interacted with.
+                    if (gameObject is Graphable) {
+                        if (!(((Graphable)gameObject).getGraphics() is Graphics2D)) continue;
+                        Graphics2D graphics = (Graphics2D)((Graphable)gameObject).getGraphics();
+                        if (gameObject is EventHandling.Interactable) {
+                            EventHandling.Interactable interaction = (EventHandling.Interactable)gameObject;
+                            // Check to see if the mouse is intersecting the GameObject.
+                            if (graphics.contains(mouse.X, mouse.Y)) {
+                                // MOUSE_OVER?
+                                if (!mouseOvered.Contains(interaction)) {
+                                    mouseOvered.Add(interaction);
+                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_OVER, new Vector3(mouse.X, mouse.Y, 0));
+                                    if (evvie != null) newEvents.Add(evvie);
+                                }
+                                // MOUSE_LEFT_CLICK?
+                                if (mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseLeftClicked.Contains(interaction)) {
+                                    mouseLeftClicked.Add(interaction);
+                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_LEFT_CLICK, new Vector3(mouse.X, mouse.Y, 0));
+                                    if (evvie != null) newEvents.Add(evvie);
+                                }
+                                // MOUSE_RIGHT_CLICK?
+                                if (mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && !mouseRightClicked.Contains(interaction)) {
+                                    mouseRightClicked.Add(interaction);
+                                    EventHandling.Event evvie = interaction.getEvent(MOUSE_RIGHT_CLICK, new Vector3(mouse.X, mouse.Y, 0));
+                                    if (evvie != null) newEvents.Add(evvie);
+                                }
                             }
                         }
                     }
@@ -131,9 +133,11 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         public override void output() {
             this.spriteBatch.Begin();
             // Go through every GameObject and see if they have something to output
-            foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()){
-                if (gameObject is Graphable)
-                    ((Graphable)gameObject).getGraphics().onDraw();
+            foreach (Constructs.LoadRegion loadRegion in Engine.getGraphableLoadRegions()) {
+                foreach (Constructs.GameObjectable gameObject in loadRegion.getGameObjectArray()) {
+                    if (gameObject is Graphable)
+                        ((Graphable)gameObject).getGraphics().onDraw();
+                }
             }
             this.spriteBatch.End();
         }
