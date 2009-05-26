@@ -254,10 +254,7 @@ namespace InteractionEngine {
                 }
             }
             // Reset the cache in every LoadRegion.
-            System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>.ValueCollection loadRegionList = getLoadRegionList();
-            lock (loadRegionList) {
-                foreach (Constructs.LoadRegion region in loadRegionList) region.resetBuffer();
-            }
+            foreach (Constructs.LoadRegion region in getLoadRegionArray()) region.resetBuffer();
         }
 
         #endregion
@@ -280,7 +277,7 @@ namespace InteractionEngine {
         /// This adds a GameObject to the GameObject Hashlist.
         /// </summary>
         /// <param name="gameObject">The GameObject to be added.</param>
-        public static void addGameObject(Constructs.GameObjectable gameObject) {
+        internal static void addGameObject(Constructs.GameObjectable gameObject) {
             lock (gameObjectHashlist) {
                 gameObjectHashlist.Add(gameObject.id, gameObject);
             }
@@ -290,7 +287,7 @@ namespace InteractionEngine {
         /// Assign an ID to a GameObject. Should only ever be called on a server, but it won't work if it's called otherwise so whatever.
         /// </summary>
         /// <param name="gameObject"></param>
-        public static void assignGameObjectID(Constructs.GameObjectable gameObject) {
+        internal static void assignGameObjectID(Constructs.GameObjectable gameObject) {
             // This will only work if the GameObject doesn't already have an ID.
             gameObject.id = nextGameObjectID++;
         }
@@ -299,8 +296,12 @@ namespace InteractionEngine {
         /// This removes a GameObject from the GameObject Hashlist. 
         /// </summary>
         /// <param name="id">The id of the GameObject to be removed</param>
-        public static void removeGameObject(int id) {
-            if (gameObjectHashlist.ContainsKey(id)) gameObjectHashlist.Remove(id);
+        internal static void removeGameObject(int id) {
+            if (gameObjectHashlist.ContainsKey(id)) {
+                lock (gameObjectHashlist) {
+                    gameObjectHashlist.Remove(id);
+                }
+            }
         }
 
         /// <summary>
@@ -314,18 +315,10 @@ namespace InteractionEngine {
         }
 
         /// <summary>
-        /// This method returns the number of GameObjects in the GameWorld.
-        /// </summary>
-        /// <returns>The number of GameObjects in the GameWorld.</returns>
-        public static int getGameObjectCount() {
-            return gameObjectHashlist.Count;
-        }
-
-        /// <summary>
         /// Get a list of all the GameObjects in the GameWorld.
         /// </summary>
         /// <returns>All the GameObjects in the GameWorld.</returns>
-        public static Constructs.GameObjectable[] getGameObjectList() {
+        public static Constructs.GameObjectable[] getGameObjectArray() {
             Constructs.GameObjectable[] gameObjectArray;
             // Copy over to prevent 
             lock (gameObjectHashlist) {
@@ -356,19 +349,25 @@ namespace InteractionEngine {
         /// This adds a LoadRegion to the LoadRegion Hashlist.
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to be added.</param>
-        public static void addLoadRegion(Constructs.LoadRegion loadRegion) {
+        internal static void addLoadRegion(Constructs.LoadRegion loadRegion) {
             // This will only work if the LoadRegion doesn't already have an ID.
             // Since on a MULTIPLAYER_CLIENT this ID would have already been set, nothing will happen in that case.
             loadRegion.id = nextLoadRegionID++;
-            loadRegionHashlist.Add(loadRegion.id, loadRegion);
+            lock (loadRegionHashlist) {
+                loadRegionHashlist.Add(loadRegion.id, loadRegion);
+            }
         }
 
         /// <summary>
         /// This removes a LoadRegion from the LoadRegion Hashlist. 
         /// </summary>
         /// <param name="id">The id of the LoadRegion to be removed</param>
-        public static void removeLoadRegion(int id) {
-            if (loadRegionHashlist.ContainsKey(id)) loadRegionHashlist.Remove(id);
+        internal static void removeLoadRegion(int id) {
+            if (loadRegionHashlist.ContainsKey(id)) {
+                lock (loadRegionHashlist) {
+                    loadRegionHashlist.Remove(id);
+                }
+            }
         }
 
         /// <summary>
@@ -382,19 +381,28 @@ namespace InteractionEngine {
         }
 
         /// <summary>
-        /// This method returns the number of LoadRegions in the GameWorld.
+        /// Get an array of all the LoadRegions in the GameWorld.
         /// </summary>
-        /// <returns>The number of LoadRegions in the GameWorld.</returns>
-        public static int getLoadRegionCount() {
-            return loadRegionHashlist.Count;
+        /// <returns>All the LoadRegions in the GameWorld.</returns>
+        public static Constructs.LoadRegion[] getLoadRegionArray() {
+            Constructs.LoadRegion[] loadRegionArray;
+            // Copy over to prevent 
+            lock (loadRegionHashlist) {
+                loadRegionArray = new Constructs.LoadRegion[loadRegionHashlist.Count];
+                int i = 0;
+                foreach(Constructs.LoadRegion loadRegion in loadRegionHashlist.Values) loadRegionArray[i++] = loadRegion;
+            }
+            return loadRegionArray;
         }
 
         /// <summary>
-        /// Get a list of all the LoadRegions in the GameWorld.
+        /// Get the LoadRegions that need to be graphed from the GameWorld.
         /// </summary>
-        /// <returns>All the LoadRegions in the GameWorld.</returns>
-        public static System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>.ValueCollection getLoadRegionList() {
-            return loadRegionHashlist.Values;
+        /// <returns>All the LoadRegions that need to be graphed.</returns>
+        internal static Constructs.LoadRegion[] getGraphableLoadRegions() {
+            if (status == Status.MULTIPLAYER_SERVERCLIENT) return Networking.Client.getPrivateLoadRegionList();
+            else if (status == Status.MULTIPLAYER_CLIENT || status == Status.SINGLE_PLAYER) return getLoadRegionArray();
+            else return null;
         }
 
         #endregion

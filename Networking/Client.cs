@@ -51,6 +51,10 @@ namespace InteractionEngine.Networking {
             } catch (System.Net.Sockets.SocketException e) {
                 throw new InteractionEngineException("You have probably tried to run two copies of the Interaction Engine on the same port from the same machine. This is not supported. For more information, see the inner exception.", e);
             }
+            // Make sure we're still graphing all our old "private" LoadRegions!
+            foreach (Constructs.LoadRegion loadRegion in Engine.getLoadRegionArray()) {
+                addPrivateLoadRegion(loadRegion);
+            }
             listenerThread = new System.Threading.Thread(new System.Threading.ThreadStart(checkForNewConnections));
             try {
                 listenerThread.Start();
@@ -107,6 +111,55 @@ namespace InteractionEngine.Networking {
                     throw new InteractionEngineException("A client tried to connect, but something failed. See the inner exception for more details.", e);
                 }
             }
+        }
+
+        #endregion
+
+        #region Private LoadRegion List
+
+        /**
+         * PRIVATE LOADREGION LIST
+         * 
+         * Contains a reference to all the LoadRegions this MULTIPLAYER_SERVERCLIENT is in.
+         * Used for figuring out what to display.
+         */
+        private static System.Collections.Generic.Dictionary<int, Constructs.LoadRegion> privateLoadRegionHashlist = new System.Collections.Generic.Dictionary<int, InteractionEngine.Constructs.LoadRegion>();
+
+        /// <summary>
+        /// Adds a LoadRegion to this User's LoadRegion list. 
+        /// </summary>
+        /// <param name="loadRegion">The LoadRegion to be added</param>
+        public static void addPrivateLoadRegion(Constructs.LoadRegion loadRegion) {
+            lock (privateLoadRegionHashlist) {
+                privateLoadRegionHashlist.Add(loadRegion.id, loadRegion);
+            }
+        }
+
+        /// <summary>
+        /// Removes a LoadRegion from this User's list of LoadRegions. 
+        /// </summary>
+        /// <param name="id">The ID of the LoadRegion to be removed</param>
+        public static void removePrivateLoadRegion(int id) {
+            if (privateLoadRegionHashlist.ContainsKey(id)) {
+                lock (privateLoadRegionHashlist) {
+                    privateLoadRegionHashlist.Remove(id);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the LoadRegion list in read-only form.
+        /// </summary>
+        /// <returns>The LoadRegion list in read-only form.</returns>
+        public static Constructs.LoadRegion[] getPrivateLoadRegionList() {
+            Constructs.LoadRegion[] loadRegionArray;
+            // Copy over to prevent 
+            lock (privateLoadRegionHashlist) {
+                loadRegionArray = new Constructs.LoadRegion[privateLoadRegionHashlist.Count];
+                int i = 0;
+                foreach(Constructs.LoadRegion loadRegion in privateLoadRegionHashlist.Values) loadRegionArray[i++] = loadRegion;
+            }
+            return loadRegionArray;
         }
 
         #endregion
@@ -229,32 +282,37 @@ namespace InteractionEngine.Networking {
         /// Adds a LoadRegion to this User's LoadRegion list. 
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to be added</param>
-        public void addLoadRegion(Constructs.LoadRegion loadRegion) {
-            loadRegionHashlist.Add(loadRegion.id, loadRegion);
+        internal void addLoadRegion(Constructs.LoadRegion loadRegion) {
+            lock (loadRegionHashlist) {
+                loadRegionHashlist.Add(loadRegion.id, loadRegion);
+            }
         }
 
         /// <summary>
         /// Removes a LoadRegion from this User's list of LoadRegions. 
         /// </summary>
         /// <param name="id">The ID of the LoadRegion to be removed</param>
-        public void removeLoadRegion(int id) {
-            if(loadRegionHashlist.ContainsKey(id)) loadRegionHashlist.Remove(id);
-        }
-
-        /// <summary>
-        /// Returns the number of LoadRegions this User has.
-        /// </summary>
-        /// <returns>The number of LoadRegions this User has.</returns>
-        public int getLoadRegionCount() {
-            return loadRegionHashlist.Count;
+        internal void removeLoadRegion(int id) {
+            if (loadRegionHashlist.ContainsKey(id)) {
+                lock (loadRegionHashlist) {
+                    loadRegionHashlist.Remove(id);
+                }
+            }
         }
 
         /// <summary>
         /// Get the LoadRegion list in read-only form.
         /// </summary>
         /// <returns>The LoadRegion list in read-only form.</returns>
-        public System.Collections.Generic.Dictionary<int, Constructs.LoadRegion>.ValueCollection getLoadRegionList() {
-            return loadRegionHashlist.Values;
+        internal Constructs.LoadRegion[] getLoadRegionList() {
+            Constructs.LoadRegion[] loadRegionArray;
+            // Copy over to prevent 
+            lock (loadRegionHashlist) {
+                loadRegionArray = new Constructs.LoadRegion[loadRegionHashlist.Count];
+                int i = 0;
+                foreach (Constructs.LoadRegion loadRegion in loadRegionHashlist.Values) loadRegionArray[i++] = loadRegion;
+            }
+            return loadRegionArray;
         }
 
         #endregion
@@ -290,24 +348,8 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="gameObjectID">The ID of the GameObject to be checked.</param>
         /// <returns>True if the Client has permission; false if not.</returns>
-        public bool hasPermission(int gameObjectID) {
+        internal bool hasPermission(int gameObjectID) {
             return permissionList.Contains(gameObjectID);
-        }
-
-        /// <summary>
-        /// Get the number of GameObjects that this Client controls.
-        /// </summary>
-        /// <returns>The number of GameObjects that this Client controls.</returns>
-        public int getPermissionCount() {
-            return permissionList.Count;
-        }
-
-        /// <summary>
-        /// Get the Permission List as a read-only list.
-        /// </summary>
-        /// <returns>The permission list in read-only form.</returns>
-        public System.Collections.Generic.IList<int> getPermissions() {
-            return permissionList.AsReadOnly();
         }
 
         #endregion

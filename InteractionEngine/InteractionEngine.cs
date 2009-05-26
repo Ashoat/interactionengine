@@ -23,9 +23,6 @@ namespace InteractionEngine {
         // Contains a reference to the display screen.
         // Used for outputting graphics.
         public Microsoft.Xna.Framework.GraphicsDeviceManager graphics;
-        // Contains a reference to a multiplayer game's NetworkSession.
-        // Used for sending and recieving data from other gamers.
-        public Microsoft.Xna.Framework.Net.NetworkSession session;
 
         /// <summary>
         /// Constructs the InteractionGame.
@@ -55,7 +52,7 @@ namespace InteractionEngine {
             if (height > 0) this.graphics.PreferredBackBufferHeight = height;
             this.graphics.ApplyChanges();
             this.graphics.GraphicsDevice.Clear(this.color);
-            foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectList()) { 
+            foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectArray()) { 
                 if (gameObject is UserInterface.Graphable) {
                     ((UserInterface.Graphable)gameObject).getGraphics().loadContent();
                 }
