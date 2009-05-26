@@ -28,7 +28,7 @@ namespace InteractionEngine {
          */
         // Contains a reference to the XNA Game object.
         // Used by various XNA components. See XNA documentation.
-        public static InteractionGame game;
+        internal static InteractionGame game = new InteractionGame();
         // Contains the current game time.
         // Used for letting GameObjects know what the time is (it's game time).
         private static Microsoft.Xna.Framework.GameTime gameTimeField;
@@ -73,14 +73,18 @@ namespace InteractionEngine {
         public static UserInterface.UserInterface userInterface;
 
         /// <summary>
-        /// Run the game.
+        /// Start the game!
+        /// </summary>
+        public static void run() {
+            game.Run();
+        }
+
+        /// <summary>
+        /// Run the GameWorld logic.
         /// </summary>
         /// <param name="GameTime">The current game time.</param>
-        public static void run(Microsoft.Xna.Framework.GameTime gameTime) {
+        internal static void runGameWorld(Microsoft.Xna.Framework.GameTime gameTime) {
             gameTimeField = gameTime;
-         //   if (userInterface == null) throw new GameWorldException("You cannot call Engine.game.Run() before you assign a UserInterface object to Engine.userInterface.");
-         //   userInterface.startInputOutput();
-            // Allows the game to exit
             if (status == Status.SINGLE_PLAYER) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
@@ -88,8 +92,6 @@ namespace InteractionEngine {
                 events.AddRange(getEvents());
                 // Process the Events locally
                 processEvents(events);
-                // Output graphics
-         //       userInterface.output();
             } else if (status == Status.MULTIPLAYER_SERVERCLIENT) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
@@ -101,8 +103,6 @@ namespace InteractionEngine {
                 handleInput();
                 // Send updates to clients
                 sendUpdates();
-                // Output graphics
-         //       userInterface.output();
             } else if (status == Status.MULTIPLAYER_CLIENT) {
                 // Get Events from the GameWorld
                 System.Collections.Generic.List<EventHandling.Event> events = userInterface.input();
@@ -114,8 +114,6 @@ namespace InteractionEngine {
                 processEvents(events);
                 // Recieve and process updates from the server
                 if (status == Status.MULTIPLAYER_CLIENT) receiveUpdate();
-                // Output graphics
-          //      userInterface.output();
             } else if (status == Status.MULTIPLAYER_SERVER) {
                 // Get and handle Events from Clients
                 handleInput();
@@ -124,6 +122,10 @@ namespace InteractionEngine {
             }
         }
 
+        /// <summary>
+        /// Run the graphics.
+        /// </summary>
+        /// <param name="gameTime">The current game time.</param>
         internal static void draw(Microsoft.Xna.Framework.GameTime gameTime) {
             gameTimeField = gameTime;
             if (userInterface == null) throw new GameWorldException("You cannot call Engine.game.Run() before you assign a UserInterface object to Engine.userInterface.");

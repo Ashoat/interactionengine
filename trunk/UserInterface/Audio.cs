@@ -86,6 +86,12 @@ namespace InteractionEngine.UserInterface.Audio {
         // Contains a list of all the actively playing sounds.
         // Used so that we know which sounds need to be calculated.
         private System.Collections.Generic.List<Microsoft.Xna.Framework.Audio.Cue> activeSounds = new System.Collections.Generic.List<Microsoft.Xna.Framework.Audio.Cue>();
+        // Contains a reference to an AudioEmitter class.
+        // Used so we don't need to instantiate this again every time.
+        private Microsoft.Xna.Framework.Audio.AudioEmitter emitter = new Microsoft.Xna.Framework.Audio.AudioEmitter();
+        // Contains a reference to an AudioListener class.
+        // Used so we don't need to instantiate this again every time.
+        private Microsoft.Xna.Framework.Audio.AudioListener listener = new Microsoft.Xna.Framework.Audio.AudioListener();
 
         /// <summary>
         /// Construct the Audio3D module.
@@ -125,12 +131,10 @@ namespace InteractionEngine.UserInterface.Audio {
                 if (sound.IsStopped) activeSounds.Remove(sound);
                 else {
                     InteractionEngine.Constructs.Location location = gameObject.getLocation();
-                    Microsoft.Xna.Framework.Audio.AudioEmitter emitter = new Microsoft.Xna.Framework.Audio.AudioEmitter();
                     emitter.Position = location.Position;
                     emitter.Forward = location.Heading;
                     emitter.Up = location.Top;
                     InteractionEngine.Constructs.Location cameraLocation = camera.getLocation();
-                    Microsoft.Xna.Framework.Audio.AudioListener listener = new Microsoft.Xna.Framework.Audio.AudioListener();
                     listener.Position = cameraLocation.Position;
                     listener.Forward = cameraLocation.Heading;
                     listener.Up = cameraLocation.Top;
