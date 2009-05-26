@@ -61,6 +61,14 @@ namespace InteractionEngine {
                 return realStatus;
             }
             set {
+                if (value == Status.MULTIPLAYER_SERVERCLIENT && (realStatus == Status.SINGLE_PLAYER || realStatus == Status.MULTIPLAYER_CLIENT)) {
+                    // Make sure we're still graphing all our old "private" LoadRegions!
+                    foreach (Constructs.LoadRegion loadRegion in Engine.getLoadRegionArray()) {
+                        Networking.Client.addPrivateLoadRegion(loadRegion);
+                    }
+                } else if (value != Status.MULTIPLAYER_SERVERCLIENT && realStatus == Status.MULTIPLAYER_SERVERCLIENT) {
+
+                }
                 // Don't want any collisions with existing numbers if the client had an GameObject or LoadRegion with an ID the server sent them.
                 // Really only need this for the server, but better safe than sorry.
                 nextLoadRegionID = nextLoadRegionID + 100;
@@ -278,6 +286,7 @@ namespace InteractionEngine {
         /// </summary>
         /// <param name="gameObject">The GameObject to be added.</param>
         internal static void addGameObject(Constructs.GameObjectable gameObject) {
+            if (gameObjectHashlist.ContainsKey(gameObject.id)) return;
             lock (gameObjectHashlist) {
                 gameObjectHashlist.Add(gameObject.id, gameObject);
             }
@@ -353,6 +362,7 @@ namespace InteractionEngine {
             // This will only work if the LoadRegion doesn't already have an ID.
             // Since on a MULTIPLAYER_CLIENT this ID would have already been set, nothing will happen in that case.
             loadRegion.id = nextLoadRegionID++;
+            if (loadRegionHashlist.ContainsKey(loadRegion.id)) return;
             lock (loadRegionHashlist) {
                 loadRegionHashlist.Add(loadRegion.id, loadRegion);
             }

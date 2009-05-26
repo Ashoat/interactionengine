@@ -51,10 +51,6 @@ namespace InteractionEngine.Networking {
             } catch (System.Net.Sockets.SocketException e) {
                 throw new InteractionEngineException("You have probably tried to run two copies of the Interaction Engine on the same port from the same machine. This is not supported. For more information, see the inner exception.", e);
             }
-            // Make sure we're still graphing all our old "private" LoadRegions!
-            foreach (Constructs.LoadRegion loadRegion in Engine.getLoadRegionArray()) {
-                addPrivateLoadRegion(loadRegion);
-            }
             listenerThread = new System.Threading.Thread(new System.Threading.ThreadStart(checkForNewConnections));
             try {
                 listenerThread.Start();
@@ -148,10 +144,19 @@ namespace InteractionEngine.Networking {
         }
 
         /// <summary>
+        /// Clear the private LoadRegion Hashlist.
+        /// </summary>
+        internal static void clearPrivateLoadRegionList() {
+            lock (privateLoadRegionHashlist) {
+                privateLoadRegionHashlist.Clear();
+            }
+        }
+
+        /// <summary>
         /// Get the LoadRegion list in read-only form.
         /// </summary>
         /// <returns>The LoadRegion list in read-only form.</returns>
-        public static Constructs.LoadRegion[] getPrivateLoadRegionList() {
+        internal static Constructs.LoadRegion[] getPrivateLoadRegionList() {
             Constructs.LoadRegion[] loadRegionArray;
             // Copy over to prevent 
             lock (privateLoadRegionHashlist) {
