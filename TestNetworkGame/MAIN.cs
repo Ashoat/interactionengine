@@ -12,8 +12,6 @@ namespace TestNetworkGame {
     public class main {
 
         public static void Main() {
-            // Set up XNA.
-            Engine.game = new InteractionGame();
             // Set up the UI.
             Engine.userInterface = new UserInterface2D();
             ((UserInterface2D)Engine.userInterface).setWindowSize(430, 430);
@@ -31,7 +29,7 @@ namespace TestNetworkGame {
             new O();
             new X();
             // Go!
-            Engine.game.Run();
+            Engine.run();
         }
 
     }

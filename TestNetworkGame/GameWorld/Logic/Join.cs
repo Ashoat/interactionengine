@@ -75,7 +75,7 @@ namespace TestNetworkGame.Logic {
             return graphics;
         }
 
-        public Event getEvent(int invoker) {
+        public Event getEvent(int invoker, Microsoft.Xna.Framework.Vector3 blah) {
             if (invoker == UserInterface2D.MOUSE_LEFT_CLICK) return new Event(this.id, "handleClick", null);
             else return null;
         }
