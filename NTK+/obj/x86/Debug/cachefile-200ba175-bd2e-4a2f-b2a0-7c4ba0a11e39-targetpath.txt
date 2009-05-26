@@ -3,9 +3,9 @@ Content\borat.xnb
 Content\Amazonia.xnb
 Content\Images\human_texture.xnb
 Content\heightImage.xnb
-Content\Models\Borat.xnb
-Content\Models\sphere180.xnb
-Content\Models\human4.xnb
 Content\genericButton.xnb
 Content\InfoBox\InfoBox.xnb
 Content\InfoBox\InfoTab.xnb
+Content\Models\Borat.xnb
+Content\Models\sphere180.xnb
+Content\Models\human4.xnb

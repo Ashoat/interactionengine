@@ -420,6 +420,68 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
     }
 
+
+    public class Animation {
+
+        List<string> frames = new List<string>();
+        List<Model> frameModels;
+
+        int index = 0;
+        string id;
+
+
+        public List<Model> Frames {
+            get { if (frameModels == null) throw new Exception("Animation content not loaded... call loadContent()"); return frameModels; }
+            set { frameModels = value; }
+        }
+        public int Index {
+            get { return index; }
+            set { index = value; }
+        }
+        public Model CurrentFrame {
+            get { if (frameModels == null) throw new Exception("Animation content not loaded... call loadContent()");  return frameModels[index]; }
+        }
+        public string Name {
+            get { return id; }
+            set { id = value; }
+        }
+        public Animation(string name) {
+            this.id = name;
+        }
+        public Animation(string[] frames, string name) {
+            this.frames = new List<string>(frames);
+            this.id = name;
+            if (UserInterface3D.graphicsDevice != null) this.loadContent();
+        }
+        public Animation(List<string> frames, string name) {
+            this.frames = new List<string>(frames);
+            this.id = name;
+            if (UserInterface3D.graphicsDevice != null) this.loadContent();
+        }
+        /// <summary>
+        /// Incriments the frame index
+        /// </summary>
+        /// <returns>Returns false if index is looped to 0 after incriment</returns>
+        public bool NextFrame() {
+            index++;
+            if (index >= frames.Count) {
+                index = 0;
+                return false;
+            }
+            return true;
+        }
+
+        public void loadContent() {
+            if (this.frameModels == null) {
+                this.frameModels = new List<Model>();
+                foreach (string modelName in this.frames) {
+                    this.frameModels.Add(UserInterface3D.content.Load<Model>(modelName));
+                }
+            }
+        }
+
+    }
+
     public interface Graphics3D : Graphics {
         float? intersects(Ray ray);
         Vector3? intersectionPoint(Ray ray);
@@ -427,6 +489,56 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
     }
 
     public class Graphics3DModel : Graphics3D {
+
+        public enum AnimationState {
+            Stopped,
+            Started,
+            Stopping
+        };
+
+        List<Animation> anims;
+        AnimationState animState = AnimationState.Stopped;
+        int animIndex = 0;
+        public List<Animation> Animations {
+            get { return anims; }
+            set {
+                anims = value;
+                foreach (Animation animation in this.anims) {
+                    animation.loadContent();
+                }
+            }
+        }
+        public Animation CurrentAnimation {
+            get { return anims[animIndex]; }
+        }
+        public Model CurrentModel {
+            get {
+                if (animState != AnimationState.Started) {
+                    return model;
+                } else {
+                    return this.CurrentAnimation.CurrentFrame;
+                }
+            }
+        }
+        public void StartAnimation(string name) {
+            this.animIndex = this.GetAnimIndexOf(this.GetAnimationByName(name));
+            animState = AnimationState.Started;
+        }
+        public void StopAnimation() {
+            if (animState == AnimationState.Started)
+                animState = AnimationState.Stopping;
+        }
+        public void ForceStopAnimation() {
+            animState = AnimationState.Stopped;
+            this.CurrentAnimation.Index = 0;
+        }
+
+        public Animation GetAnimationByName(string name) {
+            return anims.Find(a => a.Name == name);
+        }
+        public int GetAnimIndexOf(Animation a) {
+            return anims.IndexOf(a);
+        }
 
 
         private ModelEffect effect;
@@ -449,14 +561,18 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// Constructs the Graphics3D
         /// </summary>
         /// <param name="textureFileName">The filename of this GameObject's texture.</param>
-        public Graphics3DModel(Graphable3D gameObject, ModelEffect effect, string modelName) {
-            this.gameObject = gameObject;
+        public Graphics3DModel(Graphable3D gameObject, ModelEffect effect, string modelName)
+            : this(gameObject, new List<Animation>(), effect, modelName) {
 
-            this.effect = effect;
+        }
+
+        public Graphics3DModel(Graphable3D gameObject, List<Animation> animations, ModelEffect effect, string modelName) {
+            this.gameObject = gameObject;
+            this.anims = animations;
 
             this.modelName = modelName;
-
             this.worldLocal = Matrix.Identity;
+            this.effect = effect;
 
             if (InteractionEngine.Engine.game.GraphicsDevice != null) loadContent();
 
@@ -513,22 +629,35 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// Draw this Graphics3D onto the screen
         /// </summary>
         public virtual void onDraw() {
-            foreach (ModelMesh mesh in this.model.Meshes) {
+            if (animState != AnimationState.Stopped) {
+                drawModel(this.CurrentAnimation.CurrentFrame);
+                if (!this.CurrentAnimation.NextFrame()) //if NextFrame() causes a loopback to frame index 0
+                    if (animState == AnimationState.Stopping)
+                        animState = AnimationState.Stopped;
+            } else {
+                drawModel(this.model);
+            }
+        }
+
+
+        private void drawModel(Model m) {
+            foreach (ModelMesh mesh in m.Meshes) {
                 foreach (BasicEffect effect in mesh.Effects) {
 
                     effect.World = worldContainer(UserInterface3D.user.worldTransform); // so that the scale and stuff changes when the terrain scale changes
 
 
-                    effect.Projection = UserInterface3D.user.camera.Projection;
-                    effect.View = UserInterface3D.user.camera.View;
+                    effect.Projection = this.effect.ActiveCamera.Projection;//terrain.Camera.Projection;
+                    effect.View = this.effect.ActiveCamera.View;
                     effect.EnableDefaultLighting();
 
                     //
                     //Now copy all data from the ModelEffect to this BasicEffect
                     //
+
                     effect.Alpha = this.effect.Alpha;
                     effect.AmbientLightColor = this.effect.AmbientLightColor;
-                    if (this.effect.CurrentTechnique != null) effect.CurrentTechnique = this.effect.CurrentTechnique;
+                    //effect.CurrentTechnique = this.effect.CurrentTechnique;
                     effect.DiffuseColor = this.effect.DiffuseColor;
                     effect.EmissiveColor = this.effect.EmissiveColor;
                     effect.FogColor = this.effect.FogColor;
@@ -542,6 +671,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                     effect.Texture = this.effect.Texture;
                     effect.TextureEnabled = this.effect.TextureEnabled;
                     effect.VertexColorEnabled = this.effect.VertexColorEnabled;
+
                 }
 
                 mesh.Draw();
@@ -555,7 +685,16 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="ray">The ray</param>
         /// <returns>The distance at which the ray intersects this GameObject, or -1 if it does not intersect.</returns>
         public virtual float? intersects(Ray ray) {
-            return ray.Intersects(this.BoundingSphere);
+            float shortestDistance = float.PositiveInfinity;
+            foreach (ModelMesh mesh in this.CurrentModel.Meshes) {
+                Vector3 center = mesh.BoundingSphere.Center + gameObject.getLocation().Position;
+                float radius = mesh.BoundingSphere.Radius * this.scale;
+                float? distance = ray.Intersects(new BoundingSphere(center, radius));
+                if (distance < shortestDistance) shortestDistance = distance.Value;
+            }
+            if (float.IsPositiveInfinity(shortestDistance)) return null;
+            return shortestDistance;
+           // return ray.Intersects(this.BoundingSphere);
         }
 
         public virtual Vector3? intersectionPoint(Ray ray) {
@@ -571,7 +710,9 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             this.model = InteractionEngine.Engine.game.Content.Load<Model>(modelName);
             effect.Initialize(UserInterface3D.user.camera);
             this.calculateBoundingSphere();
-            // Also, remove "virtual" unless the plan is to subclass this.
+            foreach (Animation animation in this.anims) {
+                animation.loadContent();
+            }
         }
 
     }

@@ -47,66 +47,6 @@
       <Time>2009-05-22T21:15:42.4589566-07:00</Time>
     </Item>
     <Item>
-      <Source>Models\Borat.fbx</Source>
-      <Name>Models\Borat</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\Borat.xnb</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
-      <Dependency>
-        <Key>obj\x86\Debug\Models\Borat_0.xml</Key>
-        <Value>2009-05-17T19:37:25.347-07:00</Value>
-      </Dependency>
-    </Item>
-    <Item>
-      <Source>Models\sphere180.fbx</Source>
-      <Name>Models\sphere180</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
-      <Dependency>
-        <Key>obj\x86\Debug\Models\sphere180_0.xml</Key>
-        <Value>2009-05-17T19:37:25.6278-07:00</Value>
-      </Dependency>
-    </Item>
-    <Item>
-      <Source>Models\human4.fbx</Source>
-      <Name>Models\human4</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\human4.xnb</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
-      <Dependency>
-        <Key>obj\x86\Debug\Models\human4_0.xml</Key>
-        <Value>2009-05-17T19:37:25.8462-07:00</Value>
-      </Dependency>
-    </Item>
-    <Item>
-      <Source>Models\Borat.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\Models\Borat_0.xml</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Models\sphere180.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\Models\sphere180_0.xml</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Models\human4.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\Models\human4_0.xml</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
-    </Item>
-    <Item>
       <Source>genericButton.png</Source>
       <Name>genericButton</Name>
       <Importer>TextureImporter</Importer>
@@ -132,6 +72,66 @@
       <Options>None</Options>
       <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\InfoBox\InfoTab.xnb</Output>
       <Time>2009-05-25T18:52:15.233-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\Borat.fbx</Source>
+      <Name>Models\Borat</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\Borat.xnb</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Models\Borat_0.xml</Key>
+        <Value>2009-05-25T21:48:38.542-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>Models\sphere180.fbx</Source>
+      <Name>Models\sphere180</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Models\sphere180_0.xml</Key>
+        <Value>2009-05-25T21:48:39.103-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>Models\human4.fbx</Source>
+      <Name>Models\human4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\human4.xnb</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\Models\human4_0.xml</Key>
+        <Value>2009-05-25T21:48:39.491-07:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>Models\Borat.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Models\Borat_0.xml</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\sphere180.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Models\sphere180_0.xml</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\human4.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\Models\human4_0.xml</Output>
+      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
