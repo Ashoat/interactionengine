@@ -18,7 +18,7 @@ namespace InteractionEngine {
     /**
      * This class specifies an InteractionEngine-integrated XNA Game.
      */
-    public class InteractionGame : Microsoft.Xna.Framework.Game {
+    internal class InteractionGame : Microsoft.Xna.Framework.Game {
 
         // Contains a reference to the display screen.
         // Used for outputting graphics.
@@ -93,12 +93,12 @@ namespace InteractionEngine {
         protected override void Update(Microsoft.Xna.Framework.GameTime gameTime) {
             if (Microsoft.Xna.Framework.Input.GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed) this.Exit();
             this.graphics.GraphicsDevice.Clear(this.color);
-            Engine.run(gameTime);
+            Engine.runGameWorld(gameTime);
             base.Update(gameTime);
         }
 
         /// <summary>
-     //   /// We override it so that it doesn't keep clearing the screen in its almighty annoyance.
+        /// We override it so that it doesn't keep clearing the screen in its almighty annoyance.
         /// </summary>
         /// <param name="gameTime"></param>
         protected override void Draw(Microsoft.Xna.Framework.GameTime gameTime) {
