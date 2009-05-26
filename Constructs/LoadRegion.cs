@@ -178,6 +178,7 @@ namespace InteractionEngine.Constructs {
         /// <param name="objectId">The id of the GameObject that enters the room.</param>
         /// <returns>A reference to this LoadRegion, so that the GameObject can assign it to its field.</returns>
         internal void addObject(int objectId) {
+            if (objects.Contains(objectId)) return;
             lock (objects) {
                 this.objects.Add(objectId);
             }
@@ -189,6 +190,7 @@ namespace InteractionEngine.Constructs {
         /// </summary>
         /// <param name="objectId">The id of the GameObject that leaves the room.</param>
         internal void removeObject(int objectId) {
+            if (!objects.Contains(objectId)) return;
             lock (objects) {
                 this.objects.Remove(objectId);
             }
