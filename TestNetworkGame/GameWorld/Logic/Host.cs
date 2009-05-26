@@ -100,6 +100,8 @@ namespace TestNetworkGame.Logic {
             Client.startListening();
             // Set up the LoadRegion.
             hostedRegion = LoadRegion.createLoadRegion();
+            // Make sure we see it.
+            Client.addPrivateLoadRegion(hostedRegion);
             // Set up the GameField.
             GameField gameField = GameObject.createGameObject<GameField>(hostedRegion);
             const int offset = 56;
