@@ -128,10 +128,8 @@ namespace TestNetworkGame.Logic {
             if (parameter is Client) {
                 Client realClient = (Client)parameter;
                 hostedRegion.sentToClient(realClient);
-                foreach (GameObjectable gameObject in Engine.getGameObjectList()) {
-                    if (hostedRegion.containsObject(gameObject.id))
-                        realClient.addPermission(gameObject.id);
-                }
+                foreach (GameObjectable gameObject in hostedRegion.getGameObjectArray())
+                    realClient.addPermission(gameObject.id);
             }
         }
 
