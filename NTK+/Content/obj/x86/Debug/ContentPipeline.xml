@@ -8,7 +8,7 @@
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
-      <Time>2009-05-17T14:49:39.5295459-07:00</Time>
+      <Time>2009-05-25T15:18:20.666-07:00</Time>
     </Item>
     <Item>
       <Source>borat_code.jpg</Source>
@@ -105,6 +105,33 @@
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\human4_0.xml</Output>
       <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+    </Item>
+    <Item>
+      <Source>genericButton.png</Source>
+      <Name>genericButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\genericButton.xnb</Output>
+      <Time>2009-05-25T18:51:48.286-07:00</Time>
+    </Item>
+    <Item>
+      <Source>InfoBox\InfoBox.png</Source>
+      <Name>InfoBox\InfoBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\InfoBox\InfoBox.xnb</Output>
+      <Time>2009-05-25T18:52:08.904-07:00</Time>
+    </Item>
+    <Item>
+      <Source>InfoBox\InfoTab.png</Source>
+      <Name>InfoBox\InfoTab</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\InfoBox\InfoTab.xnb</Output>
+      <Time>2009-05-25T18:52:15.233-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

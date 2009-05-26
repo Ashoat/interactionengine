@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using InteractionEngine.EventHandling;
 using InteractionEngine.Constructs;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace InteractionEngine.UserInterface.ThreeDimensional {
 
@@ -30,6 +31,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         public static User3D user;
         public static GraphicsDevice graphicsDevice;
+        public static ContentManager content;
         public SpriteBatch spriteBatch;
 
         // Contain lists of Interactables that had been MOUSEMASK_OVER'd and MOUSEMASK_CLICK'd in the last iteration of input().
@@ -131,7 +133,8 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                 if (testMask(alreadyEvented, mask) && (!isActivated(mouse) || !isStillMousedOver(interaction, ray, mouse))) {
                     Event evvie = interaction.getEvent(setMask(mask, MOUSEMASK_RESET), Vector3.Zero);
                     if (evvie != null) newEvents.Add(evvie);
-                    removals.Add(interaction, unsetMask(alreadyEvented, mask));
+                    //if (!removals.ContainsKey(interaction)) removals.Add(interaction, unsetMask(alreadyEvented, mask));
+                    removals[interaction] = unsetMask(alreadyEvented, mask);
                 }
             }
         }
@@ -204,7 +207,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             Interactable3D closest3DInteractable = null;
             float closest3DDistance = float.PositiveInfinity;
             Interactable2D closest2DInteractable = null;
-            float closest2DLayerDepth = 0;
+            float closest2DLayerDepth = float.PositiveInfinity;
             Vector3 intersection2D = Vector3.Zero;
             // Loop through all of the User's LoadRegions
             foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getGraphableLoadRegions()) {
@@ -221,7 +224,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                     }
                     if (gameObject is Interactable2D) {
                         Interactable2D interaction = (Interactable2D)gameObject;
-                        if (interaction.getGraphics2D().LayerDepth > closest2DLayerDepth) {
+                        if (interaction.getGraphics2D().Visible && interaction.getGraphics2D().LayerDepth < closest2DLayerDepth) {
                             Vector3? pointClicked = interaction.getGraphics2D().intersectionPoint(mouse.X, mouse.Y);
                             if (pointClicked.HasValue) {
                                 closest2DInteractable = interaction;
@@ -263,8 +266,14 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                 // Loop through the GameObjects within those LoadRegions
                 foreach (Constructs.GameObjectable gameObject in loadRegion.getGameObjectArray()) {
                     if (gameObject is Audio.Audible3D) ((Audio.Audible3D)gameObject).getAudio3D().output();
-                    if (gameObject is Graphable) ((Graphable)gameObject).getGraphics().onDraw();
+                    if (gameObject is Graphable3D) ((Graphable)gameObject).getGraphics().onDraw();
                 }
+
+                spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.SaveState);
+                foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectArray()) {
+                    if (gameObject is Graphable2D) ((Graphable)gameObject).getGraphics().onDraw();
+                }
+                spriteBatch.End();
             }
 
         }
@@ -275,6 +284,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         public override void initialize() {
             graphicsDevice = InteractionEngine.Engine.game.GraphicsDevice;
             spriteBatch = new SpriteBatch(graphicsDevice);
+            content = InteractionEngine.Engine.game.Content;
             base.initialize();
         }
 
@@ -410,7 +420,13 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
     }
 
-    public class Graphics3D : Graphics {
+    public interface Graphics3D : Graphics {
+        float? intersects(Ray ray);
+        Vector3? intersectionPoint(Ray ray);
+        ModelEffect Effect { get; }
+    }
+
+    public class Graphics3DModel : Graphics3D {
 
 
         private ModelEffect effect;
@@ -433,7 +449,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// Constructs the Graphics3D
         /// </summary>
         /// <param name="textureFileName">The filename of this GameObject's texture.</param>
-        public Graphics3D(Graphable3D gameObject, ModelEffect effect, string modelName) {
+        public Graphics3DModel(Graphable3D gameObject, ModelEffect effect, string modelName) {
             this.gameObject = gameObject;
 
             this.effect = effect;
@@ -720,6 +736,9 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             updateCamera();
         }
         private void updateCamera() {
+            Vector3 newHeading = (this.target - this.location.Position);
+            Vector3 newStrafe = new Vector3(-newHeading.Z, 0, newHeading.X);
+            this.location.setHeadingAndStrafe(newHeading, newStrafe);
             viewMatrix = Matrix.CreateLookAt(this.location.Position, target, this.location.Top);
             frustum = new BoundingFrustum(viewMatrix * projectionMatrix);
         }
@@ -744,11 +763,17 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
     }
 
 
+    public interface Graphics2D : Graphics {
+        Vector3? intersectionPoint(double x, double y);
+        float LayerDepth { get; }
+        bool Visible { get; set; }
+    }
+
     /**
      * Contains all graphics information and methods neccessary to drawing a GameObject in a 2D environment.
      * Could effectively be called a "Sprite" class.
      */
-    public class Graphics2D : Graphics {
+    public class Graphics2DTexture : Graphics2D {
 
         // Contains a reference to this Graphics module's GameObject.
         // Used for proper Updatable construction.
@@ -766,13 +791,13 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// Loads the sprite from XNA's ContentPipeline.
         /// </summary>
         /// <param name="textureFileName">The filename of this GameObject's texture.</param>
-        public Graphics2D(Graphable2D gameObject, string textureName) {
+        public Graphics2DTexture(Graphable2D gameObject, string textureName) {
             this.gameObject = gameObject;
             this.textureName = textureName;
             if (Engine.game.GraphicsDevice != null) this.loadContent();
         }
 
-        public Graphics2D(Graphable2D gameObject) {
+        public Graphics2DTexture(Graphable2D gameObject) {
             this.gameObject = gameObject;
         }
 
@@ -820,14 +845,16 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// <param name="y">The y-coordinate of the point.</param>
         /// <returns>True if the point is within the Graphics2D's boundaries; false otherwise.</returns>
         public Vector3? intersectionPoint(double x, double y) {
+            if (this.texture == null || !this.visible) return null;
             Vector3 location3 = this.gameObject.getLocation().Position;
             Vector3 inversePosition = Vector3.Multiply(location3, -1);
-            Matrix inverseRotation = Matrix.CreateRotationZ(-this.gameObject.getLocation().yaw);
+            Matrix inverseRotation = Matrix.CreateRotationZ(-this.gameObject.getLocation().yaw * MathHelper.Pi / 180);
             Vector3 vector = new Vector3((float)x, (float)y, 0f);
             vector = Vector3.Transform(vector, inverseRotation) + inversePosition;
-            int index = (int)vector.X * texture.Width + (int)vector.Y;
+            if (vector.X < 0 || vector.Y < 0 || (vector.X >= this.texture.Width) || (vector.Y >= this.texture.Height)) return null;
+            int index = (int)vector.X * this.texture.Height + (int)vector.Y;
             const int alphaLimit = 10;
-            if ((index < 0) || (index >= pixels.Length) || (pixels[index].A < alphaLimit)) return null;
+            if (this.pixels[index].A < alphaLimit) return null;
             return vector;
         }
 
@@ -835,6 +862,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// Called during InteractionGame's LoadContent loop.
         /// </summary>
         public virtual void loadContent() {
+            if (textureName == null || textureName.Length == 0) return;
             texture = InteractionEngine.Engine.game.Content.Load<Texture2D>(textureName);
             pixels = new Color[texture.Width * texture.Height];
             texture.GetData<Color>(pixels);

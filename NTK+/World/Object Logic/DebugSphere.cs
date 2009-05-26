@@ -21,6 +21,7 @@ using NTKPlusGame.World.Modules;
 using InteractionEngine.UserInterface.ThreeDimensional;
 using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace NTKPlusGame.World {
 
@@ -60,7 +61,7 @@ namespace NTKPlusGame.World {
             return location;
         }
 
-        private Graphics3D graphics3D;
+        private Graphics3DModel graphics3D;
         public Graphics3D getGraphics3D() {
             return graphics3D;
         }
@@ -80,12 +81,17 @@ namespace NTKPlusGame.World {
             modelEffect.Alpha = 0.5f;
             modelEffect.SpecularPower = 30f;
             modelEffect.CommitProperties();
-            this.graphics3D = new Graphics3D(this, modelEffect, "Models\\sphere180");
+            this.graphics3D = new Graphics3DModel(this, modelEffect, "Models\\sphere180");
         }
 
         public void setPosition(Vector3 position, float radius) {
             this.location.Position = position;
             this.graphics3D.SetScale(radius);
+        }
+
+        public void setColor(Vector3 color) {
+            this.graphics3D.Effect.AmbientLightColor = color;
+            this.graphics3D.Effect.CommitProperties();
         }
 
     }

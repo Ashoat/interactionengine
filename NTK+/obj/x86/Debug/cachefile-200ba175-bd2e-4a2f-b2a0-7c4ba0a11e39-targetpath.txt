@@ -6,3 +6,6 @@ Content\heightImage.xnb
 Content\Models\Borat.xnb
 Content\Models\sphere180.xnb
 Content\Models\human4.xnb
+Content\genericButton.xnb
+Content\InfoBox\InfoBox.xnb
+Content\InfoBox\InfoTab.xnb

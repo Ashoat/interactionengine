@@ -87,14 +87,14 @@ namespace NTKPlusGame.World {
             if (previous == null) {
                 this.currentlySelected[0].value = newSelection;
                 this.numberSelected.value = 1;
-            //    if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
+                if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
             } else {
                 bool actionAccepted = false;
                 for (int i = 0; i < numberSelected.value; i++) actionAccepted |= currentlySelected[i].value.acceptSecondSelection(newSelection, param);
                 if (!actionAccepted) {
                     this.currentlySelected[0].value = newSelection;
                     this.numberSelected.value = 1;
-           //         if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
+                    if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
                 }
             }
         }

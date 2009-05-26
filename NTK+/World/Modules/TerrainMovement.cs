@@ -29,7 +29,7 @@ namespace NTKPlusGame.World.Modules {
 		
 		public const string SPEED_STRING = "Movement speed";
 		public readonly Stats.StatType SPEED_STAT = new Stats.StatType(SPEED_STRING);
-		private const float speedRatio = 0.002f;
+		private const float speedRatio = 0.001f;
 
         /// <summary>
         /// Triggered when this GameObject arrives at the destination towards which it was headed.
@@ -63,7 +63,7 @@ namespace NTKPlusGame.World.Modules {
 			this.lastUpdate = new UpdatableDouble(gameObject);
 			this.isMoving = new UpdatableBoolean(gameObject);
 			this.gameObject.getStats().registerStatType(SPEED_STAT);
-            this.gameObject.getStats().setBaseStat(SPEED_STAT, 2);
+            this.gameObject.getStats().setBaseStat(SPEED_STAT, 10);
         }
 		
 

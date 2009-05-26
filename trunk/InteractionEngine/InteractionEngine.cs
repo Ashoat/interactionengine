@@ -41,13 +41,13 @@ namespace InteractionEngine {
         /// </summary>
         protected override void Initialize() {
             base.Initialize();
-            Engine.userInterface.initialize();
         }
 
         /// <summary>
         /// WTF?!?!?!? NOTHING!!!
         /// </summary>
         protected override void LoadContent() {
+            Engine.userInterface.initialize();
             if (width > 0) this.graphics.PreferredBackBufferWidth = width;
             if (height > 0) this.graphics.PreferredBackBufferHeight = height;
             this.graphics.ApplyChanges();
@@ -89,7 +89,6 @@ namespace InteractionEngine {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(Microsoft.Xna.Framework.GameTime gameTime) {
             if (Microsoft.Xna.Framework.Input.GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed) this.Exit();
-            this.graphics.GraphicsDevice.Clear(this.color);
             Engine.runGameWorld(gameTime);
             base.Update(gameTime);
         }
@@ -99,6 +98,7 @@ namespace InteractionEngine {
         /// </summary>
         /// <param name="gameTime"></param>
         protected override void Draw(Microsoft.Xna.Framework.GameTime gameTime) {
+            this.graphics.GraphicsDevice.Clear(this.color);
             Engine.draw(gameTime);
         }
 

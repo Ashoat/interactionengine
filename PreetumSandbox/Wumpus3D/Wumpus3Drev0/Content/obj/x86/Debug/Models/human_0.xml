@@ -3,7 +3,7 @@
   <Asset Type="Graphics:NodeContent">
     <Name>human_root</Name>
     <Identity>
-      <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\human.fbx</SourceFilename>
+      <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\human.fbx</SourceFilename>
       <SourceTool>FbxImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>
@@ -32,7 +32,7 @@
     <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
       <Name>defaultMat</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\human.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\human.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>

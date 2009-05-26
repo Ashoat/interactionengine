@@ -48,3 +48,6 @@ C:\Users\Woofy\Desktop\interactionengine2\NTK+\obj\x86\Debug\ResolveAssemblyRefe
 C:\Users\Woofy\Desktop\interactionengine2\NTK+\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\Woofy\Desktop\interactionengine2\NTK+\obj\x86\Debug\NTKPlusGame.exe
 C:\Users\Woofy\Desktop\interactionengine2\NTK+\obj\x86\Debug\NTKPlusGame.pdb
+C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\genericButton.xnb
+C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\InfoBox\InfoBox.xnb
+C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\InfoBox\InfoTab.xnb

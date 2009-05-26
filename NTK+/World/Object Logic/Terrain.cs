@@ -363,7 +363,6 @@ namespace NTKPlusGame.World {
             //effect.FogEnd = 3000;
         }
 
-        private int count = 0;
         public void onDraw() {
 
             UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace; //or null
@@ -389,8 +388,8 @@ namespace NTKPlusGame.World {
 
             Game.TestGame.initializeStuff();
 
-            Texture2D texAsset = Engine.game.Content.Load<Texture2D>("Amazonia"); //tex1.png //Amazonia.jpg
-            Texture2D mapAsset = Engine.game.Content.Load<Texture2D>("heightImage"); //heightImage
+            Texture2D texAsset = UserInterface3D.content.Load<Texture2D>("Amazonia"); //tex1.png //Amazonia.jpg
+            Texture2D mapAsset = UserInterface3D.content.Load<Texture2D>("heightImage"); //heightImage
 
             this.LoadHeightmapFromImage(mapAsset);
             this.LoadTexture(texAsset);
@@ -399,7 +398,7 @@ namespace NTKPlusGame.World {
             this.GenerateVertices();
             this.GenerateNormals();
 
-            this.SetData(Engine.game.GraphicsDevice);
+            this.SetData(UserInterface3D.graphicsDevice);
             this.InitDefaultEffectVal();
 
 
@@ -447,7 +446,7 @@ namespace NTKPlusGame.World {
         }
 
 
-        class TerrainGraphics : Graphics3D {
+        class TerrainGraphics : Graphics3DModel {
 
             private Terrain gameObject;
 

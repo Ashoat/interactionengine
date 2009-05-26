@@ -98,6 +98,7 @@
     <Compile Include="World\Object Logic\DebugSphere.cs" />
     <Compile Include="World\Object Logic\FighterTemplate.cs" />
     <Compile Include="World\Object Logic\FrameRateCounter.cs" />
+    <Compile Include="World\Object Logic\Human.cs" />
     <Compile Include="World\Object Logic\InfoDisplayBox.cs" />
     <Compile Include="World\Object Logic\KeyboardCameraControl.cs" />
     <Compile Include="World\Object Logic\Player.cs" />
