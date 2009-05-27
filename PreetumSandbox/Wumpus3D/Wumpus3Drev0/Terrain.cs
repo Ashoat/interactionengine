@@ -857,15 +857,10 @@ namespace Wumpus3Drev0
 
                 pos += this.Size / 2;
                 Vector2 blockPos = new Vector2((int)(pos.X / blockScale), (int)(pos.Y / blockScale));
-                Vector2 posRel = pos - blockPos * blockScale;
+                Vector2 posRel = (pos - blockPos * blockScale) / blockScale;
 
                 int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
-                //if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; //default value
-
-                float height1 = vertices[vertexIndex + 1].Position.Y;
-                float height2 = vertices[vertexIndex].Position.Y;
-                float height3 = vertices[vertexIndex + vertexCountX + 1].Position.Y;
-                float height4 = vertices[vertexIndex + vertexCountX].Position.Y;
+                if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; //default value
 
                 float heightHxLz = vertices[vertexIndex + 1].Position.Y;
                 float heightLxLz = vertices[vertexIndex].Position.Y;
@@ -873,21 +868,21 @@ namespace Wumpus3Drev0
                 float heightLxHz = vertices[vertexIndex + vertexCountX].Position.Y;
 
                 bool aboveLowerTri = posRel.X < posRel.Y;
-                float heightIncX, heightIncY;
+                float finalHeight;
                 if (aboveLowerTri)
                 {
-                    heightIncX = height3 - height4;
-                    heightIncY = height4 - height2;
-                    //return height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
+                    finalHeight = heightLxLz;
+                    finalHeight += posRel.Y * (heightLxHz - heightLxLz);
+                    finalHeight += posRel.X * (heightHxLz - heightLxLz);
                 }
                 else
                 {
-                    heightIncX = height1 - height2;
-                    heightIncY = height3 - height1;
-                    //return height3 + (1.0f-pos.X
+                    finalHeight = heightHxHz;
+                    finalHeight += (1.0f - posRel.Y) * (heightHxLz - heightHxHz);
+                    finalHeight += (1.0f - posRel.X) * (heightLxHz - heightHxHz);
                 }
-                float lerpHeight = height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
-                return lerpHeight;
+                return finalHeight;
+
 
             }
             return 20; //default value
