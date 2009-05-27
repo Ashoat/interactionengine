@@ -255,6 +255,15 @@
       <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\texMulti2.xnb</Output>
       <Time>2009-05-26T19:48:26.905-07:00</Time>
     </Item>
+    <Item>
+      <Source>Images\texMulti3.png</Source>
+      <Name>Images\texMulti3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\texMulti3.xnb</Output>
+      <Time>2009-05-26T20:01:01.565-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

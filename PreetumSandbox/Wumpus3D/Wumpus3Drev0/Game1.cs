@@ -94,7 +94,7 @@ namespace Wumpus3Drev0
             //camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
             camera.SetPerspectiveFov(45f, GraphicsDevice.Viewport.AspectRatio, 1.0f, 10000f);
 
-            terrain = new Terrain(GraphicsDevice, camera, Content.Load<Texture2D>("Images\\texMulti2"), 10f, 1f); //3f, .2
+            terrain = new Terrain(GraphicsDevice, camera, Content.Load<Texture2D>("Images\\texMulti3"), 10f, 1f); //3f, .2
             //terrain = new Terrain(GraphicsDevice, camera, tex, 3f, .2f);,
             //terrain.Effect.SpecularPower = 40f;
             //terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
