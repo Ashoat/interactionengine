@@ -70,3 +70,22 @@ C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\Models\spher
 C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\Models\human4.xnb
 C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\NTKPlusGame.exe
 C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\NTKPlusGame.pdb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\SpriteFont1.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\borat.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\Amazonia.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\Images\human_texture.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\heightImage.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\genericButton.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\InfoBox\InfoBox.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\InfoBox\InfoTab.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\Models\Borat.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\Models\sphere180.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\Content\Models\human4.xnb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\NTKPlusGame.exe
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\NTKPlusGame.pdb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\InteractionEngine.dll
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\bin\x86\Debug\InteractionEngine.pdb
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\NTKPlusGame.exe
+C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\NTKPlusGame.pdb
