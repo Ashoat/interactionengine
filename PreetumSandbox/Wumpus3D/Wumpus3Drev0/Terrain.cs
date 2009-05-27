@@ -243,7 +243,7 @@ namespace Wumpus3Drev0
                     for (int w = 0; w < size-1; w += sideLen)
                     {
                         //rand = new Random(w * h);
-                        rand = new Random((int)Camera.View.Determinant() * DateTime.Now.Millisecond * w * h);
+                        //rand = new Random((int)Camera.View.Determinant() * DateTime.Now.Millisecond * w * h);
                         //now w,h is the uper left corner of each square 
                         Int2 center = new Int2((w + sideLen / 2), (h + sideLen / 2)); //the center of the square
                         map[center.X, center.Y] = (map[w, h] + map[w + sideLen, h] + map[w, h + sideLen] + map[w + sideLen, h + sideLen]) / 4; //the center = avg of 4 corners
@@ -266,7 +266,7 @@ namespace Wumpus3Drev0
 
                         Int2 c1 = new Int2(w, (h + sideLen / 2) % size);
                         Int2 c2 = new Int2((w + sideLen / 2) % size, h);
-
+                        
                         rand = new Random(p0.X * p5.X);  //p0.X * p5.X
                         map[c1.X, c1.Y] = (GetVal(p0, map) + GetVal(p1, map) + GetVal(p2, map) + GetVal(p3, map)) / 4;
                         map[c1.X, c1.Y] += (float)(rand.NextDouble() * 2 - 1) * magR;
@@ -804,7 +804,8 @@ namespace Wumpus3Drev0
             return isOnTerrain(new Vector2(pos.X, pos.Z));
         }
 
-        public float getHeight(Vector2 pos) //(x,z)
+        /*
+         * public float getHeight(Vector2 pos) //(x,z)
         {
             //return Vector3.Transform(vertices[128 + vertexCountX * 128].Position, this.WorldMatrix).Y;
             // Check if the object is inside the grid
@@ -845,8 +846,52 @@ namespace Wumpus3Drev0
 
             }
             return 20; //default value
-        }
+        }*/
 
+        public float getHeight(Vector2 pos) //(x,z)
+        {
+            //return Vector3.Transform(vertices[128 + vertexCountX * 128].Position, this.WorldMatrix).Y;
+            // Check if the object is inside the grid
+            if (isOnTerrain(pos))
+            {
+
+                pos += this.Size / 2;
+                Vector2 blockPos = new Vector2((int)(pos.X / blockScale), (int)(pos.Y / blockScale));
+                Vector2 posRel = pos - blockPos * blockScale;
+
+                int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
+                //if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; //default value
+
+                float height1 = vertices[vertexIndex + 1].Position.Y;
+                float height2 = vertices[vertexIndex].Position.Y;
+                float height3 = vertices[vertexIndex + vertexCountX + 1].Position.Y;
+                float height4 = vertices[vertexIndex + vertexCountX].Position.Y;
+
+                float heightHxLz = vertices[vertexIndex + 1].Position.Y;
+                float heightLxLz = vertices[vertexIndex].Position.Y;
+                float heightHxHz = vertices[vertexIndex + vertexCountX + 1].Position.Y;
+                float heightLxHz = vertices[vertexIndex + vertexCountX].Position.Y;
+
+                bool aboveLowerTri = posRel.X < posRel.Y;
+                float heightIncX, heightIncY;
+                if (aboveLowerTri)
+                {
+                    heightIncX = height3 - height4;
+                    heightIncY = height4 - height2;
+                    //return height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
+                }
+                else
+                {
+                    heightIncX = height1 - height2;
+                    heightIncY = height3 - height1;
+                    //return height3 + (1.0f-pos.X
+                }
+                float lerpHeight = height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
+                return lerpHeight;
+
+            }
+            return 20; //default value
+        }
 
         public float getHeight(Vector3 pos)
         {

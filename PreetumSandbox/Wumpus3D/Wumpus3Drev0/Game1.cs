@@ -87,7 +87,7 @@ namespace Wumpus3Drev0
 
             //FileStream fileStream = File.OpenRead(this.Content.RootDirectory + "/map.raw");
 
-            Vector3 cameraPos = new Vector3(200, 150, 200); //(75, 40, 75)
+            Vector3 cameraPos = new Vector3(400, 400, 400); //(75, 40, 75)
 
             camera = new BasicCamera();
             camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
@@ -149,7 +149,7 @@ namespace Wumpus3Drev0
             skySphere.SetScale(100f);
 
             //
-            plane = new SimplePlane(new Vector3(0, 60, 0), terrain.Size.X, terrain.Size.Y, modelEffect.ActiveCamera, GraphicsDevice); //15
+            plane = new SimplePlane(new Vector3(0, 70, 0), terrain.Size.X, terrain.Size.Y, modelEffect.ActiveCamera, GraphicsDevice); //15
 
         }
 
@@ -201,7 +201,7 @@ namespace Wumpus3Drev0
 
                 if (Keyboard.GetState().IsKeyDown(Keys.W) || Keyboard.GetState().IsKeyDown(Keys.S))
                 {
-                    model.StartAnimation("walk");
+                    //model.StartAnimation("walk");
                     if (Keyboard.GetState().IsKeyDown(Keys.W))
                         model.Move(-Vector2.UnitY /1);
                     if (Keyboard.GetState().IsKeyDown(Keys.S))
