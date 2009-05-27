@@ -237,6 +237,24 @@
       <Output>obj\x86\Debug\Models\Cube_0.xml</Output>
       <Time>2009-05-16T20:54:34.266-07:00</Time>
     </Item>
+    <Item>
+      <Source>Images\texMulti.png</Source>
+      <Name>Images\texMulti</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\texMulti.xnb</Output>
+      <Time>2009-05-26T18:02:07.153-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Images\texMulti2.png</Source>
+      <Name>Images\texMulti2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\texMulti2.xnb</Output>
+      <Time>2009-05-26T19:48:26.905-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

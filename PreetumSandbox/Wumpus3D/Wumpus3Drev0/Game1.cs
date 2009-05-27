@@ -87,16 +87,17 @@ namespace Wumpus3Drev0
 
             //FileStream fileStream = File.OpenRead(this.Content.RootDirectory + "/map.raw");
 
-            Vector3 cameraPos = new Vector3(75, 40, 75); //30
+            Vector3 cameraPos = new Vector3(200, 150, 200); //(75, 40, 75)
 
             camera = new BasicCamera();
             camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
             //camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
-            camera.SetPerspectiveFov(45f, GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000f);
+            camera.SetPerspectiveFov(45f, GraphicsDevice.Viewport.AspectRatio, 1.0f, 10000f);
 
-            terrain = new Terrain(GraphicsDevice, camera, texImage, tex, 3f, .2f); //2
-            terrain.Effect.SpecularPower = 40f;
-            terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
+            terrain = new Terrain(GraphicsDevice, camera, Content.Load<Texture2D>("Images\\texMulti2"), 10f, 1f); //3f, .2
+            //terrain = new Terrain(GraphicsDevice, camera, tex, 3f, .2f);,
+            //terrain.Effect.SpecularPower = 40f;
+            //terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
             
 
             graphics.GraphicsDevice.RenderState.CullMode = CullMode.None;
@@ -148,7 +149,7 @@ namespace Wumpus3Drev0
             skySphere.SetScale(100f);
 
             //
-            plane = new SimplePlane(new Vector3(0, 50, 0), 200, 200, modelEffect.ActiveCamera, GraphicsDevice);
+            plane = new SimplePlane(new Vector3(0, 60, 0), terrain.Size.X, terrain.Size.Y, modelEffect.ActiveCamera, GraphicsDevice); //15
 
         }
 
@@ -189,9 +190,9 @@ namespace Wumpus3Drev0
                     model.Rotation -= .05f;
 
                 if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
-                    camera.Zoom(-1.5f);
+                    camera.Zoom(-5.5f);
                 if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
-                    camera.Zoom(1.5f);
+                    camera.Zoom(5.5f);
 
                 /*if (Keyboard.GetState().IsKeyDown(Keys.A))
                     model.Move(-Vector2.UnitX / 2);  
@@ -202,10 +203,10 @@ namespace Wumpus3Drev0
                 {
                     model.StartAnimation("walk");
                     if (Keyboard.GetState().IsKeyDown(Keys.W))
-                        model.Move(-Vector2.UnitY /2);
+                        model.Move(-Vector2.UnitY /1);
                     if (Keyboard.GetState().IsKeyDown(Keys.S))
-                        model.Move(Vector2.UnitY /2);
-                    System.Diagnostics.Debug.WriteLine(model.Position3.Y);
+                        model.Move(Vector2.UnitY /1);
+                    //System.Diagnostics.Debug.WriteLine(model.Position3.Y);
                 }
                 else
                     model.StopAnimation();

@@ -29,7 +29,16 @@ namespace Wumpus3Drev0
 
         float scale = 1f;
 
-
+        public Vector3 AmbientColor
+        {
+            get { return this.effect.AmbientLightColor; }
+            set { this.effect.AmbientLightColor = value; }
+        }
+        public float Alpha
+        {
+            get { return this.effect.Alpha; }
+            set { this.effect.Alpha = value; }
+        }
         public Vector3 Orgin
         {
             get { return orgin; }
@@ -42,6 +51,17 @@ namespace Wumpus3Drev0
             set
             {
                 height = value;
+                this.UpdateVertices();
+                this.SetData(dev);
+            }
+        }
+
+        public float Width
+        {
+            get { return width; }
+            set
+            {
+                width = value;
                 this.UpdateVertices();
                 this.SetData(dev);
             }
@@ -73,7 +93,7 @@ namespace Wumpus3Drev0
             this.effect.EnableDefaultLighting();
 
             this.effect.AmbientLightColor = new Vector3(.2f, .2f, .6f);
-            this.effect.Alpha = .5f;
+            this.effect.Alpha = .7f;
         }
 
         public SimplePlane(Vector3 orgin, float width, float height, BasicCamera cam, GraphicsDevice dev)

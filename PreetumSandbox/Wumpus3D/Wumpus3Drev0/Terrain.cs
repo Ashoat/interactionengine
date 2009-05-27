@@ -22,6 +22,7 @@ namespace Wumpus3Drev0
         int[] indices;
 
         byte[] heightMap;
+        Color[] dynTexData;
 
         VertexBuffer vb;
         IndexBuffer ib;
@@ -33,7 +34,8 @@ namespace Wumpus3Drev0
         float blockScale;
         float heightScale;
 
-        Texture2D tex;
+        //Texture2D tex;
+        Texture2D dynTex;
 
         ModelEffect effect;
 
@@ -59,8 +61,8 @@ namespace Wumpus3Drev0
         }
         public Texture2D Texture
         {
-            get { return tex; }
-            set { tex = value; }
+            get { return dynTex; }
+            set { dynTex = value; }
         }
         public BasicCamera Camera
         {
@@ -89,7 +91,7 @@ namespace Wumpus3Drev0
 
         private void LoadTexture(Texture2D asset)
         {
-            tex = asset;
+            dynTex = asset;
         }
 
         /*public void SetScale(float scale)
@@ -571,6 +573,20 @@ namespace Wumpus3Drev0
             tex.Save("dynMap.png", ImageFileFormat.Png);
         }
 
+        public void LoadDynTex()
+        {
+            dynTexData = new Color[dynTex.Width * dynTex.Height];
+            dynTex.GetData<Color>(dynTexData);
+        }
+
+        private Vector2 getDynCoord(byte height)
+        {
+            Random rand = new Random();
+            float w = (float)height / 255f; //horizonal co-ordinate
+            float h = rand.Next(0, dynTex.Height) / (float)dynTex.Height;
+            return new Vector2(w, h);
+        }
+
         private void GenerateIndices()
         {
             indices = new int[vertexCountX * 2 * (vertexCountZ - 1)];
@@ -609,7 +625,8 @@ namespace Wumpus3Drev0
                 for (float j = 0; j < vertexCountX; j++)
                 {
                     vertices[vertexCount].Position = new Vector3((j - vertexCountX / 2) * blockScale, heightMap[vertexCount] * heightScale, (i - vertexCountZ / 2) * blockScale);
-                    vertices[vertexCount].TextureCoordinate = new Vector2(j / vertexCountX, i / vertexCountZ);
+                    //vertices[vertexCount].TextureCoordinate = new Vector2(j / vertexCountX, i / vertexCountZ);
+                    vertices[vertexCount].TextureCoordinate = getDynCoord(heightMap[vertexCount]);
                     vertexCount++;
                 }
             }
@@ -662,14 +679,20 @@ namespace Wumpus3Drev0
             effect.EnableDefaultLighting();
             //effect.PreferPerPixelLighting = true;
             effect.TextureEnabled = true;
-            effect.Texture = tex;
+            effect.Texture = dynTex;
             effect.SpecularColor = new Vector3(.4f, .4f, .4f);
+            effect.AmbientLightColor = new Vector3(.2f, .2f, .2f);
             effect.PreferPerPixelLighting = true;
             effect.SpecularPower = 4f;
             //effect.FogEnabled = true;
             //effect.FogColor = Vector3.Zero;
             //effect.FogStart = 50;
             //effect.FogEnd = 500;
+        }
+
+        public void LoadDynTex(Texture2D asset)
+        {
+            this.dynTex = asset;
         }
 
         public void ReGenerateTerrain()
@@ -682,7 +705,7 @@ namespace Wumpus3Drev0
             this.SetData(dev);
         }
 
-        public Terrain(GraphicsDevice device, BasicCamera camera, Texture2D mapAsset, Texture2D texAsset, float blockScaleF, float heightScaleF)
+        /*public Terrain(GraphicsDevice device, BasicCamera camera, Texture2D texAsset, float blockScaleF, float heightScaleF)
         {
             this.blockScale = blockScaleF;
             this.heightScale = heightScaleF;
@@ -705,7 +728,34 @@ namespace Wumpus3Drev0
             this.InitDefaultEffectVal();
 
             //this.SetScale(scale);
+        }*/
+
+        public Terrain(GraphicsDevice device, BasicCamera camera, Texture2D texDyn, float blockScaleF, float heightScaleF)
+        {
+            this.blockScale = blockScaleF;
+            this.heightScale = heightScaleF;
+
+            dev = device;
+
+            //this.LoadHeightmapFromImage(mapAsset);
+            //this.GenerateRandomWalkMap(128, 128, 20);
+            //this.GenerateMidFractalMap(128, 128, 255, .6f);
+            //this.GenerateDynamicTerrainMap(129, 64, .55f); //(129, 64, .5f);
+
+            //this.LoadTexture(texAsset);
+            this.LoadDynTex(texDyn);
+            
+            this.ReGenerateTerrain();
+
+            //this.world
+
+            this.effect = new ModelEffect(device, null);
+            this.effect.ActiveCamera = camera;
+            this.InitDefaultEffectVal();
+
+            //this.SetScale(scale);
         }
+
         public void Draw(CullMode mode)
         {
             dev.RenderState.CullMode = mode; //or null
@@ -760,7 +810,7 @@ namespace Wumpus3Drev0
                 Vector2 posRel = pos - blockPos * blockScale;
 
                 int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
-                if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; //default value
+                //if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; //default value
 
                 float height1 = vertices[vertexIndex + 1].Position.Y;
                 float height2 = vertices[vertexIndex].Position.Y;
