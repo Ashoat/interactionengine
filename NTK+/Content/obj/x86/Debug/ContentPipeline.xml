@@ -7,8 +7,8 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
-      <Time>2009-05-25T15:18:20.666-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
+      <Time>2009-05-25T20:38:00.4908574-07:00</Time>
     </Item>
     <Item>
       <Source>borat_code.jpg</Source>
@@ -16,8 +16,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\borat.xnb</Output>
-      <Time>2009-05-17T14:49:39.3267459-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\borat.xnb</Output>
+      <Time>2009-05-20T08:04:39.1476002-07:00</Time>
     </Item>
     <Item>
       <Source>Amazonia.jpg</Source>
@@ -25,8 +25,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Amazonia.xnb</Output>
-      <Time>2009-05-17T14:49:39.5295459-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\Amazonia.xnb</Output>
+      <Time>2009-05-20T08:04:39.1756018-07:00</Time>
     </Item>
     <Item>
       <Source>Images\human_texture.jpg</Source>
@@ -34,8 +34,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
-      <Time>2009-05-17T14:49:33.4455459-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
+      <Time>2009-05-20T08:04:37.3174955-07:00</Time>
     </Item>
     <Item>
       <Source>heightImage.png</Source>
@@ -43,10 +43,39 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\heightImage.xnb</Output>
-      <Time>2009-05-22T21:15:42.4589566-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\heightImage.xnb</Output>
+      <Time>2009-05-24T07:37:33.7842532-07:00</Time>
     </Item>
     <Item>
+<<<<<<< .mine
+      <Source>genericButton.png</Source>
+      <Name>genericButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\genericButton.xnb</Output>
+      <Time>2009-05-25T20:38:00.4968577-07:00</Time>
+    </Item>
+    <Item>
+      <Source>InfoBox\InfoBox.png</Source>
+      <Name>InfoBox\InfoBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\InfoBox\InfoBox.xnb</Output>
+      <Time>2009-05-25T20:38:00.2908459-07:00</Time>
+    </Item>
+    <Item>
+      <Source>InfoBox\InfoTab.png</Source>
+      <Name>InfoBox\InfoTab</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\InfoBox\InfoTab.xnb</Output>
+      <Time>2009-05-25T20:38:00.2868457-07:00</Time>
+    </Item>
+    <Item>
+=======
       <Source>genericButton.png</Source>
       <Name>genericButton</Name>
       <Importer>TextureImporter</Importer>
@@ -74,16 +103,21 @@
       <Time>2009-05-25T18:52:15.233-07:00</Time>
     </Item>
     <Item>
+>>>>>>> .r93
       <Source>Models\Borat.fbx</Source>
       <Name>Models\Borat</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\Borat.xnb</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\Models\Borat.xnb</Output>
+      <Time>2009-05-20T08:04:37.0874824-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\Borat_0.xml</Key>
+<<<<<<< .mine
+        <Value>2009-05-26T11:53:20.7617554-07:00</Value>
+=======
         <Value>2009-05-25T21:48:38.542-07:00</Value>
+>>>>>>> .r93
       </Dependency>
     </Item>
     <Item>
@@ -92,11 +126,15 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
+      <Time>2009-05-20T08:04:37.0994831-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\sphere180_0.xml</Key>
+<<<<<<< .mine
+        <Value>2009-05-26T11:53:21.9328223-07:00</Value>
+=======
         <Value>2009-05-25T21:48:39.103-07:00</Value>
+>>>>>>> .r93
       </Dependency>
     </Item>
     <Item>
@@ -105,11 +143,15 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\human4.xnb</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Output>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\Models\human4.xnb</Output>
+      <Time>2009-05-20T08:04:37.0934827-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\human4_0.xml</Key>
+<<<<<<< .mine
+        <Value>2009-05-26T11:53:23.0658872-07:00</Value>
+=======
         <Value>2009-05-25T21:48:39.491-07:00</Value>
+>>>>>>> .r93
       </Dependency>
     </Item>
     <Item>
@@ -117,31 +159,31 @@
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\Borat_0.xml</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Time>2009-05-20T08:04:37.0874824-07:00</Time>
     </Item>
     <Item>
       <Source>Models\sphere180.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\sphere180_0.xml</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Time>2009-05-20T08:04:37.0994831-07:00</Time>
     </Item>
     <Item>
       <Source>Models\human4.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\human4_0.xml</Output>
-      <Time>2009-05-17T14:49:32.6031459-07:00</Time>
+      <Time>2009-05-20T08:04:37.0934827-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\Content\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\Content\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
@@ -166,7 +208,7 @@
       </Assembly>
       <Assembly>
         <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2009-03-30T15:26:49.825644-07:00</Value>
+        <Value>2009-05-16T11:45:50.7265297-07:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

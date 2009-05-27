@@ -25,28 +25,26 @@ namespace Game
         public static void Main()
         {
             // Initialize the Engine.
-            Engine.status = Engine.Status.SINGLE_PLAYER;
-            //Engine.game.setWindowSize(1000, 1100);
+            // Engine.status = Engine.Status.SINGLE_PLAYER;
+            // ^---- That's the default. No need to set it.
             // Initialize the user and their personal LoadRegion.
-            UserInterface3D interface3D = new UserInterface3D();
-            Engine.userInterface = interface3D;
+            // UserInterface3D interface3D = new UserInterface3D();
+            // ^---- absolute waste of memory
+            Engine.userInterface = new UserInterface3D();
+            // Set up the user
             user = new NTKPlusUser();
             NTKPlusUser.localUser = user;
             UserInterface3D.user = user;
-            loadRegion = LoadRegion.createLoadRegion();
-
+            loadRegion = LoadRegion.createLoadRegion(); // <--- are we planning on doing anything with this?
+            // Set up the camera
             Vector3 cameraPos = new Vector3(75, 40, 75); //30
-
             user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
-
+            // Set up some basic GameObjects.
             Terrain terrain = GameObject.createGameObject<Terrain>(loadRegion);
             terrain.initialize(2f, .1f, loadRegion);
             Human human = GameObject.createGameObject<Human>(loadRegion);
             human.initialize(terrain);
             FrameRateCounter frameRateCounter = GameObject.createGameObject<FrameRateCounter>(loadRegion);
-
-            //Engine.game.initializeMethod = new InitializeMethod(initializeStuff);
-
             Engine.run();
         }
 

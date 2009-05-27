@@ -2,3 +2,4 @@ D:\t09\InteractionEngine\NTK+\Content\obj\x86\Debug\ResolveAssemblyReference.cac
 E:\NTK+\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Woofy\Desktop\InteractionEngine\NTK+\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Woofy\Desktop\interactionengine2\NTK+\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\Content\obj\x86\Debug\ResolveAssemblyReference.cache
