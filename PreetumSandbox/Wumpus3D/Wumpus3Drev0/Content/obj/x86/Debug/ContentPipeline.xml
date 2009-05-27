@@ -7,8 +7,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
-      <Time>2009-05-24T21:23:50.0549604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\human_texture.xnb</Output>
+      <Time>2009-05-16T20:54:34.914-07:00</Time>
     </Item>
     <Item>
       <Source>Images\Amazonia.jpg</Source>
@@ -16,8 +16,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\Amazonia.xnb</Output>
-      <Time>2009-05-24T21:23:50.0909604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\Amazonia.xnb</Output>
+      <Time>2009-05-16T20:54:41.906-07:00</Time>
     </Item>
     <Item>
       <Source>Images\heightImage.png</Source>
@@ -25,8 +25,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\heightImage.xnb</Output>
-      <Time>2009-05-24T21:23:50.0859604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Images\heightImage.xnb</Output>
+      <Time>2009-05-16T20:54:41.912-07:00</Time>
     </Item>
     <Item>
       <Source>Models\Borat.fbx</Source>
@@ -34,11 +34,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\Borat.xnb</Output>
-      <Time>2009-05-24T21:23:48.4349604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\Borat.xnb</Output>
+      <Time>2009-05-16T20:54:34.273-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\Borat_0.xml</Key>
-        <Value>2009-05-25T16:15:19.743-07:00</Value>
+        <Value>2009-05-25T20:41:40.808-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -47,11 +47,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\human4.xnb</Output>
-      <Time>2009-05-24T21:23:48.8059604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\human4.xnb</Output>
+      <Time>2009-05-16T20:54:34.28-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\human4_0.xml</Key>
-        <Value>2009-05-25T16:15:20.154-07:00</Value>
+        <Value>2009-05-25T20:41:41.101-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -60,11 +60,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
-      <Time>2009-05-24T21:23:48.8979604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\sphere180.xnb</Output>
+      <Time>2009-05-16T20:54:34.29-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\sphere180_0.xml</Key>
-        <Value>2009-05-25T16:15:20.335-07:00</Value>
+        <Value>2009-05-25T20:41:41.213-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -73,11 +73,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\masterchief2.xnb</Output>
-      <Time>2009-05-24T21:23:48.8149604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\masterchief2.xnb</Output>
+      <Time>2009-05-20T18:38:33.537-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\masterchief2_0.xml</Key>
-        <Value>2009-05-25T16:15:21.048-07:00</Value>
+        <Value>2009-05-25T20:41:41.876-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -86,11 +86,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\human.xnb</Output>
-      <Time>2009-05-24T21:23:48.4399604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\human.xnb</Output>
+      <Time>2009-05-23T15:53:12.099-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\human_0.xml</Key>
-        <Value>2009-05-25T16:15:21.334-07:00</Value>
+        <Value>2009-05-25T20:41:42.275-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -99,11 +99,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\SpyGirl.xnb</Output>
-      <Time>2009-05-24T21:23:48.7759604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\SpyGirl.xnb</Output>
+      <Time>2009-05-23T23:44:09.741-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\SpyGirl_0.xml</Key>
-        <Value>2009-05-25T16:16:16.228-07:00</Value>
+        <Value>2009-05-25T20:42:09.709-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -112,11 +112,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\man.xnb</Output>
-      <Time>2009-05-24T21:23:48.8769604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\man.xnb</Output>
+      <Time>2009-05-23T23:44:24.262-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\91man-musculature_0.xml</Key>
-        <Value>2009-05-25T16:16:25.272-07:00</Value>
+        <Value>2009-05-25T20:42:13.869-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -125,11 +125,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\dino.xnb</Output>
-      <Time>2009-05-24T21:23:48.4119604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\dino.xnb</Output>
+      <Time>2009-05-24T00:00:36.6-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\90dinosaurus-model_0.xml</Key>
-        <Value>2009-05-25T16:16:34.727-07:00</Value>
+        <Value>2009-05-25T20:42:17.74-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -138,11 +138,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\sphereHP.xnb</Output>
-      <Time>2009-05-24T21:23:48.8019604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\sphereHP.xnb</Output>
+      <Time>2009-05-24T01:08:53.17-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\SphereHighPoly_0.xml</Key>
-        <Value>2009-05-25T16:16:36.789-07:00</Value>
+        <Value>2009-05-25T20:42:18.611-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -151,11 +151,11 @@
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\Cube.xnb</Output>
-      <Time>2009-05-24T21:23:48.4199604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Models\Cube.xnb</Output>
+      <Time>2009-05-16T20:54:34.266-07:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\Models\Cube_0.xml</Key>
-        <Value>2009-05-25T16:16:37.724-07:00</Value>
+        <Value>2009-05-25T20:42:18.836-07:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -164,113 +164,113 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Fonts\font1.xnb</Output>
-      <Time>2009-05-24T21:23:51.8169604-07:00</Time>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\Fonts\font1.xnb</Output>
+      <Time>2009-05-24T19:04:00.108-07:00</Time>
     </Item>
     <Item>
       <Source>Models\Borat.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\Borat_0.xml</Output>
-      <Time>2009-05-24T21:23:48.4349604-07:00</Time>
+      <Time>2009-05-16T20:54:34.273-07:00</Time>
     </Item>
     <Item>
       <Source>Models\human4.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\human4_0.xml</Output>
-      <Time>2009-05-24T21:23:48.8059604-07:00</Time>
+      <Time>2009-05-16T20:54:34.28-07:00</Time>
     </Item>
     <Item>
       <Source>Models\sphere180.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\sphere180_0.xml</Output>
-      <Time>2009-05-24T21:23:48.8979604-07:00</Time>
+      <Time>2009-05-16T20:54:34.29-07:00</Time>
     </Item>
     <Item>
       <Source>Models\masterchief2.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\masterchief2_0.xml</Output>
-      <Time>2009-05-24T21:23:48.8149604-07:00</Time>
+      <Time>2009-05-20T18:38:33.537-07:00</Time>
     </Item>
     <Item>
       <Source>Models\human.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\human_0.xml</Output>
-      <Time>2009-05-24T21:23:48.4399604-07:00</Time>
+      <Time>2009-05-23T15:53:12.099-07:00</Time>
     </Item>
     <Item>
       <Source>Models\SpyGirl.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\SpyGirl_0.xml</Output>
-      <Time>2009-05-24T21:23:48.7759604-07:00</Time>
+      <Time>2009-05-23T23:44:09.741-07:00</Time>
     </Item>
     <Item>
       <Source>Models\91man-musculature.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\91man-musculature_0.xml</Output>
-      <Time>2009-05-24T21:23:48.8769604-07:00</Time>
+      <Time>2009-05-23T23:44:24.262-07:00</Time>
     </Item>
     <Item>
       <Source>Models\90dinosaurus-model.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\90dinosaurus-model_0.xml</Output>
-      <Time>2009-05-24T21:23:48.4119604-07:00</Time>
+      <Time>2009-05-24T00:00:36.6-07:00</Time>
     </Item>
     <Item>
       <Source>Models\SphereHighPoly.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\SphereHighPoly_0.xml</Output>
-      <Time>2009-05-24T21:23:48.8019604-07:00</Time>
+      <Time>2009-05-24T01:08:53.17-07:00</Time>
     </Item>
     <Item>
       <Source>Models\Cube.X</Source>
       <Importer>XImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\Models\Cube_0.xml</Output>
-      <Time>2009-05-24T21:23:48.4199604-07:00</Time>
+      <Time>2009-05-16T20:54:34.266-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
-        <Value>2008-10-10T17:42:32-07:00</Value>
+        <Value>2008-10-10T18:42:32-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
-        <Value>2008-10-10T17:43:28-07:00</Value>
+        <Value>2008-10-10T18:43:28-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
-        <Value>2008-10-10T17:43:18-07:00</Value>
+        <Value>2008-10-10T18:43:18-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
-        <Value>2008-10-10T17:48:18-07:00</Value>
+        <Value>2008-10-10T18:48:18-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
-        <Value>2008-10-10T17:48:50-07:00</Value>
+        <Value>2008-10-10T18:48:50-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2009-03-30T15:26:49.825644-07:00</Value>
+        <Value>2009-01-30T21:55:17.543-08:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

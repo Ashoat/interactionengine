@@ -26,6 +26,8 @@ namespace Wumpus3Drev0
         GraphicsDeviceManager graphics;
         SpriteFont font;
 
+        SimplePlane plane;
+
         int frameCount;
         TimeSpan elapsedTime = TimeSpan.Zero;
 
@@ -92,7 +94,7 @@ namespace Wumpus3Drev0
             //camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
             camera.SetPerspectiveFov(45f, GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000f);
 
-            terrain = new Terrain(GraphicsDevice, camera, texImage, tex, 3f, .13f); //2
+            terrain = new Terrain(GraphicsDevice, camera, texImage, tex, 3f, .2f); //2
             terrain.Effect.SpecularPower = 40f;
             terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
             
@@ -146,6 +148,7 @@ namespace Wumpus3Drev0
             skySphere.SetScale(100f);
 
             //
+            plane = new SimplePlane(new Vector3(0, 50, 0), 200, 200, modelEffect.ActiveCamera, GraphicsDevice);
 
         }
 
@@ -199,9 +202,10 @@ namespace Wumpus3Drev0
                 {
                     model.StartAnimation("walk");
                     if (Keyboard.GetState().IsKeyDown(Keys.W))
-                        model.Move(-Vector2.UnitY *2);
+                        model.Move(-Vector2.UnitY /2);
                     if (Keyboard.GetState().IsKeyDown(Keys.S))
-                        model.Move(Vector2.UnitY *2);
+                        model.Move(Vector2.UnitY /2);
+                    System.Diagnostics.Debug.WriteLine(model.Position3.Y);
                 }
                 else
                     model.StopAnimation();
@@ -220,6 +224,8 @@ namespace Wumpus3Drev0
                     System.Diagnostics.Debug.WriteLine(height);
                 }
 
+                if (Keyboard.GetState().IsKeyDown(Keys.G))
+                    terrain.ReGenerateTerrain();
             }
 
             model.Move(Vector2.Reflect(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left, Vector2.UnitY));
@@ -272,13 +278,17 @@ namespace Wumpus3Drev0
             
 
 
-            terrain.Draw(CullMode.None);
+            terrain.Draw();
+            
 
-            GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
-            GraphicsDevice.RenderState.DepthBufferEnable = true;
+            //GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
+            //GraphicsDevice.RenderState.DepthBufferEnable = true;
             model.Draw();
 
+            plane.Draw();
+
             frc.Draw();
+           
             //skySphere.Draw();
 
             /*GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;

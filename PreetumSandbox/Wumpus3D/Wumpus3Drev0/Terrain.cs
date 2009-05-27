@@ -189,7 +189,7 @@ namespace Wumpus3Drev0
             for (int h = 0; h < height; h++)
             {
                 byte[] row = new byte[width];
-                recurseMidFractalMap(ref row, 0, row.Length-1, mag, magConst, new Random(h));
+                recurseMidFractalMap(ref row, 0, row.Length-1, mag, magConst, new Random(h)); //remove 'h' so see just 1 plane
                 for (int i = 0; i < width; i++)
                     heightMap[i + h * width] = row[i];
             }
@@ -198,6 +198,379 @@ namespace Wumpus3Drev0
             numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
             numVertices = heightMap.Length;
         }
+
+        private class Int2
+        {
+            public int X;
+            public int Y;
+            public Int2(int x, int y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+        }
+
+        private float GetVal(Int2 v, float[,] map)
+        {
+            return map[v.X, v.Y];
+        }
+
+        private void GenerateDynamicTerrainMap(int size, float magR, float r)
+        {
+            Random rand = new Random();
+            float[,] map = new float[size, size]; //[w,h] - by convention
+            //seed 4 corners
+            /*map[0, 0] = rand.Next(0, 30);
+            map[0, size - 1] = rand.Next(0, 30);
+            map[size - 1, 0] = rand.Next(0, 30);
+            map[size - 1, size - 1] = rand.Next(0, 30);*/
+
+            map[0, 0] = 0;
+            map[0, size - 1] = 0;
+            map[size - 1, 0] = 0;
+            map[size - 1, size - 1] = 0;
+
+            int sideLen = size-1;
+           
+
+            while (sideLen > 0)
+            {
+                //perform mid-square thing
+                for (int h = 0; h < size-1; h += sideLen)
+                {
+                    for (int w = 0; w < size-1; w += sideLen)
+                    {
+                        //rand = new Random(w * h);
+                        //now w,h is the uper left corner of each square 
+                        Int2 center = new Int2((w + sideLen / 2), (h + sideLen / 2)); //the center of the square
+                        map[center.X, center.Y] = (map[w, h] + map[w + sideLen, h] + map[w, h + sideLen] + map[w + sideLen, h + sideLen]) / 4; //the center = avg of 4 corners
+                        map[center.X, center.Y] += (float)(rand.NextDouble() * 2 - 1) * magR;
+                    }
+                }
+
+                //perform diamond-y thing
+                for (int h = 0; h < size; h += sideLen)
+                {
+                    for (int w = 0; w < size; w += sideLen)
+                    {
+                        
+                        Int2 p0 = new Int2(w, h); // "orgin"
+                        Int2 p1 = new Int2((w + sideLen / 2) % size, (h - sideLen / 2 + size) % size); //the (...+size)%size is to loop, but take negatives into account
+                        Int2 p2 = new Int2((w + sideLen) % size, h);
+                        Int2 p3 = new Int2((w + sideLen / 2) % size, (h + sideLen / 2) % size);
+                        Int2 p4 = new Int2(w, (h + sideLen) % size);
+                        Int2 p5 = new Int2((w - sideLen / 2 + size) % size, (h + sideLen / 2) % size);
+
+                        Int2 c1 = new Int2(w, (h + sideLen / 2) % size);
+                        Int2 c2 = new Int2((w + sideLen / 2) % size, h);
+
+                        rand = new Random(p0.X * p5.X);
+                        map[c1.X, c1.Y] = (GetVal(p0, map) + GetVal(p1, map) + GetVal(p2, map) + GetVal(p3, map)) / 4;
+                        map[c1.X, c1.Y] += (float)(rand.NextDouble() * 2 - 1) * magR;
+
+                        rand = new Random(p4.Y * p5.Y);
+                        map[c2.X, c2.Y] = (GetVal(p0, map) + GetVal(p3, map) + GetVal(p4, map) + GetVal(p5, map)) / 4;
+                        map[c2.X, c2.Y] += (float)(rand.NextDouble() * 2 - 1) * magR;
+                    }
+                }
+
+                sideLen /= 2;
+                magR *= r;
+            }
+            NormalizeToTerrain(map);
+            SaveMapToImage();
+        }
+
+        public float[] ConvertTo1D(float[,] a)
+        {
+            int width = a.GetLength(0);
+            int height = a.GetLength(1);
+
+            float[] data = new float[width * height];
+            for (int h = 0; h < height; h++)
+            {
+                for (int w = 0; w < width; w++)
+                {
+                    data[w + h * width] = a[w, h];
+                }
+            }
+            return data;
+        }
+
+        public double Gaussian(double x, double sd)
+        {
+            double a = sd * Math.Sqrt((double)MathHelper.TwoPi);
+            double b = -((x / sd) * (x / sd)) / 2;
+            return (1 / a) * Math.Pow(Math.E, b);
+        }
+        /// <summary>
+        /// Performs gaussian pass along ROWS. note: only checkes pixels within 3*sd of source. (for speed)
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="sd"></param>
+        /// <returns></returns>
+        private float[,] gaussianPass1(float[,] data, float sd) //ROW pass. sd = standard deviation
+        {
+            int width = data.GetLength(0);
+            int height = data.GetLength(1);
+            for (int h = 0; h < height; h++)
+            {
+                float[] row = new float[width];
+                for (int w = 0; w < width; w++)
+                {
+                    float valTot = 0;
+                    float sum = 0;
+                    for (int k = w - (int)(3 * sd) - 1; k < w + (int)(3 * sd) + 1; k++) //for (int p = 0; p < width; p++)
+                    {
+                        int p = (k + width) % width;
+                        float gauss = (float)Gaussian((double)(w - k), (double)sd); //(float)Gaussian((double)(w - p), (double)sd);
+                        valTot += data[p, h] * gauss;
+                        sum += gauss;
+                    }
+                    row[w] = valTot/sum;
+                }
+                for (int i = 0; i < width; i++) //copy row into source array
+                    data[i, h] = row[i];
+            }
+            return data;
+        }
+
+        private float[,] gaussianPass2(float[,] data, float sd) //ROW pass. sd = standard deviation
+        {
+            int width = data.GetLength(0);
+            int height = data.GetLength(1);
+            for (int w = 0; w < width; w++)
+            {
+                float[] col = new float[height];
+                for (int h = 0; h < height; h++)
+                {
+                    float valTot = 0;
+                    float sum = 0;
+                    for (int k = h - (int)(3 * sd) - 1; k < h + (int)(3 * sd) + 1; k++) //for (int p = 0; p < height; p++)
+                    {
+                        int p = (k + height) % height;
+                        float gauss = (float)Gaussian((double)(h - k), (double)sd);
+                        valTot += data[w, p] * gauss;
+                        sum += gauss;
+                    }
+                    col[h] = valTot / sum;
+                }
+                for (int i = 0; i < height; i++) //copy row into source array
+                    data[w, i] = col[i];
+            }
+            return data;
+        }
+
+        public float MaxAdvanced(float[] data)
+        {
+            float max1 = RegWeighted(data);
+            float max2 = InvWeighted(data);
+            float max = (max1 > max2) ? max1 : max2;
+            max = (max + maximum(data)) / 2;
+            return max;
+        }
+        public float MinAdvanced(float[] data)
+        {
+            float min1 = RegWeighted(data);
+            float min2 = InvWeighted(data);
+            float min = (min1 < min2) ? min1 : min2;
+            min = (min + minimum(data)) / 2;
+            return min;
+        }
+        public float RegWeighted(float[] data)
+        {
+            float sumFx = 0;
+            float sumXfX = 0; //x * f(x). where f(x) is the histogram
+
+            int[] hist = this.histogram(data);
+            for (int i = 0; i < hist.Length; i++)
+            {
+                sumXfX += i * hist[i];
+                sumFx += hist[i];
+            }
+            //Debug.WriteLine("max weighted: " + sumXfX / sumFx);
+            return sumXfX / sumFx;
+        }
+
+        public float InvWeighted(float[] data)
+        {
+            float sumFx = 0;
+            float sumXfX = 0; //x * f(x). where f(x) is the histogram
+
+            int[] histInv = this.histogram(this.invert(data));
+            for (int i = 0; i < histInv.Length; i++)
+            {
+                sumXfX += i * histInv[i];
+                sumFx += histInv[i];
+            }
+            //Debug.WriteLine("min weighted: " + sumXfX / sumFx);
+            return sumXfX / sumFx;
+        }
+
+        public int[] histogram(float[] data) //returns the number (int[x]) that the value x appears in float[] data
+        {
+            int[] hist = new int[(int)maximum(data)+1];
+            foreach (float f in data)
+            {
+                    hist[(int)f]++;
+            }
+            return hist;
+        }
+
+        private float[] invert(float[] data)
+        {
+            float[] inverted = (float[])data.Clone();
+            for (int i = 0; i < data.Length; i++)
+            {
+                inverted[i] = (maximum(data) - data[i]);
+            }
+            return inverted;
+        }
+
+        private float minimum(float[] data)
+        {
+            float min = float.MaxValue;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] < min) min = data[i];
+            }
+            return min;
+        }
+        private float minimum(float[,] data)
+        {
+            float min = float.MaxValue;
+            int dim1 = data.GetLength(0);
+            int dim2 = data.GetLength(1);
+            for (int a = 0; a < dim2; a++)
+            {
+                for (int i = 0; i < dim1; i++)
+                {
+                    if (data[i,a] < min) min = data[i,a];
+                }
+            }
+            return min;
+        }
+        private float maximum(float[] data)
+        {
+            float max = float.MinValue;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] > max) max = data[i];
+            }
+            return max;
+        }
+
+        private float[] reboundToZero(float[] data)
+        {
+            float min = minimum(data);
+            if (min < 0)
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    data[i] += -min;
+                }
+            }
+            return data;
+        }
+
+        private float[,] reboundToZero(float[,] data)
+        {
+            float min = minimum(data);
+            int dim1 = data.GetLength(0);
+            int dim2 = data.GetLength(1);
+            for (int a = 0; a < dim2; a++)
+            {
+                for (int i = 0; i < dim1; i++)
+                {
+                    data[i, a] += -min;
+                }
+            }
+            return data;
+        }
+
+        private byte clampBounds(float a)
+        {
+            if (a < 0) return 255;
+            if (a > 255) return 255;
+            return (byte)a;
+        }
+        private void NormalizeToTerrain(float[,] map)
+        {
+            int width = map.GetLength(0);
+            int height = map.GetLength(1);
+
+            this.heightMap = new byte[width * height];
+
+            vertexCountX = width;
+            vertexCountZ = height;
+            numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
+            numVertices = this.heightMap.Length;
+
+            /*
+            float max = float.MinValue, min = float.MaxValue;
+            for (int h = 0; h < height; h++)
+            {
+                for (int w = 0; w < width; w++)
+                {
+                    if (map[w, h] > max) max = map[w, h];
+                    if (map[w, h] < min) min = map[w, h];
+                }
+            }
+            */
+
+            map = reboundToZero(map);
+
+            map = gaussianPass1(map, .5f);
+            map = gaussianPass2(map, .5f);
+
+            float[] data = ConvertTo1D(map);
+
+            
+            /*float[] cubic = new float[data.Length];
+            for (int i = 0; i < data.Length; i++)
+            {
+                cubic[i] = data[i] * data[i] * data[i];
+            }
+
+            for(int i=0;i<data.Length;i++)
+            {
+                data[i] = data[i] + cubic[i] * 0.0001f;
+            }*/
+
+            //data = reboundToZero(data);
+
+            float min, max;
+            //min = this.MinAdvanced(data);
+            //max = this.MaxAdvanced(data);
+            min = minimum(data);
+            max = maximum(data);
+
+
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                heightMap[i] = clampBounds((255f / (max + min))*(data[i] + min));
+            }
+            
+            
+        }
+
+        public void SaveMapToImage()
+        {
+            Color[] c = new Color[vertexCountX * vertexCountZ];
+            for (int i = 0; i < this.heightMap.Length; i++)
+            {
+                c[i] = new Color();
+                c[i].R = this.heightMap[i];
+                c[i].G = this.heightMap[i];
+                c[i].B = this.heightMap[i];
+                c[i].A = 255;
+            }
+            Texture2D tex = new Texture2D(this.dev, vertexCountX, vertexCountX);
+            tex.SetData<Color>(c);
+            tex.Save("dynMap.png", ImageFileFormat.Png);
+        }
+
         private void GenerateIndices()
         {
             indices = new int[vertexCountX * 2 * (vertexCountZ - 1)];
@@ -299,6 +672,16 @@ namespace Wumpus3Drev0
             //effect.FogEnd = 500;
         }
 
+        public void ReGenerateTerrain()
+        {
+            this.GenerateDynamicTerrainMap(129, 64, .55f); //129,100,.5
+            this.GenerateIndices();
+            this.GenerateVertices();
+            this.GenerateNormals();
+
+            this.SetData(dev);
+        }
+
         public Terrain(GraphicsDevice device, BasicCamera camera, Texture2D mapAsset, Texture2D texAsset, float blockScaleF, float heightScaleF)
         {
             this.blockScale = blockScaleF;
@@ -308,14 +691,12 @@ namespace Wumpus3Drev0
 
             //this.LoadHeightmapFromImage(mapAsset);
             //this.GenerateRandomWalkMap(128, 128, 20);
-            this.GenerateMidFractalMap(128, 128, 255, .6f);
+            //this.GenerateMidFractalMap(128, 128, 255, .6f);
+            //this.GenerateDynamicTerrainMap(129, 64, .55f); //(129, 64, .5f);
+            
             this.LoadTexture(texAsset);
 
-            this.GenerateIndices();
-            this.GenerateVertices();
-            this.GenerateNormals();
-
-            this.SetData(device);
+            this.ReGenerateTerrain();
 
             //this.world
 
