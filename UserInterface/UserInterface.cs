@@ -107,6 +107,15 @@ namespace InteractionEngine.UserInterface {
             // Default: do nothing!
         }
 
+        /// <summary>
+        /// Get the XNA GraphicsDevice.
+        /// </summary>
+        /// <returns>The XNA GraphicsDevice.</returns>
+        public Microsoft.Xna.Framework.Graphics.GraphicsDevice getGraphicsDevice() {
+            if (Engine.game != null) return Engine.game.GraphicsDevice;
+            else return null;
+        }
+
     }
 
     /// <summary>

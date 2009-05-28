@@ -126,6 +126,7 @@ namespace InteractionEngine.Networking {
         /// </summary>
         /// <param name="loadRegion">The LoadRegion to be added</param>
         public static void addPrivateLoadRegion(Constructs.LoadRegion loadRegion) {
+            if (privateLoadRegionHashlist.ContainsKey(loadRegion.id)) return;
             lock (privateLoadRegionHashlist) {
                 privateLoadRegionHashlist.Add(loadRegion.id, loadRegion);
             }
