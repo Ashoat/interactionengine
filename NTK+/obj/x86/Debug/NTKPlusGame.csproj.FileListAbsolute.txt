@@ -89,3 +89,4 @@ C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\ResolveAssemb
 C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\NTKPlusGame.exe
 C:\Documents and Settings\Paul\My Documents\NTK\NTK+\obj\x86\Debug\NTKPlusGame.pdb
+C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\bin\x86\Debug\Content\host+join.xnb

@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using InteractionEngine.Constructs.Datatypes;
 using InteractionEngine.EventHandling;
+using NTKPlusGame.World.Modules;
+using WumpusGame.World;
 
 
 namespace Game
@@ -35,16 +37,22 @@ namespace Game
             user = new NTKPlusUser();
             NTKPlusUser.localUser = user;
             UserInterface3D.user = user;
-            loadRegion = LoadRegion.createLoadRegion(); // <--- are we planning on doing anything with this?
             // Set up the camera
-            Vector3 cameraPos = new Vector3(75, 40, 75); //30
-            user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
-            // Set up some basic GameObjects.
-            Terrain terrain = GameObject.createGameObject<Terrain>(loadRegion);
-            terrain.initialize(2f, .1f, loadRegion);
-            Human human = GameObject.createGameObject<Human>(loadRegion);
-            human.initialize(terrain);
-            FrameRateCounter frameRateCounter = GameObject.createGameObject<FrameRateCounter>(loadRegion);
+            Microsoft.Xna.Framework.Vector3 cameraPos = new Microsoft.Xna.Framework.Vector3(75, 40, 75); //30
+            Game.TestGame.user.camera.SetLookAt(cameraPos, Microsoft.Xna.Framework.Vector3.Zero, Microsoft.Xna.Framework.Vector3.Up);
+            // blah
+            new Terrain();
+            new Human();
+            new FrameRateCounter();
+            new InfoTab();
+            new InfoButton();
+            new InfoDisplayBox();
+            new DebugSphere();
+            new KeyboardCameraControl();
+            new Player();
+            new SelectionFocus();
+            // Set up the LobbyButtons
+            LobbyButtons buttons = GameObject.createGameObject<LobbyButtons>(user.localLoadRegion);
             Engine.run();
         }
 

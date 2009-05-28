@@ -92,6 +92,8 @@ namespace NTKPlusGame.World {
         double frameRate;
 
         public void onDraw() {
+            if (Engine.userInterface.getGraphicsDevice() != null) this.loadContent();
+
             drawHistory[++lastDrawIndex % numDraws] = Engine.gameTime.TotalRealTime;
 
             if ((Engine.gameTime.TotalRealTime - lastFrameRateCalculation).TotalMilliseconds > 400) {

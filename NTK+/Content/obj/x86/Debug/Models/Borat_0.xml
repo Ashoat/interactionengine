@@ -3,7 +3,7 @@
   <Asset Type="Graphics:MeshContent">
     <Name>Borat</Name>
     <Identity>
-      <SourceFilename>C:\Documents and Settings\Paul\My Documents\NTK\NTK+\Content\Models\Borat.fbx</SourceFilename>
+      <SourceFilename>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\Content\Models\Borat.fbx</SourceFilename>
       <SourceTool>FbxImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0.0409114026 0 0 1</Transform>
@@ -26,7 +26,7 @@
     <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
       <Name>lambert1</Name>
       <Identity>
-        <SourceFilename>C:\Documents and Settings\Paul\My Documents\NTK\NTK+\Content\Models\Borat.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Ashoat\Desktop\Bluestone Coding\NTK+\Content\Models\Borat.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>

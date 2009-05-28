@@ -101,6 +101,7 @@
     <Compile Include="World\Object Logic\Human.cs" />
     <Compile Include="World\Object Logic\InfoDisplayBox.cs" />
     <Compile Include="World\Object Logic\KeyboardCameraControl.cs" />
+    <Compile Include="World\Object Logic\LobbyButtons.cs" />
     <Compile Include="World\Object Logic\Player.cs" />
     <Compile Include="World\Object Logic\SelectionFocus.cs" />
     <Compile Include="World\Object Logic\Terrain.cs" />

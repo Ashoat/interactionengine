@@ -365,6 +365,8 @@ namespace NTKPlusGame.World {
 
         public void onDraw() {
 
+            if (Engine.userInterface.getGraphicsDevice() != null) this.loadContent();
+
             UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace; //or null
             UserInterface3D.graphicsDevice.RenderState.DepthBufferEnable = true;
 
@@ -461,6 +463,7 @@ namespace NTKPlusGame.World {
 
             public override void loadContent() {
                 // TODO: this.
+                if (gameObject == null) return;
                 gameObject.loadContent();
                 //base.loadContent();
             }

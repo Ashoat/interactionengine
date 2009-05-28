@@ -29,7 +29,7 @@ using InteractionEngine.Constructs.Datatypes;
 namespace NTKPlusGame.World {
 
 
-    public class InfoDisplayBox : GameObject, Locatable, Graphable2D {
+    public class InfoDisplayBox : GameObject, Graphable2D {
 
         #region FACTORY
 
