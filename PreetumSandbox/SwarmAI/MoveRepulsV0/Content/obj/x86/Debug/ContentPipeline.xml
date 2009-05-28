@@ -7,18 +7,27 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\SwarmAI\MoveRepulsV0\bin\x86\Debug\Content\dot.xnb</Output>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\MoveRepulsV0\bin\x86\Debug\Content\dot.xnb</Output>
       <Time>2009-05-27T22:21:34.003-07:00</Time>
+    </Item>
+    <Item>
+      <Source>font.spritefont</Source>
+      <Name>font</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\MoveRepulsV0\bin\x86\Debug\Content\font.xnb</Output>
+      <Time>2009-05-27T23:52:18.267-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>D:\t09\SwarmAI\MoveRepulsV0\Content\</RootDirectory>
-      <LoggerRootDirectory>D:\t09\SwarmAI\MoveRepulsV0\</LoggerRootDirectory>
-      <IntermediateDirectory>D:\t09\SwarmAI\MoveRepulsV0\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>D:\t09\SwarmAI\MoveRepulsV0\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\MoveRepulsV0\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\MoveRepulsV0\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\MoveRepulsV0\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\MoveRepulsV0\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>

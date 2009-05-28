@@ -21,6 +21,8 @@ namespace MoveRepulsV0
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        SpriteFont font;
+
         int width, height;
 
         Swarm swarm;
@@ -58,6 +60,8 @@ namespace MoveRepulsV0
 
             swarm = new Swarm(spriteBatch, Content.Load<Texture2D>("dot"));
             swarm.PopulateSwarm(10, 10f, 1f, width, height);
+
+            font = Content.Load<SpriteFont>("font");
         }
 
         /// <summary>
@@ -106,6 +110,12 @@ namespace MoveRepulsV0
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             swarm.Draw();
+
+            //display total energyof system
+            float eng = swarm.CalcTotalEnergy();
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font, "energy: " + eng.ToString(), new Vector2(15, 15), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

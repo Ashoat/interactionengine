@@ -7,7 +7,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\SwarmAI\swarmV0\bin\x86\Debug\Content\dot.xnb</Output>
+      <Output>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\bin\x86\Debug\Content\dot.xnb</Output>
       <Time>2009-05-23T01:16:18.7197102-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
@@ -15,10 +15,10 @@
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>D:\t09\SwarmAI\swarmV0\Content\</RootDirectory>
-      <LoggerRootDirectory>D:\t09\SwarmAI\swarmV0\</LoggerRootDirectory>
-      <IntermediateDirectory>D:\t09\SwarmAI\swarmV0\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>D:\t09\SwarmAI\swarmV0\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>

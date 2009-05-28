@@ -25,6 +25,8 @@ namespace MoveRepulsV0
         private const float hookeConst = .000005f; //.000005f
         private const float gravConst = .00000001f;
 
+        public float Dampening = .96f; //IMPORTANT!!!!
+
         public Attractor Attractor
         {
             get { return attractor; }
@@ -80,6 +82,16 @@ namespace MoveRepulsV0
             return hookeConst * attr.Mass * Vector2.Distance(unit.Position, attr.Position) * direction;
         }
 
+        public float CalcTotalEnergy()
+        {
+            float totEng = 0;
+            foreach (Unit unit in units)
+            {
+                totEng += unit.Velocity.Length() * unit.Velocity.Length() * unit.Mass;
+            }
+            return totEng;
+        }
+
         public void Update()
         {
             if (units == null) return;
@@ -99,7 +111,7 @@ namespace MoveRepulsV0
                 }
 
                 unit.Velocity += netForce;
-                unit.Velocity *= .96f;
+                unit.Velocity *= this.Dampening;
                 unit.Position += unit.Velocity;
             }
         }
