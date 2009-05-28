@@ -158,7 +158,7 @@ namespace Wumpus3Drev0
         }
         public void Draw()
         {
-            dev.RenderState.CullMode = CullMode.None;
+            dev.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
             dev.RenderState.DepthBufferEnable = true;
 
             dev.VertexDeclaration = new VertexDeclaration(dev, VertexPositionColor.VertexElements);

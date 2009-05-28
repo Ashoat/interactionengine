@@ -267,11 +267,12 @@ namespace Wumpus3Drev0
                         Int2 c1 = new Int2(w, (h + sideLen / 2) % size);
                         Int2 c2 = new Int2((w + sideLen / 2) % size, h);
                         
-                        rand = new Random(p0.X * p5.X);  //p0.X * p5.X
+                        //rand = new Random(p0.X * p5.X);  //p0.X * p5.X
+                        rand = new Random((w+DateTime.Now.Millisecond)*17 + h * 57);
                         map[c1.X, c1.Y] = (GetVal(p0, map) + GetVal(p1, map) + GetVal(p2, map) + GetVal(p3, map)) / 4;
                         map[c1.X, c1.Y] += (float)(rand.NextDouble() * 2 - 1) * magR;
 
-                        rand = new Random(p4.Y * p5.Y);
+                        //rand = new Random(p4.Y * p5.Y);
                         map[c2.X, c2.Y] = (GetVal(p0, map) + GetVal(p3, map) + GetVal(p4, map) + GetVal(p5, map)) / 4;
                         map[c2.X, c2.Y] += (float)(rand.NextDouble() * 2 - 1) * magR;
                     }
@@ -526,9 +527,11 @@ namespace Wumpus3Drev0
             map = gaussianPass1(map, .5f);
             map = gaussianPass2(map, .5f);
 
+            //map = gaussianPass1(map, .5f);
+            //map = gaussianPass2(map, .5f);
+
             float[] data = ConvertTo1D(map);
 
-            
             /*float[] cubic = new float[data.Length];
             for (int i = 0; i < data.Length; i++)
             {
@@ -556,6 +559,40 @@ namespace Wumpus3Drev0
             }
             
             
+        }
+
+        public void FliterCurrentTerrain(float sd)
+        {
+            float[,] map = new float[vertexCountX, vertexCountZ];
+            for (int h = 0; h < vertexCountZ; h++)
+            {
+                for (int w = 0; w < vertexCountX; w++)
+                {
+                    map[w, h] = heightMap[w + h * vertexCountX];
+                }
+            }
+
+            map = gaussianPass1(map, sd);
+            map = gaussianPass2(map, sd);
+
+
+            float[] data = ConvertTo1D(map);
+            float min, max;
+            //min = this.MinAdvanced(data);
+            //max = this.MaxAdvanced(data);
+            min = minimum(data);
+            max = maximum(data);
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                heightMap[i] = clampBounds((255f / (max + min)) * (data[i] + min));
+            }
+
+            this.GenerateIndices();
+            this.GenerateVertices();
+            this.GenerateNormals();
+
+            this.SetData(dev);
         }
 
         public void SaveMapToImage()
@@ -697,7 +734,12 @@ namespace Wumpus3Drev0
 
         public void ReGenerateTerrain()
         {
-            this.GenerateDynamicTerrainMap(129, 64, .55f); //129,100,.5
+            //this.GenerateDynamicTerrainMap(129, 64, .55f); //129,100,.5
+            //this.heightScale = 1f;
+            
+            this.GenerateDynamicTerrainMap(257, 128, .6f);
+            this.heightScale = 2f;
+
             this.GenerateIndices();
             this.GenerateVertices();
             this.GenerateNormals();
@@ -804,50 +846,7 @@ namespace Wumpus3Drev0
             return isOnTerrain(new Vector2(pos.X, pos.Z));
         }
 
-        /*
-         * public float getHeight(Vector2 pos) //(x,z)
-        {
-            //return Vector3.Transform(vertices[128 + vertexCountX * 128].Position, this.WorldMatrix).Y;
-            // Check if the object is inside the grid
-            if (isOnTerrain(pos))
-            {
-
-                pos += this.Size / 2;
-                Vector2 blockPos = new Vector2((int)(pos.X / blockScale), (int)(pos.Y / blockScale));
-                Vector2 posRel = pos - blockPos * blockScale;
-
-                int vertexIndex = (int)blockPos.X + (int)blockPos.Y * vertexCountX;
-                //if (vertexIndex >= vertices.Length - vertexCountX || vertexIndex < 0) return 20; //default value
-
-                float height1 = vertices[vertexIndex + 1].Position.Y;
-                float height2 = vertices[vertexIndex].Position.Y;
-                float height3 = vertices[vertexIndex + vertexCountX + 1].Position.Y;
-                float height4 = vertices[vertexIndex + vertexCountX].Position.Y;
-
-                float heightHxLz = vertices[vertexIndex + 1].Position.Y;
-                float heightLxLz = vertices[vertexIndex].Position.Y;
-                float heightHxHz = vertices[vertexIndex + vertexCountX + 1].Position.Y;
-                float heightLxHz = vertices[vertexIndex + vertexCountX].Position.Y;
-
-                bool aboveLowerTri = posRel.X < posRel.Y;
-                float heightIncX, heightIncY;
-                if (aboveLowerTri)
-                {
-                    heightIncX = height3 - height4;
-                    heightIncY = height4 - height2;
-                }
-                else
-                {
-                    heightIncX = height1 - height2;
-                    heightIncY = height3 - height1;
-                }
-                float lerpHeight = height2 + heightIncX * posRel.X + heightIncY * posRel.Y;
-                return lerpHeight;
-
-            }
-            return 20; //default value
-        }*/
-
+        
         public float getHeight(Vector2 pos) //(x,z)
         {
             //return Vector3.Transform(vertices[128 + vertexCountX * 128].Position, this.WorldMatrix).Y;

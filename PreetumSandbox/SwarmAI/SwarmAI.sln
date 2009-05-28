@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swarmV0", "swarmV0\swarmV0.csproj", "{6A05630F-D7AB-4A5A-BA14-9325802AC26C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoveRepulsV0", "MoveRepulsV0\MoveRepulsV0.csproj", "{7FE952A8-77BE-44BB-9401-9CFF36E697C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A05630F-D7AB-4A5A-BA14-9325802AC26C}.Debug|x86.ActiveCfg = Debug|x86
+		{6A05630F-D7AB-4A5A-BA14-9325802AC26C}.Debug|x86.Build.0 = Debug|x86
+		{6A05630F-D7AB-4A5A-BA14-9325802AC26C}.Release|x86.ActiveCfg = Release|x86
+		{6A05630F-D7AB-4A5A-BA14-9325802AC26C}.Release|x86.Build.0 = Release|x86
+		{2289E9CA-DADE-4F56-BF3E-30D18BA2C2C0}.Debug|x86.ActiveCfg = Debug|x86
+		{2289E9CA-DADE-4F56-BF3E-30D18BA2C2C0}.Release|x86.ActiveCfg = Release|x86
+		{7FE952A8-77BE-44BB-9401-9CFF36E697C5}.Debug|x86.ActiveCfg = Debug|x86
+		{7FE952A8-77BE-44BB-9401-9CFF36E697C5}.Debug|x86.Build.0 = Debug|x86
+		{7FE952A8-77BE-44BB-9401-9CFF36E697C5}.Release|x86.ActiveCfg = Release|x86
+		{7FE952A8-77BE-44BB-9401-9CFF36E697C5}.Release|x86.Build.0 = Release|x86
+		{D528F41F-2CFE-4EA0-BE12-C037EA7BF773}.Debug|x86.ActiveCfg = Debug|x86
+		{D528F41F-2CFE-4EA0-BE12-C037EA7BF773}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

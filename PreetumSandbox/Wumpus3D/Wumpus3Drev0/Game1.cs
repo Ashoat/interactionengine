@@ -33,6 +33,8 @@ namespace Wumpus3Drev0
 
         Matrix scale;
 
+        GameModel lab;
+
         Model cube;
 
         Texture2D tex;
@@ -137,6 +139,7 @@ namespace Wumpus3Drev0
             anim.Frames.Add(Content.Load<Model>("Models\\masterchief2"));
             model.Animations.Add(anim);
 
+
             //
             //
             //
@@ -144,13 +147,22 @@ namespace Wumpus3Drev0
             UI = new UserInterface(camera, GraphicsDevice);
             UI.Add(this.model);
             //
-            skySphere = new SkySphere(Content.Load<Model>("Models\\sphereHP"), modelEffect);
-            skySphere.Orgin = Vector3.Zero;
-            skySphere.SetScale(100f);
+
+            ModelEffect sky = new ModelEffect(GraphicsDevice, null);
+            sky.ActiveCamera = camera;
+            sky.TextureEnabled = true;
+            sky.AmbientLightColor = new Vector3(.6f, .6f, .6f);
+            sky.Texture = Content.Load<Texture2D>("Models\\cloudMap");
+            skySphere = new SkySphere(Content.Load<Model>("Models\\dome"), sky);
+            skySphere.Orgin = new Vector3(0, -100, 0);
+            skySphere.SetScale(5000f);
 
             //
-            plane = new SimplePlane(new Vector3(0, 70, 0), terrain.Size.X, terrain.Size.Y, modelEffect.ActiveCamera, GraphicsDevice); //15
-
+            float ph = 180; //70 for 129x129, 160 for 257x257
+            plane = new SimplePlane(new Vector3(0, ph, 0), terrain.Size.X, terrain.Size.Y, modelEffect.ActiveCamera, GraphicsDevice); //15
+            //
+            //lab = new GameModel(Content.Load<Model>("Models\\Lab"), modelEffect, terrain, GraphicsDevice);
+            //lab.SetScale(10f);
         }
 
         /// <summary>
@@ -227,6 +239,8 @@ namespace Wumpus3Drev0
 
                 if (Keyboard.GetState().IsKeyDown(Keys.G))
                     terrain.ReGenerateTerrain();
+                if (Keyboard.GetState().IsKeyDown(Keys.F))
+                    terrain.FliterCurrentTerrain(.2f);
             }
 
             model.Move(Vector2.Reflect(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left, Vector2.UnitY));
@@ -276,7 +290,7 @@ namespace Wumpus3Drev0
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1, 0);
             //GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            
+            //skySphere.Draw();
 
 
             terrain.Draw();
@@ -285,12 +299,13 @@ namespace Wumpus3Drev0
             //GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
             //GraphicsDevice.RenderState.DepthBufferEnable = true;
             model.Draw();
+            //lab.Draw();
 
             plane.Draw();
 
             frc.Draw();
            
-            //skySphere.Draw();
+            
 
             /*GraphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
             GraphicsDevice.RenderState.DepthBufferEnable = true;
