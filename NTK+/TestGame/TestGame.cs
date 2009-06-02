@@ -22,7 +22,6 @@ namespace Game
     {
 
         static NTKPlusUser user;
-        static LoadRegion loadRegion;
 
         public static void Main()
         {
