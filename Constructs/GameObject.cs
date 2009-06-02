@@ -142,7 +142,7 @@ namespace InteractionEngine.Constructs {
         /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
         /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
         /// </summary>
-        public GameObject() {
+        protected GameObject() {
         }
 
         /// <summary>

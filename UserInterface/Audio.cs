@@ -115,7 +115,7 @@ namespace InteractionEngine.UserInterface.Audio {
         /// Start playing a sound.
         /// </summary>
         /// <param name="sound">The string identifying the sound in one the SoundBanks that is being executed.</param>
-        public virtual void playSound(string soundIdentifier) {
+        public override void playSound(string soundIdentifier) {
             Microsoft.Xna.Framework.Audio.Cue sound = soundBank.GetCue(soundIdentifier);
             activeSounds.Add(sound);
             sound.Play();
