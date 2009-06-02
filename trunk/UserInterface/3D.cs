@@ -268,8 +268,11 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                     if (gameObject is Audio.Audible3D) ((Audio.Audible3D)gameObject).getAudio3D().output();
                     if (gameObject is Graphable3D) ((Graphable)gameObject).getGraphics().onDraw();
                 }
-
+                if (loadRegion == user.localLoadRegion) {
+                    ;
+                }
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.SaveState);
+                // TODO: figure this thing out... stop drawing stuff twice
                 foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectArray()) {
                     if (gameObject is Graphable2D) ((Graphable)gameObject).getGraphics().onDraw();
                 }

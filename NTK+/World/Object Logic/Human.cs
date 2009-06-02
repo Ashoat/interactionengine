@@ -23,6 +23,7 @@ using InteractionEngine.Networking;
 using InteractionEngine.UserInterface;
 using InteractionEngine.EventHandling;
 using Microsoft.Xna.Framework.Graphics;
+using InteractionEngine;
 
 namespace NTKPlusGame.World {
 
@@ -94,26 +95,35 @@ namespace NTKPlusGame.World {
             this.infoDisplay = new InfoDisplay(this);
 
             InfoTab tab1 = GameObject.createGameObject<InfoTab>(this.getLoadRegion());
-            tab1.initialize("A tab!", this);
+            if (tab1 != null) this.initializeInfoDisplay(null, tab1);
+            else CreateObject.onCreateObject.Add(new Event(this.id, INFO_HASH, null));
+            //tab1.initialize("A tab!", this);
 
             InfoTab tab2 = GameObject.createGameObject<InfoTab>(this.getLoadRegion());
-            tab2.initialize("Another tab!", this);
+            if (tab2 != null) this.initializeInfoDisplay(null, tab2);
+            else CreateObject.onCreateObject.Add(new Event(this.id, INFO_HASH, null));
+            //tab2.initialize("Another tab!", this);
 
             InfoButton button1 = GameObject.createGameObject<InfoButton>(this.getLoadRegion());
-            button1.initialize(this, BUTTON_HASH, 0, "genericButton", "Do generic stuff 1!", "Attack: none! Defense: A button!");
+            if (button1 != null) this.initializeInfoDisplay(null, button1);
+            //button1.initialize(this, BUTTON_HASH, 0, "genericButton", "Do generic stuff 1!", "Attack: none! Defense: A button!");
 
             InfoButton button2 = GameObject.createGameObject<InfoButton>(this.getLoadRegion());
-            button2.initialize(this, BUTTON_HASH, 1, "genericButton", "Do generic stuff 2!", "Attack: none! Defense: A button!");
+            if (button2 != null) this.initializeInfoDisplay(null, button2);
+            //button2.initialize(this, BUTTON_HASH, 1, "genericButton", "Do generic stuff 2!", "Attack: none! Defense: A button!");
 
             InfoButton button3 = GameObject.createGameObject<InfoButton>(this.getLoadRegion());
-            button3.initialize(this, BUTTON_HASH, 2, "genericButton", "Do generic stuff 3!", "Attack: none! Defense: A button!");
+            if (button3 != null) this.initializeInfoDisplay(null, button3);
+            //button3.initialize(this, BUTTON_HASH, 2, "genericButton", "Do generic stuff 3!", "Attack: none! Defense: A button!");
 
             InfoButton button4 = GameObject.createGameObject<InfoButton>(this.getLoadRegion());
-            button4.initialize(this, BUTTON_HASH, 3, "genericButton", "Do generic stuff 4!", "Attack: none! Defense: A button!");
+            if (button4 != null) this.initializeInfoDisplay(null, button4);
+            //button4.initialize(this, BUTTON_HASH, 3, "genericButton", "Do generic stuff 4!", "Attack: none! Defense: A button!");
 
             InfoButton button5 = GameObject.createGameObject<InfoButton>(this.getLoadRegion());
-            button5.initialize(this, BUTTON_HASH, 4, "genericButton", "Do generic stuff 5!", "Attack: none! Defense: A button!");
-
+            if (button5 != null) this.initializeInfoDisplay(null, button5);
+            //button5.initialize(this, BUTTON_HASH, 4, "genericButton", "Do generic stuff 5!", "Attack: none! Defense: A button!");
+            /*
             tab1.addInfoButton(button1);
             tab1.addInfoButton(button2);
             tab2.addInfoButton(button3);
@@ -121,19 +131,53 @@ namespace NTKPlusGame.World {
             tab2.addInfoButton(button5);
             this.infoDisplay.addTab(tab1);
             this.infoDisplay.addTab(tab2);
+            */
+
             this.infoDisplay.FaceIcon = "Images\\human_texture";
             this.infoDisplay.DisplayName = "Human";
             this.infoDisplay.Description = "Homo sapiens sapiens. With rectangular edges.";
 
             this.addEventMethod(BUTTON_HASH, new EventMethod(onButton));
+            this.addEventMethod(SPHERE_HASH, new EventMethod(initializeSphere));
+            this.addEventMethod(INFO_HASH, new EventMethod(initializeInfoDisplay));
         }
 
+        private InfoTab[] tabs = new InfoTab[2];
+        private int nextTabIndex = 0;
+        private InfoButton[] buttons = new InfoButton[5];
+        private int nextButtonIndex = 0;
+        private string INFO_HASH = "info21353egrfg";
+
+        private void initializeInfoDisplay(Client client, object param) {
+            if (param is InfoTab) {
+                InfoTab tab = (InfoTab)param;
+                tabs[nextTabIndex++] = tab;
+                this.infoDisplay.addTab(tab);
+                tab.initialize(nextTabIndex == 1 ? "A tab!" : "Another tab!", this);
+            } else if (param is InfoButton) {
+                InfoButton button = ((InfoButton)param); 
+                button.initialize(this, BUTTON_HASH, nextButtonIndex, "genericButton", "Do generic stuff " + nextButtonIndex + "!", "Attack: none! Defense: A button!");
+                buttons[nextButtonIndex++] = button;
+                tabs[nextButtonIndex / 3].addInfoButton(button);
+            }
+        }
 
         private Vector3[] colors = { Color.Red.ToVector3(), Color.Yellow.ToVector3(), Color.Green.ToVector3(), Color.Blue.ToVector3(), Color.Purple.ToVector3() };
+        private int nextColor;
+        private const string SPHERE_HASH = "sphere324h4kj23gadsyt832";
         public void onButton(Client client, object param) {
             DebugSphere sphere = GameObject.createGameObject<DebugSphere>(this.getLoadRegion());
+            nextColor = (int)param;
+            if (sphere != null) {
+                initializeSphere(client, sphere);
+            } else CreateObject.onCreateObject.Add(new Event(this.id, SPHERE_HASH, null));
+        }
+
+        public void initializeSphere(Client client, object spherey) {
+            DebugSphere sphere = (DebugSphere)spherey;
             sphere.setPosition(this.getLocation().Position + new Vector3(0, 25, 0), 2);
-            sphere.setColor(colors[(int)param]);
+            sphere.setColor(colors[nextColor]);
+
         }
 
         public override Event getEvent(int invoker, Vector3 position) {
