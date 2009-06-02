@@ -105,7 +105,6 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Funny how much encapsulation that little piece of information requires...
         /// </summary>
         private bool realValue;
-        private bool lastServerSetValue; // Used by the client so that server updates stay in a bad-calculation-safe variable.
         public bool value {
             get {
                 return realValue;
@@ -170,7 +169,6 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Funny how much encapsulation that little piece of information requires...
         /// </summary>
         private int realValue;
-        private int lastServerSetValue; // Used by the client so that server updates stay in a bad-calculation-safe variable.
         public int value {
             get {
                 return realValue;
@@ -232,7 +230,6 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Funny how much encapsulation that little piece of information requires...
         /// </summary>
         private char realValue;
-        private char lastServerSetValue; // Used by the client so that server updates stay in a bad-calculation-safe variable.
         public char value {
             get {
                 return realValue;
@@ -294,7 +291,6 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Funny how much encapsulation that little piece of information requires...
         /// </summary>
         private double realValue;
-        private double lastServerSetValue; // Used by the client so that server updates stay in a bad-calculation-safe variable.
         public double value {
             get {
                 return realValue;
@@ -356,7 +352,6 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Funny how much encapsulation that little piece of information requires...
         /// </summary>
         private string realValue;
-        private string lastServerSetValue; // Used by the client so that server updates stay in a bad-calculation-safe variable.
         public string value {
             get {
                 return realValue;

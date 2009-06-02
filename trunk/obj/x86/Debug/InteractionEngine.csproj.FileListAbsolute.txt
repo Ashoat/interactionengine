@@ -43,3 +43,9 @@ C:\Users\Ashoat\Desktop\Bluestone Coding\trunk\obj\x86\Debug\ResolveAssemblyRefe
 C:\Users\Ashoat\Desktop\Bluestone Coding\trunk\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\Ashoat\Desktop\Bluestone Coding\trunk\obj\x86\Debug\InteractionEngine.dll
 C:\Users\Ashoat\Desktop\Bluestone Coding\trunk\obj\x86\Debug\InteractionEngine.pdb
+D:\Development\Interaction Engine\trunk\bin\x86\Debug\InteractionEngine.dll
+D:\Development\Interaction Engine\trunk\bin\x86\Debug\InteractionEngine.pdb
+D:\Development\Interaction Engine\trunk\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Development\Interaction Engine\trunk\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\Development\Interaction Engine\trunk\obj\x86\Debug\InteractionEngine.dll
+D:\Development\Interaction Engine\trunk\obj\x86\Debug\InteractionEngine.pdb

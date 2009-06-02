@@ -6,3 +6,4 @@ C:\Users\Ashoat\Desktop\InteractionEngine\trunk\Content\obj\x86\Debug\ResolveAss
 C:\Users\Ashoat\Desktop\InteractionEngine\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Woofy\Desktop\interactionengine2\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Ashoat\Desktop\Bluestone Coding\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Development\Interaction Engine\trunk\Content\obj\x86\Debug\ResolveAssemblyReference.cache

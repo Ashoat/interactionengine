@@ -42,7 +42,6 @@ namespace InteractionEngine.Constructs.Datatypes {
         /// Funny how much encapsulation that little piece of information requires...
         /// </summary>
         private Microsoft.Xna.Framework.Vector3 realValue;
-        private Microsoft.Xna.Framework.Vector3 lastServerSetValue; // Used by the client so that server updates stay in a bad-calculation-safe variable.
         public Microsoft.Xna.Framework.Vector3 value {
             get {
                 return realValue;
