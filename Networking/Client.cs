@@ -238,6 +238,10 @@ namespace InteractionEngine.Networking {
                 System.Console.WriteLine(ex);
                 eventReaderThread.Abort();
                 disconnect();
+            } catch (System.InvalidOperationException ex) {
+                System.Console.WriteLine(ex);
+                eventReaderThread.Abort();
+                disconnect();
             }
         }
 

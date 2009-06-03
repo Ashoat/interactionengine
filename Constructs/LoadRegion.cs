@@ -171,7 +171,7 @@ namespace InteractionEngine.Constructs {
          * Every LoadRegion has GameObjects located in it; this is a list of GameObjects.
          */
         private readonly System.Collections.Generic.List<int> objects = new System.Collections.Generic.List<int>();
-
+        
         /// <summary>
         /// This method is triggered when a GameObject enters this LoadRegion.
         /// </summary>
@@ -181,6 +181,7 @@ namespace InteractionEngine.Constructs {
             if (objects.Contains(objectId)) return;
             lock (objects) {
                 this.objects.Add(objectId);
+                this.objects.Sort();
             }
         }
 
