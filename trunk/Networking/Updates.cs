@@ -276,8 +276,7 @@ namespace InteractionEngine.Networking {
                 field.setValue(pair.Value);
             }
             foreach (EventHandling.Event eventObject in onCreateObject) {
-                eventObject.parameter = (object)gameObject;
-                Engine.addEvent(eventObject);
+                Engine.addEvent(new EventHandling.Event(eventObject.gameObjectID, eventObject.eventHash, (object)gameObject));
             }
         }
 

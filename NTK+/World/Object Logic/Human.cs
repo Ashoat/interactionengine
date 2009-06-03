@@ -79,6 +79,8 @@ namespace NTKPlusGame.World {
         }
 
         public override void construct() {
+            // blah
+            CreateObject.onCreateObject.Add(new Event(this.id, Human.INFO_HASH, null));
             base.construct();
             ModelEffect modelEffect = new ModelEffect(); // new Graphics3D.ModelEffect(UserInterface3D.graphicsDevice, null);
             modelEffect.SpecularColor = new Vector3(.1f, .3f, .6f);
@@ -94,9 +96,20 @@ namespace NTKPlusGame.World {
 
             this.infoDisplay = new InfoDisplay(this);
 
+            
+            //button5.initialize(this, BUTTON_HASH, 4, "genericButton", "Do generic stuff 5!", "Attack: none! Defense: A button!");
+            /*
+            tab1.addInfoButton(button1);
+            tab1.addInfoButton(button2);
+            tab2.addInfoButton(button3);
+            tab2.addInfoButton(button4);
+            tab2.addInfoButton(button5);
+            this.infoDisplay.addTab(tab1);
+            this.infoDisplay.addTab(tab2);
+            */
+
             InfoTab tab1 = GameObject.createGameObject<InfoTab>(this.getLoadRegion());
             if (tab1 != null) this.initializeInfoDisplay(null, tab1);
-            else CreateObject.onCreateObject.Add(new Event(this.id, INFO_HASH, null));
             //tab1.initialize("A tab!", this);
 
             InfoTab tab2 = GameObject.createGameObject<InfoTab>(this.getLoadRegion());
@@ -121,16 +134,6 @@ namespace NTKPlusGame.World {
 
             InfoButton button5 = GameObject.createGameObject<InfoButton>(this.getLoadRegion());
             if (button5 != null) this.initializeInfoDisplay(null, button5);
-            //button5.initialize(this, BUTTON_HASH, 4, "genericButton", "Do generic stuff 5!", "Attack: none! Defense: A button!");
-            /*
-            tab1.addInfoButton(button1);
-            tab1.addInfoButton(button2);
-            tab2.addInfoButton(button3);
-            tab2.addInfoButton(button4);
-            tab2.addInfoButton(button5);
-            this.infoDisplay.addTab(tab1);
-            this.infoDisplay.addTab(tab2);
-            */
 
             this.infoDisplay.FaceIcon = "Images\\human_texture";
             this.infoDisplay.DisplayName = "Human";
@@ -145,8 +148,9 @@ namespace NTKPlusGame.World {
         private int nextTabIndex = 0;
         private InfoButton[] buttons = new InfoButton[5];
         private int nextButtonIndex = 0;
-        private string INFO_HASH = "info21353egrfg";
+        public const string INFO_HASH = "info21353egrfg";
 
+        // This initializes the info display stuff from the constructor
         private void initializeInfoDisplay(Client client, object param) {
             if (param is InfoTab) {
                 InfoTab tab = (InfoTab)param;

@@ -284,6 +284,11 @@ namespace NTKPlusGame.World {
         }
 
         private void heightMapFinishings() {
+            numVertices = heightMap.Length;
+            vertexCountX = (int)Math.Sqrt(heightMap.Length);
+            vertexCountZ = vertexCountX;
+            numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
+
             this.GenerateIndices();
             this.GenerateVertices();
             this.GenerateNormals();
@@ -722,6 +727,7 @@ namespace NTKPlusGame.World {
         }
 
         private void GenerateVertices() {
+            numVertices = this.heightMap.Length;
             vertices = new VertexPositionNormalTexture[numVertices];
             Random rand = new Random((int)Camera.View.Determinant() * DateTime.Now.Millisecond);
             int vertexCount = 0;
@@ -799,7 +805,6 @@ namespace NTKPlusGame.World {
                 //this.GenerateDynamicTerrainMap(257, 128, .6f);
                 this.genDynTerMapSTART(257, 128, .6f);
 
-                water = new SimplePlane(new Vector3(0, 180, 0), this.Size.X, this.Size.Y);
                 this.heightMapFinishings();
         }
 
@@ -808,15 +813,16 @@ namespace NTKPlusGame.World {
             this.LoadDynTex(effect.Texture);
             this.InitDefaultEffectVal();
             if (Engine.status != Engine.Status.MULTIPLAYER_CLIENT) this.ReGenerateTerrain();
+            water = new SimplePlane(new Vector3(0, 180, 0), this.Size.X, this.Size.Y);
             water.loadContent();
         }
 
         public void onDraw() {
             if (!terrainReady) {
                 if (Engine.status == Engine.Status.MULTIPLAYER_CLIENT && this.heightMapSerialized.value != null) {
-                    XmlSerializer serializer = new XmlSerializer(heightMap.GetType());
-                    XmlReader xmlReader = new XmlTextReader(heightMapSerialized.value);
-                    heightMap = (byte[])serializer.Deserialize(xmlReader, "http://www.w3.org/2001/12/soap-encoding");
+                    XmlSerializer serializer = new XmlSerializer(new byte[0].GetType());
+                    XmlReader xmlReader = new XmlTextReader(new StringReader(heightMapSerialized.value));
+                    heightMap = (byte[])serializer.Deserialize(xmlReader, null);
                     heightMapFinishings();
                 }
                 return;
@@ -901,6 +907,7 @@ namespace NTKPlusGame.World {
         }
 
         public Vector3? intersectionPoint(Ray ray) {
+            if (!terrainReady || vertices == null) return null;
             Vector3 rayStep = ray.Direction * blockScale * .5f;
             Vector3 currPoint = ray.Position;
             Vector3 prevPoint = currPoint;

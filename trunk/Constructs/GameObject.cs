@@ -179,11 +179,12 @@ namespace InteractionEngine.Constructs {
             gameObject.id = id;
             // Add this FieldContainer to the GameWorld. 
             InteractionEngine.Engine.addGameObject(gameObject);
-            // Add and assign it to the LoadRegion.
-            loadRegion.addObject(gameObject.id);
+            // Assign its LoadRegion.
             gameObject.loadRegion = loadRegion; 
             // Setup its fields.
             gameObject.construct();
+            // Add it to the LoadRegion.
+            loadRegion.addObject(gameObject.id);
             // Return it!
             return gameObject;
         }
