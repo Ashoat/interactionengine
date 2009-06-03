@@ -51,6 +51,7 @@ namespace NTKPlusGame.World {
             this.keyboardCameraControl = GameObject.createGameObject<KeyboardCameraControl>(this.localLoadRegion);
             this.keyboardFocus.setFocus(keyboardCameraControl);
             ((UserInterface3D)Engine.userInterface).registerKeyboardFocus(keyboardFocus);
+            ((UserInterface3D)Engine.userInterface).frustumSelectionClear = new UserInterface3D.FrustumSelectionClear(() => NTKPlusUser.localUser.selectionFocus.clearSelections());
         }
 
         public static bool isOnOurTeam(Client client) {

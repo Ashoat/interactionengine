@@ -90,7 +90,7 @@ namespace TexturesAndColorsSample
         {
             //orientation quaternion assumes a Pi rotation so you're facing the "front"
             //of the model (looking down the +Z axis)
-            orientation = Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.Pi);
+            orientation = Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.Pi); //MathHelper.Pi
 
             mode = controlMode;
             inputDistanceRateValue = 4.0f;

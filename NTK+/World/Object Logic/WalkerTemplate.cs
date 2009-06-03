@@ -139,7 +139,7 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="selectedBy">Um... probably null I guess.</param>
         public virtual void onDragSelected(Client client, object selectedBy) {
-            NTKPlusUser.localUser.selectionFocus.setSelection(this, client, null);
+            NTKPlusUser.localUser.selectionFocus.addAsMultipleSelection(this);
         }
 
 

@@ -28,3 +28,9 @@ C:\Users\Woofy\Desktop\interactionengine2\testInteractionEngine\obj\x86\Debug\In
 C:\Users\Woofy\Desktop\interactionengine2\testInteractionEngine\bin\x86\Debug\InteractionEngine.dll
 C:\Users\Woofy\Desktop\interactionengine2\testInteractionEngine\bin\x86\Debug\InteractionEngine.pdb
 C:\Users\Woofy\Desktop\interactionengine2\testInteractionEngine\obj\x86\Debug\InteractionEngine.pdb
+D:\t09\InteractionEngine\testInteractionEngine\bin\x86\Debug\InteractionEngine.dll
+D:\t09\InteractionEngine\testInteractionEngine\bin\x86\Debug\InteractionEngine.pdb
+D:\t09\InteractionEngine\testInteractionEngine\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\t09\InteractionEngine\testInteractionEngine\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\t09\InteractionEngine\testInteractionEngine\obj\x86\Debug\InteractionEngine.dll
+D:\t09\InteractionEngine\testInteractionEngine\obj\x86\Debug\InteractionEngine.pdb

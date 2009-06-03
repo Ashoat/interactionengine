@@ -163,7 +163,7 @@ namespace Wumpus3Drev0
             raptorEffect.TextureEnabled = true;
             raptorEffect.EnableDefaultLighting();
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 10; i++)
             {
                 GameModel m = new GameModel(Content.Load<Model>("Models\\RaptorWalk\\0"), raptorEffect, terrain, GraphicsDevice);
                 m.Position2 = new Vector2((float)rand.NextDouble() * terrain.Size.X - terrain.Size.X / 2, (float)rand.NextDouble() * terrain.Size.Y - terrain.Size.Y / 2);
@@ -188,14 +188,15 @@ namespace Wumpus3Drev0
 
             ModelEffect treeEffect = new ModelEffect(GraphicsDevice, null);
             treeEffect.TextureEnabled = true;
-            treeEffect.Texture = Content.Load<Texture2D>("treemap");
+            treeEffect.Texture = Content.Load<Texture2D>("Images\\treemap");
             treeEffect.ActiveCamera = camera;
-            Model treeM = Content.Load<Model>("tree");
+            Model treeM = Content.Load<Model>("Models\\tree");
             for (int i = 0; i < 30; i++)
             {
                 GameModel tree = new GameModel(treeM, treeEffect, terrain, GraphicsDevice);
                 tree.Position2 = new Vector2((float)rand.NextDouble() * terrain.Size.X - terrain.Size.X / 2, (float)rand.NextDouble() * terrain.Size.Y - terrain.Size.Y / 2);
-                tree.SetScale(1f);
+                tree.SetScale(20f);
+                tree.heightOffset = 10f;
                 trees.Add(tree);
             }
             
@@ -359,6 +360,7 @@ namespace Wumpus3Drev0
 
             foreach (GameModel gm in trees)
             {
+                gm.Position2 = gm.Position2;
                 gm.Draw();
             }
             UI.Draw();

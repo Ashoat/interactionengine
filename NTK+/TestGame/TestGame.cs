@@ -62,7 +62,7 @@ namespace Game
 
             user.camera.SetPerspectiveFov(45f, UserInterface3D.graphicsDevice.Viewport.AspectRatio, 1.0f, 9000.0f);
             Vector3 cameraPos = new Vector3(600, 600, 600); //30
-            user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
+            user.camera.SetLookAt(cameraPos, new Vector3(0, 40, 0), Vector3.Up);
             UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.None;
 
             //UserInterface3D.graphicsDevice.RenderState.MultiSampleAntiAlias = false;

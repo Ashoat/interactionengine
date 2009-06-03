@@ -78,8 +78,10 @@ namespace NTKPlusGame.World {
             else return null;
         }
         public void terrainClicked(Client client, object param) {
-            if (param is Vector3) NTKPlusUser.localUser.selectionFocus.addOnlyAsSecondSelection(this, client, (Vector3)param);
-            if (param == null) NTKPlusUser.localUser.selectionFocus.setSelection(null, client, null);
+            
+            if (param is Vector3) NTKPlusUser.localUser.selectionFocus.swarmTo((Vector3)param);
+            //NTKPlusUser.localUser.selectionFocus.clearSelections();
+            if (param == null) NTKPlusUser.localUser.selectionFocus.clearSelections();
         }
 
         public override void construct() {

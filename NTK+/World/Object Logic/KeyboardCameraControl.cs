@@ -71,14 +71,14 @@ namespace NTKPlusGame.World {
             Camera camera = NTKPlusUser.localUser.camera;
             if (key == Keys.Up) camera.ChangeAzimuth(camera.Target, Vector3.Up, 1f);
             if (key == Keys.Down) camera.ChangeAzimuth(camera.Target, Vector3.Up, -1f);
-            if (key == Keys.Right) camera.RotateUponAxis(camera.Target, Vector3.Up, 3);
+            if (key == Keys.Right) camera.RotateUponAxis(camera.Target, Vector3.Up, 3f);
             if (key == Keys.Left) camera.RotateUponAxis(camera.Target, Vector3.Up, -3f);
-            if (key == Keys.W) camera.SetPosition(camera.getLocation().Position + 3 * planeProjection(camera.getLocation().Heading));
-            if (key == Keys.S) camera.SetPosition(camera.getLocation().Position - 3 * planeProjection(camera.getLocation().Heading));
-            if (key == Keys.D) camera.SetPosition(camera.getLocation().Position + 3 * planeProjection(camera.getLocation().Strafe));
-            if (key == Keys.A) camera.SetPosition(camera.getLocation().Position - 3 * planeProjection(camera.getLocation().Strafe));
-            if (key == Keys.PageUp) camera.SetPositionLockTarget(camera.getLocation().Position + 3 * camera.getLocation().Heading);
-            if (key == Keys.PageDown) camera.SetPositionLockTarget(camera.getLocation().Position - 3 * camera.getLocation().Heading);
+            if (key == Keys.W) camera.SetPosition(camera.getLocation().Position + 15 * planeProjection(camera.getLocation().Heading));
+            if (key == Keys.S) camera.SetPosition(camera.getLocation().Position - 15 * planeProjection(camera.getLocation().Heading));
+            if (key == Keys.D) camera.SetPosition(camera.getLocation().Position + 15 * planeProjection(camera.getLocation().Strafe));
+            if (key == Keys.A) camera.SetPosition(camera.getLocation().Position - 15 * planeProjection(camera.getLocation().Strafe));
+            if (key == Keys.PageUp) camera.SetPositionLockTarget(camera.getLocation().Position + 15 * camera.getLocation().Heading);
+            if (key == Keys.PageDown) camera.SetPositionLockTarget(camera.getLocation().Position - 15 * camera.getLocation().Heading);
         }
 
         private Vector3 planeProjection(Vector3 input){

@@ -32,7 +32,7 @@ namespace Wumpus3Drev0
         Vector2 posRel;
         Vector3 posAbs;
         Vector2 heading;
-        float heightOffset = .5f;
+        public float heightOffset = .5f;
 
         Terrain terrain;
 
@@ -205,7 +205,7 @@ namespace Wumpus3Drev0
             this.Rotation = HelperClass.GetAngle((this.Position2 - tar));
         }
         
-        private void updateWorld()
+        public void updateWorld()
         {
             this.worldLocal = localWorld();
             effect.World = worldContainer(terrain.WorldMatrix);

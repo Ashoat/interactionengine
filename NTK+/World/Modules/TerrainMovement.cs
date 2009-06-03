@@ -72,6 +72,7 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="gameObject">The GameObject whose TerrainMovement this is.</param>
         public TerrainMovement(TerrainMovable gameObject) : base(gameObject) {
             this.gameObject = gameObject;
+            this.swarm = new UpdatableGameObject<Swarm>(gameObject);
 			this.targetPosition = new UpdatableVector(gameObject);
             this.targetGameObject = new UpdatableGameObject<Locatable>(gameObject);
             this.targetTrackingDistance = new UpdatableDouble(gameObject);

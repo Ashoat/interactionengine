@@ -85,12 +85,14 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="newSelection">The new Selectable that had been clicked on.</param>
         public void setSelection(Selectable newSelection, Client client, object param) {
+            
             Selectable previous = currentlySelected[0].value;
             if (previous == null) {
                 this.currentlySelected[0].value = newSelection;
                 this.numberSelected.value = 1;
                 if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
             } else {
+                //NTKPlusUser.localUser.selectionFocus.clearSelections(); //preetum
                 bool actionAccepted = false;
                 for (int i = 0; i < numberSelected.value; i++) actionAccepted |= currentlySelected[i].value.acceptSecondSelection(newSelection, client, param);
                 if (!actionAccepted) {
@@ -120,22 +122,32 @@ namespace NTKPlusGame.World {
         }
 
         /// <summary>
-        /// TODO!!! HAHAHA!!! GAY NETWORKING!
+        /// TODO (networking?)
         /// </summary>
         /// <param name="position"></param>
         public void swarmTo(Vector3 position) {
+
+            
             for (int j = 0; j < numberSelected.value; j++)
             {
-                ((TerrainMovable)currentlySelected[j].value).getTerrainMovement().swarm.value.Units.Remove(((TerrainMovable)currentlySelected[j].value).getTerrainMovement().unit);
+                TerrainMovement movement = ((TerrainMovable)currentlySelected[j].value).getTerrainMovement();
+                if (movement.swarm.value != null) movement.swarm.value.disable();
+                movement.swarm.value = null;
             }
+            
             Swarm swarm = GameObject.createGameObject<Swarm>(this.getLoadRegion());
             for (int i = 0; i < numberSelected.value; i++)
             {
+                ((TerrainMovable)currentlySelected[i].value).getTerrainMovement().swarm = new UpdatableGameObject<Swarm>(this);
                 ((TerrainMovable)currentlySelected[i].value).getTerrainMovement().swarm.value = swarm;
                 Unit unit = new Unit();
                 unit.Position = new Vector2((currentlySelected[i].value).getLocation().Position.X, (currentlySelected[i].value).getLocation().Position.Z);
                 swarm.Units.Add(unit);
                 ((TerrainMovable)currentlySelected[i].value).getTerrainMovement().unit = unit;
+                Attractor attr = new Attractor();
+                attr.Position = new Vector2(position.X, position.Z);
+                swarm.Attractor = attr;
+                swarm.UnitToModel.Add(unit, (TerrainMovable)currentlySelected[i].value); 
             }
         }
 

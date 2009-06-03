@@ -7,8 +7,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Effects\Terrain.xnb</Output>
-      <Time>2008-03-29T01:23:48-07:00</Time>
+      <Output>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Effects\Terrain.xnb</Output>
+      <Time>2009-05-16T20:31:58.41-07:00</Time>
     </Item>
     <Item>
       <Source>Textures\alphaMap.tga</Source>
@@ -16,8 +16,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\alphaMap.xnb</Output>
-      <Time>2008-03-29T01:24:30-07:00</Time>
+      <Output>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\alphaMap.xnb</Output>
+      <Time>2009-05-16T20:32:04.434-07:00</Time>
     </Item>
     <Item>
       <Source>Textures\rockbump.dds</Source>
@@ -25,8 +25,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\rockbump.xnb</Output>
-      <Time>2008-03-29T01:24:30-07:00</Time>
+      <Output>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\rockbump.xnb</Output>
+      <Time>2009-05-16T20:32:04.413-07:00</Time>
     </Item>
     <Item>
       <Source>Textures\Terrain1.png</Source>
@@ -34,8 +34,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain1.xnb</Output>
-      <Time>2008-03-29T01:24:30-07:00</Time>
+      <Output>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain1.xnb</Output>
+      <Time>2009-05-16T20:32:04.282-07:00</Time>
     </Item>
     <Item>
       <Source>Textures\Terrain2.png</Source>
@@ -43,8 +43,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain2.xnb</Output>
-      <Time>2008-03-29T01:24:30-07:00</Time>
+      <Output>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain2.xnb</Output>
+      <Time>2009-05-16T20:32:04.305-07:00</Time>
     </Item>
     <Item>
       <Source>Textures\Terrain3.png</Source>
@@ -52,8 +52,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain3.xnb</Output>
-      <Time>2008-03-29T01:24:30-07:00</Time>
+      <Output>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain3.xnb</Output>
+      <Time>2009-05-16T20:32:04.402-07:00</Time>
     </Item>
     <Item>
       <Source>Textures\Terrain4.png</Source>
@@ -61,18 +61,18 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain4.xnb</Output>
-      <Time>2008-03-29T01:24:30-07:00</Time>
+      <Output>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\Textures\Terrain4.xnb</Output>
+      <Time>2009-05-16T20:32:04.421-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\Content\</RootDirectory>
-      <LoggerRootDirectory>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\</LoggerRootDirectory>
-      <IntermediateDirectory>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\Content\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>D:\t09\Beginning_XNA_2_0_Game_Programming_From_Novice_to_Professional-3974\Fontes do Livro\Chapter 10\TerrainEngine\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\t09\InteractionEngine\Samples\Chapter 10\TerrainEngine\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>

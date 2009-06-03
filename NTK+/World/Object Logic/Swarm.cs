@@ -166,7 +166,7 @@ namespace WumpusGame.World
         \*••••••••••••••••••••••••••••••••••••••••*/
 
         List<Unit> units = new List<Unit>();
-        public Dictionary<Unit, TerrainMovable> UnitToModel;
+        public Dictionary<Unit, TerrainMovable> UnitToModel = new Dictionary<Unit, TerrainMovable>();
 
         SpriteBatch sb;
         Texture2D dot;
@@ -284,18 +284,28 @@ namespace WumpusGame.World
             this.addEventMethod(SWARM_HASH, new EventMethod(updateSwarm));
             Engine.addEvent(new Event(this.id, SWARM_HASH, null));
         }
-        
+
+        bool enabled = true;
+        public void disable()
+        {
+            enabled = false;
+        }
+
         public void updateSwarm(Client client, object param)
         {
             this.Update();
-            foreach(Unit u in UnitToModel.Keys)
+            if (UnitToModel != null)
             {
-                TerrainMovable model;
-                UnitToModel.TryGetValue(u, out model);
-                model.getTerrainMovement().Position = new Vector3(u.Position.X, 0, u.Position.Y);
-                model.getTerrainMovement().yaw = MathHelper.ToDegrees(u.Rotation);
+                foreach (Unit u in UnitToModel.Keys)
+                {
+                    TerrainMovable model;
+                    UnitToModel.TryGetValue(u, out model);
+                    model.getTerrainMovement().Position = new Vector3(u.Position.X, 0, u.Position.Y);
+                    model.getTerrainMovement().yaw = MathHelper.ToDegrees(u.Rotation);
+                }
             }
-            Engine.addEvent(new Event(this.id, SWARM_HASH, null));
+
+            if (enabled) Engine.addEvent(new Event(this.id, SWARM_HASH, null));
         }
 
     }

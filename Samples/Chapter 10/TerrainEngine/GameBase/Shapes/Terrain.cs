@@ -176,6 +176,7 @@ namespace TerrainEngine.GameBase.Shapes
 
             // Load effect
             effect = new TerrainEffect(Game.Content.Load<Effect>(TerrainEffect.EFFECT_FILENAME));
+            
             terrainMaterial = new TerrainMaterial();
         }
 

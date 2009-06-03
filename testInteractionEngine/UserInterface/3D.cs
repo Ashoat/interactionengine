@@ -414,7 +414,7 @@ namespace InteractionEngine.Client.ThreeDimensional {
             this.modelName = modelName;
 
             this.worldLocal = Matrix.Identity;
-
+            if (GameWorld.GameWorld.game.GraphicsDevice != null) loadContent();
             if (GameWorld.GameWorld.game.GraphicsDevice != null) loadContent();
 
         }
