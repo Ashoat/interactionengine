@@ -35,6 +35,8 @@ namespace Wumpus3Drev0
 
         GameModel lab;
 
+        List<GameModel> trees = new List<GameModel>();
+
         Model cube;
 
         Texture2D tex;
@@ -184,6 +186,20 @@ namespace Wumpus3Drev0
             }
             //
 
+            ModelEffect treeEffect = new ModelEffect(GraphicsDevice, null);
+            treeEffect.TextureEnabled = true;
+            treeEffect.Texture = Content.Load<Texture2D>("treemap");
+            treeEffect.ActiveCamera = camera;
+            Model treeM = Content.Load<Model>("tree");
+            for (int i = 0; i < 30; i++)
+            {
+                GameModel tree = new GameModel(treeM, treeEffect, terrain, GraphicsDevice);
+                tree.Position2 = new Vector2((float)rand.NextDouble() * terrain.Size.X - terrain.Size.X / 2, (float)rand.NextDouble() * terrain.Size.Y - terrain.Size.Y / 2);
+                tree.SetScale(1f);
+                trees.Add(tree);
+            }
+            
+            //
             ModelEffect sky = new ModelEffect(GraphicsDevice, null);
             sky.ActiveCamera = camera;
             sky.TextureEnabled = true;
@@ -341,6 +357,10 @@ namespace Wumpus3Drev0
             model.Draw();
             //lab.Draw();
 
+            foreach (GameModel gm in trees)
+            {
+                gm.Draw();
+            }
             UI.Draw();
 
             //plane.Draw();
