@@ -144,7 +144,7 @@ namespace NTKPlusGame.World.Modules {
 
         private const string TAB_CHANGE_HASH = "tab change";
 
-        public string name;
+        public string name = "";
         // TODO: Updatable?
         private readonly UpdatableGameObject<InfoButton>[] buttons = new UpdatableGameObject<InfoButton>[MAXIMUM_BUTTONS];
         private int buttonCount = 0;
