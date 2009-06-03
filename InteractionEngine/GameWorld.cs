@@ -181,11 +181,15 @@ namespace InteractionEngine {
         /// <returns>All the Events in the EventCache.</returns>
         private static System.Collections.Generic.List<EventHandling.Event> getEvents() {
             System.Collections.Generic.List<EventHandling.Event> returnCache = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>(eventCache);
+            int a = 0;
+            foreach (EventHandling.Event evvie in returnCache)
+                a++; 
             eventCache.Clear();
             return returnCache;
         }
 
         #endregion
+
 
         #region Client Networking
 

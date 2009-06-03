@@ -195,8 +195,12 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             if (evvie != null) newEvents.Add(evvie);
         }
 
+        public delegate void FrustumSelectionClear();
+        public FrustumSelectionClear frustumSelectionClear;
+
         private void frustrumSelect(List<Event> newEvents, Ray edge1, Ray edge2, bool leftButton) {
             if (user.camera.NearPlane == 0) return;
+            frustumSelectionClear();
             Vector3 displacement = edge1.Position - edge2.Position;
             Vector3 antiRotation = -user.camera.getLocation().EulerRotation;
             Matrix matrix = Matrix.CreateFromYawPitchRoll(antiRotation.X, antiRotation.Y, antiRotation.Z);
@@ -209,6 +213,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
                         Interactable3D interaction = (Interactable3D)gameObject;
                         if (interaction.getGraphics3D().intersects(frustum)) {
                             addIfNotNull(newEvents, interaction.getEvent(leftButton ? MOUSEMASK_LEFT_DRAG : MOUSEMASK_RIGHT_DRAG, Vector3.Zero));
+                            
                         }
                     }
                     // End checking game object
@@ -945,6 +950,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
     }
 
     public interface Interactable2D : Interactable, Graphable2D {
+
 
     }
 
