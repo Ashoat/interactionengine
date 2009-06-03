@@ -159,6 +159,19 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Audio\Anthem.xsb" />
+    <None Include="Content\Audio\Anthem.xwb" />
+    <None Include="Content\Audio\BingBang.xsb" />
+    <None Include="Content\Audio\BingBang.xwb" />
+    <None Include="Content\Audio\Borat.xsb" />
+    <None Include="Content\Audio\Borat.xwb" />
+    <None Include="Content\Audio\Loop.xsb" />
+    <None Include="Content\Audio\Loop.xwb" />
+    <None Include="Content\Audio\NTK_music.xgs" />
+    <None Include="Content\Audio\Raptor.xsb" />
+    <None Include="Content\Audio\Raptor.xwb" />
+    <None Include="Content\Audio\StartTheme.xsb" />
+    <None Include="Content\Audio\StartTheme.xwb" />
     <None Include="Content\Content.contentproj" />
   </ItemGroup>
   <ItemGroup>

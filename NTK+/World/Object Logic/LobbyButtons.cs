@@ -28,7 +28,7 @@ using InteractionEngine.UserInterface.Audio;
 namespace NTKPlusGame.World {
 
 
-    public class LobbyButtons : GameObject, Interactable2D {
+    public class LobbyButtons : GameObject, Interactable2D, Audible {
 
         #region FACTORY
 
@@ -65,7 +65,7 @@ namespace NTKPlusGame.World {
             this.graphics.TextureName = "host+join";
             this.location.Position = new Microsoft.Xna.Framework.Vector3(15f, 565f, 0f);
             //Audio
-            Audio audio = new Audio(((Audible)this), "Content\\Audio\\StartTheme", "Content\\Audio\\StartTheme");
+            Audio audio = new Audio(this, "Content\\StartTheme", "Content\\StartTheme");
             audio.playSound("02 Chaje Shukarije - Esma Redzepova");
             // EventMethods
             this.addEventMethod("host", host);
@@ -82,6 +82,10 @@ namespace NTKPlusGame.World {
         private Location location;
         public Location getLocation() {
             return location;
+        }
+        private Audio audio;
+        public Audio getAudio() {
+            return audio;
         }
 
         /// <summary>
