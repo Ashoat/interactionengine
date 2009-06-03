@@ -212,7 +212,9 @@ namespace InteractionEngine.Networking {
         /// </summary>
         public void disconnect() {
             this.tcpClient.Close();
-            clientList.Remove(this);
+            lock (clientList) {
+                clientList.Remove(this);
+            }
             // Trigger the onQuit Events.
             foreach (EventHandling.Event eventObject in onQuit) {
                 eventObject.parameter = (object)this;
@@ -228,10 +230,12 @@ namespace InteractionEngine.Networking {
             try {
                 update.sendUpdate(writer, tcpClient.GetStream(), formatter);
             // The connection was closed.
-            } catch (System.IO.IOException) {
+            } catch (System.IO.IOException ex) {
+                System.Console.WriteLine(ex);
                 eventReaderThread.Abort();
                 disconnect();
-            } catch (System.Runtime.Serialization.SerializationException) {
+            } catch (System.Runtime.Serialization.SerializationException ex) {
+                System.Console.WriteLine(ex);
                 eventReaderThread.Abort();
                 disconnect();
             }

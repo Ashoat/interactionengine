@@ -36,10 +36,12 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         // Contain lists of Interactables that had been MOUSEMASK_OVER'd and MOUSEMASK_CLICK'd in the last iteration of input().
         // Used for knowing when to invoke MOUSEMASK_OUT and MOUSEMASK_RELEASE events.
-        private System.Collections.Generic.Dictionary<Interactable, int> eventsAwaitingReset = new System.Collections.Generic.Dictionary<Interactable, int>();
+        private Interactable currentlyMousedOver;
+        private MouseState? leftClickPosition;
+        private MouseState? rightClickPosition;
 
         // This specifies the bits that represent unique positive mouse buttons or actions (right-click, mouse-over, etc)
-        public const int MOUSEMASK_ACTION = (1 << 4) - 1;
+        public const int MOUSEMASK_ACTION = (1 << 3) - 1;
         // This specifies the bit that represents a reversal of the positive mouse actions (right-release, mouse-out, etc)
         // It might also represent the release of a modifier key, although that probably won't be necessary.
         public const int MOUSEMASK_RESET = 1 << 4;
@@ -56,16 +58,18 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         // Positive mouse actions (except the first one, to be used when sending modifier-key-changed-events, if we want to do that)
         public const int MOUSEMASK_NULL = 0;
-        public const int MOUSEMASK_RIGHT_PRESS = 1 << 0;
-        public const int MOUSEMASK_LEFT_PRESS = 1 << 1;
+        public const int MOUSEMASK_RIGHT_CLICK = 1 << 0;
+        public const int MOUSEMASK_LEFT_CLICK = 1 << 1;
         public const int MOUSEMASK_OVER = 1 << 2;
         // Currently unused
-        public const int MOUSEMASK_OTHER = 1 << 3;
+        public const int MOUSEMASK_DRAG_SELECT = 1 << 3;
 
         // Negative mouse actions!
-        public const int MOUSEMASK_RIGHT_RELEASE = MOUSEMASK_RIGHT_PRESS + MOUSEMASK_RESET;
-        public const int MOUSEMASK_LEFT_RELEASE = MOUSEMASK_LEFT_PRESS + MOUSEMASK_RESET;
+    //    public const int MOUSEMASK_RIGHT_RELEASE = MOUSEMASK_RIGHT_PRESS + MOUSEMASK_RESET;
+    //    public const int MOUSEMASK_LEFT_RELEASE = MOUSEMASK_LEFT_PRESS + MOUSEMASK_RESET;
         public const int MOUSEMASK_OUT = MOUSEMASK_OVER + MOUSEMASK_RESET;
+        public const int MOUSEMASK_LEFT_DRAG = MOUSEMASK_DRAG_SELECT + MOUSEMASK_LEFT_CLICK;
+        public const int MOUSEMASK_RIGHT_DRAG = MOUSEMASK_DRAG_SELECT + MOUSEMASK_RIGHT_CLICK;
 
         public static bool testMask(int val, int mask) {
             return (val & mask) != 0;
@@ -83,30 +87,6 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             return val | mask;
         }
 
-        /// <summary>
-        /// Goes through old "held" events that need resetting (such as a "mouseOver" awaiting a "mouseOut")
-        /// and checks to see if they are ready to reset, and if so, sends their corresponding release events
-        /// and removes from the list of held events.
-        /// </summary>
-        /// <param name="newEvents">The list into which newly detected events are to be inserted.</param>
-        private void resetEvents(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents, Ray ray) {
-            // Check states of mouse input
-            Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            // Loop through list and test to see if any are ready to receive a RELEASE or OUT event
-            System.Collections.Generic.Dictionary<Interactable, int> removals = new Dictionary<Interactable, int>();
-            foreach (Interactable interaction in eventsAwaitingReset.Keys) {
-                int alreadyEvented = eventsAwaitingReset[interaction];
-                foreach (MouseMaskTest maskTest in this.maskTests) {
-                    maskTest.testAndRetrieveNegativeEvent(removals, newEvents, interaction, ray, mouse, alreadyEvented);
-                }
-            }
-            // Remove ones that no longer have any mouse events to reset
-            foreach (KeyValuePair<Interactable, int> removal in removals) {
-                if (!testMask(removal.Value, MOUSEMASK_ACTION)) eventsAwaitingReset.Remove(removal.Key);
-                else eventsAwaitingReset[removal.Key] = removal.Value;
-            }
-
-        }
 
         private class MouseMaskTest {
             public delegate bool IsActivated(MouseState mouse);
@@ -141,8 +121,8 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
         private MouseMaskTest[] maskTests = new MouseMaskTest[] {
             new MouseMaskTest(MOUSEMASK_OVER, (MouseState mouse) => true),
-            new MouseMaskTest(MOUSEMASK_LEFT_PRESS, (MouseState mouse) => mouse.LeftButton == ButtonState.Pressed),
-            new MouseMaskTest(MOUSEMASK_RIGHT_PRESS, (MouseState mouse) => mouse.RightButton == ButtonState.Pressed),
+            new MouseMaskTest(MOUSEMASK_LEFT_CLICK, (MouseState mouse) => mouse.LeftButton == ButtonState.Pressed),
+            new MouseMaskTest(MOUSEMASK_RIGHT_CLICK, (MouseState mouse) => mouse.RightButton == ButtonState.Pressed),
         };
 
         #region Keyboard Stuff
@@ -154,7 +134,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             this.kf = kf;
         }
         private void checkKeyboard(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents) {
-            if (this.kf == null) return;
+            if (this.kf == null || !Engine.game.IsActive) return;
             Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
                 if (!repeatTimes.ContainsKey(key) || repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
@@ -174,20 +154,66 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         /// <param name="newEventList">The list into which newly detected events are to be inserted.</param>
         protected override void retrieveInput(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents) {
+
+            if (!Engine.game.IsActive) return;
+
             // Get mouse state
             Microsoft.Xna.Framework.Input.MouseState mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             Ray ray = this.calculateMouseRay(mouse);
-            // Reset old events
-            resetEvents(newEvents, ray);
-
             Vector3 point;
             Interactable interaction = this.findClosestIntersectedInteractable(ray, mouse, out point);
-            if (interaction != null) {
-                foreach (MouseMaskTest maskTest in this.maskTests) {
-                    maskTest.testAndRetrievePositiveEvent(eventsAwaitingReset, newEvents, interaction, mouse, ray, point);
+            if (interaction != this.currentlyMousedOver) {
+                if (currentlyMousedOver != null) addIfNotNull(newEvents, this.currentlyMousedOver.getEvent(MOUSEMASK_OUT, point));
+                if (interaction != null) addIfNotNull(newEvents, interaction.getEvent(MOUSEMASK_OVER, point));
+                this.currentlyMousedOver = interaction;
+            }
+            if (interaction == null) return;
+            if (mouse.LeftButton == ButtonState.Pressed) {
+                if (this.leftClickPosition == null) this.leftClickPosition = mouse;
+            } else {
+                if (this.leftClickPosition != null) {
+                    if (leftClickPosition.Value.X == mouse.X && leftClickPosition.Value.Y == mouse.Y) {
+                        addIfNotNull(newEvents, interaction.getEvent(MOUSEMASK_LEFT_CLICK, point));
+                    } else frustrumSelect(newEvents, this.calculateMouseRay(leftClickPosition.Value), ray, true);
                 }
+                this.leftClickPosition = null;
+            }
+            if (mouse.RightButton == ButtonState.Pressed) {
+                if (this.rightClickPosition == null) this.rightClickPosition = mouse;
+            } else {
+                if (this.rightClickPosition != null) {
+                    if (rightClickPosition.Value.X == mouse.X && rightClickPosition.Value.Y == mouse.Y) {
+                        addIfNotNull(newEvents, interaction.getEvent(MOUSEMASK_RIGHT_CLICK, point));
+                    } else frustrumSelect(newEvents, this.calculateMouseRay(rightClickPosition.Value), ray, false);
+                }
+                this.rightClickPosition = null;
             }
 
+        }
+
+        private void addIfNotNull(List<Event> newEvents, Event evvie) {
+            if (evvie != null) newEvents.Add(evvie);
+        }
+
+        private void frustrumSelect(List<Event> newEvents, Ray edge1, Ray edge2, bool leftButton) {
+            if (user.camera.NearPlane == 0) return;
+            Vector3 displacement = edge1.Position - edge2.Position;
+            Vector3 antiRotation = -user.camera.getLocation().EulerRotation;
+            Matrix matrix = Matrix.CreateFromYawPitchRoll(antiRotation.X, antiRotation.Y, antiRotation.Z);
+            Vector3 rectangle = Vector3.Transform(displacement, matrix);
+            BoundingFrustum frustum = new BoundingFrustum(user.camera.View * Matrix.CreatePerspective(rectangle.X, rectangle.Y, user.camera.NearPlane, user.camera.FarPlane));
+            foreach (InteractionEngine.Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getGraphableLoadRegions()) {
+                // Loop through all the LoadRegion's GameObjects
+                foreach (Constructs.GameObjectable gameObject in loadRegion.getGameObjectArray()) {
+                    if (gameObject is Interactable3D) {
+                        Interactable3D interaction = (Interactable3D)gameObject;
+                        if (interaction.getGraphics3D().intersects(frustum)) {
+                            addIfNotNull(newEvents, interaction.getEvent(leftButton ? MOUSEMASK_LEFT_DRAG : MOUSEMASK_RIGHT_DRAG, Vector3.Zero));
+                        }
+                    }
+                    // End checking game object
+                }
+            }
         }
 
         private Ray calculateMouseRay(MouseState mouse) {
@@ -489,6 +515,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
     public interface Graphics3D : Graphics {
         float? intersects(Ray ray);
         Vector3? intersectionPoint(Ray ray);
+        bool intersects(BoundingFrustum frustum);
         ModelEffect Effect { get; }
     }
 
@@ -707,6 +734,10 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             return null;
         }
 
+        public virtual bool intersects(BoundingFrustum frustum) {
+            return frustum.Contains(this.BoundingSphere) != ContainmentType.Disjoint;
+        }
+
         /// <summary>
         /// Called during InteractionGame's LoadContent loop.
         /// </summary>
@@ -772,6 +803,15 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         BoundingFrustum frustum;
 
         private Location location;
+
+        public float NearPlane {
+            get { return nearPlane; }
+        }
+
+        public float FarPlane {
+            get { return farPlane; }
+        }
+
         public Location getLocation() {
             return location;
         }
