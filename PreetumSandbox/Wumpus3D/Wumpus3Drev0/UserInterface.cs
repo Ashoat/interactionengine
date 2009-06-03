@@ -64,7 +64,12 @@ namespace Wumpus3Drev0
             }
 
             swarm.Update();
-            
+            for (int i = 0; i < models.Count; i++)
+            {
+                models[i].StartAnimation("walk");
+                models[i].Position2 = swarm.Units[i].Position;
+                models[i].Rotation = -swarm.Units[i].Rotation;
+            }
         }
         public void Draw()
         {

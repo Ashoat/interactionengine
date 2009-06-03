@@ -22,7 +22,7 @@ namespace Wumpus3Drev0
 
         float radius = 20;
 
-        public float Mass = 20;
+        public float Mass = 20; //20
         
         bool trailOn;
 
@@ -34,7 +34,11 @@ namespace Wumpus3Drev0
 
         List<Vector2> trail;
         int trailLen = 100;
-
+        public float Rotation
+        {
+            get { return rotation; }
+            set { rotation = value; }
+        }
         public float Repulsion
         {
             get { return repul; }
@@ -69,7 +73,7 @@ namespace Wumpus3Drev0
             set
             {
                 //speed = value.Length();
-                rotation = (float)Math.Atan2(value.X, value.Y);
+                rotation = (float)Math.Atan2(value.X, -value.Y);
             }
         }
 

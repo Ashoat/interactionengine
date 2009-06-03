@@ -16,7 +16,7 @@ namespace Wumpus3Drev0
     class Attractor
     {
         public Vector2 Position = new Vector2(0, 0);
-        public float Mass = 120;
+        public float Mass = 120; //120
         public float Repulsion = .5f;
 
         public Attractor()

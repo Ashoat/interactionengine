@@ -129,18 +129,21 @@ namespace Wumpus3Drev0
             modelEffect.EnableDefaultLighting(); //doesn't do anything. draw method does this automatically
 
             //model = new GameModel(Content.Load<Model>("Models\\human"), new List<Animation>(), modelEffect, terrain, GraphicsDevice);
-            model = new GameModel(Content.Load<Model>("Models\\Borat\\0"), new List<Animation>(), modelEffect, terrain, GraphicsDevice);
+            model = new GameModel(Content.Load<Model>("Models\\BoratWalk\\0"), new List<Animation>(), modelEffect, terrain, GraphicsDevice);
 
             model.SetScale(10f); //3
             model.RotationOffset = MathHelper.Pi;
 
             Animation anim = new Animation("walk");
-            //anim.Frames.Add(Content.Load<Model>("Models\\human4"));
-            //anim.Frames.Add(Content.Load<Model>("Models\\sphere180"));
-            //anim.Frames.Add(Content.Load<Model>("Models\\masterchief2"));
             for (int i = 1; i <= 35; i++)
             {
-                anim.Frames.Add(Content.Load<Model>("Models\\Borat\\" + i.ToString()));
+                anim.Frames.Add(Content.Load<Model>("Models\\BoratWalk\\" + i.ToString()));
+            }
+            model.Animations.Add(anim);
+            anim = new Animation("attack");
+            for (int i = 0; i <= 40; i++)
+            {
+                anim.Frames.Add(Content.Load<Model>("Models\\BoratAttack\\" + i.ToString()));
             }
             model.Animations.Add(anim);
 
@@ -151,16 +154,29 @@ namespace Wumpus3Drev0
             
             UI = new UserInterface(camera,terrain, GraphicsDevice);
             //UI.Add(this.model);
+            Random rand = new Random();
+            ModelEffect raptorEffect = new ModelEffect(GraphicsDevice, null);
+            raptorEffect.Texture = Content.Load<Texture2D>("Images\\raptorTex");
+            raptorEffect.ActiveCamera = camera;
+            raptorEffect.TextureEnabled = true;
+            raptorEffect.EnableDefaultLighting();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 30; i++)
             {
-                GameModel m = new GameModel(Content.Load<Model>("Models\\Borat\\0"), modelEffect, terrain, GraphicsDevice);
-                m.SetScale(20f); //3
+                GameModel m = new GameModel(Content.Load<Model>("Models\\RaptorWalk\\0"), raptorEffect, terrain, GraphicsDevice);
+                m.Position2 = new Vector2((float)rand.NextDouble() * terrain.Size.X - terrain.Size.X / 2, (float)rand.NextDouble() * terrain.Size.Y - terrain.Size.Y / 2);
+                m.SetScale(2f); //3
                 m.RotationOffset = MathHelper.Pi;
-                Animation anim1 = new Animation("walk");
-                for (int j = 1; j <= 35; j++)
+                Animation anim1 = new Animation("attack");
+                for (int j = 0; j <= 30; j++)
                 {
-                    anim1.Frames.Add(Content.Load<Model>("Models\\Borat\\" + i.ToString()));
+                    anim1.Frames.Add(Content.Load<Model>("Models\\RaptorAttack\\" + j.ToString()));
+                }
+                m.Animations.Add(anim1);
+                anim1 = new Animation("walk");
+                for (int j = 1; j <= 40; j++)
+                {
+                    anim1.Frames.Add(Content.Load<Model>("Models\\RaptorWalk\\" + j.ToString()));
                 }
                 m.Animations.Add(anim1);
 
@@ -250,7 +266,10 @@ namespace Wumpus3Drev0
                     model.StartAnimation("walk");
                     camera.SetTargetLockPosition(model.Position3);
                 }
-
+                if (Keyboard.GetState().IsKeyDown(Keys.R))
+                {
+                    model.StartAnimation("attack");
+                }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.D)) //dump debug info
                 {

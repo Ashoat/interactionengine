@@ -284,14 +284,16 @@ namespace Wumpus3Drev0
                 sideLength /= 2;
                 magRand *= r;
 
+
+
+                NormalizeToTerrain(map);
+                SaveMapToImage();
+
                 this.GenerateIndices();
                 this.GenerateVertices();
                 this.GenerateNormals();
 
                 this.SetData(dev);
-
-                NormalizeToTerrain(map);
-                SaveMapToImage();
             }
             else
             {
