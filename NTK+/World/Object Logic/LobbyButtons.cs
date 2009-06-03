@@ -65,7 +65,7 @@ namespace NTKPlusGame.World {
             this.graphics.TextureName = "host+join";
             this.location.Position = new Microsoft.Xna.Framework.Vector3(15f, 565f, 0f);
             //Audio
-            Audio audio = new Audio(((Audible)this), "Content\\Audio\\StartTheme.xwb", "Content\\Audio\\StartTheme.xsb");
+            Audio audio = new Audio(((Audible)this), "Content\\Audio\\StartTheme", "Content\\Audio\\StartTheme");
             audio.playSound("02 Chaje Shukarije - Esma Redzepova");
             // EventMethods
             this.addEventMethod("host", host);
