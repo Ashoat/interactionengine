@@ -29,7 +29,7 @@ namespace InteractionEngine.UserInterface.Audio {
         /// </summary>
         /// <param name="xgs">The XACT settings file path.</param>
         public static void loadAudioSettings(string xgs) {
-            audioEngine = new Microsoft.Xna.Framework.Audio.AudioEngine(xgs);
+            audioEngine = new Microsoft.Xna.Framework.Audio.AudioEngine(xgs + ".xgs");
         }
 
         // Contains the GameObject this module is associated with.
@@ -48,8 +48,8 @@ namespace InteractionEngine.UserInterface.Audio {
         /// <param name="gameObject">The GameObject this module represents.</param>
         public Audio(Audible gameObject, string xwb, string xsb) {
             this.gameObject = gameObject;
-            waveBank = new Microsoft.Xna.Framework.Audio.WaveBank(audioEngine, xwb);
-            soundBank = new Microsoft.Xna.Framework.Audio.SoundBank(audioEngine, xsb);
+            waveBank = new Microsoft.Xna.Framework.Audio.WaveBank(audioEngine, xwb + ".xwb");
+            soundBank = new Microsoft.Xna.Framework.Audio.SoundBank(audioEngine, xsb + ".xsb");
         }
 
         /// <summary>
