@@ -132,7 +132,7 @@ namespace NTKPlusGame.World {
         /// <param name="position">The position where the interaction happened, if applicable.</param>
         /// <returns>An Event.</returns>
         public Event getEvent(int invoker, Vector3 coordinates) {
-            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) return new Event(this.id, TERRAIN_CLICKED_HASH, coordinates);
+            if (invoker == UserInterface3D.MOUSEMASK_LEFT_CLICK) return new Event(this.id, TERRAIN_CLICKED_HASH, coordinates);
             return null;
         }
 

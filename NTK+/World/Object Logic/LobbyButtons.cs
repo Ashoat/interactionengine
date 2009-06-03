@@ -99,7 +99,7 @@ namespace NTKPlusGame.World {
         /// <param name="point">The coordinates of the click.</param>
         /// <returns></returns>
         public Event getEvent(int invoker, Microsoft.Xna.Framework.Vector3 point) {
-            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
+            if (invoker == UserInterface3D.MOUSEMASK_LEFT_CLICK) {
                 if (point.X < 100) return new Event(this.id, "host", null);
                 else return new Event(this.id, "join", null);
             } else return null;

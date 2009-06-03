@@ -180,7 +180,7 @@ namespace InteractionEngine {
         /// </summary>
         /// <returns>All the Events in the EventCache.</returns>
         private static System.Collections.Generic.List<EventHandling.Event> getEvents() {
-            System.Collections.Generic.List<EventHandling.Event> returnCache = eventCache;
+            System.Collections.Generic.List<EventHandling.Event> returnCache = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>(eventCache);
             eventCache.Clear();
             return returnCache;
         }

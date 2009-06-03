@@ -201,7 +201,7 @@ namespace NTKPlusGame.World.Modules {
         }
 
         public Event getEvent(int invoker, Vector3 coordinates) {
-            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
+            if (invoker == UserInterface3D.MOUSEMASK_LEFT_CLICK) {
                 return new Event(this.id, TAB_CHANGE_HASH, null);
             }
             return null;
@@ -314,7 +314,7 @@ namespace NTKPlusGame.World.Modules {
             else if (invoker == UserInterface3D.MOUSEMASK_OUT) {
                 return new Event(NTKPlusUser.localUser.infoDisplayBox.id, InfoDisplayBox.DESCRIPTION_CHANGE_EVENT_HASH, null);
             }
-            else if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
+            else if (invoker == UserInterface3D.MOUSEMASK_LEFT_CLICK) {
                 return new Event(gameObject.id, onClickHash, param);
             }
             return null;

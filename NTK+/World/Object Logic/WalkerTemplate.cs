@@ -97,7 +97,7 @@ namespace NTKPlusGame.World {
         /// <param name="position">The position where the interaction happened, if applicable.</param>
         /// <returns>An Event.</returns>
         public virtual Event getEvent(int invoker, Vector3 coordinates) {
-            if (invoker == UserInterface3D.MOUSEMASK_LEFT_PRESS) {
+            if (invoker == UserInterface3D.MOUSEMASK_LEFT_CLICK) {
                 return new Event(this.id, MOVE_EVENT_HASH, null);
             } else if (invoker == UserInterface3D.MOUSEMASK_OVER) {
                 //this.getGraphics3D().Effect.AmbientLightColor = highlight(this.getGraphics3D().Effect.AmbientLightColor, 0.5f);

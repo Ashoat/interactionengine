@@ -43,8 +43,10 @@ namespace Game
             new Terrain();
             new Human();
             new FrameRateCounter();
-            new InfoDisplayBox();
-            new SelectionFocus();
+            new DebugSphere();
+            new SkyDome();
+            new InfoTab();
+            new InfoButton();
             KeyboardFocus keyboardFocus = new KeyboardFocus();
             ((UserInterface3D)Engine.userInterface).registerKeyboardFocus(keyboardFocus);
             keyboardFocus.setFocus(new KeyboardCameraControl());

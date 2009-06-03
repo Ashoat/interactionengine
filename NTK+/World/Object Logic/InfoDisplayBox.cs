@@ -120,8 +120,6 @@ namespace NTKPlusGame.World {
             return null;
         }
 
-
-
     }
 
     public class InfoDisplayBoxGraphics : Graphics2DTexture {
