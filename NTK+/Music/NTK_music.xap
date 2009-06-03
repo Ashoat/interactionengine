@@ -16,8 +16,8 @@ Global Settings
     Header File = NTK_music.h;
     Exclude Category Names = 0;
     Exclude Variable Names = 0;
-    Last Modified Low = 404805566;
-    Last Modified High = 30008379;
+    Last Modified Low = 61675692;
+    Last Modified High = 30008398;
 
     Category
     {
@@ -225,29 +225,33 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 1950899316;
-    Bank Last Revised High = 30008379;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 62144442;
+    PC Bank Last Modified High = 30008398;
+    Bank Last Revised Low = 4248517988;
+    Bank Last Revised High = 30008397;
 
     Wave
     {
-        Name = 01 Chaje Shukarije - Esma Redzepova;
-        File = ..\..\..\..\Desktop\01 Chaje Shukarije - Esma Redzepova.wav;
-        Build Settings Last Modified Low = 245586816;
-        Build Settings Last Modified High = 30008379;
+        Name = 02 Chaje Shukarije - Esma Redzepova;
+        File = ..\..\..\..\Desktop\02 Chaje Shukarije - Esma Redzepova.wav;
+        Build Settings Last Modified Low = 4225392988;
+        Build Settings Last Modified High = 30008397;
 
         Cache
         {
             Format Tag = 0;
             Channels = 2;
             Sampling Rate = 44100;
-            Bits Per Sample = 1;
+            Bits Per Sample = 0;
             Play Region Offset = 44;
-            Play Region Length = 46324224;
+            Play Region Length = 2157792;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 112865158;
-            Last Modified High = 30008377;
+            Last Modified Low = 3847860284;
+            Last Modified High = 30008396;
         }
     }
 }
@@ -261,8 +265,14 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 2589649316;
-    Bank Last Revised High = 30008379;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 68081942;
+    PC Bank Last Modified High = 30008398;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 785849698;
+    Bank Last Revised High = 30008387;
 
     Wave
     {
@@ -297,29 +307,33 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 3092618066;
-    Bank Last Revised High = 30008379;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 70425692;
+    PC Bank Last Modified High = 30008398;
+    Bank Last Revised Low = 3723986738;
+    Bank Last Revised High = 30008397;
 
     Wave
     {
-        Name = Eu Vin Acasa Cu Drag - Stefan de la Barbulesti;
-        File = ..\..\..\..\Desktop\Eu Vin Acasa Cu Drag - Stefan de la Barbulesti.wav;
-        Build Settings Last Modified Low = 3092618066;
-        Build Settings Last Modified High = 30008379;
+        Name = 2Bing Bang - Korki Buchek;
+        File = ..\..\..\..\Desktop\2Bing Bang - Korki Buchek.wav;
+        Build Settings Last Modified Low = 3677424238;
+        Build Settings Last Modified High = 30008397;
 
         Cache
         {
             Format Tag = 0;
             Channels = 2;
-            Sampling Rate = 48000;
-            Bits Per Sample = 1;
+            Sampling Rate = 44100;
+            Bits Per Sample = 0;
             Play Region Offset = 44;
-            Play Region Length = 2421972;
+            Play Region Length = 3741696;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 3703177658;
-            Last Modified High = 30008377;
+            Last Modified Low = 1000549238;
+            Last Modified High = 30008397;
         }
     }
 }
@@ -333,29 +347,33 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 3812618066;
-    Bank Last Revised High = 30008379;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 72613192;
+    PC Bank Last Modified High = 30008398;
+    Bank Last Revised Low = 2821486738;
+    Bank Last Revised High = 30008397;
 
     Wave
     {
-        Name = 18 O Kazakhstan - Erran Baron Cohen;
-        File = ..\..\..\..\Desktop\18 O Kazakhstan - Erran Baron Cohen.wav;
-        Build Settings Last Modified Low = 3812618066;
-        Build Settings Last Modified High = 30008379;
+        Name = 18 2 Kazakhstan - Erran Baron Cohen;
+        File = ..\..\..\..\Desktop\18 2 Kazakhstan - Erran Baron Cohen.wav;
+        Build Settings Last Modified Low = 2389767988;
+        Build Settings Last Modified High = 30008397;
 
         Cache
         {
             Format Tag = 0;
             Channels = 2;
             Sampling Rate = 44100;
-            Bits Per Sample = 1;
+            Bits Per Sample = 0;
             Play Region Offset = 44;
-            Play Region Length = 20173824;
+            Play Region Length = 10086912;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 878021408;
-            Last Modified High = 30008377;
+            Last Modified Low = 525705488;
+            Last Modified High = 30008397;
         }
     }
 }
@@ -369,8 +387,14 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 89682020;
-    Bank Last Revised High = 30008380;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 97144442;
+    PC Bank Last Modified High = 30008398;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 653193448;
+    Bank Last Revised High = 30008387;
 
     Wave
     {
@@ -396,6 +420,48 @@ Wave Bank
     }
 }
 
+Wave Bank
+{
+    Name = Raptor;
+    Xbox File = Xbox\Raptor.xwb;
+    Windows File = Win\Raptor.xwb;
+    Xbox Bank Path Edited = 0;
+    Windows Bank Path Edited = 0;
+    Seek Tables = 1;
+    Compression Preset Name = <none>;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 97613192;
+    PC Bank Last Modified High = 30008398;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 1011318448;
+    Bank Last Revised High = 30008387;
+
+    Wave
+    {
+        Name = raptor1;
+        File = ..\..\..\..\Desktop\raptor1.wav;
+        Build Settings Last Modified Low = 3780973244;
+        Build Settings Last Modified High = 30008386;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 1;
+            Sampling Rate = 11025;
+            Bits Per Sample = 0;
+            Play Region Offset = 44;
+            Play Region Length = 49176;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 898896000;
+            Last Modified High = 30008375;
+        }
+    }
+}
+
 Sound Bank
 {
     Name = StartTheme;
@@ -403,10 +469,14 @@ Sound Bank
     Windows File = Win\StartTheme.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
+    Bank Last Modified Low = 97613192;
+    Bank Last Modified High = 30008398;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
 
     Sound
     {
-        Name = 01 Chaje Shukarije - Esma Redzepova 2;
+        Name = 02 Chaje Shukarije - Esma Redzepova;
         Volume = -1200;
         Pitch = 0;
         Priority = 0;
@@ -441,7 +511,7 @@ Sound Bank
                 {
                     Bank Name = StartTheme;
                     Bank Index = 0;
-                    Entry Name = 01 Chaje Shukarije - Esma Redzepova;
+                    Entry Name = 02 Chaje Shukarije - Esma Redzepova;
                     Entry Index = 0;
                     Weight = 255;
                     Weight Min = 0;
@@ -452,7 +522,7 @@ Sound Bank
 
     Cue
     {
-        Name = 01 Chaje Shukarije - Esma Redzepova 2;
+        Name = 02 Chaje Shukarije - Esma Redzepova;
 
         Variation
         {
@@ -463,7 +533,402 @@ Sound Bank
 
         Sound Entry
         {
-            Name = 01 Chaje Shukarije - Esma Redzepova 2;
+            Name = 02 Chaje Shukarije - Esma Redzepova;
+            Index = 0;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+}
+
+Sound Bank
+{
+    Name = Anthem;
+    Xbox File = Xbox\Anthem.xsb;
+    Windows File = Win\Anthem.xsb;
+    Xbox Bank Path Edited = 0;
+    Windows Bank Path Edited = 0;
+    Bank Last Modified Low = 97613192;
+    Bank Last Modified High = 30008398;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
+
+    Sound
+    {
+        Name = 18 2 Kazakhstan - Erran Baron Cohen;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Anthem;
+                    Bank Index = 3;
+                    Entry Name = 18 2 Kazakhstan - Erran Baron Cohen;
+                    Entry Index = 0;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Cue
+    {
+        Name = 18 2 Kazakhstan - Erran Baron Cohen;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = 18 2 Kazakhstan - Erran Baron Cohen;
+            Index = 0;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+}
+
+Sound Bank
+{
+    Name = BingBang;
+    Xbox File = Xbox\BingBang.xsb;
+    Windows File = Win\BingBang.xsb;
+    Xbox Bank Path Edited = 0;
+    Windows Bank Path Edited = 0;
+    Bank Last Modified Low = 97613192;
+    Bank Last Modified High = 30008398;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
+
+    Sound
+    {
+        Name = 2Bing Bang - Korki Buchek;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = BingBang;
+                    Bank Index = 2;
+                    Entry Name = 2Bing Bang - Korki Buchek;
+                    Entry Index = 0;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Cue
+    {
+        Name = 2Bing Bang - Korki Buchek;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = 2Bing Bang - Korki Buchek;
+            Index = 0;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+}
+
+Sound Bank
+{
+    Name = Borat;
+    Xbox File = Xbox\Borat.xsb;
+    Windows File = Win\Borat.xsb;
+    Xbox Bank Path Edited = 0;
+    Windows Bank Path Edited = 0;
+    Bank Last Modified Low = 97613192;
+    Bank Last Modified High = 30008398;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
+
+    Sound
+    {
+        Name = Yagshamash;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Borat;
+                    Bank Index = 4;
+                    Entry Name = Yagshamash;
+                    Entry Index = 0;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Cue
+    {
+        Name = Yagshamash;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = Yagshamash;
+            Index = 0;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+}
+
+Sound Bank
+{
+    Name = Loop;
+    Xbox File = Xbox\Loop.xsb;
+    Windows File = Win\Loop.xsb;
+    Xbox Bank Path Edited = 0;
+    Windows Bank Path Edited = 0;
+    Bank Last Modified Low = 97613192;
+    Bank Last Modified High = 30008398;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
+
+    Sound
+    {
+        Name = Eu Vin Acasa Cu Drag - Stefan de la Barbulesti;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Loop;
+                    Bank Index = 1;
+                    Entry Name = Eu Vin Acasa Cu Drag - Stefan de la Barbulesti;
+                    Entry Index = 0;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Cue
+    {
+        Name = Eu Vin Acasa Cu Drag - Stefan de la Barbulesti;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = Eu Vin Acasa Cu Drag - Stefan de la Barbulesti;
+            Index = 0;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+}
+
+Sound Bank
+{
+    Name = Raptor;
+    Xbox File = Xbox\Raptor.xsb;
+    Windows File = Win\Raptor.xsb;
+    Xbox Bank Path Edited = 0;
+    Windows Bank Path Edited = 0;
+    Bank Last Modified Low = 97613192;
+    Bank Last Modified High = 30008398;
+    Header Last Modified High = 0;
+    Header Last Modified Low = 0;
+
+    Sound
+    {
+        Name = raptor1;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaer Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Raptor;
+                    Bank Index = 5;
+                    Entry Name = raptor1;
+                    Entry Index = 0;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Cue
+    {
+        Name = raptor1;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = raptor1;
             Index = 0;
             Weight Min = 0;
             Weight Max = 255;

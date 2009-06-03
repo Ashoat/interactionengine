@@ -27,6 +27,7 @@ using System;
 using InteractionEngine.EventHandling;
 using Microsoft.Xna.Framework.Graphics;
 using InteractionEngine.Networking;
+using InteractionEngine.UserInterface.Audio;
 
 namespace NTKPlusGame.World.Modules {
 
@@ -60,6 +61,8 @@ namespace NTKPlusGame.World.Modules {
         /// </summary>
         /// <param name="gameObject">The GameObject whose InfoDisplay this is.</param>
         public InfoDisplay(InfoDisplayable gameObject) {
+            Audio audio = new Audio(((Audible)gameObject), "Content\\Audio\\Loop.xwb", "Content\\Audio\\Loop.xsb");
+            audio.playSound("Eu Vin Acasa Cu Drag - Stefan de la Barbulesti");
             this.gameObject = gameObject;
             this.faceIcon = new UpdatableString(gameObject);
             this.displayName = new UpdatableString(gameObject);
