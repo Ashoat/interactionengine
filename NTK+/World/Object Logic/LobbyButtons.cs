@@ -63,8 +63,8 @@ namespace NTKPlusGame.World {
             this.location = new Location(this);
             this.graphics = new Graphics2DTexture(this);
             //Audio
-            this.audio = new Audio(this, "Content\\StartTheme", "Content\\StartTheme");
-            audio.playSound("02 Chaje Shukarije - Esma Redzepova");
+            this.audio = new Audio(this, "Content\\Audio\\BingBang", "Content\\Audio\\BingBang");
+            audio.playSound("BingBang");
             this.graphics.TextureName = "host+join";
             this.location.Position = new Microsoft.Xna.Framework.Vector3(15f, 565f, 0f);
             // EventMethods
