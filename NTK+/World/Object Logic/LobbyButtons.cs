@@ -62,11 +62,11 @@ namespace NTKPlusGame.World {
         public override void construct() {
             this.location = new Location(this);
             this.graphics = new Graphics2DTexture(this);
+            //Audio
+            this.audio = new Audio(this, "Content\\StartTheme", "Content\\StartTheme");
+            audio.playSound("02 Chaje Shukarije - Esma Redzepova");
             this.graphics.TextureName = "host+join";
             this.location.Position = new Microsoft.Xna.Framework.Vector3(15f, 565f, 0f);
-            //Audio
-            Audio audio = new Audio(this, "Content\\StartTheme", "Content\\StartTheme");
-            audio.playSound("02 Chaje Shukarije - Esma Redzepova");
             // EventMethods
             this.addEventMethod("host", host);
             this.addEventMethod("join", join);
@@ -74,6 +74,7 @@ namespace NTKPlusGame.World {
             this.addEventMethod("catchHostedLoadRegion", catchHostedLoadRegion);
             this.addEventMethod("handleDroppedConnection", handleDroppedConnection);
         }
+
 
         /// <summary>
         /// Returns the Location module of this GameObject.
@@ -87,6 +88,7 @@ namespace NTKPlusGame.World {
         public Audio getAudio() {
             return audio;
         }
+
 
         /// <summary>
         /// Returns the Graphics module of this GameObject.

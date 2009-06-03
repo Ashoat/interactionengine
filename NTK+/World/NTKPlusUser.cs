@@ -22,6 +22,7 @@ using NTKPlusGame.World.Modules;
 using InteractionEngine.UserInterface.ThreeDimensional;
 using Microsoft.Xna.Framework;
 using InteractionEngine.Networking;
+using InteractionEngine.UserInterface.Audio;
 
 namespace NTKPlusGame.World {
 
