@@ -33,7 +33,7 @@ namespace Game
             // UserInterface3D interface3D = new UserInterface3D();
             // ^---- absolute waste of memory
             Engine.userInterface = new UserInterface3D();
-            Audio.loadAudioSettings("Content\\NTK_music.xgs");
+            Audio.loadAudioSettings("Content\\NTK_music");
             // Set up the user
             user = new NTKPlusUser();
             NTKPlusUser.localUser = user;
