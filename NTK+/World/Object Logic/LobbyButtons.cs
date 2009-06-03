@@ -128,7 +128,6 @@ namespace NTKPlusGame.World {
             Client.addPrivateLoadRegion(hostedRegion);
             // Make the GameWorld!
             Terrain terrain = GameObject.createGameObject<Terrain>(hostedRegion);
-            terrain.initialize(2f, .1f, hostedRegion); // <---- why does the terrain need the LoadRegion passed to it again?
             Human human = GameObject.createGameObject<Human>(hostedRegion);
             human.initialize(terrain);
             FrameRateCounter frameRateCounter = GameObject.createGameObject<FrameRateCounter>(hostedRegion);

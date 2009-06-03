@@ -54,8 +54,11 @@ namespace NTKPlusGame.World.Modules {
             if (grounded.value) {
                 Vector3 position = base.Position;
                 // Calculate the z-translation based on the terrain.
-                float y = gameObject.getTerrain().getHeight(position.X + dx, position.Z + dz);
-                float dy = y - position.Y;
+                float dy = 0;
+                if (gameObject.getTerrain() != null) {
+                    float y = gameObject.getTerrain().getHeight(new Vector2(position.X + dx, position.Z + dz));
+                    dy = y - position.Y;
+                }
                 // Apply translation
                 Vector3 translation = position; // recycling the Vector3 object
                 translation.X = dx;
@@ -70,12 +73,12 @@ namespace NTKPlusGame.World.Modules {
         }
 
         public override Vector3 Position {
-            get { return base.Position; }
+            get { this.move(Vector3.Zero);  return base.Position; }
             set {
                 if (grounded.value) {
                     float x = value.X;
                     float z = value.Z;
-                    float y = this.gameObject.getTerrain().getHeight(value.X, value.Z);
+                    float y = this.gameObject.getTerrain().getHeight(new Vector2(value.X, value.Z));
                     base.Position = (new Vector3(x, y, z));
                 } else {
                     base.Position = (value);

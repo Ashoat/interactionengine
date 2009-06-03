@@ -335,10 +335,10 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         public bool FogEnabled = false;
         public float FogEnd = 1.0f;
         public float FogStart = 0f;
-        public bool LightingEnabled = false;
+        public bool LightingEnabled = true;
         public bool PreferPerPixelLighting = false;
-        public Vector3 SpecularColor = Vector3.Zero;
-        public float SpecularPower = 1f;
+        public Vector3 SpecularColor = Vector3.One;
+        public float SpecularPower = 16f;
         public Texture2D Texture = null;
         public bool TextureEnabled = false;
         public bool VertexColorEnabled = false;
@@ -571,6 +571,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             return anims.IndexOf(a);
         }
 
+        public float RotationOffset = 0f;
 
         private ModelEffect effect;
 
@@ -648,7 +649,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         /// </summary>
         /// <returns></returns>
         private Matrix localWorld() {
-            return Matrix.CreateScale(this.scale) * Matrix.CreateRotationY(this.gameObject.getLocation().yaw) * Matrix.CreateTranslation(this.gameObject.getLocation().Position); //add more later. scale + rotate.
+            return Matrix.CreateScale(this.scale) * Matrix.CreateRotationY(-this.gameObject.getLocation().yaw + RotationOffset) * Matrix.CreateTranslation(this.gameObject.getLocation().Position); //add more later. scale + rotate.
         }
 
         public void SetScale(float scale) {

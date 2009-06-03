@@ -196,6 +196,15 @@
       <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\cloudMap_0.xnb</Output>
       <Time>2009-06-02T13:51:50.929-07:00</Time>
     </Item>
+    <Item>
+      <Source>Images\texMulti3.png</Source>
+      <Name>Images\texMulti3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Images\texMulti3.xnb</Output>
+      <Time>2009-06-03T03:05:13.8548676-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

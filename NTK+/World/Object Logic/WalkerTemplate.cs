@@ -127,7 +127,7 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="selectedBy">Um... probably null I guess.</param>
         public virtual void onSelected(Client client, object selectedBy) {
-            NTKPlusUser.localUser.selectionFocus.addSelection(this, null);
+            NTKPlusUser.localUser.selectionFocus.setSelection(this, null);
         }
 
 

@@ -52,13 +52,14 @@ namespace Game
             keyboardFocus.setFocus(new KeyboardCameraControl());
             // Set up the LobbyButtons
             LobbyButtons buttons = GameObject.createGameObject<LobbyButtons>(user.localLoadRegion);
+            GameObject.createGameObject<Initializer>(user.localLoadRegion);
             Engine.run();
         }
 
         public static void initializeStuff() {
 
             user.camera.SetPerspectiveFov(45f, UserInterface3D.graphicsDevice.Viewport.AspectRatio, 1.0f, 9000.0f);
-            Vector3 cameraPos = new Vector3(75, 40, 75); //30
+            Vector3 cameraPos = new Vector3(600, 600, 600); //30
             user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
             UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.None;
 
@@ -70,6 +71,81 @@ namespace Game
             UserInterface3D.graphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha; // dest rgb * (255 - source alpha)
             UserInterface3D.graphicsDevice.RenderState.AlphaDestinationBlend = Blend.InverseSourceAlpha; // dest alpha * (255 - source alpha)
             UserInterface3D.graphicsDevice.RenderState.BlendFunction = BlendFunction.Add; // add source and dest results
+        }
+
+        public class Initializer : GameObject, Graphable {
+
+            #region FACTORY
+
+            /// <summary>
+            /// All GameObjects need a parameterless constructor for calling by GameObject.createGameObject() and GameObject.createFromUpdate().
+            /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
+            /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
+            /// </summary>
+            public Initializer() {
+            }
+
+            // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
+            // Used for the factory methods called when the client receives a CREATE_NEW_OBJECT update from the server computer.
+            public const string realHash = "Initializer";
+            public override string classHash {
+                get { return realHash; }
+            }
+
+            /// <summary>
+            /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
+            /// </summary>
+            static Initializer() {
+                GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Initializer>));
+            }
+
+            #endregion
+
+            /*••••••••••••••••••••••••••••••••••••••••*\
+              MODULES
+            \*••••••••••••••••••••••••••••••••••••••••*/
+
+            public Location getLocation() {
+                return null;
+            }
+
+            InitializerGraphics graphics;
+            public Graphics getGraphics() {
+                return graphics;
+            }
+
+
+            /*••••••••••••••••••••••••••••••••••••••••*\
+              MEMBERS
+            \*••••••••••••••••••••••••••••••••••••••••*/
+
+            /// <summary>
+            /// Constructs the Initializer.
+            /// </summary>
+            /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
+            public override void construct() {
+                this.graphics = new InitializerGraphics(this);
+            }
+
+            class InitializerGraphics : Graphics {
+
+                Initializer gameObject;
+
+                public InitializerGraphics(Initializer gameObject) {
+                    this.gameObject = gameObject;
+                }
+
+                public void onDraw() {
+
+                }
+
+                public void loadContent() {
+                    initializeStuff();
+                    gameObject.deconstruct();
+                }
+
+            }
+
         }
 
     }

@@ -14,3 +14,4 @@ Content\Images\cloudMap.xnb
 Content\Models\dome.xnb
 Content\Models\cloudMap.xnb
 Content\Models\cloudMap_0.xnb
+Content\Images\texMulti3.xnb

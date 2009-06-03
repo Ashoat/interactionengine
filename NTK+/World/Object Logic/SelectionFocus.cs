@@ -82,7 +82,7 @@ namespace NTKPlusGame.World {
         /// If the active selection does not "accept" the new Selectable, makes the new Selectable the active selection.
         /// </summary>
         /// <param name="newSelection">The new Selectable that had been clicked on.</param>
-        public void addSelection(Selectable newSelection, object param) {
+        public void setSelection(Selectable newSelection, object param) {
             Selectable previous = currentlySelected[0].value;
             if (previous == null) {
                 this.currentlySelected[0].value = newSelection;

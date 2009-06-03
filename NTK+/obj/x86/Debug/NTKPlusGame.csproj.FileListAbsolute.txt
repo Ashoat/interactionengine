@@ -95,3 +95,4 @@ C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Images\clou
 C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\dome.xnb
 C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\cloudMap.xnb
 C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Models\cloudMap_0.xnb
+C:\Users\Woofy\Desktop\interactionengine2\NTK+\bin\x86\Debug\Content\Images\texMulti3.xnb
