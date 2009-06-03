@@ -35,15 +35,16 @@ namespace NTKPlusGame.World.Modules {
     public class Attack {
         
         //Attack variables
-        private static UpdatableInteger Strength;
-        private static UpdatableInteger Range;
-        private static UpdatableInteger Distance;
-        private static UpdatableInteger Duration;
-        private static UpdatableString AttackType;
+        private UpdatableInteger Strength;
+        private UpdatableInteger Range;
+        private UpdatableInteger Distance;
+        private UpdatableInteger Duration;
+        private UpdatableString AttackType;
 
         // Contains a reference to the GameObject this Attack module is associated with.
         // Used for constructing Updatables.
         private readonly Attackable gameObject;
+        private Combatable target;
 
         /// <summary>
         /// Constructor.
@@ -55,42 +56,62 @@ namespace NTKPlusGame.World.Modules {
 
         //Devour attack
         public void Devour(Combatable target) {
+            this.target = target;
             AttackType.value = "Devour";
             Strength.value = 20;
             Range.value = 1;
             Distance.value = 100;
             ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
-            target.onBeingAttacked(gameObject);
+            DoAttack(target);
         }
 
         //Scream attack.
         public void Scream(Combatable target) {
+            this.target = target;
             AttackType.value = "Scream";
             Strength.value = 20;
             Range.value = 1;
             Distance.value = 100;
             ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
-            target.onBeingAttacked(gameObject);
+            DoAttack(target);
         }
 
         //Ranged attack.  
         public void Ranged(Combatable target) {
+            this.target = target;
             AttackType.value = "Ranged";
             Strength.value = 20;
             Range.value = 1;
             Distance.value = 100;
             ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
-            target.onBeingAttacked(gameObject);
+            DoAttack(target);
         }
 
         //Insult attack.
         public void Insult(Combatable target) {
+            this.target = target;
             AttackType.value = "Insult";
             Strength.value = 20;
             Range.value = 1;
             Distance.value = 100;
             ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
-            target.onBeingAttacked(gameObject);
+            DoAttack(target);
+        }
+
+        void DoAttack(Combatable target) {
+            if (gameObject is TerrainMovable) {
+                ((TerrainMovable)gameObject).getTerrainMovement().startTracking(target, gameObject.getAttack().getAttackRange());
+                ((TerrainMovable)gameObject).getTerrainMovement().destinationArrived += new System.EventHandler(onArrived);
+            }
+            else {
+                if (getDistance(gameObject, target) <= gameObject.getAttack().getAttackDistance()) {
+                    this.target.onBeingAttacked(gameObject);
+                }
+            }
+        }
+
+        void onArrived(object sender, System.EventArgs e) {
+            this.target.onBeingAttacked(gameObject);
         }
 
         public int getAttackStrength() {
@@ -113,7 +134,9 @@ namespace NTKPlusGame.World.Modules {
             return AttackType.value;
         }
 
-        // TODO
+        float getDistance(Locatable first, Locatable second) {
+            return (first.getLocation().Position - second.getLocation().Position).Length();
+        }
 
     }
 

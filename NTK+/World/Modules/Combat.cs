@@ -44,6 +44,7 @@ namespace NTKPlusGame.World.Modules {
         public Combat(Combatable gameObject) {
             this.gameObject = gameObject;
             gameObject.getStats().registerStatType(Combat.HEALTH_STAT);
+            gameObject.getStats().setBaseStat(HEALTH_STAT, 100);
         }
 
         public int getHealth() {
@@ -51,10 +52,24 @@ namespace NTKPlusGame.World.Modules {
         }
 
         void onBeingAttacked(Attackable attacker) {
-            
+            UpdateStats(attacker);
         }
 
-        // TODO
+        void UpdateStats(Attackable attacker) {
+            if ((int)getDistance(attacker, gameObject) < attacker.getAttack().getAttackRange()) {
+                if (gameObject.getStats().getBaseStat(HEALTH_STAT) > 0) {
+                    gameObject.getStats().setBaseStat(HEALTH_STAT, (gameObject.getStats().getBaseStat(HEALTH_STAT) - attacker.getAttack().getAttackStrength()));
+                }
+                else {
+                    gameObject.deconstruct();
+                }
+            }
+        }
+
+        float getDistance(Locatable first, Locatable second) { 
+            return (first.getLocation().Position - second.getLocation().Position).Length();
+        }
+
 
     }
 
