@@ -23,6 +23,7 @@ using InteractionEngine.EventHandling;
 using InteractionEngine.Networking;
 using InteractionEngine.UserInterface.ThreeDimensional;
 using InteractionEngine.Constructs.Datatypes;
+using InteractionEngine.UserInterface.Audio;
 
 namespace NTKPlusGame.World {
 
@@ -63,6 +64,9 @@ namespace NTKPlusGame.World {
             this.graphics = new Graphics2DTexture(this);
             this.graphics.TextureName = "host+join";
             this.location.Position = new Microsoft.Xna.Framework.Vector3(15f, 565f, 0f);
+            //Audio
+            Audio audio = new Audio(((Audible)this), "Content\\Audio\\StartTheme.xwb", "Content\\Audio\\StartTheme.xsb");
+            audio.playSound("02 Chaje Shukarije - Esma Redzepova");
             // EventMethods
             this.addEventMethod("host", host);
             this.addEventMethod("join", join);
