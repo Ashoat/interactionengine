@@ -19,6 +19,7 @@ using InteractionEngine;
 using Microsoft.Xna.Framework;
 using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Graphics;
+using InteractionEngine.Networking;
 
 namespace NTKPlusGame.World.Modules {
 
@@ -41,7 +42,7 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="param">Any additional information provided by the second selection.</param>
         /// <returns>True if the second selection indicates an action-triggering option,
         /// false if the SelectionFocus should be transferred to the new selection.</returns>
-        bool acceptSecondSelection(GameObjectable second, object param);
+        bool acceptSecondSelection(GameObjectable second, Client client, object param);
 
 
         /// <summary>

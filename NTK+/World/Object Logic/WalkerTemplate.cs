@@ -32,6 +32,7 @@ namespace NTKPlusGame.World {
     public abstract class WalkerTemplate : GameObject, TerrainMovable, Graphable3D {
 
         private const string MOVE_EVENT_HASH = "move";
+        private const string MULTI_MOVE_HASH = "multimove";
 
         /// <summary>
         /// Returns the Graphics module of this GameObject.
@@ -86,6 +87,7 @@ namespace NTKPlusGame.World {
             this.stats = new Stats(this);
             this.terrainMovement = new TerrainMovement(this);
             this.addEventMethod(MOVE_EVENT_HASH, new EventMethod(onSelected));
+            this.addEventMethod(MULTI_MOVE_HASH, new EventMethod(onDragSelected));
         }
 
         /// <summary>
@@ -99,6 +101,8 @@ namespace NTKPlusGame.World {
         public virtual Event getEvent(int invoker, Vector3 coordinates) {
             if (invoker == UserInterface3D.MOUSEMASK_LEFT_CLICK) {
                 return new Event(this.id, MOVE_EVENT_HASH, null);
+            } else if (invoker == UserInterface3D.MOUSEMASK_LEFT_DRAG) {
+                return new Event(this.id, MULTI_MOVE_HASH, null);
             } else if (invoker == UserInterface3D.MOUSEMASK_OVER) {
                 //this.getGraphics3D().Effect.AmbientLightColor = highlight(this.getGraphics3D().Effect.AmbientLightColor, 0.5f);
                 //this.getGraphics3D().Effect.DiffuseColor = highlight(this.getGraphics3D().Effect.DiffuseColor, 0.5f);
@@ -127,7 +131,15 @@ namespace NTKPlusGame.World {
         /// </summary>
         /// <param name="selectedBy">Um... probably null I guess.</param>
         public virtual void onSelected(Client client, object selectedBy) {
-            NTKPlusUser.localUser.selectionFocus.setSelection(this, null);
+            NTKPlusUser.localUser.selectionFocus.setSelection(this, client, null);
+        }
+
+        /// <summary>
+        /// EventMethod method... handles click events by registering this GameObject with the SelectionFocus.
+        /// </summary>
+        /// <param name="selectedBy">Um... probably null I guess.</param>
+        public virtual void onDragSelected(Client client, object selectedBy) {
+            NTKPlusUser.localUser.selectionFocus.setSelection(this, client, null);
         }
 
 
@@ -138,10 +150,9 @@ namespace NTKPlusGame.World {
         /// <param name="param">Any additional information provided by the second selection.</param>
         /// <returns>True if the second selection indicates an action-triggering option,
         /// false if the SelectionFocus should be transferred to the new selection.</returns>
-        public virtual bool acceptSecondSelection(GameObjectable second, object param) {
-            if (second is Terrain && param is Vector3) {
+        public virtual bool acceptSecondSelection(GameObjectable second, Client client, object param) {
+            if (second is Terrain && NTKPlusUser.isOnOurTeam(client) && param is Vector3) {
                 this.getTerrainMovement().startWalking((Vector3)param);
-                //this.getTerrainMovement().moveTo((Vector3)param);
                 return true;
             }
             return false;

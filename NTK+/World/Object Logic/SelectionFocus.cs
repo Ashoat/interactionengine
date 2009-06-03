@@ -23,6 +23,7 @@ using InteractionEngine;
 using InteractionEngine.Constructs.Datatypes;
 using NTKPlusGame.World.Modules;
 using WumpusGame.World;
+using InteractionEngine.Networking;
 
 namespace NTKPlusGame.World {
 
@@ -83,7 +84,7 @@ namespace NTKPlusGame.World {
         /// If the active selection does not "accept" the new Selectable, makes the new Selectable the active selection.
         /// </summary>
         /// <param name="newSelection">The new Selectable that had been clicked on.</param>
-        public void setSelection(Selectable newSelection, object param) {
+        public void setSelection(Selectable newSelection, Client client, object param) {
             Selectable previous = currentlySelected[0].value;
             if (previous == null) {
                 this.currentlySelected[0].value = newSelection;
@@ -91,7 +92,7 @@ namespace NTKPlusGame.World {
                 if (newSelection is InfoDisplayable) NTKPlusUser.localUser.infoDisplayBox.setDisplayedObject((InfoDisplayable)newSelection);
             } else {
                 bool actionAccepted = false;
-                for (int i = 0; i < numberSelected.value; i++) actionAccepted |= currentlySelected[i].value.acceptSecondSelection(newSelection, param);
+                for (int i = 0; i < numberSelected.value; i++) actionAccepted |= currentlySelected[i].value.acceptSecondSelection(newSelection, client, param);
                 if (!actionAccepted) {
                     this.currentlySelected[0].value = newSelection;
                     this.numberSelected.value = 1;
@@ -101,13 +102,21 @@ namespace NTKPlusGame.World {
         }
 
         // no nulls allowed
-        public void setMultipleSelections(Selectable[] selections) {
+        public void setMultipleSelections(Selectable[] selections, Client client) {
             numberSelected.value = selections.Length;
             for (int i = 0; i < selections.Length; i++) currentlySelected[i].value = selections[i];
         }
 
-        public void addOnlyAsSecondSelection(GameObject secondSelection, object param) {
-            for (int i = 0; i < numberSelected.value; i++) currentlySelected[i].value.acceptSecondSelection(secondSelection, param);
+        public void addOnlyAsSecondSelection(GameObject secondSelection, Client client, object param) {
+            for (int i = 0; i < numberSelected.value; i++) currentlySelected[i].value.acceptSecondSelection(secondSelection, client, param);
+        }
+
+        public void clearSelections() {
+            numberSelected.value = 0;
+        }
+
+        public void addAsMultipleSelection(Selectable selection) {
+            currentlySelected[numberSelected.value++].value = selection;
         }
 
         /// <summary>

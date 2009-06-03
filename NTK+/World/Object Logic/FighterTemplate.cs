@@ -22,6 +22,7 @@ using NTKPlusGame.World.Modules;
 using InteractionEngine.UserInterface.ThreeDimensional;
 using System;
 using InteractionEngine.Constructs.Datatypes;
+using InteractionEngine.Networking;
 
 namespace NTKPlusGame.World {
 
@@ -73,12 +74,12 @@ namespace NTKPlusGame.World {
         /// <param name="param">Any additional information provided by the second selection.</param>
         /// <returns>True if the second selection indicates an action-triggering option,
         /// false if the SelectionFocus should be transferred to the new selection.</returns>
-        public override bool acceptSecondSelection(GameObjectable second, object param) {
-            if (base.acceptSecondSelection(second, param)) return true;
+        public override bool acceptSecondSelection(GameObjectable second, Client client, object param) {
+            if (base.acceptSecondSelection(second, client, param)) return true;
 
-            const bool OTHER_OBJECT_BELONGS_TO_ENEMY = false;
-            if (OTHER_OBJECT_BELONGS_TO_ENEMY && second is Combatable) {
-                onCommandedToAttackSomethingElse((Combatable)second);
+            if (NTKPlusUser.isOnOurTeam(client) && second is Combatable) {
+                Combatable target = (Combatable)second;
+                if (!target.getCombat().isOnOurTeam(client)) onCommandedToAttackSomethingElse(target);
                 return true;
             }
 
@@ -90,28 +91,7 @@ namespace NTKPlusGame.World {
         /// Handler for when this GameObject has been ordered to attack something else.
         /// </summary>
         /// <param name="somethingElse">The thing that this GameObject has been ordered to attack.</param>
-        public virtual void onCommandedToAttackSomethingElse(Combatable somethingElse) {
-            this.target.value = somethingElse;
-            this.getTerrainMovement().startTracking(somethingElse, this.getAttack().getAttackRange());
-            this.getTerrainMovement().destinationArrived += new EventHandler(onArrivedAtAttackTargetLocation);
-        }
-
-        /// <summary>
-        /// Handler for when we have finished walking toward the attack target and now desire to hurt it!
-        /// </summary>
-        /// <param name="sender">not used</param>
-        /// <param name="e">not used</param>
-        public virtual void onArrivedAtAttackTargetLocation(object sender, EventArgs e) {
-            this.attacking();
-            this.target.value.onBeingAttacked(this);
-        }
-
-        /// <summary>
-        /// Specifically execute attack maneuvers, including animations and damage-doing.
-        /// </summary>
-        protected virtual void attacking() {
-            // TODO: attack animations/code!
-        }
+        public abstract void onCommandedToAttackSomethingElse(Combatable somethingElse);
 
         /// <summary>
         /// Handler for when this GameObject is being attacked.

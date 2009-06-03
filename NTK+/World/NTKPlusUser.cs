@@ -21,6 +21,7 @@ using InteractionEngine.UserInterface;
 using NTKPlusGame.World.Modules;
 using InteractionEngine.UserInterface.ThreeDimensional;
 using Microsoft.Xna.Framework;
+using InteractionEngine.Networking;
 
 namespace NTKPlusGame.World {
 
@@ -51,6 +52,9 @@ namespace NTKPlusGame.World {
             ((UserInterface3D)Engine.userInterface).registerKeyboardFocus(keyboardFocus);
         }
 
+        public static bool isOnOurTeam(Client client) {
+            return Engine.status == Engine.Status.MULTIPLAYER_CLIENT ^ client == null;
+        }
 
     }
 
