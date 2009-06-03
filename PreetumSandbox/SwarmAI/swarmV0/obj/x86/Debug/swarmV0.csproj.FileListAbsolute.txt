@@ -12,3 +12,10 @@ D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\ResolveAss
 D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\swarmV0.exe
 D:\t09\InteractionEngine\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\swarmV0.pdb
+C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\SwarmAI\swarmV0\bin\x86\Debug\Content\dot.xnb
+C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\SwarmAI\swarmV0\bin\x86\Debug\swarmV0.exe
+C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\SwarmAI\swarmV0\bin\x86\Debug\swarmV0.pdb
+C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\swarmV0.exe
+C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\SwarmAI\swarmV0\obj\x86\Debug\swarmV0.pdb

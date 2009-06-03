@@ -101,7 +101,6 @@ namespace NTKPlusGame.World {
 
             InfoTab tab2 = GameObject.createGameObject<InfoTab>(this.getLoadRegion());
             if (tab2 != null) this.initializeInfoDisplay(null, tab2);
-            else CreateObject.onCreateObject.Add(new Event(this.id, INFO_HASH, null));
             //tab2.initialize("Another tab!", this);
 
             InfoButton button1 = GameObject.createGameObject<InfoButton>(this.getLoadRegion());
@@ -177,7 +176,7 @@ namespace NTKPlusGame.World {
             DebugSphere sphere = (DebugSphere)spherey;
             sphere.setPosition(this.getLocation().Position + new Vector3(0, 25, 0), 2);
             sphere.setColor(colors[nextColor]);
-
+           
         }
 
         public override Event getEvent(int invoker, Vector3 position) {

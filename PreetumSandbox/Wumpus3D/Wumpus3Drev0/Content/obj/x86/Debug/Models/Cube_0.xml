@@ -3,7 +3,7 @@
   <Asset Type="Graphics:NodeContent">
     <Name>Box01</Name>
     <Identity>
-      <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\Cube.X</SourceFilename>
+      <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\Cube.X</SourceFilename>
       <SourceTool>XImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>

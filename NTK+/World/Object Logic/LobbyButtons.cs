@@ -132,6 +132,7 @@ namespace NTKPlusGame.World {
             Human human = GameObject.createGameObject<Human>(hostedRegion);
             human.initialize(terrain);
             FrameRateCounter frameRateCounter = GameObject.createGameObject<FrameRateCounter>(hostedRegion);
+            SkyDome skydome = GameObject.createGameObject<SkyDome>(hostedRegion);
             // Send the hosted region to anybody who joins the game
             Client.onJoin.Add(new Event(this.id, "handleNewPlayer", null));
         }

@@ -181,7 +181,7 @@ namespace InteractionEngine {
         /// <returns>All the Events in the EventCache.</returns>
         private static System.Collections.Generic.List<EventHandling.Event> getEvents() {
             System.Collections.Generic.List<EventHandling.Event> returnCache = eventCache;
-            eventCache = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
+            eventCache.Clear();
             return returnCache;
         }
 

@@ -115,12 +115,12 @@ namespace NTKPlusGame.World {
             this.location = new Location(this);
             this.graphics = new TerrainGraphics(this);
             this.addEventMethod(TERRAIN_CLICKED_HASH, new EventMethod(onClicked));
-
         }
 
         public void initialize(float blockScaleF, float heightScaleF, LoadRegion terrainedLoadRegion) {
             this.blockScale = blockScaleF;
             this.heightScale = heightScaleF;
+            if (UserInterface3D.graphicsDevice != null) this.loadContent();
         }
 
         /// <summary>
@@ -365,8 +365,6 @@ namespace NTKPlusGame.World {
 
         public void onDraw() {
 
-            if (Engine.userInterface.getGraphicsDevice() != null) this.loadContent();
-
             UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace; //or null
             UserInterface3D.graphicsDevice.RenderState.DepthBufferEnable = true;
 
@@ -403,8 +401,6 @@ namespace NTKPlusGame.World {
             this.SetData(UserInterface3D.graphicsDevice);
             this.InitDefaultEffectVal();
 
-
-            Console.WriteLine(this.getHeight(0, 0) + "");
         }
 
         public float getHeight(Vector3 pos) {
@@ -415,7 +411,7 @@ namespace NTKPlusGame.World {
         }
 
         private Vector3? intersectionPoint(Ray ray) {
-
+            if (this.vertices == null) return null;
             Vector3 rayStep = ray.Direction * blockScale * .5f;
             Vector3 currPoint = ray.Position;
             Vector3 prevPoint = currPoint;

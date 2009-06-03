@@ -157,7 +157,6 @@ namespace InteractionEngine.UserInterface {
         /// Pretty much the constructor. It'll be called every time this object is instantiated.
         /// </summary>
         public override void construct() {
-            this.focusHolder = new InteractionEngine.Constructs.Datatypes.UpdatableGameObject<Keyboardable>(this);
             this.addEventMethod(EVENT_HASH, new InteractionEngine.EventHandling.EventMethod(keyPressed));
         }
 
@@ -170,7 +169,8 @@ namespace InteractionEngine.UserInterface {
         private int repeatRate = 200;
         // Contains the GameObject that currently holds the keyboard focus.
         // Used for knowing where to send keyboard events.
-        private Constructs.Datatypes.UpdatableGameObject<Keyboardable> focusHolder;
+        //private Constructs.Datatypes.UpdatableGameObject<Keyboardable> focusHolder;
+        private Keyboardable focusHolder;
 
         // You can't use the following method. You have to use a factory like in GameObject.
 
@@ -192,16 +192,16 @@ namespace InteractionEngine.UserInterface {
         /// <param name="keyParam">The Microsoft.Xna.Framework.Input.Keys key pressed.</param>
         public void keyPressed(InteractionEngine.Networking.Client client, object keyParam) {
             Microsoft.Xna.Framework.Input.Keys key = (Microsoft.Xna.Framework.Input.Keys)keyParam;
-            focusHolder.value.keyPressed(key);
+            focusHolder.keyPressed(key);
         }
 
         /// <summary>
         /// Yields the keyboard focus to the specified Keyboardable object.
         /// </summary>
         /// <param name="newFocusHolder">The new holder of the keyboard focus.</param>
-        public void getFocus(Keyboardable newFocusHolder) {
-            if (focusHolder.value != null) focusHolder.value.focusLost(newFocusHolder);
-            this.focusHolder.value = newFocusHolder;
+        public void setFocus(Keyboardable newFocusHolder) {
+            if (focusHolder != null) focusHolder.focusLost(newFocusHolder);
+            this.focusHolder = newFocusHolder;
         }
 
         /// <summary>

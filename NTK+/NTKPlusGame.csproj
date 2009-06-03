@@ -104,6 +104,7 @@
     <Compile Include="World\Object Logic\LobbyButtons.cs" />
     <Compile Include="World\Object Logic\Player.cs" />
     <Compile Include="World\Object Logic\SelectionFocus.cs" />
+    <Compile Include="World\Object Logic\SkyDome.cs" />
     <Compile Include="World\Object Logic\Terrain.cs" />
     <Compile Include="World\Object Logic\WalkerTemplate.cs" />
   </ItemGroup>

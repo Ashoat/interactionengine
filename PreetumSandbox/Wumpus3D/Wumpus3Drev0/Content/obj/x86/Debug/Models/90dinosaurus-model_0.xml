@@ -3,7 +3,7 @@
   <Asset Type="Graphics:NodeContent">
     <Name>RootNode</Name>
     <Identity>
-      <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+      <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
       <SourceTool>FbxImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>
@@ -1155,7 +1155,7 @@
     <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
       <Name>Body</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>
@@ -1169,7 +1169,7 @@
     <Resource ID="#Resource2" Type="Graphics:BasicMaterialContent">
       <Name>Teeth</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>
@@ -1183,7 +1183,7 @@
     <Resource ID="#Resource3" Type="Graphics:BasicMaterialContent">
       <Name>Body</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>
@@ -1197,7 +1197,7 @@
     <Resource ID="#Resource4" Type="Graphics:BasicMaterialContent">
       <Name>Iris</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>
@@ -1211,7 +1211,7 @@
     <Resource ID="#Resource5" Type="Graphics:BasicMaterialContent">
       <Name>Pupil</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>
@@ -1225,7 +1225,7 @@
     <Resource ID="#Resource6" Type="Graphics:BasicMaterialContent">
       <Name>Eyetrans</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>
@@ -1239,7 +1239,7 @@
     <Resource ID="#Resource7" Type="Graphics:BasicMaterialContent">
       <Name>Claws</Name>
       <Identity>
-        <SourceFilename>D:\t09\InteractionEngine\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
+        <SourceFilename>C:\Users\Woofy\Desktop\interactionengine2\PreetumSandbox\Wumpus3D\Wumpus3Drev0\Content\Models\90dinosaurus-model.fbx</SourceFilename>
         <SourceTool>FbxImporter</SourceTool>
       </Identity>
       <OpaqueData>

@@ -29,7 +29,7 @@ using InteractionEngine.Constructs.Datatypes;
 namespace NTKPlusGame.World {
 
 
-    public class InfoDisplayBox : GameObject, Graphable2D {
+    public class InfoDisplayBox : GameObject, Graphable2D, Interactable2D {
 
         #region FACTORY
 
@@ -115,6 +115,12 @@ namespace NTKPlusGame.World {
             this.graphics.name = display.getInfoDisplay().DisplayName;
             this.graphics.faceIcon = UserInterface3D.content.Load<Texture2D>(display.getInfoDisplay().FaceIcon);
         }
+
+        Event Interactable.getEvent(int invoker, Vector3 param) {
+            return null;
+        }
+
+
 
     }
 

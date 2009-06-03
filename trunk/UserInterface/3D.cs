@@ -158,7 +158,8 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
                 if (!repeatTimes.ContainsKey(key) || repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
-                    newEvents.Add(this.kf.getEvent((int)key));
+                   // newEvents.Add(this.kf.getEvent((int)key));
+                    kf.keyPressed(null, (int)key);
                     repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatDelay;
                 }
             }
@@ -257,7 +258,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             return events;
         }
 
-        /// <summary>
+        /// <summary>n 
         /// Output stuff.
         /// </summary>
         public override void output() {

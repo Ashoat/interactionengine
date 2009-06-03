@@ -43,13 +43,11 @@ namespace Game
             new Terrain();
             new Human();
             new FrameRateCounter();
-            new InfoTab();
-            new InfoButton();
             new InfoDisplayBox();
-            new DebugSphere();
-            new KeyboardCameraControl();
-            new Player();
             new SelectionFocus();
+            KeyboardFocus keyboardFocus = new KeyboardFocus();
+            ((UserInterface3D)Engine.userInterface).registerKeyboardFocus(keyboardFocus);
+            keyboardFocus.setFocus(new KeyboardCameraControl());
             // Set up the LobbyButtons
             LobbyButtons buttons = GameObject.createGameObject<LobbyButtons>(user.localLoadRegion);
             Engine.run();
@@ -57,7 +55,7 @@ namespace Game
 
         public static void initializeStuff() {
 
-            user.camera.SetPerspectiveFov(45f, UserInterface3D.graphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+            user.camera.SetPerspectiveFov(45f, UserInterface3D.graphicsDevice.Viewport.AspectRatio, 1.0f, 9000.0f);
             Vector3 cameraPos = new Vector3(75, 40, 75); //30
             user.camera.SetLookAt(cameraPos, Vector3.Zero, Vector3.Up);
             UserInterface3D.graphicsDevice.RenderState.CullMode = CullMode.None;

@@ -60,7 +60,7 @@ namespace MoveRepulsV0
 
             swarm = new Swarm(spriteBatch, Content.Load<Texture2D>("dot"));
             swarm.PopulateSwarm(10, 10f, 1f, width, height);
-
+            //swarm.PopulateWith(
             font = Content.Load<SpriteFont>("font");
         }
 
@@ -95,8 +95,8 @@ namespace MoveRepulsV0
             {
                 swarm.Attractor = null;
             }
-            
 
+            
 
             base.Update(gameTime);
         }

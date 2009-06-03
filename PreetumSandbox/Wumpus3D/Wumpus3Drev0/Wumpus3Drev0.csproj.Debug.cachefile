@@ -1,6 +1,10 @@
 Content\Images\human_texture.xnb
 Content\Images\Amazonia.xnb
 Content\Images\heightImage.xnb
+Content\Images\texMulti.xnb
+Content\Images\texMulti2.xnb
+Content\Images\texMulti3.xnb
+Content\Models\cloudMap.xnb
 Content\Models\Borat.xnb
 Content\Models\human4.xnb
 Content\Models\sphere180.xnb
@@ -10,12 +14,8 @@ Content\Models\SpyGirl.xnb
 Content\Models\man.xnb
 Content\Models\dino.xnb
 Content\Models\sphereHP.xnb
-Content\Models\Cube.xnb
-Content\Fonts\font1.xnb
-Content\Images\texMulti.xnb
-Content\Images\texMulti2.xnb
-Content\Images\texMulti3.xnb
 Content\Models\Lab.xnb
+Content\Models\Cube.xnb
 Content\Models\dome.xnb
+Content\Fonts\font1.xnb
 Content\Models\cloudMap_0.xnb
-Content\Models\cloudMap.xnb
