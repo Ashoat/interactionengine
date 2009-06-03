@@ -43,6 +43,25 @@ namespace Wumpus3Drev0
 
         //float scale = 1f;
 
+        SimplePlane water;
+
+
+        bool needGenUpdate = true;
+        int sideLength;
+        float magRand;
+        float[,] map;
+        int size;
+        Random rand;
+        float r;
+
+        public enum TerrainSize
+        {
+            Default,
+            Small
+        };
+
+        TerrainSize sizeTerr;
+
         public Vector2 Size
         {
             get
@@ -217,10 +236,113 @@ namespace Wumpus3Drev0
             return map[v.X, v.Y];
         }
 
+        private void genDynTerMapSTEP()
+        {
+            if (sideLength > 0)
+            {
+                //perform mid-square thing
+                for (int h = 0; h < size - 1; h += sideLength)
+                {
+                    for (int w = 0; w < size - 1; w += sideLength)
+                    {
+                        //rand = new Random(w * h);
+                        //rand = new Random((int)Camera.View.Determinant() * DateTime.Now.Millisecond * w * h);
+                        //now w,h is the uper left corner of each square 
+                        Int2 center = new Int2((w + sideLength / 2), (h + sideLength / 2)); //the center of the square
+                        map[center.X, center.Y] = (map[w, h] + map[w + sideLength, h] + map[w, h + sideLength] + map[w + sideLength, h + sideLength]) / 4; //the center = avg of 4 corners
+                        map[center.X, center.Y] += (float)(rand.NextDouble() * 2 - 1) * magRand;
+                    }
+                }
+
+                //perform diamond-y thing
+                for (int h = 0; h < size; h += sideLength)
+                {
+                    for (int w = 0; w < size; w += sideLength)
+                    {
+
+                        Int2 p0 = new Int2(w, h); // "orgin"
+                        Int2 p1 = new Int2((w + sideLength / 2) % size, (h - sideLength / 2 + size) % size); //the (...+size)%size is to loop, but take negatives into account
+                        Int2 p2 = new Int2((w + sideLength) % size, h);
+                        Int2 p3 = new Int2((w + sideLength / 2) % size, (h + sideLength / 2) % size);
+                        Int2 p4 = new Int2(w, (h + sideLength) % size);
+                        Int2 p5 = new Int2((w - sideLength / 2 + size) % size, (h + sideLength / 2) % size);
+
+                        Int2 c1 = new Int2(w, (h + sideLength / 2) % size);
+                        Int2 c2 = new Int2((w + sideLength / 2) % size, h);
+
+                        //rand = new Random(p0.X * p5.X);  //p0.X * p5.X
+                        rand = new Random((w + DateTime.Now.Millisecond) * 17 + h * 57);
+                        map[c1.X, c1.Y] = (GetVal(p0, map) + GetVal(p1, map) + GetVal(p2, map) + GetVal(p3, map)) / 4;
+                        map[c1.X, c1.Y] += (float)(rand.NextDouble() * 2 - 1) * magRand;
+
+                        //rand = new Random(p4.Y * p5.Y);
+                        map[c2.X, c2.Y] = (GetVal(p0, map) + GetVal(p3, map) + GetVal(p4, map) + GetVal(p5, map)) / 4;
+                        map[c2.X, c2.Y] += (float)(rand.NextDouble() * 2 - 1) * magRand;
+                    }
+                }
+
+                sideLength /= 2;
+                magRand *= r;
+
+                this.GenerateIndices();
+                this.GenerateVertices();
+                this.GenerateNormals();
+
+                this.SetData(dev);
+
+                NormalizeToTerrain(map);
+                SaveMapToImage();
+            }
+            else
+            {
+                needGenUpdate = false;
+            }
+        }
+        private void genDynTerMapSTART(int size, float magR, float r)
+        {
+            needGenUpdate = true;
+
+            int width = size;
+            int height = size;
+
+            this.heightMap = new byte[width * height];
+
+            rand = new Random((int)Camera.View.Determinant() * DateTime.Now.Millisecond);
+            map = new float[size, size]; //[w,h] - by convention
+
+            vertexCountX = width;
+            vertexCountZ = height;
+            numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
+            numVertices = this.heightMap.Length;
+
+            
+            this.size = size;
+            this.r = r;
+            this.magRand = magR;
+
+
+            map[0, 0] = 0;
+            map[0, size - 1] = 0;
+            map[size - 1, 0] = 0;
+            map[size - 1, size - 1] = 0;
+
+            sideLength = size - 1;
+        }
         private void GenerateDynamicTerrainMap(int size, float magR, float r)
         {
+            int width = size;
+            int height = size;
+
+            this.heightMap = new byte[width * height];
+
             Random rand = new Random((int)Camera.View.Determinant() * DateTime.Now.Millisecond);
             float[,] map = new float[size, size]; //[w,h] - by convention
+
+            vertexCountX = width;
+            vertexCountZ = height;
+            numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
+            numVertices = this.heightMap.Length;
+
             //seed 4 corners
             /*map[0, 0] = rand.Next(0, 30);
             map[0, size - 1] = rand.Next(0, 30);
@@ -280,6 +402,7 @@ namespace Wumpus3Drev0
 
                 sideLen /= 2;
                 magR *= r;
+
             }
             NormalizeToTerrain(map);
             SaveMapToImage();
@@ -500,7 +623,7 @@ namespace Wumpus3Drev0
         }
         private void NormalizeToTerrain(float[,] map)
         {
-            int width = map.GetLength(0);
+            /*int width = map.GetLength(0);
             int height = map.GetLength(1);
 
             this.heightMap = new byte[width * height];
@@ -508,7 +631,7 @@ namespace Wumpus3Drev0
             vertexCountX = width;
             vertexCountZ = height;
             numTriangles = (vertexCountX - 1) * (vertexCountZ - 1) * 2;
-            numVertices = this.heightMap.Length;
+            numVertices = this.heightMap.Length;*/
 
             /*
             float max = float.MinValue, min = float.MaxValue;
@@ -521,16 +644,17 @@ namespace Wumpus3Drev0
                 }
             }
             */
+            float[,] mapz = (float[,])map.Clone();
 
-            map = reboundToZero(map);
+            mapz = reboundToZero(mapz);
 
-            map = gaussianPass1(map, .5f);
-            map = gaussianPass2(map, .5f);
+            mapz = gaussianPass1(mapz, .5f);
+            mapz = gaussianPass2(mapz, .5f);
 
             //map = gaussianPass1(map, .5f);
             //map = gaussianPass2(map, .5f);
 
-            float[] data = ConvertTo1D(map);
+            float[] data = ConvertTo1D(mapz);
 
             /*float[] cubic = new float[data.Length];
             for (int i = 0; i < data.Length; i++)
@@ -543,7 +667,7 @@ namespace Wumpus3Drev0
                 data[i] = data[i] + cubic[i] * 0.0001f;
             }*/
 
-            //data = reboundToZero(data);
+            data = reboundToZero(data);
 
             float min, max;
             //min = this.MinAdvanced(data);
@@ -571,6 +695,8 @@ namespace Wumpus3Drev0
                     map[w, h] = heightMap[w + h * vertexCountX];
                 }
             }
+
+            map = reboundToZero(map);
 
             map = gaussianPass1(map, sd);
             map = gaussianPass2(map, sd);
@@ -617,10 +743,17 @@ namespace Wumpus3Drev0
             dynTex.GetData<Color>(dynTexData);
         }
 
-        private Vector2 getDynCoord(byte height, Random rand)
+        private Vector2 getDynCoordOld(byte height, Random rand)
         {
             float w = (float)height / 255f; //horizonal co-ordinate
             float h = rand.Next(0, dynTex.Height) / (float)dynTex.Height;
+            return new Vector2(w, h);
+        }
+
+        private Vector2 getDynCoord(byte height, float i, float j)
+        {
+            float w = (float)height / 255f; //horizonal co-ordinate
+            float h = 0; //rand.Next(0, dynTex.Height) / (float)dynTex.Height;
             return new Vector2(w, h);
         }
 
@@ -663,7 +796,8 @@ namespace Wumpus3Drev0
                 {
                     vertices[vertexCount].Position = new Vector3((j - vertexCountX / 2) * blockScale, heightMap[vertexCount] * heightScale, (i - vertexCountZ / 2) * blockScale);
                     //vertices[vertexCount].TextureCoordinate = new Vector2(j / vertexCountX, i / vertexCountZ);
-                    vertices[vertexCount].TextureCoordinate = getDynCoord(heightMap[vertexCount],rand);
+                    //vertices[vertexCount].TextureCoordinate = getDynCoord(heightMap[vertexCount], i, j);
+                    vertices[vertexCount].TextureCoordinate = getDynCoordOld(heightMap[vertexCount], rand); //AWESOME!!!!!
                     vertexCount++;
                 }
             }
@@ -734,11 +868,25 @@ namespace Wumpus3Drev0
 
         public void ReGenerateTerrain()
         {
-            //this.GenerateDynamicTerrainMap(129, 64, .55f); //129,100,.5
-            //this.heightScale = 1f;
-            
-            this.GenerateDynamicTerrainMap(257, 128, .6f);
-            this.heightScale = 2f;
+            needGenUpdate = true;
+            if (sizeTerr == TerrainSize.Small)
+            {
+                //this.GenerateDynamicTerrainMap(129, 64, .55f); //129,100,.5
+                this.genDynTerMapSTART(129, 64, .55f);
+                this.heightScale = 1f;
+                this.blockScale = 10f;
+                
+                water = new SimplePlane(new Vector3(0, 85, 0), this.Size.X, this.Size.Y, this.Effect.ActiveCamera, this.dev);
+            }
+            else if (sizeTerr == TerrainSize.Default)
+            {
+                //this.GenerateDynamicTerrainMap(257, 128, .6f);
+                this.genDynTerMapSTART(257, 128, .6f);
+                this.heightScale = 2f;
+                this.blockScale = 10f;
+
+                water = new SimplePlane(new Vector3(0, 180, 0), this.Size.X, this.Size.Y, this.Effect.ActiveCamera, this.dev);
+            }
 
             this.GenerateIndices();
             this.GenerateVertices();
@@ -774,8 +922,6 @@ namespace Wumpus3Drev0
 
         public Terrain(GraphicsDevice device, BasicCamera camera, Texture2D texDyn, float blockScaleF, float heightScaleF)
         {
-            this.blockScale = blockScaleF;
-            this.heightScale = heightScaleF;
 
             dev = device;
 
@@ -795,17 +941,53 @@ namespace Wumpus3Drev0
 
             this.InitDefaultEffectVal();
 
+            this.sizeTerr = TerrainSize.Default;
             this.ReGenerateTerrain();
+
+            this.blockScale = blockScaleF;
+            this.heightScale = heightScaleF;
 
             //this.world
 
-            
+            //this.SetScale(scale);
+        }
+
+        public Terrain(GraphicsDevice device, BasicCamera camera, Texture2D texDyn, TerrainSize size)
+        {
+            this.sizeTerr = size;
+            dev = device;
+
+
+            this.effect = new ModelEffect(device, null);
+            this.effect.ActiveCamera = camera;
+
+
+
+            //this.LoadHeightmapFromImage(mapAsset);
+            //this.GenerateRandomWalkMap(128, 128, 20);
+            //this.GenerateMidFractalMap(128, 128, 255, .6f);
+            //this.GenerateDynamicTerrainMap(129, 64, .55f); //(129, 64, .5f);
+
+            //this.LoadTexture(texAsset);
+            this.LoadDynTex(texDyn);
+
+            this.InitDefaultEffectVal();
+
+            this.ReGenerateTerrain();
+
+            //this.world
 
             //this.SetScale(scale);
         }
 
         public void Draw(CullMode mode)
         {
+            if (needGenUpdate)
+            {
+                this.genDynTerMapSTEP();
+            }
+            
+
             dev.RenderState.CullMode = mode; //or null
             dev.RenderState.DepthBufferEnable = true;
 
@@ -823,6 +1005,11 @@ namespace Wumpus3Drev0
                 pass.End();
             }
             effect.End();
+
+            if(!needGenUpdate)
+            {
+                water.Draw();
+            }
         }
         public void Draw()
         {

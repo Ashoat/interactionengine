@@ -21,20 +21,28 @@ namespace Wumpus3Drev0
     class UserInterface
     {
         List<GameModel> models;
-        GameModel selectedModel;
         BasicCamera camera;
         GraphicsDevice GraphicsDevice;
 
-        public UserInterface(BasicCamera camera, GraphicsDevice GraphicsDevice)
+        Terrain terrain;
+
+        Swarm swarm;
+        Attractor attr = null;
+
+        public UserInterface(BasicCamera camera, Terrain terrain, GraphicsDevice GraphicsDevice)
         {
-            selectedModel = null;
             this.camera = camera;
             models = new List<GameModel>();
             this.GraphicsDevice = GraphicsDevice;
+            this.terrain = terrain;
+            swarm = new Swarm();
         }
         public void Add(GameModel model)
         {
             models.Add(model);
+            Unit unit = new Unit();
+            unit.Position = model.Position2;
+            swarm.Units.Add(unit);
         }
         public void Remove(GameModel model)
         {
@@ -46,36 +54,25 @@ namespace Wumpus3Drev0
             Ray mouseRay = getMouseRay();
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                foreach (GameModel model in this.models)
-                {
-                    if (model.RayIntersects(mouseRay))
-                    {
-                        this.selectedModel = model;
-                        return;
-                    }
-                }
-                this.selectedModel = null;
+                swarm.Attractor = new Attractor();
+                Vector3? tmp = this.terrain.RayIntersects(mouseRay);
+                swarm.Attractor.Position = new Vector2(tmp.Value.X, tmp.Value.Z);
             }
-            else if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            else
             {
-                
-                if (this.selectedModel != null)
-                {
-                    Vector3? intersect = this.selectedModel.Terrain.RayIntersects(mouseRay);
-                    if (intersect.HasValue) // this will always be true, with the current method
-                    {
-                        if (!this.selectedModel.RayIntersects(mouseRay))
-                        {
-                            selectedModel.SetTarget(new Vector2(intersect.Value.X, intersect.Value.Z));
-                            selectedModel.SetPosition(new Vector2(intersect.Value.X, intersect.Value.Z));
-                        }
-                    }
-                }
-               
+                //swarm.Attractor = null;
             }
 
+            swarm.Update();
+            
         }
-
+        public void Draw()
+        {
+            foreach (GameModel m in models)
+            {
+                m.Draw();
+            }
+        }
         public Ray getMouseRay()
         {
             Vector2 mouse = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);

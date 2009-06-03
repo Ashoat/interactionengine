@@ -96,8 +96,9 @@ namespace Wumpus3Drev0
             //camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), GraphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
             camera.SetPerspectiveFov(45f, GraphicsDevice.Viewport.AspectRatio, 1.0f, 10000f);
 
-            terrain = new Terrain(GraphicsDevice, camera, Content.Load<Texture2D>("Images\\texMulti3"), 10f, 1f); //3f, .2
-            //terrain = new Terrain(GraphicsDevice, camera, tex, 3f, .2f);,
+            //terrain = new Terrain(GraphicsDevice, camera, Content.Load<Texture2D>("Images\\texMulti3"), 10f, 1f); //3f, .2
+            terrain = new Terrain(GraphicsDevice, camera, Content.Load<Texture2D>("Images\\texMulti3"), Terrain.TerrainSize.Default);
+
             //terrain.Effect.SpecularPower = 40f;
             //terrain.Effect.AmbientLightColor = Color.Black.ToVector3();
             
@@ -127,25 +128,44 @@ namespace Wumpus3Drev0
 
             modelEffect.EnableDefaultLighting(); //doesn't do anything. draw method does this automatically
 
-            //model = new GameModel(Content.Load<Model>("Models\\human4"), modelEffect, terrain, GraphicsDevice);
-            model = new GameModel(Content.Load<Model>("Models\\human"), new List<Animation>(), modelEffect, terrain, GraphicsDevice);
-            
-            model.SetScale(3f); //3
+            //model = new GameModel(Content.Load<Model>("Models\\human"), new List<Animation>(), modelEffect, terrain, GraphicsDevice);
+            model = new GameModel(Content.Load<Model>("Models\\Borat\\0"), new List<Animation>(), modelEffect, terrain, GraphicsDevice);
+
+            model.SetScale(10f); //3
             model.RotationOffset = MathHelper.Pi;
 
             Animation anim = new Animation("walk");
-            anim.Frames.Add(Content.Load<Model>("Models\\human4"));
-            anim.Frames.Add(Content.Load<Model>("Models\\sphere180"));
-            anim.Frames.Add(Content.Load<Model>("Models\\masterchief2"));
+            //anim.Frames.Add(Content.Load<Model>("Models\\human4"));
+            //anim.Frames.Add(Content.Load<Model>("Models\\sphere180"));
+            //anim.Frames.Add(Content.Load<Model>("Models\\masterchief2"));
+            for (int i = 1; i <= 35; i++)
+            {
+                anim.Frames.Add(Content.Load<Model>("Models\\Borat\\" + i.ToString()));
+            }
             model.Animations.Add(anim);
 
 
             //
             //
             //
+            
+            UI = new UserInterface(camera,terrain, GraphicsDevice);
+            //UI.Add(this.model);
 
-            UI = new UserInterface(camera, GraphicsDevice);
-            UI.Add(this.model);
+            for (int i = 0; i < 5; i++)
+            {
+                GameModel m = new GameModel(Content.Load<Model>("Models\\Borat\\0"), modelEffect, terrain, GraphicsDevice);
+                m.SetScale(20f); //3
+                m.RotationOffset = MathHelper.Pi;
+                Animation anim1 = new Animation("walk");
+                for (int j = 1; j <= 35; j++)
+                {
+                    anim1.Frames.Add(Content.Load<Model>("Models\\Borat\\" + i.ToString()));
+                }
+                m.Animations.Add(anim1);
+
+                UI.Add(m);
+            }
             //
 
             ModelEffect sky = new ModelEffect(GraphicsDevice, null);
@@ -154,15 +174,16 @@ namespace Wumpus3Drev0
             sky.AmbientLightColor = new Vector3(.6f, .6f, .6f);
             sky.Texture = Content.Load<Texture2D>("Models\\cloudMap");
             skySphere = new SkySphere(Content.Load<Model>("Models\\dome"), sky);
-            skySphere.Orgin = new Vector3(0, -100, 0);
-            skySphere.SetScale(5000f);
+            skySphere.Orgin = new Vector3(0, -1500, 0);
+            skySphere.SetScale(7000f); //5000
 
             //
-            float ph = 180; //70 for 129x129, 160 for 257x257
-            plane = new SimplePlane(new Vector3(0, ph, 0), terrain.Size.X, terrain.Size.Y, modelEffect.ActiveCamera, GraphicsDevice); //15
+           
             //
             //lab = new GameModel(Content.Load<Model>("Models\\Lab"), modelEffect, terrain, GraphicsDevice);
             //lab.SetScale(10f);
+
+
         }
 
         /// <summary>
@@ -213,7 +234,7 @@ namespace Wumpus3Drev0
 
                 if (Keyboard.GetState().IsKeyDown(Keys.W) || Keyboard.GetState().IsKeyDown(Keys.S))
                 {
-                    //model.StartAnimation("walk");
+                    model.StartAnimation("walk");
                     if (Keyboard.GetState().IsKeyDown(Keys.W))
                         model.Move(-Vector2.UnitY /1);
                     if (Keyboard.GetState().IsKeyDown(Keys.S))
@@ -240,12 +261,12 @@ namespace Wumpus3Drev0
                 if (Keyboard.GetState().IsKeyDown(Keys.G))
                     terrain.ReGenerateTerrain();
                 if (Keyboard.GetState().IsKeyDown(Keys.F))
-                    terrain.FliterCurrentTerrain(.2f);
+                    terrain.FliterCurrentTerrain(.5f);
             }
 
             model.Move(Vector2.Reflect(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left, Vector2.UnitY));
             model.Rotation += -GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X / 20;
-            //camera.SetTargetDisplacePosition(model.Position3);
+            camera.SetTargetDisplacePosition(model.Position3);
             //camera.SetTargetLockPosition(model.Position3);
             
             //
@@ -287,10 +308,10 @@ namespace Wumpus3Drev0
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1, 0);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1, 0);
             //GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            //skySphere.Draw();
+            skySphere.Draw();
 
 
             terrain.Draw();
@@ -301,7 +322,9 @@ namespace Wumpus3Drev0
             model.Draw();
             //lab.Draw();
 
-            plane.Draw();
+            UI.Draw();
+
+            //plane.Draw();
 
             frc.Draw();
            

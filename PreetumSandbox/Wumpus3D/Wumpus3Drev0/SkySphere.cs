@@ -17,7 +17,7 @@ namespace Wumpus3Drev0
 {
     class SkySphere
     {
-        ModelEffect effect;
+        ModelEffect mEffect;
         Model model;
 
         Vector3 orgin;
@@ -34,12 +34,12 @@ namespace Wumpus3Drev0
 
         public ModelEffect Effect
         {
-            get { return this.effect; }
+            get { return this.mEffect; }
         }
 
         public Matrix World
         {
-            get { return this.effect.World; }
+            get { return this.mEffect.World; }
         }
 
         public BoundingSphere BoundingSphere
@@ -49,7 +49,7 @@ namespace Wumpus3Drev0
 
         public BasicCamera Camera
         {
-            get { return this.effect.ActiveCamera; }
+            get { return this.mEffect.ActiveCamera; }
         }
 
         public BoundingSphere getBoundingSphere()
@@ -67,15 +67,15 @@ namespace Wumpus3Drev0
         public SkySphere(Model model, ModelEffect effect)
         {
             this.model = model;
-            this.effect = effect;
+            this.mEffect = effect;
             //this.effect.Projection = effect.ActiveCamera.Projection;
             //this.effect.View = effect.ActiveCamera.View;
-            this.effect.World = calcWorld();
+            this.mEffect.World = calcWorld();
         }
       
         private void updateWorld()
         {
-            effect.World = calcWorld();
+            mEffect.World = calcWorld();
         }
 
         /// <summary>
@@ -104,38 +104,41 @@ namespace Wumpus3Drev0
 
         public void Draw()
         {
+
             foreach (ModelMesh mesh in this.model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
+                    effect.GraphicsDevice.RenderState.CullMode = CullMode.None;
+                    effect.GraphicsDevice.RenderState.DepthBufferEnable = true;
 
                     effect.World = calcWorld();
 
 
-                    effect.Projection = this.effect.ActiveCamera.Projection;//terrain.Camera.Projection;
-                    effect.View = this.effect.ActiveCamera.View;
+                    effect.Projection = this.mEffect.ActiveCamera.Projection;//terrain.Camera.Projection;
+                    effect.View = this.mEffect.ActiveCamera.View;
                     effect.EnableDefaultLighting();
                     
                     //
                     //Now copy all data from the ModelEffect to this BasicEffect
                     //
                     
-                    effect.Alpha = this.effect.Alpha;
-                    effect.AmbientLightColor = this.effect.AmbientLightColor;
+                    effect.Alpha = this.mEffect.Alpha;
+                    effect.AmbientLightColor = this.mEffect.AmbientLightColor;
                     //effect.CurrentTechnique = this.effect.CurrentTechnique;
-                    effect.DiffuseColor = this.effect.DiffuseColor;
-                    effect.EmissiveColor = this.effect.EmissiveColor;
-                    effect.FogColor = this.effect.FogColor;
-                    effect.FogEnabled = this.effect.FogEnabled;
-                    effect.FogEnd = this.effect.FogEnd;
-                    effect.FogStart = this.effect.FogStart;
-                    //effect.LightingEnabled = this.effect.LightingEnabled;
-                    effect.PreferPerPixelLighting = this.effect.PreferPerPixelLighting;
-                    effect.SpecularColor = this.effect.SpecularColor;
-                    effect.SpecularPower = this.effect.SpecularPower;
-                    effect.Texture = this.effect.Texture;
-                    effect.TextureEnabled = this.effect.TextureEnabled;
-                    effect.VertexColorEnabled = this.effect.VertexColorEnabled;
+                    effect.DiffuseColor = this.mEffect.DiffuseColor;
+                    mEffect.EmissiveColor = this.mEffect.EmissiveColor;
+                    mEffect.FogColor = this.mEffect.FogColor;
+                    mEffect.FogEnabled = this.mEffect.FogEnabled;
+                    mEffect.FogEnd = this.mEffect.FogEnd;
+                    mEffect.FogStart = this.mEffect.FogStart;
+                    //mEffect.LightingEnabled = this.mEffect.LightingEnabled;
+                    mEffect.PreferPerPixelLighting = this.mEffect.PreferPerPixelLighting;
+                    mEffect.SpecularColor = this.mEffect.SpecularColor;
+                    mEffect.SpecularPower = this.mEffect.SpecularPower;
+                    mEffect.Texture = this.mEffect.Texture;
+                    mEffect.TextureEnabled = this.mEffect.TextureEnabled;
+                    mEffect.VertexColorEnabled = this.mEffect.VertexColorEnabled;
                     
                 }
 
