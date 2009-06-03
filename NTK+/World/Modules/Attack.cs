@@ -21,6 +21,7 @@ using InteractionEngine.Constructs.Datatypes;
 using InteractionEngine.Constructs;
 using InteractionEngine;
 using Microsoft.Xna.Framework;
+using InteractionEngine.UserInterface.ThreeDimensional;
 
 namespace NTKPlusGame.World.Modules {
 
@@ -32,15 +33,13 @@ namespace NTKPlusGame.World.Modules {
      */
 
     public class Attack {
-
-        public const string STRENGTH_STRING = "Strength";
-        public static readonly Stats.StatType STRENGTH_STAT = new Stats.StatType(STRENGTH_STRING);
-        public const string RANGE_STRING = "Range";
-        public static readonly Stats.StatType RANGE_STAT = new Stats.StatType(RANGE_STRING);
-        public const string DISTANCE_STRING = "Distance";
-        public static readonly Stats.StatType DISTANCE_STAT = new Stats.StatType(DISTANCE_STRING);
-        public const string DURATION_STRING = "Duration";
-        public static readonly Stats.StatType DURATION_STAT = new Stats.StatType(DURATION_STRING);
+        
+        //Attack variables
+        private static UpdatableInteger Strength;
+        private static UpdatableInteger Range;
+        private static UpdatableInteger Distance;
+        private static UpdatableInteger Duration;
+        private static UpdatableString AttackType;
 
         // Contains a reference to the GameObject this Attack module is associated with.
         // Used for constructing Updatables.
@@ -52,66 +51,66 @@ namespace NTKPlusGame.World.Modules {
         /// <param name="gameObject">The GameObject whose Attack this is.</param>
         public Attack(Attackable gameObject) {
             this.gameObject = gameObject;
-            gameObject.getStats().registerStatType(STRENGTH_STAT);
-            gameObject.getStats().registerStatType(RANGE_STAT);
-            gameObject.getStats().registerStatType(DISTANCE_STAT);
-            gameObject.getStats().registerStatType(DURATION_STAT);
         }
 
         //Devour attack
-        public class Devour {
-
-            /// <summary>
-            /// Constructor.
-            /// </summary>
-            public Devour() {
-            }
+        public void Devour(Combatable target) {
+            AttackType.value = "Devour";
+            Strength.value = 20;
+            Range.value = 1;
+            Distance.value = 100;
+            ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
+            target.onBeingAttacked(gameObject);
         }
 
         //Scream attack.
-        public class Scream {
-
-            /// <summary>
-            /// Constructor.
-            /// </summary>
-            public Scream() {
-            }
+        public void Scream(Combatable target) {
+            AttackType.value = "Scream";
+            Strength.value = 20;
+            Range.value = 1;
+            Distance.value = 100;
+            ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
+            target.onBeingAttacked(gameObject);
         }
 
-        //Ranged attack.
-        public class Ranged {
-
-            /// <summary>
-            /// Constructor.
-            /// </summary>
-            public Ranged() {
-            }
+        //Ranged attack.  
+        public void Ranged(Combatable target) {
+            AttackType.value = "Ranged";
+            Strength.value = 20;
+            Range.value = 1;
+            Distance.value = 100;
+            ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
+            target.onBeingAttacked(gameObject);
         }
 
         //Insult attack.
-        public class Insult {
-
-            /// <summary>
-            /// Constructor.
-            /// </summary>
-            public Insult() {
-            }
+        public void Insult(Combatable target) {
+            AttackType.value = "Insult";
+            Strength.value = 20;
+            Range.value = 1;
+            Distance.value = 100;
+            ((Graphics3DModel)gameObject.getGraphics3D()).StartAnimation("Animations\\");
+            target.onBeingAttacked(gameObject);
         }
 
         public int getAttackStrength() {
-            return gameObject.getStats().getStat(Attack.STRENGTH_STAT);
+            return Strength.value;
         }
 
         public int getAttackRange() {
-            return gameObject.getStats().getStat(Attack.RANGE_STAT);
+            return Range.value;
         }
 
         public int getAttackDistance() {
-            return gameObject.getStats().getStat(Attack.DISTANCE_STAT);
+            return Distance.value;
         }
 
         public int getAttackDuration() {
-            return gameObject.getStats().getStat(Attack.DURATION_STAT);
+            return Duration.value;
+        }
+
+        public string getAttackType() {
+            return AttackType.value;
         }
 
         // TODO

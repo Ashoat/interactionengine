@@ -50,6 +50,10 @@ namespace NTKPlusGame.World.Modules {
             return this.gameObject.getStats().getStat(Combat.HEALTH_STAT);
         }
 
+        void onBeingAttacked(Attackable attacker) {
+            
+        }
+
         // TODO
 
     }
