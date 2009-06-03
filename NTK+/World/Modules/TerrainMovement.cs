@@ -19,6 +19,16 @@ using InteractionEngine;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System;
+using System.Linq;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Net;
+using Microsoft.Xna.Framework.Storage;
+using WumpusGame.World;
 
 namespace NTKPlusGame.World.Modules {
 
@@ -26,7 +36,12 @@ namespace NTKPlusGame.World.Modules {
      * Holds all information and methods regarding modules that handle Movement on terrain.
      */
     public class TerrainMovement : TerrainLocation {
-		
+
+        //public static List<TerrainMovable> models = new List<TerrainMovable>();
+        public UpdatableGameObject<Swarm> swarm;
+        public Unit unit;
+
+
 		public const string SPEED_STRING = "Movement speed";
 		public readonly Stats.StatType SPEED_STAT = new Stats.StatType(SPEED_STRING);
 		private const float speedRatio = 0.001f;
@@ -72,11 +87,11 @@ namespace NTKPlusGame.World.Modules {
         /// </summary>
         /// <param name="target">The location to go to.</param>
 		public void startWalking(Vector3 target) {
-            Vector3 direction = target - base.Position;
+            /*Vector3 direction = target - base.Position;
             this.yaw = (float)Math.Atan2(direction.X, direction.Z);
 			this.targetPosition.value = target;
             this.isMoving.value = true;
-			this.lastUpdate.value = Engine.gameTime.TotalRealTime.TotalMilliseconds;
+			this.lastUpdate.value = Engine.gameTime.TotalRealTime.TotalMilliseconds;*/
 		}
 
         /// <summary>

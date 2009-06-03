@@ -22,6 +22,7 @@ using InteractionEngine.Constructs;
 using InteractionEngine;
 using InteractionEngine.Constructs.Datatypes;
 using NTKPlusGame.World.Modules;
+using WumpusGame.World;
 
 namespace NTKPlusGame.World {
 
@@ -110,13 +111,34 @@ namespace NTKPlusGame.World {
         }
 
         /// <summary>
+        /// TODO!!! HAHAHA!!! GAY NETWORKING!
+        /// </summary>
+        /// <param name="position"></param>
+        public void swarmTo(Vector3 position) {
+            for (int j = 0; j < numberSelected.value; j++)
+            {
+                ((TerrainMovable)currentlySelected[j].value).getTerrainMovement().swarm.value.Units.Remove(((TerrainMovable)currentlySelected[j].value).getTerrainMovement().unit);
+            }
+            Swarm swarm = GameObject.createGameObject<Swarm>(this.getLoadRegion());
+            for (int i = 0; i < numberSelected.value; i++)
+            {
+                ((TerrainMovable)currentlySelected[i].value).getTerrainMovement().swarm.value = swarm;
+                Unit unit = new Unit();
+                unit.Position = new Vector2((currentlySelected[i].value).getLocation().Position.X, (currentlySelected[i].value).getLocation().Position.Z);
+                swarm.Units.Add(unit);
+                ((TerrainMovable)currentlySelected[i].value).getTerrainMovement().unit = unit;
+            }
+        }
+
+        /// <summary>
         /// We'll probably want the cursor to change icon indicating that an action is
         /// possible for a certain selection, or something.
         /// Also, probably highlight the currently moused-over Selectable.
         /// Implementation details to follow.
         /// </summary>
         /// <param name="selection">The new Selectable that had been moused-over.</param>
-        public void selectionMousedOver(Selectable selection) {
+        public void selectionMousedOver(Selectable selection)
+        {
             // TODO
         }
 

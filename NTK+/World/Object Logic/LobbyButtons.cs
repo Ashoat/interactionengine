@@ -118,7 +118,9 @@ namespace NTKPlusGame.World {
         /// <summary>
         /// The EventMethod that causes this instance to become a host.
         /// </summary>
-        /// <param name="client">The Client that raised this Event.</param>
+        /// <param name="client">The Client that
+        /// 
+        /// raised this Event.</param>
         /// <param name="parameter">Optional extra information regarding this Event.</param>
         public void host(Client client, object parameter) {
             // Kill any current sessions.
@@ -134,6 +136,15 @@ namespace NTKPlusGame.World {
             Terrain terrain = GameObject.createGameObject<Terrain>(hostedRegion);
             Human human = GameObject.createGameObject<Human>(hostedRegion);
             human.initialize(terrain);
+            human.getLocation().move(Microsoft.Xna.Framework.Vector3.One*10);
+            Human human1 = GameObject.createGameObject<Human>(hostedRegion);
+            human1.initialize(terrain);
+            Human human2 = GameObject.createGameObject<Human>(hostedRegion);
+            human2.initialize(terrain);
+            Human human3 = GameObject.createGameObject<Human>(hostedRegion);
+            human3.initialize(terrain);
+            Human human4 = GameObject.createGameObject<Human>(hostedRegion);
+            human4.initialize(terrain);
             FrameRateCounter frameRateCounter = GameObject.createGameObject<FrameRateCounter>(hostedRegion);
             SkyDome skydome = GameObject.createGameObject<SkyDome>(hostedRegion);
             // Send the hosted region to anybody who joins the game

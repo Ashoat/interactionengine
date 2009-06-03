@@ -106,6 +106,7 @@
     <Compile Include="World\Object Logic\SelectionFocus.cs" />
     <Compile Include="World\Object Logic\SimplePlane.cs" />
     <Compile Include="World\Object Logic\SkyDome.cs" />
+    <Compile Include="World\Object Logic\Swarm.cs" />
     <Compile Include="World\Object Logic\Terrain.cs" />
     <Compile Include="World\Object Logic\WalkerTemplate.cs" />
   </ItemGroup>
