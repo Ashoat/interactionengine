@@ -1023,7 +1023,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             SpriteBatch spriteBatch = ((UserInterface3D)InteractionEngine.Engine.userInterface).spriteBatch;
             Vector3 position3 = this.gameObject.getLocation().Position;
             Vector2 position = new Vector2(position3.X, position3.Y);
-            float rotationRadians = this.gameObject.getLocation().yaw ;
+            float rotationRadians = (float)Math.PI / 180 * this.gameObject.getLocation().yaw ;
             Vector2 origin = Vector2.Zero;
             spriteBatch.Draw(texture, position, (Rectangle?)null, Color.White, rotationRadians,
                 origin, scale, SpriteEffects.None, layerDepth);
