@@ -84,8 +84,7 @@ namespace GlobalGameJam.GameObjects {
         private void attack() {
             if (this.busyPerformingAction.value > 0) return;
             List<Character> chars = Map.getVisibleCharacters(position, 1);
-            if (chars.Count >= 1) {
-                Character chara = chars[0];
+            foreach (Character chara in chars) {
                 attack(chara);
             }
             // do stuff
