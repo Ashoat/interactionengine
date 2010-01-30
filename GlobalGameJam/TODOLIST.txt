@@ -1,6 +1,6 @@
 
 NPC:
---Write AI procedures
+--Write AI procedures/rules
 
 Punk/Monk/Skunk:
 --Attitudes and attack modifiers
@@ -12,3 +12,18 @@ Character:
 
 Map:
 --A bunch of stuff
+
+Player:
+--Attack procedure
+--Shapeshifting animation and freeze time
+--Attack modifiers
+--Handle multiple players with multiple controls
+--Double-speed button?
+
+EntityGraphics:
+--Animations
+
+General:
+--Spells/abilities?
+--Awesome graphics!!!
+--Blood and explosions
