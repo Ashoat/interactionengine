@@ -19,11 +19,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using InteractionEngine.EventHandling;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace InteractionEngine.UserInterface.TwoDimensional {
 
     public class UserInterface2D : UserInterface {
 
+        public static ContentManager content;
         public static GraphicsDevice graphicsDevice;
         public SpriteBatch spriteBatch;
 
@@ -260,6 +262,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             Engine.game.setBackgroundColor(Microsoft.Xna.Framework.Graphics.Color.White);
             graphicsDevice = InteractionEngine.Engine.game.GraphicsDevice;
             spriteBatch = new SpriteBatch(graphicsDevice);
+            content = InteractionEngine.Engine.game.Content;
             base.initialize();
         }
 
