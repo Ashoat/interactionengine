@@ -88,6 +88,7 @@ namespace InteractionEngine {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(Microsoft.Xna.Framework.GameTime gameTime) {
+            // The next line ends the program when the window is closed.
             if (Microsoft.Xna.Framework.Input.GamePad.GetState(Microsoft.Xna.Framework.PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed) this.Exit();
             Engine.runGameWorld(gameTime);
             base.Update(gameTime);
