@@ -62,6 +62,7 @@ namespace GlobalGameJam.GameObjects {
             location.Position = new Vector3(0, 88, 0);
             mapLoadRegion = this.getLoadRegion();
             this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update));
+            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
         }
 
         private int height;
@@ -77,9 +78,12 @@ namespace GlobalGameJam.GameObjects {
 
         Entity[,] entityArray;
 
+        Player player;
+        List<Character> characterList;
 
         public void LoadMap(string mapFile)
         {
+            characterList = new List<Character>();
             try
             {
                 FileStream file = new FileStream(mapFile, FileMode.Open, FileAccess.Read);
@@ -134,8 +138,6 @@ namespace GlobalGameJam.GameObjects {
             }
         }
 
-        Player player;
-
         private Entity LoadTile(char tileType, int x, int y) {
             Entity returnEntity;
             switch (tileType) {
@@ -171,6 +173,7 @@ namespace GlobalGameJam.GameObjects {
             if (returnEntity != null) {
                 if (returnEntity is Character) {
                     ((Character)returnEntity).Map = this;
+                    characterList.Add((Character)returnEntity);
                 }
                 returnEntity.getLocation().Position = new Microsoft.Xna.Framework.Vector3(x, y, 0);
             }
@@ -184,7 +187,19 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="radius">The radius of the circle to check inside</param>
         /// <returns>A list of characters that are visisble</returns>
         public List<Character> getVisibleCharacters(Point location, float radius) {
-            return null;
+            List<Character> charList = new List<Character>();
+            for (int x = (int)Math.Max(location.X-radius,0); x < Math.Min(location.X+radius,Width); x++) {
+                for (int y = (int)Math.Max(location.Y-radius,0); y < Math.Min(location.Y+radius,Height); y++) {
+                    if (Math.Sqrt(Math.Pow(location.X - x, 2) + Math.Pow(location.Y - y, 2)) < radius) {
+                        Entity e = entityArray[x, y];
+                        if (e != null && e is Character) {
+
+                            charList.Add((Character)e);
+                        }
+                    }
+                }
+            }
+            return charList;
         }
 
         /// <summary>
@@ -207,8 +222,9 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public void update(InteractionEngine.Networking.Client client, object ob) {
-            // In here I will call all the update events/methods on all of the characters
-            
+            foreach (Character c in characterList) {
+                c.update();
+            }
             Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
         }
 
