@@ -42,6 +42,10 @@ namespace GlobalGameJam.GameObjects {
             throw new System.NotImplementedException();
         }
 
+        public override int attitudeToward(Character cohabitant) {
+            throw new System.NotImplementedException();
+        }
+
     }
 
 }

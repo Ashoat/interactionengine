@@ -24,7 +24,7 @@ namespace GlobalGameJam.GameObjects {
                 this.x.value = value.X;
                 this.y.value = value.Y;
                 int screenx = value.X * GRID_WIDTH;
-                int screeny = value.Y * GRID_HEIGHT;
+                int screeny = value.Y * GRID_HEIGHT + 88;
                 this.location.Position = new Vector3(screenx, screeny, 0);
             }
         }

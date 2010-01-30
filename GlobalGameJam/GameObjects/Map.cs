@@ -60,6 +60,7 @@ namespace GlobalGameJam.GameObjects {
             graphics.TextureName = "floor2";
             width = 25;
             height = 16;
+            location.Position = new Vector3(0, 88, 0);
             mapLoadRegion = this.getLoadRegion();
             this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update));
         }

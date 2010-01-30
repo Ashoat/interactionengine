@@ -1,0 +1,14 @@
+
+NPC:
+--Write AI procedures
+
+Punk/Monk/Skunk:
+--Attitudes and attack modifiers
+
+Character:
+--Get reference to map
+--Move animation and freeze time
+--Attack procedures
+
+Map:
+--A bunch of stuff

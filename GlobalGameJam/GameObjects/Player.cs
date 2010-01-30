@@ -88,7 +88,7 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public override void update() {
-
+            base.update();
         }
 
         public override int attackModifier(Entity attackee) {

@@ -12,6 +12,7 @@ namespace GlobalGameJam.GameObjects {
         public abstract int attitudeToward(Character cohabitant);
 
         public override void update() {
+            base.update();
             if (this.busyPerformingAction.value > 0) return;
             List<Character> chars = map.getVisibleCharacters(this.position, 1);
             foreach (Character character in chars) {
