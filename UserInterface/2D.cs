@@ -348,9 +348,9 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             SpriteBatch spriteBatch = ((UserInterface2D)InteractionEngine.Engine.userInterface).spriteBatch;
             Vector3 position3 = this.gameObject.getLocation().Position;
             Vector2 position = new Vector2(position3.X, position3.Y);
-            float rotationRadians = this.gameObject.getLocation().yaw;
+            float rotationDegrees = this.gameObject.getLocation().yaw;
             Vector2 origin = Vector2.Zero;
-            spriteBatch.Draw(texture, position, (Rectangle?)null, Color.White, rotationRadians,
+            spriteBatch.Draw(texture, position, (Rectangle?)null, Color.White, (float)Math.PI / 180 * rotationDegrees,
                 origin, scale, SpriteEffects.None, layerDepth);
         }
 
