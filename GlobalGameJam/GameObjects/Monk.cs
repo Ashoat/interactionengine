@@ -35,15 +35,8 @@ namespace GlobalGameJam.GameObjects {
 
         public override void construct() {
             base.construct();
+            this.characterType = CharacterType.MonkType;
             graphics.setTexture("monk");
-        }
-
-        public override int attackModifier(Entity attackee) {
-            throw new System.NotImplementedException();
-        }
-
-        public override int attitudeToward(Character cohabitant) {
-            throw new System.NotImplementedException();
         }
 
     }

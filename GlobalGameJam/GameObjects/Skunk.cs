@@ -37,14 +37,7 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             base.construct();
             graphics.setTexture("skunk");
-        }
-
-        public override int attackModifier(Entity attackee) {
-            throw new System.NotImplementedException();
-        }
-
-        public override int attitudeToward(Character cohabitant) {
-            throw new System.NotImplementedException();
+            this.characterType = CharacterType.SkunkType;
         }
 
     }

@@ -34,15 +34,10 @@ namespace GlobalGameJam.GameObjects {
 
         #endregion
 
-        private const int PUNK_TYPE = 0;
-        private const int MONK_TYPE = 1;
-        private const int SKUNK_TYPE = 2;
-        private UpdatableInteger characterType;
-
         public override void construct() {
             base.construct();
+            movementDelay = 500;
             graphics.setTexture("Player");
-            characterType = new UpdatableInteger(this);
         }
 
         public void handleKey(Keys key) {
@@ -73,7 +68,7 @@ namespace GlobalGameJam.GameObjects {
         private void shiftType() {
             if (this.busyPerformingAction.value > 0) return;
             if (this.Map.getVisibleCharacters(this.position, 2).Count == 0) {
-                this.characterType.value = (characterType.value + 1) % 3;
+                this.characterType = CharacterType.getNextShift(this.characterType);
                 // one second delay for shape-shifting?
                 this.busyPerformingAction.value = 1000;
                 // do animation
@@ -89,14 +84,6 @@ namespace GlobalGameJam.GameObjects {
 
         public override void update() {
             base.update();
-        }
-
-        public override int attackModifier(Entity attackee) {
-            throw new System.NotImplementedException();
-            if (this.characterType.value == PUNK_TYPE) {
-            } else if (this.characterType.value == MONK_TYPE) {
-            } else if (this.characterType.value == SKUNK_TYPE) {
-            } else throw new System.ApplicationException("Character type is neither a punk, a monk, or a skunk.");
         }
 
     }
