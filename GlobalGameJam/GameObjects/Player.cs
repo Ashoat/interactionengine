@@ -36,7 +36,7 @@ namespace GlobalGameJam.GameObjects {
 
         public override void construct() {
             base.construct();
-            movementDelay = 500;
+            movementDelay = 300;
             graphics.setTexture("Player");
         }
 

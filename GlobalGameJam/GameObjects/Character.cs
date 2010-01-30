@@ -88,14 +88,12 @@ namespace GlobalGameJam.GameObjects {
             }
         }
 
-        protected Map map; // TODO
+        protected Map map;
 
         public Map Map {
             get { return map; }
             set { map = value; }
         }
-
-        private Map map; // TODO
 
         private UpdatableInteger attackStrength;
         // If this value is more than zero, the character is already busy doing something.
