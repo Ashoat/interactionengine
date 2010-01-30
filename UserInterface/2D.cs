@@ -332,6 +332,9 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             set { this.scale = value; }
         }
 
+        /// <summary>
+        /// One is back, zero is front.
+        /// </summary>
         public float LayerDepth {
             get { return this.layerDepth; }
             set { this.layerDepth = value; }
