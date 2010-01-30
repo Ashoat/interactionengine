@@ -9,6 +9,7 @@ using InteractionEngine;
 using System.IO;
 using System;
 using Microsoft.Xna.Framework;
+using System.Threading;
 namespace GlobalGameJam.GameObjects {
 
     public class Map : GameObject, Graphable2D {
@@ -188,12 +189,12 @@ namespace GlobalGameJam.GameObjects {
         /// <returns>A list of characters that are visisble</returns>
         public List<Character> getVisibleCharacters(Point location, float radius) {
             List<Character> charList = new List<Character>();
-            for (int x = (int)Math.Max(location.X-radius,0); x < Math.Min(location.X+radius,Width); x++) {
-                for (int y = (int)Math.Max(location.Y-radius,0); y < Math.Min(location.Y+radius,Height); y++) {
-                    if (Math.Sqrt(Math.Pow(location.X - x, 2) + Math.Pow(location.Y - y, 2)) < radius) {
+            for (int x = (int)Math.Max(location.X-radius,0); x <= Math.Min(location.X+radius,Width); x++) {
+                for (int y = (int)Math.Max(location.Y-radius,0); y <= Math.Min(location.Y+radius,Height); y++) {
+                    float val = (float)Math.Sqrt(Math.Pow(location.X - x, 2) + Math.Pow(location.Y - y, 2));
+                    if (val <= radius) {
                         Entity e = entityArray[x, y];
                         if (e != null && e is Character) {
-
                             charList.Add((Character)e);
                         }
                     }
@@ -225,6 +226,7 @@ namespace GlobalGameJam.GameObjects {
             foreach (Character c in characterList) {
                 c.update();
             }
+            Thread.Sleep(16);
             Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
         }
 
