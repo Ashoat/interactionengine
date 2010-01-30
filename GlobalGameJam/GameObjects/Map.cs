@@ -38,7 +38,8 @@ namespace GlobalGameJam.GameObjects {
         public InteractionEngine.UserInterface.Graphics getGraphics() {
             return graphics;
         }
-        public Graphics2D getGraphics2D() {
+
+        public InteractionEngine.UserInterface.TwoDimensional.Graphics2D getGraphics2D() {
             return graphics;
         }
 
@@ -52,6 +53,9 @@ namespace GlobalGameJam.GameObjects {
             graphics = new Graphics2DTexture(this);
         }
 
+        public void LoadMap(string mapFile) {
+            
+        }
     }
 
 }
