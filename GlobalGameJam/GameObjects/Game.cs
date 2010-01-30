@@ -40,7 +40,7 @@ namespace GlobalGameJam.GameObjects {
         public void focusLost(Keyboardable blah) {
         }
 
-        public void keyPressed(Keys key) {
+        public void keyEvent(Keys key, KeyEvent keyEvent) {
             if (Keys.Escape == key) {
             } else {
                 player.handleKey(key);
