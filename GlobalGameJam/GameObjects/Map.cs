@@ -3,7 +3,8 @@ using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Input;
 using GlobalGameJam.Graphics;
 using InteractionEngine.UserInterface.TwoDimensional;
-
+using System.Collections.Generic;
+using InteractionEngine;
 namespace GlobalGameJam.GameObjects {
 
     public class Map : GameObject, Graphable2D {
@@ -51,10 +52,43 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             location = new Location(this);
             graphics = new Graphics2DTexture(this);
+            this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update))
         }
 
         public void LoadMap(string mapFile) {
             
+        }
+
+        /// <summary>
+        /// Gets the characters that are within a given radius of the location
+        /// </summary>
+        /// <param name="location">The location to center the circle on</param>
+        /// <param name="radius">The radius of the circle to check inside</param>
+        /// <returns>A list of characters that are visisble</returns>
+        public List<Character> getVisibleCharacters(Location location, float radius) {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets whether the given location in the game world is empty (i.e. is a valid square to move onto)
+        /// </summary>
+        /// <param name="location">The location to check</param>
+        /// <returns>true if it is empty, false if it isn't</returns>
+        public bool isEmpty(Location location) {
+            return true;
+        }
+
+        /// <summary>
+        /// Sets the character on the map. Used to set the location of the character on the 
+        /// map's internal representation of the game board
+        /// </summary>
+        /// <param name="character">The character object to update the map with</param>
+        public void setCharacter(Character character) {
+        }
+
+        public void update(InteractionEngine.Networking.Client client, object ob) {
+            // In here I will call all the update events/methods on all of the characters
+            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
         }
     }
 
