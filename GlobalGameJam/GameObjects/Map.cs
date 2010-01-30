@@ -5,6 +5,8 @@ using GlobalGameJam.Graphics;
 using InteractionEngine.UserInterface.TwoDimensional;
 using System.Collections.Generic;
 using InteractionEngine;
+using System.IO;
+using System;
 namespace GlobalGameJam.GameObjects {
 
     public class Map : GameObject, Graphable2D {
@@ -52,11 +54,54 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             location = new Location(this);
             graphics = new Graphics2DTexture(this);
-            this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update))
+            this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update));
         }
 
+        private int height;
+        private int width;
+
+        public readonly int Height {
+            get { return height; }
+        }
+
+        public readonly int Width {
+            get { return width; }
+        }
+
+        Entity[,] entityArray;
+
         public void LoadMap(string mapFile) {
-            
+            int width;
+            List<string> lines = new List<string>();
+            using (StreamReader reader = new StreamReader(mapFile)) {
+                string line = reader.ReadLine();
+                while (line != null) {
+                    lines.Add(line);
+                    if (line.Length != Width)
+                        throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
+                    line = reader.ReadLine();
+                }
+            }
+
+            // Allocate the tile grid.
+            entityArray = new Entity[Width, Height];
+
+            // Loop over every tile position,
+            for (int y = 0; y < Height; ++y) {
+                for (int x = 0; x < Width; ++x) {
+                    // to load each tile.
+                    char tileType = lines[y][x];
+                    entityArray[x, y] = LoadTile(tileType, x, y);
+                }
+            }
+
+        }
+
+        private Entity LoadTile(char tileType, int x, int y) {
+            switch (tileType) {
+                case '.':
+                    return null;
+            }
         }
 
         /// <summary>
@@ -88,6 +133,7 @@ namespace GlobalGameJam.GameObjects {
 
         public void update(InteractionEngine.Networking.Client client, object ob) {
             // In here I will call all the update events/methods on all of the characters
+            
             Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
         }
     }
