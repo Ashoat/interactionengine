@@ -7,7 +7,6 @@ namespace GlobalGameJam.GameObjects {
 
     public class Monk : NPC {
 
-
         #region FACTORY
 
         /// <summary>
@@ -35,8 +34,8 @@ namespace GlobalGameJam.GameObjects {
         #endregion
 
         public override void construct() {
-            location = new Location(this);
-            graphics = new EntityGraphics(this, "Monk");
+            base.construct();
+            graphics.setTexture("monk");
         }
 
         public override void update() {

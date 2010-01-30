@@ -56,9 +56,11 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             location = new Location(this);
             graphics = new Graphics2DTexture(this);
-            mapLoadRegion = this.getLoadRegion();
+            graphics.LayerDepth = 1;
+            graphics.TextureName = "floor2";
             width = 25;
             height = 16;
+            mapLoadRegion = this.getLoadRegion();
             this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update));
         }
 
@@ -149,7 +151,7 @@ namespace GlobalGameJam.GameObjects {
         /// </summary>
         /// <param name="location">The location to check</param>
         /// <returns>true if it is empty, false if it isn't</returns>
-        public bool isEmpty(Vector3 location) {
+        public bool isEmpty(Point location) {
             return true;
         }
 

@@ -5,6 +5,7 @@ namespace GlobalGameJam.Graphics {
 
     public class EntityGraphics : Graphics2DTexture {
 
+        private const float ENTITY_DEPTH = 0.2f;
         private Entity entity;
 
         /// <summary>
@@ -13,6 +14,7 @@ namespace GlobalGameJam.Graphics {
         /// <param name="gameObject">GameObject!</param>
         public EntityGraphics(Entity entity) : base(entity) {
             this.entity = entity;
+            this.LayerDepth = ENTITY_DEPTH;
         }
 
         /// <summary>
@@ -21,6 +23,7 @@ namespace GlobalGameJam.Graphics {
         /// <param name="gameObject">GameObject!</param>
         public EntityGraphics(Entity entity, string texture) : base(entity, texture) {
             this.entity = entity;
+            this.LayerDepth = ENTITY_DEPTH;
         }
 
         public void setTexture(string texture) {

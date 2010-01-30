@@ -35,8 +35,8 @@ namespace GlobalGameJam.GameObjects {
         #endregion
 
         public override void construct() {
-            location = new Location(this);
-            graphics = new EntityGraphics(this, "Skunk");
+            base.construct();
+            graphics.setTexture("skunk");
         }
 
         public override void update() {

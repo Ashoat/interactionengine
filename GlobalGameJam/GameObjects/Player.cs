@@ -2,6 +2,7 @@
 using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Input;
 using GlobalGameJam.Graphics;
+using InteractionEngine.Constructs.Datatypes;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -33,9 +34,15 @@ namespace GlobalGameJam.GameObjects {
 
         #endregion
 
+        private const int PUNK_TYPE = 0;
+        private const int MONK_TYPE = 1;
+        private const int SKUNK_TYPE = 2;
+        private UpdatableInteger characterType;
+
         public override void construct() {
-            location = new Location(this);
-            graphics = new EntityGraphics(this, "Player");
+            base.construct();
+            graphics.setTexture("Player");
+            characterType = new UpdatableInteger(this);
         }
 
         public void handleKey(Keys key) {
@@ -52,9 +59,26 @@ namespace GlobalGameJam.GameObjects {
                 case Keys.Down:
                     move(0, -1);
                     break;
+                case Keys.RightShift:
+                    shiftType();
+                    break;
+                case Keys.RightControl:
+                    attack();
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void shiftType() {
+            if (this.map.getVisibleCharacters(this.getLocation(), 2).Count == 0) {
+                this.characterType.value = (characterType.value + 1) % 3;
+                // do other stuff
+            }
+        }
+
+        private void attack() {
+            // do stuff
         }
 
         public override void update() {
@@ -63,6 +87,10 @@ namespace GlobalGameJam.GameObjects {
 
         public override int attackModifier(Entity attackee) {
             throw new System.NotImplementedException();
+            if (this.characterType.value == PUNK_TYPE) {
+            } else if (this.characterType.value == MONK_TYPE) {
+            } else if (this.characterType.value == SKUNK_TYPE) {
+            } else throw new System.ApplicationException("Character type is neither a punk, a monk, or a skunk.");
         }
 
     }
