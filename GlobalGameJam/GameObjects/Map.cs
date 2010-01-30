@@ -192,7 +192,7 @@ namespace GlobalGameJam.GameObjects {
             for (int x = (int)Math.Max(location.X-radius,0); x <= Math.Min(location.X+radius,Width); x++) {
                 for (int y = (int)Math.Max(location.Y-radius,0); y <= Math.Min(location.Y+radius,Height); y++) {
                     float val = (float)Math.Sqrt(Math.Pow(location.X - x, 2) + Math.Pow(location.Y - y, 2));
-                    if (val <= radius) {
+                    if (0 < val && val <= radius) {
                         Entity e = entityArray[x, y];
                         if (e != null && e is Character) {
                             charList.Add((Character)e);
