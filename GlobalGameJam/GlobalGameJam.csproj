@@ -87,6 +87,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameObjects\Character.cs" />
+    <Compile Include="GameObjects\Entity.cs" />
+    <Compile Include="GameObjects\Game.cs" />
+    <Compile Include="GameObjects\HUD.cs" />
+    <Compile Include="GameObjects\Map.cs" />
+    <Compile Include="GameObjects\Monk.cs" />
+    <Compile Include="GameObjects\NPC.cs" />
+    <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GameObjects\Punk.cs" />
+    <Compile Include="GameObjects\Skunk.cs" />
+    <Compile Include="GameObjects\Wall.cs" />
+    <Compile Include="Graphics\EntityGraphics.cs" />
+    <Compile Include="Graphics\HUDGraphics.cs" />
+    <Compile Include="Graphics\MapGraphics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
