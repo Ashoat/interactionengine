@@ -58,8 +58,6 @@ namespace GlobalGameJam.GameObjects {
             graphics = new Graphics2DTexture(this);
             graphics.LayerDepth = 1;
             graphics.TextureName = "floor2";
-            width = 25;
-            height = 16;
             location.Position = new Vector3(0, 88, 0);
             mapLoadRegion = this.getLoadRegion();
             this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update));
@@ -78,30 +76,61 @@ namespace GlobalGameJam.GameObjects {
 
         Entity[,] entityArray;
 
-        public void LoadMap(string mapFile) {
-            List<string> lines = new List<string>();
-            using (StreamReader reader = new StreamReader(mapFile)) {
-                string line = reader.ReadLine();
-                while (line != null) {
-                    lines.Add(line);
-                    if (line.Length != Width)
-                        throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
-                    line = reader.ReadLine();
+
+        public void LoadMap(string mapFile)
+        {
+            try
+            {
+                FileStream file = new FileStream(mapFile, FileMode.Open, FileAccess.Read);
+
+                width = (byte)file.ReadByte();
+                height = (byte)file.ReadByte();
+                file.ReadByte();
+
+                char[,] characters = new char[width, height];
+
+                try
+                {
+                    for (int y = 0; y < height; y++)
+                    {
+                        for (int x = 0; x < width; x++)
+                        {
+                            byte[] buffer = new byte[4];
+                            file.Read(buffer, 0, 4);
+
+                            characters[x, y] = (char)buffer[0];  
+                        }
+                    }
+                
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
+                file.Close();
+
+                // Allocate the tile grid.
+                entityArray = new Entity[Width, Height];
+
+                // Loop over every tile position,
+                for (int y = 0; y < Height; ++y)
+                {
+                    for (int x = 0; x < Width; ++x)
+                    {
+                        // to load each tile.
+                        char tileType = characters[x,y];
+                        entityArray[x, y] = LoadTile(tileType, x, y);
+                        if (entityArray[x, y] != null)
+                        {
+                            entityArray[x, y].position = new Point(x, y);
+                        }
+                    }
                 }
             }
-
-            // Allocate the tile grid.
-            entityArray = new Entity[Width, Height];
-
-            // Loop over every tile position,
-            for (int y = 0; y < Height; ++y) {
-                for (int x = 0; x < Width; ++x) {
-                    // to load each tile.
-                    char tileType = lines[y][x];
-                    entityArray[x, y] = LoadTile(tileType, x, y);
-                }
+            catch (IOException e)
+            {
+                Console.WriteLine("File Error: " + e.ToString());
             }
-
         }
 
         private Entity LoadTile(char tileType, int x, int y) {
@@ -115,11 +144,15 @@ namespace GlobalGameJam.GameObjects {
                     break;
                 case '|':
                     returnEntity = GameObject.createGameObject<Wall>(mapLoadRegion);
-                    returnEntity.getLocation().Heading = new Microsoft.Xna.Framework.Vector3(0, 1, 0);
+                    Vector3 heading = new Vector3(0, 1, 0);
+                    Vector3 strafe = new Microsoft.Xna.Framework.Vector3(-1, 0, 0);
+                    returnEntity.getLocation().setHeadingAndStrafe(heading, strafe);
                     break;
                 case '-':
                     returnEntity = GameObject.createGameObject<Wall>(mapLoadRegion);
-                    returnEntity.getLocation().Heading = new Microsoft.Xna.Framework.Vector3(1, 0, 0);
+                    Vector3 heading1 = new Vector3(0, 1, 0);
+                    Vector3 strafe1 = new Microsoft.Xna.Framework.Vector3(-1, 0, 0);
+                    returnEntity.getLocation().setHeadingAndStrafe(heading1, strafe1);
                     break;
                 case 'S':
                     returnEntity = GameObject.createGameObject<Skunk>(mapLoadRegion);

@@ -18,7 +18,7 @@ namespace GlobalGameJam.GameObjects {
 
         public abstract int attackModifier(Entity attackee);
 
-        public void update() {
+        public virtual void update() {
             if (busyPerformingAction.value != 0) {
                 if (busyPerformingAction.value - Engine.gameTime.ElapsedGameTime.Milliseconds <= 0) {
                     busyPerformingAction.value = 0;

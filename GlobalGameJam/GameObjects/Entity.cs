@@ -19,8 +19,8 @@ namespace GlobalGameJam.GameObjects {
                 return new Point(x.value, y.value);
             }
             set {
-                const int GRID_WIDTH = 50;
-                const int GRID_HEIGHT = 50;
+                const int GRID_WIDTH = 32;
+                const int GRID_HEIGHT = 32;
                 this.x.value = value.X;
                 this.y.value = value.Y;
                 int screenx = value.X * GRID_WIDTH;
