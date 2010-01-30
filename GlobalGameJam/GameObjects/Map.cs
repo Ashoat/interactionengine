@@ -142,7 +142,7 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="location">The location to center the circle on</param>
         /// <param name="radius">The radius of the circle to check inside</param>
         /// <returns>A list of characters that are visisble</returns>
-        public List<Character> getVisibleCharacters(Location location, float radius) {
+        public List<Character> getVisibleCharacters(Point location, float radius) {
             return null;
         }
 

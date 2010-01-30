@@ -38,10 +38,6 @@ namespace GlobalGameJam.GameObjects {
             graphics.setTexture("monk");
         }
 
-        public override void update() {
-            
-        }
-
         public override int attackModifier(Entity attackee) {
             throw new System.NotImplementedException();
         }

@@ -71,13 +71,19 @@ namespace GlobalGameJam.GameObjects {
         }
 
         private void shiftType() {
-            if (this.map.getVisibleCharacters(this.getLocation(), 2).Count == 0) {
+            if (this.busyPerformingAction.value > 0) return;
+            if (this.map.getVisibleCharacters(this.position, 2).Count == 0) {
                 this.characterType.value = (characterType.value + 1) % 3;
-                // do other stuff
+                // one second delay for shape-shifting?
+                this.busyPerformingAction.value = 1000;
+                // do animation
+            } else {
+                // notify of failure to shift
             }
         }
 
         private void attack() {
+            if (this.busyPerformingAction.value > 0) return;
             // do stuff
         }
 

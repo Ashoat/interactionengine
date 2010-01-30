@@ -39,10 +39,6 @@ namespace GlobalGameJam.GameObjects {
             graphics.setTexture("punk");
         }
 
-        public override void update() {
-
-        }
-
         public override int attackModifier(Entity attackee) {
             throw new System.NotImplementedException();
         }

@@ -46,6 +46,8 @@ namespace GlobalGameJam.GameObjects {
             this.location = new Location(this);
             this.graphics = new EntityGraphics(this);
             this.health = new UpdatableInteger(this);
+            this.x = new UpdatableInteger(this);
+            this.y = new UpdatableInteger(this);
         }
 
     }
