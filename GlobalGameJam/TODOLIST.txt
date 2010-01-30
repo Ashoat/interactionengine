@@ -2,21 +2,13 @@
 NPC:
 --Write AI procedures/rules
 
-Punk/Monk/Skunk:
---Attitudes and attack modifiers
-
 Character:
---Get reference to map
 --Move animation and freeze time
 --Attack procedures
-
-Map:
---A bunch of stuff
 
 Player:
 --Attack procedure
 --Shapeshifting animation and freeze time
---Attack modifiers
 --Handle multiple players with multiple controls
 --Double-speed button?
 
