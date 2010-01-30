@@ -5,7 +5,7 @@ using GlobalGameJam.Graphics;
 
 namespace GlobalGameJam.GameObjects {
 
-    public class Player : Character {
+    public class Player : Character, Keyboardable {
 
         #region FACTORY
 
@@ -38,8 +38,12 @@ namespace GlobalGameJam.GameObjects {
             graphics = new EntityGraphics(this, "Player");
         }
 
-        public void handleKey(Keys key) {
+        public void keyPressed(Keys key) {
             
+        }
+
+        public void focusLost() {
+            // won't happen
         }
 
     }

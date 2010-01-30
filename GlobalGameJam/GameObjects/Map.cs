@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using InteractionEngine;
 using System.IO;
 using System;
+using Microsoft.Xna.Framework;
 namespace GlobalGameJam.GameObjects {
 
     public class Map : GameObject, Graphable2D {
@@ -100,6 +101,7 @@ namespace GlobalGameJam.GameObjects {
         private Entity LoadTile(char tileType, int x, int y) {
             switch (tileType) {
                 case '.':
+                default:
                     return null;
             }
         }
@@ -119,7 +121,7 @@ namespace GlobalGameJam.GameObjects {
         /// </summary>
         /// <param name="location">The location to check</param>
         /// <returns>true if it is empty, false if it isn't</returns>
-        public bool isEmpty(Location location) {
+        public bool isEmpty(Vector3 location) {
             return true;
         }
 
