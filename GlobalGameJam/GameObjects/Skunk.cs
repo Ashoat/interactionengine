@@ -39,9 +39,12 @@ namespace GlobalGameJam.GameObjects {
             graphics = new EntityGraphics(this, "Skunk");
         }
 
-        public override void update()
-        {
+        public override void update() {
 
+        }
+
+        public override int attackModifier(Entity attackee) {
+            throw new System.NotImplementedException();
         }
 
     }
