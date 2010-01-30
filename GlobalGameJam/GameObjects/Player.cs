@@ -3,6 +3,8 @@ using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Input;
 using GlobalGameJam.Graphics;
 using InteractionEngine.Constructs.Datatypes;
+using System;
+using System.Collections.Generic;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -36,7 +38,7 @@ namespace GlobalGameJam.GameObjects {
 
         public override void construct() {
             base.construct();
-            movementDelay = 300;
+            movementDelay = 200;
             graphics.setTexture("Player");
         }
 
@@ -63,6 +65,7 @@ namespace GlobalGameJam.GameObjects {
                 default:
                     break;
             }
+            Console.WriteLine(key);
         }
 
         private void shiftType() {
@@ -73,12 +76,18 @@ namespace GlobalGameJam.GameObjects {
                 this.busyPerformingAction.value = 1000;
                 // do animation
             } else {
+                Console.WriteLine("Can't shift, enemies nearby");
                 // notify of failure to shift
             }
         }
 
         private void attack() {
             if (this.busyPerformingAction.value > 0) return;
+            List<Character> chars = Map.getVisibleCharacters(position, 1);
+            if (chars.Count >= 1) {
+                Character chara = chars[0];
+                attack(chara);
+            }
             // do stuff
         }
 

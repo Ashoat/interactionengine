@@ -41,6 +41,7 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public void keyEvent(Keys key, KeyEvent keyEvent) {
+            if (keyEvent != KeyEvent.KEY_TYPED) return;
             if (Keys.Escape == key) {
             } else {
                 map.getPlayer().handleKey(key);

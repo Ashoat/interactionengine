@@ -19,7 +19,7 @@ namespace GlobalGameJam.GameObjects {
             List<Character> chars = Map.getVisibleCharacters(this.position, 1);
             foreach (Character character in chars) {
                 //if (characterType.getAttitudeToward(character.characterType) < 0) {
-                int relation = characterType.getAttitudeToward(character.characterType);
+                int relation = characterType.getAttitudeToward(character);
                 Console.Write(this.classHash + " sees " + character.classHash);
                 Console.WriteLine(" Attitude:" + relation.ToString());
                 
@@ -41,12 +41,12 @@ namespace GlobalGameJam.GameObjects {
                 } else {
                     // Don't update motion pattern
                 }
-                if (running) {
-                    runSquaresLeft--;
-                    this.move(moveDirection);
-                    if (runSquaresLeft == 0) {
-                        running = false;
-                    }
+            }
+            if (running) {
+                runSquaresLeft--;
+                this.move(moveDirection);
+                if (runSquaresLeft == 0) {
+                    running = false;
                 }
             }
         }

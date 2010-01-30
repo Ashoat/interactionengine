@@ -80,11 +80,11 @@ namespace GlobalGameJam.GameObjects {
             private CharacterType(int typeNumber) {
                 this.typeNumber = typeNumber;
             }
-            public double getAttackModifier(CharacterType attackee) {
-                return getAttackModifier(this, attackee);
+            public double getAttackModifier(Character attackee) {
+                return getAttackModifier(this, attackee.characterType);
             }
-            public int getAttitudeToward(CharacterType seee) {
-                return getAttitudeToward(this, seee);
+            public int getAttitudeToward(Character seee) {
+                return getAttitudeToward(this, seee.characterType);
             }
         }
 
@@ -104,7 +104,8 @@ namespace GlobalGameJam.GameObjects {
             get { return updatableCharacterType.value; }
             set { updatableCharacterType.value = value; }
         }
-        protected int movementDelay;
+        protected int movementDelay = 200;
+        protected int attackDelay = 200;
 
         public virtual void update() {
             if (busyPerformingAction.value != 0) {
@@ -121,6 +122,7 @@ namespace GlobalGameJam.GameObjects {
             this.attackStrength = new UpdatableInteger(this);
             this.busyPerformingAction = new UpdatableInteger(this);
             this.updatableCharacterType = new CharacterType.UpdatableCharacterType(this);
+            this.attackStrength.value = 20;
         }
 
         /// <summary>
@@ -160,6 +162,14 @@ namespace GlobalGameJam.GameObjects {
                 return true;
             }
             return false;
+        }
+
+        public void attack(Entity attackee) {
+            if (busyPerformingAction.value > 0) return;
+            double attackModifier = attackee is Character ? characterType.getAttackModifier((Character)attackee) : 1;
+            attackee.wasAttacked((int)(this.attackStrength.value * attackModifier));
+            busyPerformingAction.value = attackDelay;
+            // animate
         }
 
     }

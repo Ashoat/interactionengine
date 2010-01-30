@@ -209,6 +209,7 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="location">The location to check</param>
         /// <returns>true if it is empty, false if it isn't</returns>
         public bool isEmpty(Point location) {
+            if (location.X >= Width || location.Y >= Height || location.X < 0 || location.Y < 0) return false;
             return entityArray[location.X,location.Y]==null;
         }
 

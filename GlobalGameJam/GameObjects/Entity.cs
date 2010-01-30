@@ -10,7 +10,7 @@ namespace GlobalGameJam.GameObjects {
 
     public abstract class Entity : GameObject, Graphable2D {
 
-        public UpdatableInteger health;
+        private UpdatableInteger health;
         private UpdatableInteger x;
         private UpdatableInteger y;
 
@@ -48,6 +48,16 @@ namespace GlobalGameJam.GameObjects {
             this.health = new UpdatableInteger(this);
             this.x = new UpdatableInteger(this);
             this.y = new UpdatableInteger(this);
+            health.value = 100;
+        }
+
+        public void wasAttacked(int damage) {
+            health.value -= damage;
+            BAM.getBAM(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
+            if (health.value <= 0) {
+                graphics.Visible = false;
+                // die
+            }
         }
 
     }
