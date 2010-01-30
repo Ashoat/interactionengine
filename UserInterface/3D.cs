@@ -951,7 +951,6 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
 
     public interface Interactable2D : Interactable, Graphable2D {
 
-
     }
 
 
