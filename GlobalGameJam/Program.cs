@@ -22,10 +22,19 @@ namespace GlobalGameJam {
             // Set up the local LoadRegion with its buttons.
             LoadRegion localRegion = LoadRegion.createLoadRegion();
 
-            // Annoyance: Static constructors aren't called unless I bother the class first. Ugh.
-            new HUD();
-
+            Game game = GameObject.createGameObject<Game>(localRegion);
             HUD hud = GameObject.createGameObject<HUD>(localRegion);
+            Map map = GameObject.createGameObject<Map>(localRegion);
+            map.LoadMap("levels/level1.txt");
+            // Annoyance: Static constructors aren't called unless I bother the class first. Ugh.
+            new Game();
+            new HUD();
+            new Punk();
+            new Skunk();
+            new Monk();
+            new Player();
+            new Wall();
+            new Map();
 
             // Go!
             Engine.run();

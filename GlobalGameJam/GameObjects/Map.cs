@@ -52,9 +52,13 @@ namespace GlobalGameJam.GameObjects {
             return location;
         }
 
+        LoadRegion mapLoadRegion;
         public override void construct() {
             location = new Location(this);
             graphics = new Graphics2DTexture(this);
+            mapLoadRegion = this.getLoadRegion();
+            width = 25;
+            height = 16;
             this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update));
         }
 
@@ -72,7 +76,6 @@ namespace GlobalGameJam.GameObjects {
         Entity[,] entityArray;
 
         public void LoadMap(string mapFile) {
-            int width;
             List<string> lines = new List<string>();
             using (StreamReader reader = new StreamReader(mapFile)) {
                 string line = reader.ReadLine();
@@ -99,11 +102,36 @@ namespace GlobalGameJam.GameObjects {
         }
 
         private Entity LoadTile(char tileType, int x, int y) {
+            Entity returnEntity;
             switch (tileType) {
-                case '.':
+                case 'M':
+                    returnEntity = GameObject.createGameObject<Monk>(mapLoadRegion);
+                    break;
+                case 'P':
+                    returnEntity = GameObject.createGameObject<Punk>(mapLoadRegion);
+                    break;
+                case '|':
+                    returnEntity = GameObject.createGameObject<Wall>(mapLoadRegion);
+                    returnEntity.getLocation().Heading = new Microsoft.Xna.Framework.Vector3(0, 1, 0);
+                    break;
+                case '-':
+                    returnEntity = GameObject.createGameObject<Wall>(mapLoadRegion);
+                    returnEntity.getLocation().Heading = new Microsoft.Xna.Framework.Vector3(1, 0, 0);
+                    break;
+                case 'S':
+                    returnEntity = GameObject.createGameObject<Skunk>(mapLoadRegion);
+                    break;
+                case '!':
+                    returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
+                    break;
                 default:
-                    return null;
+                    returnEntity = null;
+                    break;
             }
+            if (returnEntity != null) {
+                returnEntity.getLocation().Position = new Microsoft.Xna.Framework.Vector3(x, y, 0);
+            }
+            return returnEntity;
         }
 
         /// <summary>
