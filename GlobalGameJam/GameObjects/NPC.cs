@@ -26,7 +26,7 @@ namespace GlobalGameJam.GameObjects {
                 if (relation > 0) {
                     if (MathHelper.PointDistance(this.position, character.position) <= 1.0f) {
                         // Attack
-                        
+                        this.attack(character);
                     } else {
                         //Begin attack run
                         moveDirection = getDirection(this.position,character.position);

@@ -104,8 +104,8 @@ namespace GlobalGameJam.GameObjects {
             get { return updatableCharacterType.value; }
             set { updatableCharacterType.value = value; }
         }
-        protected int movementDelay = 200;
-        protected int attackDelay = 200;
+        protected int movementDelay = 300;
+        protected int attackDelay = 400;
 
         public virtual void update() {
             if (busyPerformingAction.value != 0) {
@@ -162,6 +162,12 @@ namespace GlobalGameJam.GameObjects {
                 return true;
             }
             return false;
+        }
+
+        public override void wasAttacked(int damage) {
+            base.wasAttacked(damage);
+            // Remove the character from the map.
+            if (this.Health < 0) map.setCharacter(this.position, null);
         }
 
         public void attack(Entity attackee) {

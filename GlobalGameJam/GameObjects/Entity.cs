@@ -14,6 +14,10 @@ namespace GlobalGameJam.GameObjects {
         private UpdatableInteger x;
         private UpdatableInteger y;
 
+        public int Health {
+            get { return health.value; }
+        }
+
         public Microsoft.Xna.Framework.Point position {
             get {
                 return new Point(x.value, y.value);
@@ -51,7 +55,7 @@ namespace GlobalGameJam.GameObjects {
             health.value = 100;
         }
 
-        public void wasAttacked(int damage) {
+        public virtual void wasAttacked(int damage) {
             health.value -= damage;
             BAM.getBAM(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
             if (health.value <= 0) {
