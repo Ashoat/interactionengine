@@ -61,11 +61,11 @@ namespace GlobalGameJam.GameObjects {
         private int height;
         private int width;
 
-        public readonly int Height {
+        public int Height {
             get { return height; }
         }
 
-        public readonly int Width {
+        public int Width {
             get { return width; }
         }
 

@@ -2,6 +2,7 @@ using System;
 using InteractionEngine.UserInterface.TwoDimensional;
 using InteractionEngine.Constructs;
 using InteractionEngine;
+using GlobalGameJam.GameObjects;
 
 namespace GlobalGameJam {
 
@@ -13,7 +14,7 @@ namespace GlobalGameJam {
         static void Main(string[] args) {
             // Set up the UI.
             Engine.userInterface = new UserInterface2D();
-            ((UserInterface2D)Engine.userInterface).setWindowSize(430, 430);
+            ((UserInterface2D)Engine.userInterface).setWindowSize(800, 600);
 
             // Set up the engine
             Engine.status = Engine.Status.SINGLE_PLAYER;
@@ -22,6 +23,9 @@ namespace GlobalGameJam {
             LoadRegion localRegion = LoadRegion.createLoadRegion();
 
             // Annoyance: Static constructors aren't called unless I bother the class first. Ugh.
+            new HUD();
+
+            HUD hud = GameObject.createGameObject<HUD>(localRegion);
 
             // Go!
             Engine.run();

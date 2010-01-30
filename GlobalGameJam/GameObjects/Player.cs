@@ -57,6 +57,11 @@ namespace GlobalGameJam.GameObjects {
             }
         }
 
+        public override void update()
+        {
+
+        }
+
     }
 
 }

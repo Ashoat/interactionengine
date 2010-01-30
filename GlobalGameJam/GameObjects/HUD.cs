@@ -50,6 +50,7 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             location = new Location(this);
             graphics = new Graphics2DTexture(this);
+            graphics.TextureName = "hud";
         }
 
     }

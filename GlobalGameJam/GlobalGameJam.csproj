@@ -150,6 +150,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="World\Modules\" />
     <Folder Include="World\Object Graphics\" />
     <Folder Include="World\Object Logic\" />

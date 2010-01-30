@@ -39,6 +39,11 @@ namespace GlobalGameJam.GameObjects {
             graphics = new EntityGraphics(this, "Monk");
         }
 
+        public override void update()
+        {
+            
+        }
+
     }
 
 }
