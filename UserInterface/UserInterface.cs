@@ -43,6 +43,8 @@ namespace InteractionEngine.UserInterface {
         /// </summary>
         public UserInterface() {
             inputDetector = new System.Threading.Thread(new System.Threading.ThreadStart(runRetrieveInput));
+            // Make sure the input-output thread doesn't hang an otherwise closing program.
+            inputDetector.IsBackground = true;
         }
 
         /// <summary>
