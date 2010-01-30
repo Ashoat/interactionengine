@@ -12,7 +12,7 @@ namespace GlobalGameJam.GameObjects {
 
         public class CharacterType {
             public class UpdatableCharacterType {
-
+                
                 /// <summary>
                 /// Constructs a new UpdatableGameObject. 
                 /// </summary>
@@ -93,6 +93,10 @@ namespace GlobalGameJam.GameObjects {
         public Map Map {
             get { return map; }
             set { map = value; }
+        }
+
+        public override EntityGraphics makeGraphics() {
+            return new CharacterGraphics(this);
         }
 
         private UpdatableInteger attackStrength;

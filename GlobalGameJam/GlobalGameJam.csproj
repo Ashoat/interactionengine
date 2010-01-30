@@ -101,6 +101,7 @@
     <Compile Include="GameObjects\Punk.cs" />
     <Compile Include="GameObjects\Skunk.cs" />
     <Compile Include="GameObjects\Wall.cs" />
+    <Compile Include="Graphics\CharacterGraphics.cs" />
     <Compile Include="Graphics\EntityGraphics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

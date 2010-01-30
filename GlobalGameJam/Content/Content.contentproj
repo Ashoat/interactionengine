@@ -77,6 +77,38 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="monk_0.png">
+      <Name>monk_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="monk_1.png">
+      <Name>monk_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="punk_0.png">
+      <Name>punk_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="punk_1.png">
+      <Name>punk_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="skunk_0.png">
+      <Name>skunk_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="skunk_1.png">
+      <Name>skunk_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="BAM.png">
       <Name>BAM</Name>
       <Importer>TextureImporter</Importer>

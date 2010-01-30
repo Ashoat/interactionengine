@@ -36,7 +36,7 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             base.construct();
             this.characterType = CharacterType.MonkType;
-            graphics.setTexture("monk");
+            ((CharacterGraphics)graphics).setTextures(new string[] {"monk_0", "monk_1"});
         }
 
     }

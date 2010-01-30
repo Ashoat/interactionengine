@@ -1,5 +1,8 @@
 ﻿using InteractionEngine.UserInterface.TwoDimensional;
 using GlobalGameJam.GameObjects;
+using InteractionEngine;
+using Microsoft.Xna.Framework;
+using System;
 
 namespace GlobalGameJam.Graphics {
 
@@ -7,6 +10,7 @@ namespace GlobalGameJam.Graphics {
 
         private const float ENTITY_DEPTH = 0.2f;
         private Entity entity;
+       
 
         /// <summary>
         /// Construct!
@@ -15,15 +19,8 @@ namespace GlobalGameJam.Graphics {
         public EntityGraphics(Entity entity) : base(entity) {
             this.entity = entity;
             this.LayerDepth = ENTITY_DEPTH;
-        }
-
-        /// <summary>
-        /// Construct!
-        /// </summary>
-        /// <param name="gameObject">GameObject!</param>
-        public EntityGraphics(Entity entity, string texture) : base(entity, texture) {
-            this.entity = entity;
-            this.LayerDepth = ENTITY_DEPTH;
+            
+            
         }
 
         public void setTexture(string texture) {
@@ -34,6 +31,10 @@ namespace GlobalGameJam.Graphics {
             entity.getLocation().Position = new Microsoft.Xna.Framework.Vector3(x, y, 0);
         }
 
+        public override void onDraw()
+        {
+            base.onDraw();
+        }
     }
 
 }

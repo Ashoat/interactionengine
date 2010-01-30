@@ -36,7 +36,7 @@ namespace GlobalGameJam.GameObjects {
 
         public override void construct() {
             base.construct();
-            graphics.setTexture("punk");
+            ((CharacterGraphics)graphics).setTextures(new string[] { "punk_0", "punk_1" });
             this.characterType = CharacterType.PunkType;
         }
 

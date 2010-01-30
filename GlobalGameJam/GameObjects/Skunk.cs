@@ -36,7 +36,7 @@ namespace GlobalGameJam.GameObjects {
 
         public override void construct() {
             base.construct();
-            graphics.setTexture("skunk");
+            ((CharacterGraphics)graphics).setTextures(new string[] { "skunk_0", "skunk_1" });
             this.characterType = CharacterType.SkunkType;
         }
 

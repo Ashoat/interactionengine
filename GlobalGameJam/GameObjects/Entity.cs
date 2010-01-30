@@ -46,9 +46,13 @@ namespace GlobalGameJam.GameObjects {
             return location;
         }
 
+        public virtual EntityGraphics makeGraphics() {
+            return new EntityGraphics(this);
+        }
+
         public override void construct() {
             this.location = new Location(this);
-            this.graphics = new EntityGraphics(this);
+            this.graphics = makeGraphics();
             this.health = new UpdatableInteger(this);
             this.x = new UpdatableInteger(this);
             this.y = new UpdatableInteger(this);
