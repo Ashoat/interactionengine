@@ -56,7 +56,7 @@ namespace InteractionEngine.Constructs {
         /// Move this GameObject from one LoadRegion to another.
         /// </summary>
         /// <param name="newLoadRegion">The new LoadRegion.</param>
-        void move(LoadRegion newLoadRegion);
+        void moveToRegion(LoadRegion newLoadRegion);
 
         /// <summary>
         /// Get rid of this GameObject. Sad, I know.
@@ -276,7 +276,7 @@ namespace InteractionEngine.Constructs {
         /// Move this GameObject from one LoadRegion to another.
         /// </summary>
         /// <param name="newLoadRegion">The new LoadRegion.</param>
-        public void move(LoadRegion newLoadRegion) {
+        public void moveToRegion(LoadRegion newLoadRegion) {
             // Are we a client? If so, wait for an update from the server who will independently process the EventHandling.Event that called this method.
             if (InteractionEngine.Engine.status == InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT) return;
             if (Engine.status == Engine.Status.MULTIPLAYER_SERVER || Engine.status == Engine.Status.MULTIPLAYER_SERVERCLIENT) this.loadRegion.addUpdate(new Networking.MoveObject(this.id, newLoadRegion.id));

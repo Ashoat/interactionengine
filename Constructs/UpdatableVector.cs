@@ -38,6 +38,14 @@ namespace InteractionEngine.Constructs.Datatypes {
         }
 
         /// <summary>
+        /// Returns a hash code for the underlying value.
+        /// </summary>
+        /// <returns>A hash code for the underlying value.</returns>
+        public override int GetHashCode() {
+            return this.value.GetHashCode();
+        }
+
+        /// <summary>
         /// The value and realValue. The value is used for changing from within the developer's game code. The value is private and stores the true value. 
         /// Funny how much encapsulation that little piece of information requires...
         /// </summary>

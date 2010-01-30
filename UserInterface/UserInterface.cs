@@ -17,6 +17,7 @@
 
 // TODO: "inputEnabled?"
 
+using System;
 namespace InteractionEngine.UserInterface {
 
     /// <summary>
@@ -159,7 +160,7 @@ namespace InteractionEngine.UserInterface {
         /// Pretty much the constructor. It'll be called every time this object is instantiated.
         /// </summary>
         public override void construct() {
-            this.addEventMethod(EVENT_HASH, new InteractionEngine.EventHandling.EventMethod(keyPressed));
+            //this.addEventMethod(EVENT_HASH, new InteractionEngine.EventHandling.EventMethod(keyEvent));
         }
 
         private const string EVENT_HASH = "Key";
@@ -192,9 +193,8 @@ namespace InteractionEngine.UserInterface {
         /// By dispatching it to the focus-holder, basically.
         /// </summary>
         /// <param name="keyParam">The Microsoft.Xna.Framework.Input.Keys key pressed.</param>
-        public void keyPressed(InteractionEngine.Networking.Client client, object keyParam) {
-            Microsoft.Xna.Framework.Input.Keys key = (Microsoft.Xna.Framework.Input.Keys)keyParam;
-            focusHolder.keyPressed(key);
+        public void keyEvent(InteractionEngine.Networking.Client client, Microsoft.Xna.Framework.Input.Keys key, KeyEvent eventType) {
+            focusHolder.keyEvent(key, eventType);
         }
 
         /// <summary>
@@ -217,6 +217,10 @@ namespace InteractionEngine.UserInterface {
 
     }
 
+    public enum KeyEvent {
+        KEY_PRESSED, KEY_TYPED, KEY_REMOVED
+    }
+
     /**
      * Implemented by GameObjects that can be receive keyboard input from the KeyboardFocus object.
      */
@@ -225,7 +229,7 @@ namespace InteractionEngine.UserInterface {
         /// <summary>
         /// Processes keys when they are pressed.
         /// </summary>
-        void keyPressed(Microsoft.Xna.Framework.Input.Keys key);
+        void keyEvent(Microsoft.Xna.Framework.Input.Keys key, KeyEvent eventType);
 
         /// <summary>
         /// Processes the event where the keyboard focus is taken away by another Keyboardable object.

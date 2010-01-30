@@ -131,7 +131,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
                 if (!repeatTimes.ContainsKey(key) || repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
                     // newEvents.Add(this.kf.getEvent((int)key));
-                    kf.keyPressed(null, (int)key);
+                    kf.keyEvent(null, key, KeyEvent.KEY_TYPED);
                     repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatDelay;
                 }
             }
