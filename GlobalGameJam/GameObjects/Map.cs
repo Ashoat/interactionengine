@@ -219,7 +219,9 @@ namespace GlobalGameJam.GameObjects {
         /// </summary>
         /// <param name="character">The character object to update the map with</param>
         public void setCharacter(Point oldLocation, Character character) {
-            entityArray[character.position.X, character.position.Y] = character;
+            if (character != null) {
+                entityArray[character.position.X, character.position.Y] = character;
+            }
             entityArray[oldLocation.X, oldLocation.Y] = null;
         }
 
