@@ -124,17 +124,34 @@ namespace GlobalGameJam.GameObjects {
         }
 
         /// <summary>
-        /// Moves the specified distance in grid squares and returns true if possible.
+        /// Moves the specified direction in grid squares and returns true if possible.
         /// Returns false if there's something in the way or the character is
         /// busy performing some other action.
         /// </summary>
-        /// <param name="dx">Horizontal grid displacement.</param>
-        /// <param name="dy">Vertical grid displacement.</param>
+        /// <param name="moveDirection">Direction to move</param>
         /// <returns>True if and only if the move completed successfully.</returns>
-        public bool move(int dx, int dy) {
+        public bool move(Direction moveDirection) {
             if (busyPerformingAction.value > 0) return false;
             Point oldPosition = this.position;
-            Point newPosition = new Point(oldPosition.X + dx, oldPosition.Y + dy);
+            Point newPosition;
+            switch (moveDirection) {
+                case Direction.NORTH:
+                    newPosition = new Point(oldPosition.X, oldPosition.Y - 1);
+                    break;
+                case Direction.EAST:
+                    newPosition = new Point(oldPosition.X + 1, oldPosition.Y);
+                    break;
+                case Direction.SOUTH:
+                    newPosition = new Point(oldPosition.X, oldPosition.Y + 1);
+                    break;
+                case Direction.WEST:
+                    newPosition = new Point(oldPosition.X - 1, oldPosition.Y);
+                    break;
+                default:
+                    newPosition = oldPosition;
+                    break;
+            }
+            
             if (map.isEmpty(newPosition)) {
                 this.position = newPosition;
                 map.setCharacter(oldPosition,this);

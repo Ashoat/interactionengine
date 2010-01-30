@@ -43,16 +43,16 @@ namespace GlobalGameJam.GameObjects {
         public void handleKey(Keys key) {
             switch (key) {
                 case Keys.Left:
-                    move(-1, 0);
+                    move(Direction.WEST);
                     break;
                 case Keys.Right:
-                    move(1, 0);
+                    move(Direction.EAST);
                     break;
                 case Keys.Up:
-                    move(0, -1);
+                    move(Direction.NORTH);
                     break;
                 case Keys.Down:
-                    move(0, 1);
+                    move(Direction.SOUTH);
                     break;
                 case Keys.RightShift:
                     shiftType();

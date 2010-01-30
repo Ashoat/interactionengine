@@ -74,6 +74,7 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
@@ -92,6 +93,7 @@
     <Compile Include="GameObjects\Game.cs" />
     <Compile Include="GameObjects\HUD.cs" />
     <Compile Include="GameObjects\Map.cs" />
+    <Compile Include="GameObjects\MathHelper.cs" />
     <Compile Include="GameObjects\Monk.cs" />
     <Compile Include="GameObjects\NPC.cs" />
     <Compile Include="GameObjects\Player.cs" />
@@ -155,6 +157,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="levels\level1.ani">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="levels\level2.ani">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

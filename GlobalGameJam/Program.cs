@@ -33,7 +33,7 @@ namespace GlobalGameJam {
             ((UserInterface2D)Engine.userInterface).registerKeyboardFocus(kf);
             
             kf.setFocus(game);
-            map.LoadMap("levels/level1.ani");
+            map.LoadMap("levels/level2.ani");
             // Annoyance: Static constructors aren't called unless I bother the class first. Ugh.
             new Game();
             new HUD();
