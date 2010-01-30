@@ -54,10 +54,10 @@ namespace GlobalGameJam.GameObjects {
                     move(1, 0);
                     break;
                 case Keys.Up:
-                    move(0, 1);
+                    move(0, -1);
                     break;
                 case Keys.Down:
-                    move(0, -1);
+                    move(0, 1);
                     break;
                 case Keys.RightShift:
                     shiftType();
@@ -72,7 +72,7 @@ namespace GlobalGameJam.GameObjects {
 
         private void shiftType() {
             if (this.busyPerformingAction.value > 0) return;
-            if (this.map.getVisibleCharacters(this.position, 2).Count == 0) {
+            if (this.Map.getVisibleCharacters(this.position, 2).Count == 0) {
                 this.characterType.value = (characterType.value + 1) % 3;
                 // one second delay for shape-shifting?
                 this.busyPerformingAction.value = 1000;

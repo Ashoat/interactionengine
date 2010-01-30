@@ -10,7 +10,13 @@ namespace GlobalGameJam.GameObjects {
 
     public abstract class Character : Entity {
 
-        protected Map map; // TODO
+
+        public Map Map {
+            get { return map; }
+            set { map = value; }
+        }
+
+        private Map map; // TODO
 
         private UpdatableInteger attackStrength;
         // If this value is more than zero, the character is already busy doing something.
@@ -48,7 +54,7 @@ namespace GlobalGameJam.GameObjects {
             Point newPosition = new Point(oldPosition.X + dx, oldPosition.Y + dy);
             if (map.isEmpty(newPosition)) {
                 this.position = newPosition;
-                map.setCharacter(this);
+                map.setCharacter(oldPosition,this);
                 // to do: start animation and freeze movement until current movement is done
                 return true;
             }

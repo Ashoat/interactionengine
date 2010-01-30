@@ -43,10 +43,14 @@ namespace GlobalGameJam.GameObjects {
         public void keyEvent(Keys key, KeyEvent keyEvent) {
             if (Keys.Escape == key) {
             } else {
-                player.handleKey(key);
+                map.getPlayer().handleKey(key);
             }
         }
 
+        Map map;
+        internal void addMap(Map map) {
+            this.map = map;
+        }
     }
 
 }

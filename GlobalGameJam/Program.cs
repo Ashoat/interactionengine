@@ -3,6 +3,7 @@ using InteractionEngine.UserInterface.TwoDimensional;
 using InteractionEngine.Constructs;
 using InteractionEngine;
 using GlobalGameJam.GameObjects;
+using InteractionEngine.UserInterface;
 
 namespace GlobalGameJam {
 
@@ -23,8 +24,15 @@ namespace GlobalGameJam {
             LoadRegion localRegion = LoadRegion.createLoadRegion();
 
             Game game = GameObject.createGameObject<Game>(localRegion);
-            HUD hud = GameObject.createGameObject<HUD>(localRegion);
             Map map = GameObject.createGameObject<Map>(localRegion);
+            HUD hud = GameObject.createGameObject<HUD>(localRegion);
+            game.addMap(map);
+            
+            
+            KeyboardFocus kf = GameObject.createGameObject<KeyboardFocus>(localRegion);
+            ((UserInterface2D)Engine.userInterface).registerKeyboardFocus(kf);
+            
+            kf.setFocus(game);
             map.LoadMap("levels/level1.ani");
             // Annoyance: Static constructors aren't called unless I bother the class first. Ugh.
             new Game();
@@ -35,6 +43,7 @@ namespace GlobalGameJam {
             new Player();
             new Wall();
             new Map();
+            new KeyboardFocus();
 
             // Go!
             Engine.run();

@@ -2,6 +2,7 @@
 using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Input;
 using GlobalGameJam.Graphics;
+using System.Linq;
 using InteractionEngine.UserInterface.TwoDimensional;
 using System.Collections.Generic;
 using InteractionEngine;
@@ -133,6 +134,8 @@ namespace GlobalGameJam.GameObjects {
             }
         }
 
+        Player player;
+
         private Entity LoadTile(char tileType, int x, int y) {
             Entity returnEntity;
             switch (tileType) {
@@ -159,12 +162,16 @@ namespace GlobalGameJam.GameObjects {
                     break;
                 case '!':
                     returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
+                    player = (Player)returnEntity;
                     break;
                 default:
                     returnEntity = null;
                     break;
             }
             if (returnEntity != null) {
+                if (returnEntity is Character) {
+                    ((Character)returnEntity).Map = this;
+                }
                 returnEntity.getLocation().Position = new Microsoft.Xna.Framework.Vector3(x, y, 0);
             }
             return returnEntity;
@@ -186,7 +193,7 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="location">The location to check</param>
         /// <returns>true if it is empty, false if it isn't</returns>
         public bool isEmpty(Point location) {
-            return true;
+            return entityArray[location.X,location.Y]==null;
         }
 
         /// <summary>
@@ -194,13 +201,19 @@ namespace GlobalGameJam.GameObjects {
         /// map's internal representation of the game board
         /// </summary>
         /// <param name="character">The character object to update the map with</param>
-        public void setCharacter(Character character) {
+        public void setCharacter(Point oldLocation, Character character) {
+            entityArray[character.position.X, character.position.Y] = character;
+            entityArray[oldLocation.X, oldLocation.Y] = null;
         }
 
         public void update(InteractionEngine.Networking.Client client, object ob) {
             // In here I will call all the update events/methods on all of the characters
             
             Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+        }
+
+        public Player getPlayer() {
+            return player;
         }
     }
 
