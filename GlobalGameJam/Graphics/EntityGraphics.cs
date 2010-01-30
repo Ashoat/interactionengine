@@ -3,50 +3,32 @@ using GlobalGameJam.GameObjects;
 
 namespace GlobalGameJam.Graphics {
 
-    public class EntityGraphics : Graphics2D {
+    public class EntityGraphics : Graphics2DTexture {
 
         private Entity entity;
-        private string texture;
 
         /// <summary>
         /// Construct!
         /// </summary>
         /// <param name="gameObject">GameObject!</param>
-        public EntityGraphics(Entity entity)
-            : base(entity) {
+        public EntityGraphics(Entity entity) : base(entity) {
+            this.entity = entity;
+        }
+
+        /// <summary>
+        /// Construct!
+        /// </summary>
+        /// <param name="gameObject">GameObject!</param>
+        public EntityGraphics(Entity entity, string texture) : base(entity, texture) {
             this.entity = entity;
         }
 
         public void setTexture(string texture) {
-            this.texture = texture;
-        }
-
-        /// <summary>
-        /// Construct!
-        /// </summary>
-        /// <param name="gameObject">GameObject!</param>
-        public EntityGraphics(Entity entity, string texture) : base(entity) {
-            this.entity = entity;
-            this.texture = texture;
+            this.TextureName = texture;
         }
 
         public void setPosition(int x, int y) {
-            base.xPos.value = x;
-            base.yPos.value = y;
-            base.loadBounds();
-        }
-
-        /// <summary>
-        /// Blah!
-        /// </summary>
-        public override void onDraw() {
-            if (!hasTexture()) loadTexture(texture);
-        }
-
-        /// <summary>
-        /// Neh!
-        /// </summary>
-        public override void loadContent() {
+            entity.getLocation().Position = new Microsoft.Xna.Framework.Vector3(x, y, 0);
         }
 
     }

@@ -2,10 +2,11 @@
 using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Input;
 using GlobalGameJam.Graphics;
+using InteractionEngine.UserInterface.TwoDimensional;
 
 namespace GlobalGameJam.GameObjects {
 
-    public class Map : GameObject, Graphable {
+    public class Map : GameObject, Graphable2D {
 
         #region FACTORY
 
@@ -33,8 +34,11 @@ namespace GlobalGameJam.GameObjects {
 
         #endregion
 
-        protected MapGraphics graphics;
+        protected Graphics2DTexture graphics;
         public InteractionEngine.UserInterface.Graphics getGraphics() {
+            return graphics;
+        }
+        public Graphics2D getGraphics2D() {
             return graphics;
         }
 
@@ -45,7 +49,7 @@ namespace GlobalGameJam.GameObjects {
 
         public override void construct() {
             location = new Location(this);
-            graphics = new MapGraphics(this);
+            graphics = new Graphics2DTexture(this);
         }
 
     }

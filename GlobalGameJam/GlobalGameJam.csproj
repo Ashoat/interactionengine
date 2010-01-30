@@ -58,7 +58,7 @@
   <ItemGroup>
     <Reference Include="InteractionEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\x86\InteractionEngine.dll</HintPath>
+      <HintPath>..\trunk\bin\x86\Debug\InteractionEngine.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
       <Private>False</Private>
@@ -99,8 +99,6 @@
     <Compile Include="GameObjects\Skunk.cs" />
     <Compile Include="GameObjects\Wall.cs" />
     <Compile Include="Graphics\EntityGraphics.cs" />
-    <Compile Include="Graphics\HUDGraphics.cs" />
-    <Compile Include="Graphics\MapGraphics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
@@ -150,6 +148,9 @@
       <ProductName>Microsoft XNA Framework Redistributable 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="World\Modules\" />
