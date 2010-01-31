@@ -148,8 +148,11 @@ namespace InteractionEngine {
         /// </summary>
         /// <param name="events">The list of events to process.</param>
         private static void processEvents(System.Collections.Generic.List<EventHandling.Event> events) {
-            foreach (EventHandling.Event eventObject in events)
-                if(eventObject != null) Engine.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(null, eventObject.parameter);
+            foreach (EventHandling.Event eventObject in events) {
+                if (eventObject == null) return;
+                if (Engine.getGameObject(eventObject.gameObjectID) == null) return;
+                Engine.getGameObject(eventObject.gameObjectID).getEventMethod(eventObject.eventHash)(null, eventObject.parameter);
+            }
         }
 
         #endregion
