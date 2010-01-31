@@ -4,6 +4,7 @@ using InteractionEngine.Constructs;
 using InteractionEngine;
 using GlobalGameJam.GameObjects;
 using InteractionEngine.UserInterface;
+using InteractionEngine.UserInterface.Audio;
 using Microsoft.Xna.Framework;
 
 namespace GlobalGameJam {
@@ -13,6 +14,9 @@ namespace GlobalGameJam {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// 
+        public static Audio audio;
+
         static void Main(string[] args) {
             // Set up the UI.
             Engine.userInterface = new UserInterface2D();
@@ -31,9 +35,15 @@ namespace GlobalGameJam {
             HealthBar health = GameObject.createGameObject<HealthBar>(localRegion);
             health.setLocationAndMap(new Vector3(15, 29, 0), map);
             game.addMap(map);
+
+
+            Audio.loadAudioSettings("ggj");
+            audio = new Audio(null, "Wave Bank", "Sound Bank");
+
             Menu menu = GameObject.createGameObject<Menu>(localRegion);
             game.setMenu(menu); // so that keyboard commands go to menu
             menu.show();
+
             
             KeyboardFocus kf = GameObject.createGameObject<KeyboardFocus>(localRegion);
             ((UserInterface2D)Engine.userInterface).registerKeyboardFocus(kf);

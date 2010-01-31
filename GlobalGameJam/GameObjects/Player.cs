@@ -75,6 +75,9 @@ namespace GlobalGameJam.GameObjects {
                 case Keys.RightControl:
                     attack();
                     break;
+                case Keys.O:
+                    Program.audio.playSound("omnomnom");
+                    break;
                 default:
                     break;
             }
