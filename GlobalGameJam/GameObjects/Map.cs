@@ -146,6 +146,8 @@ namespace GlobalGameJam.GameObjects {
                         if (entityArray[x, y].value != null)
                         {
                             entityArray[x, y].value.Position = new Point(x, y);
+                            entityArray[x, y].value.getLocation().Position = new Vector3(x * 32, y * 32 + 88, 0);
+                            
                         }
                     }
                 }
@@ -256,7 +258,7 @@ namespace GlobalGameJam.GameObjects {
         /// <returns>true if it is empty, false if it isn't</returns>
         public bool isEmpty(Point location) {
             if (location.X >= Width || location.Y >= Height || location.X < 0 || location.Y < 0) return false;
-            return entityArray[location.X,location.Y]==null;
+            return entityArray[location.X,location.Y].value == null;
         }
 
         public Entity getEntity(Point location) {

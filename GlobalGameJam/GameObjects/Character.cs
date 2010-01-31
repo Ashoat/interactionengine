@@ -5,13 +5,14 @@ using GlobalGameJam.Graphics;
 using InteractionEngine;
 using Microsoft.Xna.Framework;
 using InteractionEngine.Constructs.Datatypes;
+using System;
 
 namespace GlobalGameJam.GameObjects {
 
     public abstract class Character : Entity {
 
-        public Point oldPosition;
-        public bool running;
+        private bool running = false;
+
         public class CharacterType {
             public class UpdatableCharacterType {
                 
@@ -114,7 +115,22 @@ namespace GlobalGameJam.GameObjects {
                     busyPerformingAction.value -= Engine.gameTime.ElapsedGameTime.Milliseconds;
                 }
             }
+
+            if (running)
+            {
+                int dx = Math.Sign(Position.X * 32 - (int)location.Position.X);
+                int dy = Math.Sign(Position.Y * 32 + 88 - (int)location.Position.Y);
+
+                if (dx == 0 && dy == 0)
+                    running = false;
+                else
+                    location.Position = new Vector3(location.Position.X + (float)dx, location.Position.Y + (float)dy, 0);
+                    
+            }
+
         }
+
+  
 
         public override void construct() {
             base.construct();
@@ -132,9 +148,10 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="moveDirection">Direction to move</param>
         /// <returns>True if and only if the move completed successfully.</returns>
         public bool move(Direction moveDirection) {
-            if (busyPerformingAction.value > 0) return false;
-            oldPosition = this.Position;
-            running = true;
+            if (busyPerformingAction.value > 0 || running) return false;
+            Point oldPosition = this.Position;
+
+
             Point newPosition;
             switch (moveDirection) {
                 case Direction.NORTH:
@@ -160,6 +177,7 @@ namespace GlobalGameJam.GameObjects {
                 this.Position = newPosition;
                 map.setCharacter(oldPosition,this);
                 busyPerformingAction.value = movementDelay;
+                running = true;
                 // animate
                 return true;
             }

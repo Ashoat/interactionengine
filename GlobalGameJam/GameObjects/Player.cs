@@ -81,7 +81,7 @@ namespace GlobalGameJam.GameObjects {
                 default:
                     break;
             }
-            Console.WriteLine(key);
+            //Console.WriteLine(key);
         }
 
         private void shiftType() {
@@ -114,6 +114,7 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public override void update() {
+            
             base.update();
         }
 

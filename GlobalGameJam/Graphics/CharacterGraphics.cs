@@ -131,20 +131,7 @@ namespace GlobalGameJam.Graphics
             renderState.DestinationBlend =
                 Blend.InverseSourceAlpha;
             
-            tick+=32/3;
-                
-                int xSign = Math.Sign(entity.Position.X*32 - ((int)entity.getLocation().Position.X));
-                int ySign = Math.Sign(entity.Position.Y*32+88 - ((int)entity.getLocation().Position.Y));
-                if (((Character)entity).running) {
-                    setPosition((int)(((Character)entity).oldPosition.X * 32 + tick*xSign), (int)(88+((Character)entity).oldPosition.Y * 32 + tick*ySign));
-                    if (tick >= 32 && entity is Player) {
-                        entity.running = false;
-                        tick = 0;
-                    }
-                        
-                } else {
-                    tick = 0;
-                }
+            
             if (true) // change to character running property
                 UpdateAnimation();
             base.onDraw();
