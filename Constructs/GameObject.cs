@@ -351,6 +351,14 @@ namespace InteractionEngine.Constructs {
             return returnList;
         }
 
+        /// <summary>
+        /// Returns a dictionary of all field ID's pointing to their Updatable.
+        /// </summary>
+        /// <returns>All this object's fields.</returns>
+        public System.Collections.Generic.Dictionary<int, InteractionEngine.Constructs.Datatypes.Updatable> getFields() {
+            return fieldHashlist;
+        }
+
         #endregion
 
         #region EventMethod Hashlist
