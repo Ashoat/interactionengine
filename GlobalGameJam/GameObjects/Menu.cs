@@ -10,6 +10,7 @@ using InteractionEngine;
 using Microsoft.Xna.Framework;
 using InteractionEngine.Networking;
 using InteractionEngine.EventHandling;
+using InteractionEngine.Constructs.Datatypes;
 
 namespace GlobalGameJam.GameObjects {
     class Menu: GameObject, Graphable2D {
@@ -56,7 +57,7 @@ namespace GlobalGameJam.GameObjects {
             //graphics.TextureName = "menu";
             //location.Position = new Microsoft.Xna.Framework.Vector3(0, 0, 0);
             menuStrings = new List<string>();
-            //menuStrings.Add("Join Multiplayer");
+            menuStrings.Add("Join Multiplayer");
             menuStrings.Add("Play Level 1");
             menuStrings.Add("Play Level 2");
             menuStrings.Add("Play Level 3");
@@ -69,6 +70,7 @@ namespace GlobalGameJam.GameObjects {
             this.addEventMethod("getHostedRegion", this.getHostedRegion);
             this.addEventMethod("handleDroppedConnection", this.handleDroppedConnection);
             this.addEventMethod("handleNewPlayer", this.handleNewPlayer);
+            this.addEventMethod("getGameObject", this.getGameObject);
         }
 
         #region Graphable2D Members
@@ -111,7 +113,7 @@ namespace GlobalGameJam.GameObjects {
                             graphics.activeMenuItemIndex = menuStrings.Count - 1;
                         break;
                     case Keys.Enter:
-                        if (graphics.activeMenuItemIndex == -1) {
+                        if (graphics.activeMenuItemIndex == 0) {
                             Client.stopListening();
                             Client.onJoin.Clear();
                             CreateRegion.onCreateRegion.Clear();
@@ -121,33 +123,34 @@ namespace GlobalGameJam.GameObjects {
                             try {
                                 Engine.server = new Server("127.0.0.1");
                                 // Make sure we know what region is the hosted region so we can kill it later
-                                //CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
+                                CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
                                 Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
+                                CreateObject.onCreateObject.Add(new Event(this.id, "getGameObject", null));
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
                             }
-                        } else if (graphics.activeMenuItemIndex == 0) {
+                        } else if (graphics.activeMenuItemIndex == 1) {
                             if(map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             map.LoadMap("levels/campaign1.ani");
                             exitMenu();
-                        } else if (graphics.activeMenuItemIndex == 1) {
+                        } else if (graphics.activeMenuItemIndex == 2) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             map.LoadMap("levels/campaign2.ani");//level2.ani");
                             exitMenu();
-                        } else if (graphics.activeMenuItemIndex == 2) {
+                        } else if (graphics.activeMenuItemIndex == 3) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             map.LoadMap("levels/campaign3.ani");
                             exitMenu();
                         }
-                        else if (graphics.activeMenuItemIndex == 3) {
+                        else if (graphics.activeMenuItemIndex == 4) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             map.LoadMap("levels/campaign4.ani");
                             exitMenu();
-                        } else if (graphics.activeMenuItemIndex == 4) {
+                        } else if (graphics.activeMenuItemIndex == 5) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             map.LoadMap("levels/campaign5.ani");
@@ -172,8 +175,9 @@ namespace GlobalGameJam.GameObjects {
                             try {
                                 Engine.server = new Server("127.0.0.1");
                                 // Make sure we know what region is the hosted region so we can kill it later
-                                //CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
+                                CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
                                 Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
+                                CreateObject.onCreateObject.Add(new Event(this.id, "getGameObject", null));
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
                             }
@@ -186,12 +190,16 @@ namespace GlobalGameJam.GameObjects {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             if (graphics.activeMenuItemIndex == 1) {
-                                map.LoadMap("levels/campaign3.ani");
+                                map.LoadMap("levels/campaign1.ani");
                             } else if (graphics.activeMenuItemIndex == 2) {
+                                map.LoadMap("levels/campaign2.ani");
+                            } else if (graphics.activeMenuItemIndex == 3) {
+                                map.LoadMap("levels/campaign3.ani");
+                            } else if (graphics.activeMenuItemIndex == 3) {
                                 map.LoadMap("levels/campaign4.ani");
                             } else if (graphics.activeMenuItemIndex == 3) {
-                                map.LoadMap("levels/level2.ani");
-                            }
+                                map.LoadMap("levels/campaign5.ani");
+                            } 
                             Client.onJoin.Add(new Event(id, "handleNewPlayer", null));
                             exitMenu();
                         }
@@ -224,14 +232,58 @@ namespace GlobalGameJam.GameObjects {
                     if (go is Map) {
                         exitMenu();
                         map = (Map)go;
-                        map.LoadMap(map.mapFile.value);
+                        //map.LoadMap(map.mapFile.value);
                         map.Active = true;
                         game.addMap(map);
+                        map.characterList = new List<UpdatableGameObject<Character>>();
+                        map.entityArray = new UpdatableGameObject<Entity>[25,16];
+                        foreach (Updatable updatable in map.getFields().Values) {
+                            if (updatable is UpdatableInteger) {
+                                GameObjectable go2 = Engine.getGameObject(((UpdatableInteger)updatable).value);
+                                if (go != null && go2 is Character) {
+                                    map.characterList.Add(new UpdatableGameObject<Character>(((UpdatableInteger)updatable)));
+                                }
+                                if (go != null && go2 is Entity) {
+                                    map.entityArray[((Entity)go2).Position.X, ((Entity)go2).Position.Y] = new UpdatableGameObject<Entity>((UpdatableInteger)updatable);
+                                }
+                            }
+                        }
+                        foreach (Updatable updatable in map.getFields().Values) {
+                            if (updatable is UpdatableInteger) {
+                                GameObjectable go2 = Engine.getGameObject(((UpdatableInteger)updatable).value);
+                                if (go != null && go2 is Character) {
+                                    map.characterList.Add(new UpdatableGameObject<Character>(((UpdatableInteger)updatable)));
+                                }
+                            }
+                        }
                         Engine.addEvent(new InteractionEngine.EventHandling.Event(map.id, "tick", null));
                         return;
                     }
                 }
             }
+        }
+
+        public void getGameObject(Client client, object parameter) {
+            /*if (parameter is Character) {
+                foreach (Updatable updatable in ((Character)parameter).getFields().Values) {
+                    if (updatable is UpdatableInteger) {
+                        GameObjectable go = Engine.getGameObject(((UpdatableInteger)updatable).value);
+                        if (go != null && go is Character) {
+                            map.characterList.Add(new UpdatableGameObject<Character>((UpdatableInteger)updatable));
+                        }
+                    }
+                }
+            }
+            if (parameter is Entity) {
+                foreach (Updatable updatable in ((Entity)parameter).getFields().Values) {
+                    if (updatable is UpdatableInteger) {
+                        GameObjectable go = Engine.getGameObject(((UpdatableInteger)updatable).value);
+                        if (go != null && go is Entity) {
+                            map.entityArray[((Entity)parameter).Position.X, ((Entity)parameter).Position.Y] = new UpdatableGameObject<Entity>((UpdatableInteger)updatable);
+                        }
+                    }
+                }
+            }*/
         }
 
         public void handleDroppedConnection(Client client, object parameter) {
