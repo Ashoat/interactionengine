@@ -8,6 +8,7 @@ using InteractionEngine.Constructs.Datatypes;
 using System;
 using System.Diagnostics;
 using InteractionEngine;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -16,7 +17,22 @@ namespace GlobalGameJam.GameObjects {
 
         public int Level {
             get { return level; }
-            set { level = value; }
+            set { 
+                level = value;
+                switch (value)
+                {
+                    case 1:
+                        graphics.Tint = Color.White;
+                        break;
+                    case 2:
+                        graphics.Tint = Color.PaleTurquoise;
+                        break;
+                    case 3:
+                        graphics.Tint = Color.Blue;
+                        break;
+                }
+            
+            }
         }
 
         private int defaultRunSquares = 3;
@@ -31,8 +47,6 @@ namespace GlobalGameJam.GameObjects {
             this.Health = Health * Level;
         }
 
-        private int counter = 0;
-        private TimeSpan start;
         public override void update() {
             /*
             if (start == null) {

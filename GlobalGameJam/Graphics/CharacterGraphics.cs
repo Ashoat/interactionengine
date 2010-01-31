@@ -21,13 +21,13 @@ namespace GlobalGameJam.Graphics
         private Character entity;
         DateTime frameTimePrev = DateTime.Now;
 
-        private Effect pointSpritesEffect;
-        VertexPositionColor[] spriteArray;
-        VertexDeclaration vertexPosColDecl;
-        Random rand;
-        
-        Matrix projectionMatrix;
-        Matrix viewMatrix;
+        protected Effect pointSpritesEffect;
+        protected VertexPositionColor[] spriteArray;
+        protected VertexDeclaration vertexPosColDecl;
+        protected Random rand;
+
+        protected Matrix projectionMatrix;
+        protected Matrix viewMatrix;
         float tick;
         public CharacterGraphics(Character entity)
             : base(entity) {
