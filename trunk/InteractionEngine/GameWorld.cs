@@ -176,6 +176,16 @@ namespace InteractionEngine {
         }
 
         /// <summary>
+        /// This method removes an Event from the EventCache.
+        /// </summary>
+        /// <param name="theEvent">The Event to add to the EventCache.</param>
+        internal static void removeGameObjectEvents(Constructs.GameObject gameObject) {
+            for (int i = 0; i < eventCache.Count; i++) {
+                if (eventCache[i].gameObjectID == gameObject.id) eventCache.RemoveAt(i);
+            }
+        }
+
+        /// <summary>
         /// This method gets and clears the EventCache.
         /// </summary>
         /// <returns>All the Events in the EventCache.</returns>
@@ -189,7 +199,6 @@ namespace InteractionEngine {
         }
 
         #endregion
-
 
         #region Client Networking
 
