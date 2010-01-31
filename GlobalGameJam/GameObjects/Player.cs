@@ -31,7 +31,7 @@ namespace GlobalGameJam.GameObjects {
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static Player() {
-            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Game>));
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Player>));
         }
 
         #endregion
@@ -39,6 +39,8 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             base.construct();
             movementDelay = 200;
+            //Health = 200;
+            graphics.setTexture("Player");
             UpdateTextures();
         }
 
@@ -100,6 +102,13 @@ namespace GlobalGameJam.GameObjects {
                 attack(chara);
             }
             // do stuff
+        }
+
+        public override void wasAttacked(int damage) {
+            base.wasAttacked(damage/2);
+            if (Health <= 0) {
+                // game over
+            }
         }
 
         public override void update() {

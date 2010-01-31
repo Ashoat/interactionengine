@@ -7,7 +7,6 @@ Character:
 --Attack procedures
 
 Player:
---Attack procedure (which one to attack?)
 --Shapeshifting animation and freeze time
 --Handle multiple players with multiple controls
 --Double-speed button?

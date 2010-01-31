@@ -109,7 +109,7 @@ namespace GlobalGameJam.GameObjects {
             set { updatableCharacterType.value = value; }
         }
         protected int movementDelay = 300;
-        protected int attackDelay = 400;
+        protected int attackDelay = 700;
 
         public virtual void update() {
             if (busyPerformingAction.value != 0) {

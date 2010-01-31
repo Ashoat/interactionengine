@@ -35,7 +35,7 @@ namespace GlobalGameJam.GameObjects {
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
         static BAM() {
-            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Monk>));
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<BAM>));
         }
 
         #endregion

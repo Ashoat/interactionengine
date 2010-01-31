@@ -16,6 +16,7 @@ namespace GlobalGameJam.GameObjects {
 
         public int Health {
             get { return health.value; }
+            set { health.value = value; }
         }
 
         public Microsoft.Xna.Framework.Point position {

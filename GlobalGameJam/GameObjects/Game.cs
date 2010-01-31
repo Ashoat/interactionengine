@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GlobalGameJam.GameObjects {
 
-    public class Game : GameObject, Keyboardable {
+    public class GalactazoidsGame : GameObject, Keyboardable {
 
         #region FACTORY
 
@@ -13,7 +13,7 @@ namespace GlobalGameJam.GameObjects {
         /// NEVER CALL THIS! This constructor is exclusively for use by the InteractionEngine. If anyone else calls it things will break.
         /// If you want to construct this object, use GameObject.createGameObject(LoadRegion).
         /// </summary>
-        public Game() {
+        public GalactazoidsGame() {
         }
 
         // The classHash, a unique identifying string for the class. Hmm, wow, that's kind of redundant, isn't that? C# already provides such a function through reflection. Oh well.
@@ -26,8 +26,8 @@ namespace GlobalGameJam.GameObjects {
         /// <summary>
         /// The static constructor. Adds the class's factory method to the GameObject factoryList when the class is first loaded.
         /// </summary>
-        static Game() {
-            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<Game>));
+        static GalactazoidsGame() {
+            GameObject.factoryList.Add(realHash, new GameObjectFactory(GameObject.createFromUpdate<GalactazoidsGame>));
         }
 
         #endregion

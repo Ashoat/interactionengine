@@ -92,6 +92,7 @@
     <Compile Include="GameObjects\Character.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\Game.cs" />
+    <Compile Include="GameObjects\HealthBar.cs" />
     <Compile Include="GameObjects\HUD.cs" />
     <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameObjects\MathHelper.cs" />

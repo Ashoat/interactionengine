@@ -15,13 +15,13 @@ namespace GlobalGameJam.GameObjects {
         private Direction moveDirection;
         public override void update() {
             base.update();
-            if (this.busyPerformingAction.value > 0) return;
+            if (this.busyPerformingAction.value > 0 || Health < 0) return;
             List<Character> chars = Map.getVisibleCharacters(this.position, 1);
             foreach (Character character in chars) {
                 //if (characterType.getAttitudeToward(character.characterType) < 0) {
                 int relation = characterType.getAttitudeToward(character);
                 Console.Write(this.classHash + " sees " + character.classHash);
-                Console.WriteLine(" Attitude:" + relation.ToString());
+                Console.WriteLine("; Attitude: " + relation.ToString());
                 
                 if (relation > 0) {
                     if (MathHelper.PointDistance(this.position, character.position) <= 1.0f) {
