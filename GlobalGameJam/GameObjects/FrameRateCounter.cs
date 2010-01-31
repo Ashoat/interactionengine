@@ -110,44 +110,44 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public void onDraw() {
-            if (Engine.userInterface.getGraphicsDevice() != null) this.loadContent();
+            //if (Engine.userInterface.getGraphicsDevice() != null) this.loadContent();
 
-            drawHistory[++lastDrawIndex % numDraws] = Engine.gameTime.TotalRealTime;
+            //drawHistory[++lastDrawIndex % numDraws] = Engine.gameTime.TotalRealTime;
 
-            if ((Engine.gameTime.TotalRealTime - lastFrameRateCalculation).TotalMilliseconds > 400) {
-                lastFrameRateCalculation = Engine.gameTime.TotalRealTime;
+            //if ((Engine.gameTime.TotalRealTime - lastFrameRateCalculation).TotalMilliseconds > 400) {
+            //    lastFrameRateCalculation = Engine.gameTime.TotalRealTime;
 
-                TimeSpan time = drawHistory[lastDrawIndex % numDraws] - drawHistory[(lastDrawIndex + 1) % numDraws];
+            //    TimeSpan time = drawHistory[lastDrawIndex % numDraws] - drawHistory[(lastDrawIndex + 1) % numDraws];
 
-                frameRate = numDraws / time.TotalSeconds;
+            //    frameRate = numDraws / time.TotalSeconds;
 
-                frameRate = System.Math.Round(10 * frameRate) / 10;
-            }
+            //    frameRate = System.Math.Round(10 * frameRate) / 10;
+            //}
 
-            string fps = string.Format("fps: {0}", frameRate);
-            fps += ", #" + lastDrawIndex;
+            //string fps = string.Format("fps: {0}", frameRate);
+            //fps += ", #" + lastDrawIndex;
 
-            string tps = string.Format("tps: {0}", gameObject.TickRate);
-            if (Engine.gameTime.IsRunningSlowly) tps += ", slow";
+            //string tps = string.Format("tps: {0}", gameObject.TickRate);
+            //if (Engine.gameTime.IsRunningSlowly) tps += ", slow";
 
-            SpriteBatch spriteBatch = ((UserInterface2D)Engine.userInterface).spriteBatch;
+            //SpriteBatch spriteBatch = ((UserInterface2D)Engine.userInterface).spriteBatch;
 
-            Viewport view = UserInterface2D.graphicsDevice.Viewport;
+            //Viewport view = UserInterface2D.graphicsDevice.Viewport;
 
-            float rotation = 0;
-            float scale = 1;
-            Vector2 origin = Vector2.Zero;
-            float whiteLayer = 0.0000000101f;
-            float blackLayer = 0.0000000102f;
-            Vector2 whitePosition = new Vector2(view.Width - stringWidth, view.Height - 20 - 2 * spriteFont.LineSpacing);
-            Vector2 blackPosition = whitePosition + Vector2.One;
-            Vector2 whiteCountPosition = whitePosition + new Vector2(0, spriteFont.LineSpacing);
-            Vector2 blackCountPosition = whiteCountPosition + Vector2.One;
+            //float rotation = 0;
+            //float scale = 1;
+            //Vector2 origin = Vector2.Zero;
+            //float whiteLayer = 0.0000000101f;
+            //float blackLayer = 0.0000000102f;
+            //Vector2 whitePosition = new Vector2(view.Width - stringWidth, view.Height - 20 - 2 * spriteFont.LineSpacing);
+            //Vector2 blackPosition = whitePosition + Vector2.One;
+            //Vector2 whiteCountPosition = whitePosition + new Vector2(0, spriteFont.LineSpacing);
+            //Vector2 blackCountPosition = whiteCountPosition + Vector2.One;
 
-            spriteBatch.DrawString(spriteFont, fps, blackPosition, Color.Black, rotation, origin, scale, SpriteEffects.None, blackLayer);
-            spriteBatch.DrawString(spriteFont, fps, whitePosition, Color.White, rotation, origin, scale, SpriteEffects.None, whiteLayer);
-            spriteBatch.DrawString(spriteFont, tps, blackCountPosition, Color.Black, rotation, origin, scale, SpriteEffects.None, blackLayer);
-            spriteBatch.DrawString(spriteFont, tps, whiteCountPosition, Color.White, rotation, origin, scale, SpriteEffects.None, whiteLayer);
+            //spriteBatch.DrawString(spriteFont, fps, blackPosition, Color.Black, rotation, origin, scale, SpriteEffects.None, blackLayer);
+            //spriteBatch.DrawString(spriteFont, fps, whitePosition, Color.White, rotation, origin, scale, SpriteEffects.None, whiteLayer);
+            //spriteBatch.DrawString(spriteFont, tps, blackCountPosition, Color.Black, rotation, origin, scale, SpriteEffects.None, blackLayer);
+            //spriteBatch.DrawString(spriteFont, tps, whiteCountPosition, Color.White, rotation, origin, scale, SpriteEffects.None, whiteLayer);
 
         }
 
