@@ -218,8 +218,8 @@ namespace GlobalGameJam.GameObjects {
                     break;
             }
             if (returnEntity != null) {
+                returnEntity.Map = this;
                 if (returnEntity is Character) {
-                    ((Character)returnEntity).Map = this;
                     UpdatableGameObject<Character> ug = new UpdatableGameObject<Character>(this);
                     ug.value = (Character)returnEntity;
                     characterList.Add(ug);

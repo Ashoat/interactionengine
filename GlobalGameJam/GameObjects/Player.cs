@@ -5,6 +5,7 @@ using GlobalGameJam.Graphics;
 using InteractionEngine.Constructs.Datatypes;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -92,6 +93,7 @@ namespace GlobalGameJam.GameObjects {
                 // one second delay for shape-shifting?
                 this.busyPerformingAction.value = 1000;
                 // do animation
+                ((CharacterGraphics)graphics).startShiftAnimation();
             } else {
                 Console.WriteLine("Can't shift, enemies nearby");
                 // notify of failure to shift
@@ -104,6 +106,7 @@ namespace GlobalGameJam.GameObjects {
             Entity entity = Map.getEntity(Map.getPointInDirection(Position, Direction));
             if (entity != null) attack(entity);
             // do stuff
+            ((CharacterGraphics)graphics).startAttackAnimation(Direction);
         }
 
         public override void wasAttacked(Character attacker, int damage) {
