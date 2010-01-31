@@ -34,6 +34,10 @@ namespace InteractionEngine.Constructs {
 
         #region Constructors and Deconstructors
 
+        // Contains the number of GameObjects this LoadRegion should contain after loading.
+        // Used so we know when we're done transferring it.
+        public int numberOfGameObjects = 0;
+
         /// <summary>
         /// Constructs the LoadRegion from the GameWorld.
         /// This method isn't an actual constructor because it doesn't return a LoadRegion if you're a client. That's because we can't make the LoadRegion until the server updates us with the ID.
@@ -81,7 +85,7 @@ namespace InteractionEngine.Constructs {
             // Add this FieldContainer to the GameWorld. This will set its ID.
             InteractionEngine.Engine.addLoadRegion(returnRegion);
             foreach (Networking.Client client in clients)
-                client.sendUpdate(new Networking.CreateRegion(returnRegion.id));
+                client.sendUpdate(new Networking.CreateRegion(returnRegion.id, 0));
             return returnRegion;
         }
 
@@ -137,7 +141,7 @@ namespace InteractionEngine.Constructs {
             if (InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new GameWorldException("LoadRegion.sendToClient(Client) can only be called from the GameWorld by a server. Please note that the majority of EventMethods execute on both the server and client. Two notable exceptions are EventMethods triggered by Client.onJoin and Client.onQuit. You can also: 1) Manually check Engine.status within the EventMethod, 2) Make sure only the MULTIPLAYER_SERVERCLIENT can trigger the event from the UI, or 3) Call the EventMethod from the EventCache, and make sure it is only added to the EventCache on the server.");
             // The easy part. Send them the LoadRegion.
-            client.sendUpdate(new Networking.CreateRegion(id));
+            client.sendUpdate(new Networking.CreateRegion(id, this.getGameObjectArray().Length));
             // Now we have to package up every object in the LoadRegion! Yay!
             foreach (int gameObjectID in objects) {
                 GameObjectable gameObject = Engine.getGameObject(gameObjectID);
