@@ -271,6 +271,10 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             Engine.game.setWindowSize(width, height);
         }
 
+        public void setFullScreen(bool fullscreen) {
+            Engine.game.setFullScreenMode(fullscreen);
+        }
+
         /// <summary>
         /// Initialize stuff.
         /// </summary>
