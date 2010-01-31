@@ -20,7 +20,7 @@ namespace GlobalGameJam.Graphics {
         private Emitter shift_emitter;
         private bool attacking;
         private bool shifting;
-        private List<Modifier> modifiers;
+        //private List<Modifier> modifiers;
         ModifierLine lmod;
         private Character entity;
 
@@ -40,7 +40,7 @@ namespace GlobalGameJam.Graphics {
             : base(entity) {
             this.entity = entity;
             frameChangeTimePrev = DateTime.Now;
-            tick = 0;
+            
         }
 
         public override void loadContent()

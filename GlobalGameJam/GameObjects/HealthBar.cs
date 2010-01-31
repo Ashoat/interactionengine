@@ -45,7 +45,10 @@ namespace GlobalGameJam.GameObjects {
 
         UpdatableGameObject<Map> map;
         public float HealthPercentage {
-            get { return (this.map.value != null && this.map.value.getPlayer() != null) ? this.map.value.getPlayer().Health : 100; }
+            get {
+                return (this.map.value != null && this.map.value.getPlayer() != null)
+                    ? this.map.value.getPlayer().Health : 100;
+            }
         }
 
         Location location;

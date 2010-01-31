@@ -25,10 +25,10 @@ namespace GlobalGameJam.GameObjects {
                         graphics.Tint = Color.White;
                         break;
                     case 2:
-                        graphics.Tint = Color.PaleTurquoise;
+                        graphics.Tint = Color.LightSeaGreen;
                         break;
                     case 3:
-                        graphics.Tint = Color.Blue;
+                        graphics.Tint = Color.Salmon;
                         break;
                 }
             
@@ -45,6 +45,11 @@ namespace GlobalGameJam.GameObjects {
             base.construct();
             this.attackStrength.value = attackStrength.value * Level;
             this.Health = Health * Level;
+        }
+
+        public override EntityGraphics makeGraphics()
+        {
+            return new NPCGraphics(this);
         }
 
         public override void update() {

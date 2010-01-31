@@ -12,7 +12,7 @@ namespace GlobalGameJam.Graphics {
     class MenuGraphics: Graphics2D {
         public List<String> menuStrings;
         SpriteFont font;
-        float layerDepth;
+        float layerDepth = 0;
         bool visible;
         float menuStringWidth; // This is the largest string in the menu
         float menuStringHeight;

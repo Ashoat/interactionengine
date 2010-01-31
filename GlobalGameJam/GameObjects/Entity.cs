@@ -15,10 +15,20 @@ namespace GlobalGameJam.GameObjects {
         private UpdatableInteger x;
         private UpdatableInteger y;
         private Direction direction;
+        private int healthMax;
 
         public int Health {
             get { return health.value; }
-            set { health.value = value; }
+            set { 
+                health.value = value;
+                if (healthMax == 0) // init health max
+                    healthMax = value;
+            }
+        }
+
+        public int HealthMax
+        {
+            get { return healthMax; }
         }
 
         protected Map map;
@@ -89,13 +99,13 @@ namespace GlobalGameJam.GameObjects {
             this.health = new UpdatableInteger(this);
             this.x = new UpdatableInteger(this);
             this.y = new UpdatableInteger(this);
-            health.value = 100;
+            Health = 100;
         }
 
         public virtual void wasAttacked(Character attacker, int damage) {
-            health.value -= damage;
+            Health -= damage;
             GameObject.createGameObject<BAM>(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
-            if (health.value <= 0) {
+            if (Health <= 0) {
                 map.removeEntity(this);
                 this.deconstruct();
             }

@@ -18,8 +18,8 @@ namespace GlobalGameJam.Graphics {
         }
         private Vector2 direction;
         private Point sp;
-        private float prevElapsed;
-        private int tick;
+        //private float prevElapsed;
+        //private int tick;
         public ModifierLine(Vector2 direction, Point startPoint) {
             this.direction = direction;
             this.sp = startPoint;

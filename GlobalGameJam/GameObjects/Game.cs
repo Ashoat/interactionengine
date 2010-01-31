@@ -49,7 +49,7 @@ namespace GlobalGameJam.GameObjects {
 
         public Player player;
 
-        private KeyboardState oldState;
+        
         public void focusLost(Keyboardable blah) {
         }
 

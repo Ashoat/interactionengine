@@ -50,7 +50,7 @@ namespace GlobalGameJam.GameObjects {
 
         protected MenuGraphics graphics = new MenuGraphics();
         List<String> menuStrings;
-        public int activeMenuItemIndex;
+        
         public override void construct() {
             //graphics.LayerDepth = 0;
             //graphics.TextureName = "menu";
