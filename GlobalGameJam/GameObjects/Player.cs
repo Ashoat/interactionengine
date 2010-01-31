@@ -39,7 +39,18 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             base.construct();
             movementDelay = 200;
-            graphics.setTexture("Player");
+            UpdateTextures();
+        }
+
+        private void UpdateTextures()
+        {
+            CharacterGraphics characterGraphics = (CharacterGraphics)graphics;
+            if (characterType == CharacterType.MonkType)
+                characterGraphics.setTextures(new string[] { "player_monk_0", "player_monk_1" });
+            else if (characterType == CharacterType.SkunkType)
+                characterGraphics.setTextures(new string[] { "player_skunk_0", "player_skunk_1" });
+            else if (characterType == CharacterType.PunkType)
+                characterGraphics.setTextures(new string[] { "player_punk_0", "player_punk_1" });
         }
 
         public void handleKey(Keys key) {
@@ -72,6 +83,7 @@ namespace GlobalGameJam.GameObjects {
             if (this.busyPerformingAction.value > 0) return;
             if (this.Map.getVisibleCharacters(this.position, 2).Count == 0) {
                 this.characterType = CharacterType.getNextShift(this.characterType);
+                UpdateTextures();
                 // one second delay for shape-shifting?
                 this.busyPerformingAction.value = 1000;
                 // do animation
