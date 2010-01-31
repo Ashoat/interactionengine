@@ -56,6 +56,10 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="InteractionEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\trunk\obj\x86\Debug\InteractionEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
@@ -177,10 +181,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InteractionEngine\InteractionEngine.csproj">
-      <Project>{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}</Project>
-      <Name>InteractionEngine</Name>
-    </ProjectReference>
     <ProjectReference Include="..\InteractionEngine\InteractionEngine.csproj">
       <Project>{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}</Project>
       <Name>InteractionEngine</Name>

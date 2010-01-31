@@ -13,7 +13,7 @@ Global Settings
 {
     Xbox File = Xbox\ggj.xgs;
     Windows File = Win\ggj.xgs;
-    Header File = C:\Users\Sean\Desktop\GGJ Game\Content\Audio\ggj.h;
+    Header File = ggj.h;
     Exclude Category Names = 0;
     Exclude Variable Names = 0;
     Last Modified Low = 116042963;
@@ -225,6 +225,10 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
+    Xbox Bank Last Modified Low = 0;
+    Xbox Bank Last Modified High = 0;
+    PC Bank Last Modified Low = 4032885372;
+    PC Bank Last Modified High = 30057146;
     Bank Last Revised Low = 3921909024;
     Bank Last Revised High = 30057146;
 
@@ -246,8 +250,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 3721667766;
-            Last Modified High = 30056975;
+            Last Modified Low = 2721285266;
+            Last Modified High = 30057143;
         }
     }
 
@@ -1022,6 +1026,26 @@ Sound Bank
         {
             Name = shoot;
             Index = 8;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = omnomnom;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = omnomnom;
+            Index = 0;
             Weight Min = 0;
             Weight Max = 255;
         }
