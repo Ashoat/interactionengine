@@ -14,8 +14,6 @@ Player:
 EntityGraphics:
 --Animations
 
-
-
 General:
 --Spells/abilities?
 --Awesome graphics!!!

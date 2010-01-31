@@ -91,7 +91,6 @@ namespace GlobalGameJam.GameObjects {
         #endregion
 
         internal void handleKey(Microsoft.Xna.Framework.Input.Keys key) {
-            
             if (key.Equals(Keys.Escape)) {
                 exitMenu();
             } else {

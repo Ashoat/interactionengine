@@ -40,17 +40,6 @@ namespace GlobalGameJam.GameObjects {
 
         #endregion
 
-        static List<BAM> listOfBams = new List<BAM>();
-        public static BAM getBAM(LoadRegion loadRegion) {
-            if (listOfBams.Count > 0) {
-                BAM bam = listOfBams[0];
-                listOfBams.Remove(bam);
-                return bam;
-            } else {
-                return GameObject.createGameObject<BAM>(loadRegion);
-            }
-        }
-
         private UpdatableInteger lifeSpan;
 
         public bool isDisplaying() {
@@ -88,7 +77,7 @@ namespace GlobalGameJam.GameObjects {
             this.lifeSpan.value -= Engine.gameTime.ElapsedGameTime.Milliseconds;
             if (this.lifeSpan.value < 0) {
                 this.graphics.Visible = false;
-                listOfBams.Add(this);
+                this.deconstruct();
             } else Engine.addEvent(new Event(this.id, "tick", null));
         }
 

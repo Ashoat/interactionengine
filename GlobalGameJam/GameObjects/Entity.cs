@@ -87,7 +87,7 @@ namespace GlobalGameJam.GameObjects {
 
         public virtual void wasAttacked(int damage) {
             health.value -= damage;
-            BAM.getBAM(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
+            GameObject.createGameObject<BAM>(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
             if (health.value <= 0) {
                 this.deconstruct();
             }
