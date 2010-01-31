@@ -137,8 +137,8 @@ namespace GlobalGameJam.GameObjects {
                             } else if (graphics.activeMenuItemIndex == 4) {
                                 map.LoadMap("levels/level4.ani");
                             }
+                            exitMenu();
                         }
-                        exitMenu();
                         break;
                     case Keys.M:
                         if (graphics.activeMenuItemIndex == 0) {
@@ -201,10 +201,10 @@ namespace GlobalGameJam.GameObjects {
                 LoadRegion lr = (LoadRegion)parameter;
                 foreach (GameObject go in lr.getGameObjectArray()) {
                     if (go is Map) {
-                        exitMenu();
                         map = (Map)go;
                         map.Active = true;
                         game.addMap(map);
+                        exitMenu();
                         Engine.addEvent(new InteractionEngine.EventHandling.Event(map.id, "tick", null));
                         return;
                     }
