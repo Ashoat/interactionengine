@@ -78,9 +78,6 @@ namespace GlobalGameJam.GameObjects {
                 case Keys.RightControl:
                     attack();
                     break;
-                case Keys.O:
-                    Program.audio.playSound("omnomnom");
-                    break;
                 default:
                     break;
             }
@@ -95,6 +92,7 @@ namespace GlobalGameJam.GameObjects {
                 // one second delay for shape-shifting?
                 this.busyPerformingAction.value = 1000;
                 // do animation
+                Program.audio.playSound("shift");
                 ((CharacterGraphics)graphics).startShiftAnimation();
             } else {
                 Console.WriteLine("Can't shift, enemies nearby");
@@ -115,6 +113,7 @@ namespace GlobalGameJam.GameObjects {
             base.wasAttacked(attacker, damage/3);
             if (Health <= 0) {
                 // game over
+                Program.audio.playSound("fail");
             }
         }
 

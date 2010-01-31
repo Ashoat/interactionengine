@@ -106,6 +106,7 @@ namespace GlobalGameJam.GameObjects {
             Health -= damage;
             GameObject.createGameObject<BAM>(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
             if (Health <= 0) {
+                Program.audio.playSound("death");
                 map.removeEntity(this);
                 this.deconstruct();
             }
