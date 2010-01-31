@@ -27,6 +27,7 @@ namespace GlobalGameJam {
             GalactazoidsGame game = GameObject.createGameObject<GalactazoidsGame>(localRegion);
             Map map = GameObject.createGameObject<Map>(localRegion);
             HUD hud = GameObject.createGameObject<HUD>(localRegion);
+            FrameRateCounter counter = GameObject.createGameObject<FrameRateCounter>(localRegion);
             HealthBar health = GameObject.createGameObject<HealthBar>(localRegion);
             health.setLocationAndMap(new Vector3(15, 29, 0), map);
             game.addMap(map);
