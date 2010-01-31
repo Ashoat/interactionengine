@@ -132,6 +132,7 @@ namespace GlobalGameJam.GameObjects {
             Vector3 position3 = this.gameObject.getLocation().Position;
             int healthBarWidth = (int)(gameObject.HealthPercentage * this.texture.Width / 100);
             Rectangle healthBarDimensions = new Rectangle((int)position3.X, (int)position3.Y, healthBarWidth, this.texture.Height);
+            Rectangle sourceDimensions = new Rectangle(0, 0, healthBarWidth, this.texture.Height);
             spriteBatch.Draw(texture, healthBarDimensions, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, HealthBar.LAYER);
         }
 
