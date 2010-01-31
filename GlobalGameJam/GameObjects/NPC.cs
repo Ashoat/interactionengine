@@ -21,7 +21,6 @@ namespace GlobalGameJam.GameObjects {
 
         private int defaultRunSquares = 3;
         private int level = 1;
-        public bool running;
         private float lineOfSight = 3;
         private int runSquaresLeft;
         private Direction moveDirection;
@@ -60,7 +59,7 @@ namespace GlobalGameJam.GameObjects {
                 
                 if (relation > 0) {
                     if (MathHelper.PointDistance(this.Position, character.Position) <= 1.0f) {
-                        // Attack
+                        // Attack  
                         //Debug.WriteLine("Attacking");
                         this.attack(character);
                     } else {

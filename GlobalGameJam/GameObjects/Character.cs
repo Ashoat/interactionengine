@@ -10,6 +10,8 @@ namespace GlobalGameJam.GameObjects {
 
     public abstract class Character : Entity {
 
+        public Point oldPosition;
+        public bool running;
         public class CharacterType {
             public class UpdatableCharacterType {
                 
@@ -138,7 +140,8 @@ namespace GlobalGameJam.GameObjects {
         /// <returns>True if and only if the move completed successfully.</returns>
         public bool move(Direction moveDirection) {
             if (busyPerformingAction.value > 0) return false;
-            Point oldPosition = this.Position;
+            oldPosition = this.Position;
+            running = true;
             Point newPosition;
             switch (moveDirection) {
                 case Direction.NORTH:

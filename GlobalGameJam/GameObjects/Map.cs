@@ -10,6 +10,7 @@ using System.IO;
 using System;
 using Microsoft.Xna.Framework;
 using System.Threading;
+using InteractionEngine.Constructs.Datatypes;
 namespace GlobalGameJam.GameObjects {
 
     public class Map : GameObject, Graphable2D {
@@ -85,21 +86,21 @@ namespace GlobalGameJam.GameObjects {
             get { return width; }
         }
 
-        Entity[,] entityArray;
+        UpdatableGameObject<Entity>[,] entityArray;
 
         Player player;
-        List<Character> characterList;
+        List<UpdatableGameObject<Character>> characterList;
 
         public void LoadMap(string mapFile)
         {
             for (int y=0; y < Height; y++) {
                 for (int x=0; x < Width; x++) {
                     if (entityArray[x,y] != null){
-                        entityArray[x, y].deconstruct();
+                        entityArray[x, y].value.deconstruct();
                     }
                 }
             }
-            characterList = new List<Character>();
+            characterList = new List<UpdatableGameObject<Character>>();
             try
             {
                 FileStream file = new FileStream(mapFile, FileMode.Open, FileAccess.Read);
@@ -131,7 +132,7 @@ namespace GlobalGameJam.GameObjects {
                 file.Close();
 
                 // Allocate the tile grid.
-                entityArray = new Entity[Width, Height];
+                entityArray = new UpdatableGameObject<Entity>[Width, Height];
 
                 // Loop over every tile position,
                 for (int y = 0; y < Height; ++y)
@@ -140,10 +141,11 @@ namespace GlobalGameJam.GameObjects {
                     {
                         // to load each tile.
                         char tileType = characters[x,y];
-                        entityArray[x, y] = LoadTile(tileType, x, y);
-                        if (entityArray[x, y] != null)
+                        entityArray[x, y] = new UpdatableGameObject<Entity>(this);
+                        entityArray[x, y].value = LoadTile(tileType, x, y);
+                        if (entityArray[x, y].value != null)
                         {
-                            entityArray[x, y].Position = new Point(x, y);
+                            entityArray[x, y].value.Position = new Point(x, y);
                         }
                     }
                 }
@@ -216,7 +218,9 @@ namespace GlobalGameJam.GameObjects {
             if (returnEntity != null) {
                 if (returnEntity is Character) {
                     ((Character)returnEntity).Map = this;
-                    characterList.Add((Character)returnEntity);
+                    UpdatableGameObject<Character> ug = new UpdatableGameObject<Character>(this);
+                    ug.value = (Character)returnEntity;
+                    characterList.Add(ug);
                 }
                 returnEntity.getLocation().Position = new Microsoft.Xna.Framework.Vector3(x, y, 0);
             }
@@ -235,7 +239,7 @@ namespace GlobalGameJam.GameObjects {
                 for (int y = (int)Math.Max(location.Y-radius,0); y <= Math.Min(location.Y+radius,Height-1); y++) {
                     float val = (float)Math.Sqrt(Math.Pow(location.X - x, 2) + Math.Pow(location.Y - y, 2));
                     if (0 < val && val <= radius) {
-                        Entity e = entityArray[x, y];
+                        Entity e = entityArray[x, y].value;
                         if (e != null && e is Character) {
                             charList.Add((Character)e);
                         }
@@ -256,7 +260,7 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public Entity getEntity(Point location) {
-            return entityArray[location.X, location.Y];
+            return entityArray[location.X, location.Y].value;
         }
 
         /// <summary>
@@ -266,14 +270,14 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="character">The character object to update the map with</param>
         public void setCharacter(Point oldLocation, Character character) {
             if (character != null) {
-                entityArray[character.Position.X, character.Position.Y] = character;
+                entityArray[character.Position.X, character.Position.Y].value = character;
             }
             entityArray[oldLocation.X, oldLocation.Y] = null;
         }
         
         public void update(InteractionEngine.Networking.Client client, object ob) {
-            foreach (Character c in characterList) {
-                c.update();
+            foreach (UpdatableGameObject<Character> c in characterList) {
+                c.value.update();
             }
             Thread.Sleep(16);
             if (Active) {

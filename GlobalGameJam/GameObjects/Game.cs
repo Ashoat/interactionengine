@@ -49,16 +49,19 @@ namespace GlobalGameJam.GameObjects {
 
         public Player player;
 
+        private KeyboardState oldState;
         public void focusLost(Keyboardable blah) {
         }
 
         public void keyEvent(Keys key, KeyEvent keyEvent) {
             //Thread.Sleep(100);
             //Console.WriteLine("Key: " + key + ", " + keyEvent.ToString());
+            //if (oldState == null) oldState = Keyboard.GetState();
+            //KeyboardState state = Keyboard.GetState();
             if (menu.Displayed) {
                 if (keyEvent == KeyEvent.KEY_PRESSED) menu.handleKey(key);
             } else {
-                if (keyEvent != KeyEvent.KEY_TYPED) return;
+                if (keyEvent != KeyEvent.IS_DOWN) return;
                 if (Keys.Escape == key) {
                     menu.show();
                 } else {

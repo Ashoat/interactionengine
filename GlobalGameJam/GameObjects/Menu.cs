@@ -60,6 +60,7 @@ namespace GlobalGameJam.GameObjects {
             menuStrings.Add("Play Level 1");
             menuStrings.Add("Play Level 2");
             menuStrings.Add("Play Level 3");
+            menuStrings.Add("Play Level 4");
             graphics.menuStrings = menuStrings;
             graphics.Visible = false;
             graphics.activeMenuItemIndex = 0;
@@ -133,9 +134,11 @@ namespace GlobalGameJam.GameObjects {
                                 map.LoadMap("levels/level2.ani");
                             } else if (graphics.activeMenuItemIndex == 3) {
                                 map.LoadMap("levels/level3.ani");
+                            } else if (graphics.activeMenuItemIndex == 4) {
+                                map.LoadMap("levels/level4.ani");
                             }
-                            exitMenu();
                         }
+                        exitMenu();
                         break;
                     case Keys.M:
                         if (graphics.activeMenuItemIndex == 0) {
