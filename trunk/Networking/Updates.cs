@@ -63,19 +63,28 @@ namespace InteractionEngine.Networking {
         // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
         public static System.Collections.Generic.List<EventHandling.Event> onCreateRegion = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
 
+        // Contains a list of EventMethods that get triggered when this EventHandling.Event is executed.
+        // Used on the client side so that post-instantiation work can happen, even though the original EventMethod couldn't do any post-instantiation work because the LoadRegion never instantiated.
+        public static System.Collections.Generic.List<EventHandling.Event> onRegionTransfer = new System.Collections.Generic.List<InteractionEngine.EventHandling.Event>();
+
         // Contains the ID to assign this LoadRegion.
         // Used for making sure LoadRegions have synchronized IDs across the network.
         private int loadRegionID;
+
+        // Contains the number of GameObjects in this LoadRegin.
+        // Used in case something needs to know how many are going to be initialized.
+        private int numberOfGameObjects;
 
         /// <summary>
         /// Construct this Update.
         /// This constructor should only be used on the server side.
         /// </summary>
         /// <param name="loadRegionID">The ID to assign this LoadRegion.</param>
-        internal CreateRegion(int loadRegionID) {
+        internal CreateRegion(int loadRegionID, int numberOfGameObjects) {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVER && InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_SERVERCLIENT)
                 throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             this.loadRegionID = loadRegionID;
+            this.numberOfGameObjects = numberOfGameObjects;
         }
 
         /// <summary>
@@ -87,6 +96,7 @@ namespace InteractionEngine.Networking {
             if (InteractionEngine.Engine.status != InteractionEngine.Engine.Status.MULTIPLAYER_CLIENT)
                 throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             loadRegionID = reader.ReadInt32();
+            numberOfGameObjects = reader.ReadInt32();
         }
 
         /// <summary>
@@ -101,6 +111,7 @@ namespace InteractionEngine.Networking {
                 throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             writer.Write(Update.CREATE_REGION);
             writer.Write(this.loadRegionID);
+            writer.Write(this.numberOfGameObjects);
         }
         
         /// <summary>
@@ -112,6 +123,7 @@ namespace InteractionEngine.Networking {
                 throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             if (InteractionEngine.Engine.getLoadRegion(this.loadRegionID) != null) return;
             Constructs.LoadRegion loadRegion = new Constructs.LoadRegion(this.loadRegionID);
+            loadRegion.numberOfGameObjects = numberOfGameObjects;
             foreach (EventHandling.Event eventObject in onCreateRegion) {
                 eventObject.parameter = (object)loadRegion;
                 Engine.addEvent(eventObject);
@@ -268,6 +280,7 @@ namespace InteractionEngine.Networking {
                 throw new InteractionEngineException("Updates have seperate constructors for use on the client and server side. On the client, you must construct them using a BinaryReader containing the update packet from the server; on the server, you must construct them with the data that will be sent in the packet.");
             if (InteractionEngine.Engine.getGameObject(this.gameObjectID) != null) return;
             Constructs.LoadRegion loadRegion = InteractionEngine.Engine.getLoadRegion(this.loadRegionID);
+            if (loadRegion.numberOfGameObjects > 0) loadRegion.numberOfGameObjects--;
             if (loadRegion == null) return;
             Constructs.GameObject gameObject = Constructs.GameObject.factoryList[this.classHash](loadRegion, this.gameObjectID);
             foreach (System.Collections.Generic.KeyValuePair<int, object> pair in fieldValues) {
@@ -277,6 +290,11 @@ namespace InteractionEngine.Networking {
             }
             foreach (EventHandling.Event eventObject in onCreateObject) {
                 Engine.addEvent(new EventHandling.Event(eventObject.gameObjectID, eventObject.eventHash, (object)gameObject));
+            }
+            if (loadRegion.numberOfGameObjects == 0) {
+                foreach (EventHandling.Event loadRegionEventObject in CreateRegion.onRegionTransfer) {
+                    Engine.addEvent(new EventHandling.Event(loadRegionEventObject.gameObjectID, loadRegionEventObject.eventHash, (object)loadRegion));
+                }
             }
         }
 
