@@ -297,7 +297,7 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
             foreach (Constructs.LoadRegion loadRegion in InteractionEngine.Engine.getGraphableLoadRegions()) {
                 // Loop through the GameObjects within those LoadRegions
                 foreach (Constructs.GameObjectable gameObject in loadRegion.getGameObjectArray()) {
-                    if (gameObject is Audio.Audible3D) ((Audio.Audible3D)gameObject).getAudio3D().output();
+                    if (gameObject is Audio.Audible) ((Audio.Audible3D)gameObject).getAudio3D().output();
                     if (gameObject is Graphable3D) ((Graphable)gameObject).getGraphics().onDraw();
                 }
                 if (loadRegion == user.localLoadRegion) {
