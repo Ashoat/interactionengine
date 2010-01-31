@@ -314,6 +314,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         // Used for drawing the sprite.
         private Microsoft.Xna.Framework.Graphics.Texture2D texture;
         private string textureName;
+        private Color tint = Color.White;
         private Color[] pixels;
         private bool visible = true;
         private float scale = 1;
@@ -351,6 +352,11 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             set { this.scale = value; }
         }
 
+        public Color Tint {
+            get { return this.tint; }
+            set { this.tint = value; }
+        }
+
         /// <summary>
         /// One is back, zero is front.
         /// </summary>
@@ -369,7 +375,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             Vector2 position = new Vector2(position3.X, position3.Y);
             float rotationDegrees = this.gameObject.getLocation().yaw;
             Vector2 origin = new Vector2(texture.Width/2, texture.Height/2);
-            spriteBatch.Draw(texture, position + origin, (Rectangle?)null, Color.White, (float)Math.PI / 180 * rotationDegrees,
+            spriteBatch.Draw(texture, position + origin, (Rectangle?)null, tint, (float)Math.PI / 180 * rotationDegrees,
                 origin, scale, SpriteEffects.None, layerDepth);
         }
 
