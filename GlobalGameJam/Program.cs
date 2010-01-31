@@ -27,9 +27,10 @@ namespace GlobalGameJam {
 
             // Set up the local LoadRegion with its buttons.
             LoadRegion localRegion = LoadRegion.createLoadRegion();
+            LoadRegion syncedRegion = LoadRegion.createLoadRegion();
 
             GalactazoidsGame game = GameObject.createGameObject<GalactazoidsGame>(localRegion);
-            Map map = GameObject.createGameObject<Map>(localRegion);
+            Map map = GameObject.createGameObject<Map>(syncedRegion);
             HUD hud = GameObject.createGameObject<HUD>(localRegion);
             FrameRateCounter counter = GameObject.createGameObject<FrameRateCounter>(localRegion);
             HealthBar health = GameObject.createGameObject<HealthBar>(localRegion);
