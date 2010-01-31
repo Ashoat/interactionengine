@@ -99,7 +99,7 @@ namespace GlobalGameJam.GameObjects {
             return new CharacterGraphics(this);
         }
 
-        private UpdatableInteger attackStrength;
+        protected UpdatableInteger attackStrength;
         // If this value is more than zero, the character is already busy doing something.
         // Specifies how many milliseconds it'll be before it's done.
         protected UpdatableInteger busyPerformingAction;

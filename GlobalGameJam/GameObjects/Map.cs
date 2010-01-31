@@ -159,9 +159,27 @@ namespace GlobalGameJam.GameObjects {
             switch (tileType) {
                 case 'M':
                     returnEntity = GameObject.createGameObject<Monk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 1;
+                    break;
+                case 'N':
+                    returnEntity = GameObject.createGameObject<Monk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 2;
+                    break;
+                case 'O':
+                    returnEntity = GameObject.createGameObject<Monk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 3;
                     break;
                 case 'P':
                     returnEntity = GameObject.createGameObject<Punk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 1;
+                    break;
+                case 'Q':
+                    returnEntity = GameObject.createGameObject<Punk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 2;
+                    break;
+                case 'R':
+                    returnEntity = GameObject.createGameObject<Punk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 3;
                     break;
                 case '|':
                     returnEntity = GameObject.createGameObject<Wall>(mapLoadRegion);
@@ -177,6 +195,15 @@ namespace GlobalGameJam.GameObjects {
                     break;
                 case 'S':
                     returnEntity = GameObject.createGameObject<Skunk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 1;
+                    break;
+                case 'T':
+                    returnEntity = GameObject.createGameObject<Skunk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 2;
+                    break;
+                case 'U':
+                    returnEntity = GameObject.createGameObject<Skunk>(mapLoadRegion);
+                    ((NPC)returnEntity).Level = 3;
                     break;
                 case '!':
                     returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
@@ -243,13 +270,14 @@ namespace GlobalGameJam.GameObjects {
             }
             entityArray[oldLocation.X, oldLocation.Y] = null;
         }
-
+        
         public void update(InteractionEngine.Networking.Client client, object ob) {
             foreach (Character c in characterList) {
                 c.update();
             }
-            //Thread.Sleep(16);
+            Thread.Sleep(16);
             if (Active) {
+
                 Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
             }
         }

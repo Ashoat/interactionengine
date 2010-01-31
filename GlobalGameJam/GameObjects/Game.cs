@@ -43,8 +43,8 @@ namespace GlobalGameJam.GameObjects {
 
         public override void construct() {
             
-            this.addEventMethod("timetick", new InteractionEngine.EventHandling.EventMethod(this.tick));
-            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "timetick", null));
+            //this.addEventMethod("timetick", new InteractionEngine.EventHandling.EventMethod(this.tick));
+            //Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "timetick", null));
         }
 
         public Player player;
