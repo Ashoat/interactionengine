@@ -20,6 +20,7 @@ using Microsoft.Xna.Framework.Input;
 using InteractionEngine.EventHandling;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System.Windows.Forms;
 
 namespace InteractionEngine.UserInterface.TwoDimensional {
 
@@ -115,14 +116,16 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
 
         private MouseMaskTest[] maskTests = new MouseMaskTest[] {
             new MouseMaskTest(MOUSEMASK_OVER, (MouseState mouse) => true),
-            new MouseMaskTest(MOUSEMASK_LEFT_CLICK, (MouseState mouse) => mouse.LeftButton == ButtonState.Pressed),
-            new MouseMaskTest(MOUSEMASK_RIGHT_CLICK, (MouseState mouse) => mouse.RightButton == ButtonState.Pressed),
+            new MouseMaskTest(MOUSEMASK_LEFT_CLICK, (MouseState mouse) => mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed),
+            new MouseMaskTest(MOUSEMASK_RIGHT_CLICK, (MouseState mouse) => mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed),
         };
 
         #region Keyboard Stuff
 
         private KeyboardFocus kf;
-        private const int repeatDelay = 20;
+        private static int repeatInterval = 1000 / (2 + SystemInformation.KeyboardSpeed);
+        private static int repeatDelay = 250 + 250 * SystemInformation.KeyboardDelay;
+        private List<Microsoft.Xna.Framework.Input.Keys> pressed = new List<Microsoft.Xna.Framework.Input.Keys>();
         private Dictionary<Microsoft.Xna.Framework.Input.Keys, double> repeatTimes = new Dictionary<Microsoft.Xna.Framework.Input.Keys, double>();
         public void registerKeyboardFocus(KeyboardFocus kf) {
             this.kf = kf;
@@ -130,11 +133,24 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
         private void checkKeyboard(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents) {
             if (this.kf == null || !Engine.game.IsActive) return;
             Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+            foreach (Microsoft.Xna.Framework.Input.Keys key in new List<Microsoft.Xna.Framework.Input.Keys>(pressed)) {
+                if (!Array.Exists(keyboard.GetPressedKeys(), new System.Predicate<Microsoft.Xna.Framework.Input.Keys>((Microsoft.Xna.Framework.Input.Keys x) => key.Equals(x)))) {
+                    kf.keyEvent(null, key, KeyEvent.KEY_RELEASED);
+                    pressed.Remove(key);
+                }
+            }
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
-                if (!repeatTimes.ContainsKey(key) || repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
+                kf.keyEvent(null, key, KeyEvent.IS_DOWN);
+                if (!pressed.Contains(key)) {
+                    kf.keyEvent(null, key, KeyEvent.KEY_PRESSED);
+                    kf.keyEvent(null, key, KeyEvent.KEY_TYPED);
+                    pressed.Add(key);
+                    repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatDelay;
+                }
+                if (repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
                     // newEvents.Add(this.kf.getEvent((int)key));
                     kf.keyEvent(null, key, KeyEvent.KEY_TYPED);
-                    repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatDelay;
+                    repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatInterval;
                 }
             }
         }
@@ -161,7 +177,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                 this.currentlyMousedOver = interaction;
             }
             if (interaction == null) return;
-            if (mouse.LeftButton == ButtonState.Pressed) {
+            if (mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
                 if (this.leftClickPosition == null) this.leftClickPosition = mouse;
             } else {
                 if (this.leftClickPosition != null) {
@@ -172,7 +188,7 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
                 }
                 this.leftClickPosition = null;
             }
-            if (mouse.RightButton == ButtonState.Pressed) {
+            if (mouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
                 if (this.rightClickPosition == null) this.rightClickPosition = mouse;
             } else {
                 if (this.rightClickPosition != null) {
