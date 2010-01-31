@@ -89,8 +89,7 @@ namespace GlobalGameJam.GameObjects {
             health.value -= damage;
             BAM.getBAM(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
             if (health.value <= 0) {
-                graphics.Visible = false;
-                // die
+                this.deconstruct();
             }
         }
 
