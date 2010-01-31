@@ -94,6 +94,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MenuFont.spritefont">
+      <Name>MenuFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="player_monk_0.png">
       <Name>player_monk_0</Name>
       <Importer>TextureImporter</Importer>
