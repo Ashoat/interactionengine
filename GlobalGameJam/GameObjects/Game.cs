@@ -40,7 +40,7 @@ namespace GlobalGameJam.GameObjects {
         #endregion
 
         private TimeSpan start;
-
+        private bool avoidEnter;
         public override void construct() {
             
             //this.addEventMethod("timetick", new InteractionEngine.EventHandling.EventMethod(this.tick));
@@ -59,13 +59,25 @@ namespace GlobalGameJam.GameObjects {
             //if (oldState == null) oldState = Keyboard.GetState();
             //KeyboardState state = Keyboard.GetState();
             if (menu.Displayed) {
-                if (keyEvent == KeyEvent.KEY_PRESSED) menu.handleKey(key);
+                if (keyEvent == KeyEvent.KEY_PRESSED) {
+                    if (avoidEnter) {
+                        avoidEnter = false;
+                    } else {
+                        menu.handleKey(key);
+                    }
+                }
+            } else if (map.GameOver) {
+                if (key == Keys.Enter) {
+                    this.map.Message.close();
+                    menu.show();
+                    avoidEnter = true;
+                }
             } else {
-                if (key==Keys.Escape) {
+                if (key == Keys.Escape) {
                     if (keyEvent == KeyEvent.KEY_PRESSED) {
                         menu.show();
                     }
-                } else if (keyEvent == KeyEvent.IS_DOWN){
+                } else if (keyEvent == KeyEvent.IS_DOWN) {
                     if (map != null && map.getPlayer() != null) map.getPlayer().handleKey(key);
                 }
             }

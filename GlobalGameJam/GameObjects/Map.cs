@@ -61,6 +61,26 @@ namespace GlobalGameJam.GameObjects {
             return location;
         }
 
+        private bool go;
+        public bool GameOver {
+            get { return go; }
+            set { go = value; }
+        }
+
+        private bool playerWon;
+        public bool PlayerWon {
+            get { return playerWon; }
+            set { playerWon = value; }
+        }
+
+        private MessageScreen msg;
+        public MessageScreen Message {
+            get { return msg; }
+            set { msg = value; }
+        }
+
+
+
         LoadRegion mapLoadRegion;
         public override void construct() {
             location = new Location(this);
@@ -273,16 +293,23 @@ namespace GlobalGameJam.GameObjects {
         public void setCharacter(Point oldLocation, Character character) {
             if (character != null) {
                 entityArray[character.Position.X, character.Position.Y].value = character;
+                entityArray[oldLocation.X, oldLocation.Y].value = null;
             } else {
-                foreach (UpdatableGameObject<Character> uppy in characterList) {
+                entityArray[oldLocation.X, oldLocation.Y].value = null;
+                /*foreach (UpdatableGameObject<Character> uppy in characterList) {
                     Character chara = uppy.value;
                     if (chara is NPC) {
                         if (chara.Health > 0) return;
                     }
                 }
-                Console.WriteLine("You win!");
+                Message = GameObject.createGameObject<MessageScreen>(this.getLoadRegion());
+                Message.Text = "You Win1!!";
+                GameOver = true;
+                playerWon = true;
+                Message.Texture = "WinTexture";
+                Message.open();
+                */
             }
-            entityArray[oldLocation.X, oldLocation.Y].value = null;
         }
 
         //public void update(InteractionEngine.Networking.Client client, object ob) {
@@ -306,6 +333,16 @@ namespace GlobalGameJam.GameObjects {
                 UpdatableGameObject<Character> c = characterList[i];
                 c.value.update();
             }
+
+            if (!GameOver && player != null && player.Health <= 0) {
+                Message = GameObject.createGameObject<MessageScreen>(this.getLoadRegion());
+                GameOver = true;
+                playerWon = false;
+                Message.Text = "Be more careful next time!. \nPress enter to return to the menu";
+                Message.Texture = "game_over";
+                Message.open();
+            }
+
             //Thread.Sleep(16);
 
             if (DateTime.Now - timeSoundPlayedPrev > TimeSpan.FromSeconds(0.5))

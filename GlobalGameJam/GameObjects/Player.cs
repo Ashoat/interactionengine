@@ -57,6 +57,7 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public void handleKey(Keys key) {
+            Console.WriteLine("Player key: " + key);
             switch (key) {
                 case Keys.Left:
                     move(Direction.WEST);

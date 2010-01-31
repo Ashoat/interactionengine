@@ -175,7 +175,9 @@ namespace GlobalGameJam.GameObjects {
             }
 
             this.Direction = moveDirection;
-            
+            if (this is Player) {
+                Console.WriteLine("Player old: " + oldPosition + " new: " + newPosition);
+            }
             if (map.isEmpty(newPosition)) {
                 this.Position = newPosition;
                 map.setCharacter(oldPosition,this);
