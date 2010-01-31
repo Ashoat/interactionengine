@@ -124,7 +124,17 @@ namespace GlobalGameJam.GameObjects {
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
                             }
-                        } else {
+                        } else if (graphics.activeMenuItemIndex == 1) {
+                            if(map != null) map.getLoadRegion().deconstruct();
+                            LoadRegion syncedRegion = createGame();
+                            map.LoadMap("levels/campaign3.ani");//level1.ani");
+                            exitMenu();
+                        } else if (graphics.activeMenuItemIndex == 2) {
+                            if (map != null) map.getLoadRegion().deconstruct();
+                            LoadRegion syncedRegion = createGame();
+                            map.LoadMap("levels/campaign4.ani");//level2.ani");
+                            exitMenu();
+                        } else if (graphics.activeMenuItemIndex == 3) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             if (graphics.activeMenuItemIndex == 1) {
@@ -162,9 +172,9 @@ namespace GlobalGameJam.GameObjects {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
                             if (graphics.activeMenuItemIndex == 1) {
-                                map.LoadMap("levels/level1.ani");
+                                map.LoadMap("levels/campaign3.ani");
                             } else if (graphics.activeMenuItemIndex == 2) {
-                                map.LoadMap("levels/level1.ani");
+                                map.LoadMap("levels/campaign4.ani");
                             } else if (graphics.activeMenuItemIndex == 3) {
                                 map.LoadMap("levels/level2.ani");
                             }
@@ -179,8 +189,8 @@ namespace GlobalGameJam.GameObjects {
         private LoadRegion createGame() {
             LoadRegion syncedRegion = LoadRegion.createLoadRegion();
             map = GameObject.createGameObject<Map>(syncedRegion);
-            //HealthBar health = GameObject.createGameObject<HealthBar>(syncedRegion);
-            //health.setLocationAndMap(new Vector3(15, 29, 0), map);
+            HealthBar health = GameObject.createGameObject<HealthBar>(syncedRegion);
+            if (health != null) health.setLocationAndMap(new Vector3(15, 29, 0), map);
             game.addMap(map);
             return syncedRegion;
         }

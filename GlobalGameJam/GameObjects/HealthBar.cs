@@ -45,7 +45,7 @@ namespace GlobalGameJam.GameObjects {
 
         UpdatableGameObject<Map> map;
         public float HealthPercentage {
-            get { return this.map.value.getPlayer().Health; }
+            get { return (this.map.value != null && this.map.value.getPlayer() != null) ? this.map.value.getPlayer().Health : 100; }
         }
 
         Location location;
@@ -133,7 +133,7 @@ namespace GlobalGameJam.GameObjects {
             int healthBarWidth = (int)(gameObject.HealthPercentage * this.texture.Width / 100);
             Rectangle healthBarDimensions = new Rectangle((int)position3.X, (int)position3.Y, healthBarWidth, this.texture.Height);
             Rectangle sourceDimensions = new Rectangle(0, 0, healthBarWidth, this.texture.Height);
-            spriteBatch.Draw(texture, healthBarDimensions, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, HealthBar.LAYER);
+            spriteBatch.Draw(texture, healthBarDimensions, sourceDimensions, Color.White, 0, Vector2.Zero, SpriteEffects.None, HealthBar.LAYER);
         }
 
         /// <summary>

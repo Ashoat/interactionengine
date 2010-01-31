@@ -21,7 +21,7 @@ namespace GlobalGameJam.GameObjects {
 
         private int defaultRunSquares = 3;
         private int level = 1;
-        private float lineOfSight = 3;
+        private float lineOfSight = 2;
         private int runSquaresLeft;
         private Direction moveDirection;
 
@@ -34,7 +34,7 @@ namespace GlobalGameJam.GameObjects {
         private int counter = 0;
         private TimeSpan start;
         public override void update() {
-
+            /*
             if (start == null) {
                 start = Engine.gameTime.TotalRealTime;
             }
@@ -46,6 +46,7 @@ namespace GlobalGameJam.GameObjects {
                 counter = 0;
             }
             counter++;
+             * */
 
             base.update();
             
@@ -81,8 +82,11 @@ namespace GlobalGameJam.GameObjects {
                     // Don't update motion pattern
                 }
             }
-            
+
+            if (this.busyPerformingAction.value <= 0 && !running && runSquaresLeft > 0) {
+                this.move(moveDirection);
                 runSquaresLeft--;
+            }
                 
         }
 

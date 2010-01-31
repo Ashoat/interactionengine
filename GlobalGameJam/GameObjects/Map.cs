@@ -21,8 +21,6 @@ namespace GlobalGameJam.GameObjects {
             set { active = value; }
         }
 
-        private TimeSpan lastCalledUpdate;
-
         #region FACTORY
 
         /// <summary>
@@ -300,7 +298,6 @@ namespace GlobalGameJam.GameObjects {
             }
             //Thread.Sleep(16);
             if (Active) {
-
                 Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
             }
         }

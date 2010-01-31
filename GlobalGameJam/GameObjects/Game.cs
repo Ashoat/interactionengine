@@ -66,7 +66,7 @@ namespace GlobalGameJam.GameObjects {
                         menu.show();
                     }
                 } else if (keyEvent == KeyEvent.IS_DOWN){
-                    map.getPlayer().handleKey(key);
+                    if (map != null && map.getPlayer() != null) map.getPlayer().handleKey(key);
                 }
             }
         }

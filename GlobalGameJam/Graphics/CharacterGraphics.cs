@@ -30,34 +30,29 @@ namespace GlobalGameJam.Graphics
         Matrix viewMatrix;
         float tick;
         public CharacterGraphics(Character entity)
-            : base(entity)
-        {
+            : base(entity) {
             this.entity = entity;
             frameChangeTimePrev = DateTime.Now;
             tick = 0;
-        }
-
-        public override void loadContent()
-        {
-            pointSpritesEffect = UserInterface2D.content.Load<Effect>("Effects/pointsprites");
-            pointSpritesEffect.Parameters["SpriteTexture"].SetValue(
-                UserInterface2D.content.Load<Texture2D>("fire"));
 
             spriteArray = new VertexPositionColor[fireCount];
             vertexPosColDecl = new VertexDeclaration(UserInterface2D.graphicsDevice,
                 VertexPositionColor.VertexElements);
             rand = new Random();
-            for (int i = 0; i < spriteArray.Length; i++)
-            {
+            for (int i = 0; i < spriteArray.Length; i++) {
                 spriteArray[i].Position = new Vector3(rand.Next(100) / 10f,
                    rand.Next(100) / 10f, 0);
                 spriteArray[i].Color = Color.WhiteSmoke;
             }
-            viewMatrix =
-                Matrix.CreateLookAt(Vector3.One * 25, Vector3.Zero, Vector3.Up);
-            projectionMatrix =
-                Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.PiOver4,
-                4.0f / 3.0f, 1.0f, 10000f);
+        }
+
+        public override void loadContent()
+        {
+            if (entity is Player) {
+                pointSpritesEffect = UserInterface2D.content.Load<Effect>("Effects/pointsprites");
+                pointSpritesEffect.Parameters["SpriteTexture"].SetValue(
+                    UserInterface2D.content.Load<Texture2D>("fire"));
+            }
             base.loadContent();
         }
 
@@ -92,45 +87,46 @@ namespace GlobalGameJam.Graphics
         }
         public override void onDraw()
         {
-            UpdateEffect();
-            /*
-            RenderState renderState = UserInterface2D.graphicsDevice.RenderState;
-            
-            renderState.PointSpriteEnable = true;
-            renderState.PointSize = 64.0f;
-            renderState.AlphaBlendEnable = true;
+            if (entity is Player) {
 
-            renderState.SourceBlend = Blend.SourceAlpha;
-            //renderState.BlendFunction = BlendFunction.Subtract;
-            renderState.DestinationBlend = Blend.One;
-            renderState.DepthBufferWriteEnable = false;
+                UpdateEffect();
 
-            UserInterface2D.graphicsDevice.VertexDeclaration
-                = vertexPosColDecl;
-            Matrix WVPMatrix = Matrix.Identity; // *viewMatrix * projectionMatrix;
-            pointSpritesEffect.Parameters["WVPMatrix"].SetValue(WVPMatrix);
-            Texture2D fire = UserInterface2D.content.Load<Texture2D>("fire");
-            pointSpritesEffect.Begin();
-            if (gameObject is Player)
-            foreach (EffectPass pass in
-                pointSpritesEffect.CurrentTechnique.Passes)
-            {
-                pass.Begin();
-                foreach (VertexPositionColor sprite in spriteArray) {
-                    SpriteBatch sb = ((UserInterface2D)Engine.userInterface).spriteBatch;
-                    Vector3 possy =  gameObject.getLocation().Position + sprite.Position;
-                    sb.Draw(fire, new Vector2(possy.X, possy.Y - 10), null, Color.WhiteSmoke, 0, Vector2.Zero, 0.12f, SpriteEffects.None, 0.15f);
+                RenderState renderState = UserInterface2D.graphicsDevice.RenderState;
+
+                renderState.PointSpriteEnable = true;
+                renderState.PointSize = 64.0f;
+                renderState.AlphaBlendEnable = true;
+
+                renderState.SourceBlend = Blend.SourceAlpha;
+                //renderState.BlendFunction = BlendFunction.Subtract;
+                renderState.DestinationBlend = Blend.One;
+                renderState.DepthBufferWriteEnable = false;
+
+                UserInterface2D.graphicsDevice.VertexDeclaration
+                    = vertexPosColDecl;
+                Matrix WVPMatrix = Matrix.Identity; // *viewMatrix * projectionMatrix;
+                pointSpritesEffect.Parameters["WVPMatrix"].SetValue(WVPMatrix);
+                Texture2D fire = UserInterface2D.content.Load<Texture2D>("fire");
+                pointSpritesEffect.Begin();
+                foreach (EffectPass pass in
+                    pointSpritesEffect.CurrentTechnique.Passes) {
+                    pass.Begin();
+                    foreach (VertexPositionColor sprite in spriteArray) {
+                        SpriteBatch sb = ((UserInterface2D)Engine.userInterface).spriteBatch;
+                        Vector3 possy = entity.getLocation().Position + sprite.Position;
+                        sb.Draw(fire, new Vector2(possy.X, possy.Y - 10), null, Color.WhiteSmoke, 0, Vector2.Zero, 0.12f, SpriteEffects.None, 0.15f);
+                    }
+                    pass.End();
                 }
-                pass.End();
-            }
-            pointSpritesEffect.End();
+                pointSpritesEffect.End();
 
-            renderState.PointSpriteEnable = false;
-            renderState.DepthBufferWriteEnable = true;
-            renderState.SourceBlend = Blend.SourceAlpha;
-            renderState.DestinationBlend =
-                Blend.InverseSourceAlpha;
-            */
+                renderState.PointSpriteEnable = false;
+                renderState.DepthBufferWriteEnable = true;
+                renderState.SourceBlend = Blend.SourceAlpha;
+                renderState.DestinationBlend =
+                    Blend.InverseSourceAlpha;
+
+            }
             
             if (true) // change to character running property
                 UpdateAnimation();
