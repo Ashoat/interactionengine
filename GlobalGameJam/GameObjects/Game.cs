@@ -61,10 +61,11 @@ namespace GlobalGameJam.GameObjects {
             if (menu.Displayed) {
                 if (keyEvent == KeyEvent.KEY_PRESSED) menu.handleKey(key);
             } else {
-                if (keyEvent != KeyEvent.IS_DOWN) return;
-                if (Keys.Escape == key) {
-                    menu.show();
-                } else {
+                if (key==Keys.Escape) {
+                    if (keyEvent == KeyEvent.KEY_PRESSED) {
+                        menu.show();
+                    }
+                } else if (keyEvent == KeyEvent.IS_DOWN){
                     map.getPlayer().handleKey(key);
                 }
             }

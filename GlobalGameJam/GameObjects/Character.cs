@@ -118,8 +118,8 @@ namespace GlobalGameJam.GameObjects {
 
             if (running)
             {
-                int dx = Math.Sign(Position.X * 32 - (int)location.Position.X);
-                int dy = Math.Sign(Position.Y * 32 + 88 - (int)location.Position.Y);
+                int dx = 4*Math.Sign(Position.X * 32 - (int)location.Position.X);
+                int dy = 4*Math.Sign(Position.Y * 32 + 88 - (int)location.Position.Y);
 
                 if (dx == 0 && dy == 0)
                     running = false;
