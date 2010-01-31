@@ -173,7 +173,7 @@ namespace GlobalGameJam.GameObjects {
         public override void wasAttacked(int damage) {
             base.wasAttacked(damage);
             // Remove the character from the map.
-            if (this.Health < 0) map.setCharacter(this.Position, null);
+            if (this.Health <= 0) map.setCharacter(this.Position, null);
         }
 
         public void attack(Entity attackee) {

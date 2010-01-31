@@ -18,7 +18,7 @@ namespace GlobalGameJam.GameObjects {
             set { level = value; }
         }
 
-        private int level;
+        private int level = 1;
         public bool running;
         private float lineOfSight = 2;
         private int runSquaresLeft;
@@ -32,30 +32,30 @@ namespace GlobalGameJam.GameObjects {
 
         public override void update() {
             base.update();
-            if (this.busyPerformingAction.value > 0 || Health < 0) return;
+            if (this.busyPerformingAction.value > 0 || Health <= 0) return;
             List<Character> chars = Map.getVisibleCharacters(this.Position, lineOfSight);
             foreach (Character character in chars) {
                 //if (characterType.getAttitudeToward(character.characterType) < 0) {
                 int relation = characterType.getAttitudeToward(character);
-                Console.Write(this.classHash + " sees " + character.classHash);
-                Console.Write("Coords: " + this.Position);
-                Console.WriteLine("; Attitude: " + relation.ToString());
+                //Console.Write(this.classHash + " sees " + character.classHash);
+                //Console.Write("Coords: " + this.Position);
+                //Console.WriteLine("; Attitude: " + relation.ToString());
                 
                 if (relation > 0) {
                     if (MathHelper.PointDistance(this.Position, character.Position) <= 1.0f) {
                         // Attack
-                        Debug.WriteLine("Attacking");
+                        //Debug.WriteLine("Attacking");
                         this.attack(character);
                     } else {
                         //Begin attack run
-                        Debug.WriteLine("Moving to Attack");
+                        //Debug.WriteLine("Moving to Attack");
                     }
                     moveDirection = Map.getDirection(this.Position, character.Position);
                     running = true;
                     runSquaresLeft = 2;
                 } else if (relation < 0) {
                     // Begin defense run
-                    Debug.WriteLine("Running away");
+                    //Debug.WriteLine("Running away");
                     running = true;
                     runSquaresLeft = 2;
                     moveDirection = Map.getDirection(character.Position,this.Position);
