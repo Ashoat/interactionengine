@@ -178,9 +178,9 @@ namespace GlobalGameJam.GameObjects {
             if (this is Player) {
                 Console.WriteLine("Player old: " + oldPosition + " new: " + newPosition);
             }
-            if (map.isEmpty(newPosition)) {
+            if (map.value.isEmpty(newPosition)) {
                 this.Position = newPosition;
-                map.setCharacter(oldPosition,this);
+                map.value.setCharacter(oldPosition,this);
                 busyPerformingAction.value = movementDelay;
                 running = true;
                 // animate
@@ -192,7 +192,7 @@ namespace GlobalGameJam.GameObjects {
         public override void wasAttacked(Character attacker, int damage) {
             base.wasAttacked(attacker, damage);
             // Remove the character from the map.
-            if (this.Health <= 0) map.setCharacter(this.Position, null);
+            if (this.Health <= 0) map.value.setCharacter(this.Position, null);
         }
 
         public void attack(Entity attackee) {

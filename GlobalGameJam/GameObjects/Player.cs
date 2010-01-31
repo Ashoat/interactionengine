@@ -6,6 +6,7 @@ using InteractionEngine.Constructs.Datatypes;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using InteractionEngine;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -37,7 +38,12 @@ namespace GlobalGameJam.GameObjects {
 
         #endregion
 
+        public UpdatableBoolean isClient;
+
         public override void construct() {
+            isClient = new UpdatableBoolean(this);
+            if (Engine.status == Engine.Status.MULTIPLAYER_CLIENT) isClient.value = true;
+            else isClient.value = false;
             base.construct();
             movementDelay = 50;
             //Health = 200;

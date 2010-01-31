@@ -195,9 +195,9 @@ namespace GlobalGameJam.GameObjects {
                                 map.LoadMap("levels/campaign2.ani");
                             } else if (graphics.activeMenuItemIndex == 3) {
                                 map.LoadMap("levels/campaign3.ani");
-                            } else if (graphics.activeMenuItemIndex == 3) {
+                            } else if (graphics.activeMenuItemIndex == 4) {
                                 map.LoadMap("levels/campaign4.ani");
-                            } else if (graphics.activeMenuItemIndex == 3) {
+                            } else if (graphics.activeMenuItemIndex == 5) {
                                 map.LoadMap("levels/campaign5.ani");
                             } 
                             Client.onJoin.Add(new Event(id, "handleNewPlayer", null));
@@ -245,6 +245,10 @@ namespace GlobalGameJam.GameObjects {
                                 }
                                 if (go != null && go2 is Entity) {
                                     map.entityArray[((Entity)go2).Position.X, ((Entity)go2).Position.Y] = new UpdatableGameObject<Entity>((UpdatableInteger)updatable);
+                                }
+                                if (go2 != null && go2 is Player) {
+                                    if (((Player)go2).isClient.value == true) map.clientPlayer.value = (Player)go2;
+                                    else map.serverPlayer.value = (Player)go2;
                                 }
                             }
                         }

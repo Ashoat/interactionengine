@@ -31,11 +31,11 @@ namespace GlobalGameJam.GameObjects {
             get { return healthMax; }
         }
 
-        protected Map map;
+        protected UpdatableGameObject<Map> map;
 
         public Map Map {
-            get { return map; }
-            set { map = value; }
+            get { return map.value; }
+            set { map.value = value; }
         }
 
         public Microsoft.Xna.Framework.Point Position {
@@ -94,6 +94,7 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public override void construct() {
+            this.map = new UpdatableGameObject<Map>(this);
             this.location = new Location(this);
             this.graphics = makeGraphics();
             this.health = new UpdatableInteger(this);
@@ -107,7 +108,7 @@ namespace GlobalGameJam.GameObjects {
             GameObject.createGameObject<BAM>(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
             if (Health <= 0) {
                 Program.audio.playSound("death");
-                map.removeEntity(this);
+                map.value.removeEntity(this);
                 this.deconstruct();
             }
         }

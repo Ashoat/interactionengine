@@ -111,8 +111,8 @@ namespace GlobalGameJam.GameObjects {
 
         public UpdatableGameObject<Entity>[,] entityArray;
 
-        UpdatableGameObject<Player> serverPlayer;
-        UpdatableGameObject<Player> clientPlayer;
+        public UpdatableGameObject<Player> serverPlayer;
+        public UpdatableGameObject<Player> clientPlayer;
         public List<UpdatableGameObject<Character>> characterList;
 
         public UpdatableString mapFile;
@@ -235,11 +235,11 @@ namespace GlobalGameJam.GameObjects {
                     returnEntity = GameObject.createGameObject<Skunk>(mapLoadRegion);
                     ((NPC)returnEntity).Level = 3;
                     break;
-                case '!':
+                case '?':
                     returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
                     serverPlayer.value = (Player)returnEntity;
                     break;
-                case '?':
+                case '!':
                     returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
                     clientPlayer.value = (Player)returnEntity;
                     break;
@@ -254,7 +254,7 @@ namespace GlobalGameJam.GameObjects {
                     ug.value = (Character)returnEntity;
                     characterList.Add(ug);
                 }
-                returnEntity.getLocation().Position = new Microsoft.Xna.Framework.Vector3(x, y, 0);
+                returnEntity.Position = new Point(x, y);
             }
             return returnEntity;
         }
