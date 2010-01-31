@@ -58,7 +58,7 @@
   <ItemGroup>
     <Reference Include="InteractionEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\InteractionEngine.dll</HintPath>
+      <HintPath>..\trunk\bin\x86\Debug\InteractionEngine.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
       <Private>False</Private>

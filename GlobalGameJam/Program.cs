@@ -27,31 +27,22 @@ namespace GlobalGameJam {
 
             // Set up the local LoadRegion with its buttons.
             LoadRegion localRegion = LoadRegion.createLoadRegion();
-            LoadRegion syncedRegion = LoadRegion.createLoadRegion();
-
             GalactazoidsGame game = GameObject.createGameObject<GalactazoidsGame>(localRegion);
-            Map map = GameObject.createGameObject<Map>(syncedRegion);
             HUD hud = GameObject.createGameObject<HUD>(localRegion);
             FrameRateCounter counter = GameObject.createGameObject<FrameRateCounter>(localRegion);
-            HealthBar health = GameObject.createGameObject<HealthBar>(localRegion);
-            health.setLocationAndMap(new Vector3(15, 29, 0), map);
-            game.addMap(map);
-
-
+            Menu menu = GameObject.createGameObject<Menu>(localRegion);
+            game.setMenu(menu); // so that keyboard commands go to menu
+            menu.game = game;
+            menu.show();
             Audio.loadAudioSettings("ggj");
             audio = new Audio(null, "Wave Bank", "Sound Bank");
 
-            Menu menu = GameObject.createGameObject<Menu>(localRegion);
-            game.setMenu(menu); // so that keyboard commands go to menu
-            menu.show();
-
+            
             
             KeyboardFocus kf = GameObject.createGameObject<KeyboardFocus>(localRegion);
             ((UserInterface2D)Engine.userInterface).registerKeyboardFocus(kf);
             
             kf.setFocus(game);
-            
-            map.LoadMap("levels/level1.ani");
             
             // Annoyance: Static constructors aren't called unless I bother the class first. Ugh.
             new GalactazoidsGame();

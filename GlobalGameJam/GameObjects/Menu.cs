@@ -7,6 +7,7 @@ using InteractionEngine.UserInterface.TwoDimensional;
 using GlobalGameJam.Graphics;
 using Microsoft.Xna.Framework.Input;
 using InteractionEngine;
+using Microsoft.Xna.Framework;
 
 namespace GlobalGameJam.GameObjects {
     class Menu: GameObject, Graphable2D {
@@ -17,7 +18,7 @@ namespace GlobalGameJam.GameObjects {
             get { return displayed; }
             set { displayed = value; }
         }
-
+        public GlobalGameJam.GameObjects.GalactazoidsGame game;
 
         #region FACTORY
 
@@ -53,7 +54,7 @@ namespace GlobalGameJam.GameObjects {
             //graphics.TextureName = "menu";
             //location.Position = new Microsoft.Xna.Framework.Vector3(0, 0, 0);
             menuStrings = new List<string>();
-            menuStrings.Add("Play Multiplayer");
+            menuStrings.Add("Join Multiplayer");
             menuStrings.Add("Play Level 1");
             menuStrings.Add("Play Level 2");
             menuStrings.Add("Play Level 2");
@@ -104,14 +105,57 @@ namespace GlobalGameJam.GameObjects {
                             graphics.activeMenuItemIndex = menuStrings.Count - 1;
                         break;
                     case Keys.Enter:
-                        if (graphics.activeMenuItemIndex == 1)
+                        if (graphics.activeMenuItemIndex == 0) {
+                            
+                        } else if (graphics.activeMenuItemIndex == 1) {
+                            if(map != null) map.getLoadRegion().deconstruct();
+                            LoadRegion syncedRegion = createGame();
                             map.LoadMap("levels/level1.ani");
-                        else if (graphics.activeMenuItemIndex == 2)
+                        } else if (graphics.activeMenuItemIndex == 2) {
+                            if (map != null) map.getLoadRegion().deconstruct();
+                            LoadRegion syncedRegion = createGame();
                             map.LoadMap("levels/level2.ani");
+                        } else if (graphics.activeMenuItemIndex == 3) {
+                            if (map != null) map.getLoadRegion().deconstruct();
+                            LoadRegion syncedRegion = createGame();
+                            map.LoadMap("levels/level2.ani");
+                        }
+                        exitMenu();
+                        break;
+                    case Keys.M:
+                        if (graphics.activeMenuItemIndex == 0) {
+
+                        } else if (graphics.activeMenuItemIndex == 1) {
+                            LoadRegion syncedRegion = createGame();
+
+                            map.getLoadRegion().deconstruct();
+
+                            map.LoadMap("levels/level1.ani");
+                        } else if (graphics.activeMenuItemIndex == 2) {
+
+                            map.getLoadRegion().deconstruct();
+
+                            map.LoadMap("levels/level1.ani");
+                        } else if (graphics.activeMenuItemIndex == 3) {
+                            map.LoadMap("levels/level2.ani");
+                        }
                         exitMenu();
                         break;
                 }
             }
+        }
+
+        private LoadRegion createGame() {
+            LoadRegion syncedRegion = LoadRegion.createLoadRegion();
+            map = GameObject.createGameObject<Map>(syncedRegion);
+            HealthBar health = GameObject.createGameObject<HealthBar>(syncedRegion);
+            health.setLocationAndMap(new Vector3(15, 29, 0), map);
+            game.addMap(map);
+            return syncedRegion;
+        }
+
+        private void createMultiPlayerGame() {
+            
         }
 
         private void exitMenu() {
@@ -123,7 +167,7 @@ namespace GlobalGameJam.GameObjects {
 
         internal void show() {
             graphics.Visible = true;
-            map.Active = false;
+            if (map != null) map.Active = false;
             Displayed = true;
         }
     }
