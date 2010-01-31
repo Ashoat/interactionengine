@@ -177,7 +177,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\trunk\InteractionEngine.csproj">
+    <ProjectReference Include="..\InteractionEngine\InteractionEngine.csproj">
       <Project>{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}</Project>
       <Name>InteractionEngine</Name>
     </ProjectReference>

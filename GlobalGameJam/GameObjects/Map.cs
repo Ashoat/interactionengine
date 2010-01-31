@@ -273,6 +273,14 @@ namespace GlobalGameJam.GameObjects {
         public void setCharacter(Point oldLocation, Character character) {
             if (character != null) {
                 entityArray[character.Position.X, character.Position.Y].value = character;
+            } else {
+                foreach (UpdatableGameObject<Character> uppy in characterList) {
+                    Character chara = uppy.value;
+                    if (chara is NPC) {
+                        if (chara.Health > 0) return;
+                    }
+                }
+                Console.WriteLine("You win!");
             }
             entityArray[oldLocation.X, oldLocation.Y].value = null;
         }

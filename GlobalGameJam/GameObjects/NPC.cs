@@ -40,6 +40,8 @@ namespace GlobalGameJam.GameObjects {
         private float lineOfSight = 2;
         private int runSquaresLeft;
         private Direction moveDirection;
+        private Entity attackTarget;
+        private int attackQueued;
 
         public override void construct() {
             base.construct();
@@ -108,13 +110,20 @@ namespace GlobalGameJam.GameObjects {
                 this.move(moveDirection);
                 runSquaresLeft--;
             }
+
+            if (attackTarget != null) attackQueued -= Engine.gameTime.ElapsedGameTime.Milliseconds;
+            if (!Busy && attackTarget != null && attackQueued <= 0) {
+                attack(attackTarget);
+                attackTarget = null;
+            }
                 
         }
 
         public override void wasAttacked(Character attacker, int damage) {
             base.wasAttacked(attacker, damage);
-            if (!Busy && characterType.getAttitudeToward(attacker) == 0) {
-                attack(attacker);
+            if (!Busy) {
+                this.attackTarget = attacker;
+                this.attackQueued = attackDelay / 2;
             }
         }
 
