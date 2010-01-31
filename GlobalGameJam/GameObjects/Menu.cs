@@ -127,7 +127,7 @@ namespace GlobalGameJam.GameObjects {
                         } else if (graphics.activeMenuItemIndex == 1) {
                             if(map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
-                            map.LoadMap("levels/level1.ani");
+                            map.LoadMap("levels/campaign3.ani");
                             exitMenu();
                         } else if (graphics.activeMenuItemIndex == 2) {
                             if (map != null) map.getLoadRegion().deconstruct();

@@ -96,11 +96,15 @@ namespace GlobalGameJam.GameObjects {
                     // Begin defense run
                     //Debug.WriteLine("Running away");
                     
-                    runSquaresLeft = defaultRunSquares;
-                    moveDirection = Map.getDirection(character.Position,this.Position, character.Direction);
-                    bool canMove = this.move(moveDirection);
-                    bool inRange = MathHelper.PointDistance(this.Position, character.Position) <= 1.0f;
-                    if (!canMove && !Busy && inRange) this.attack(character);
+                    moveDirection = Map.getDirection(character.Position, this.Position, character.Direction);
+                    double newDistance = MathHelper.PointDistance(Map.getPointInDirection(this.Position, moveDirection), character.Position);
+                    double oldDistance = MathHelper.PointDistance(this.Position, character.Position);
+                    if (newDistance > oldDistance) {
+                        bool canMove = this.move(moveDirection);
+                        runSquaresLeft = defaultRunSquares;
+                    } else runSquaresLeft = 0;
+                    //bool inRange = MathHelper.PointDistance(this.Position, character.Position) <= 1.0f;
+                    //if (!canMove && !Busy && inRange) this.attack(character);
                 } else {
                     // Don't update motion pattern
                 }
