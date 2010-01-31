@@ -56,10 +56,12 @@ namespace GlobalGameJam.GameObjects {
             //graphics.TextureName = "menu";
             //location.Position = new Microsoft.Xna.Framework.Vector3(0, 0, 0);
             menuStrings = new List<string>();
-            menuStrings.Add("Join Multiplayer");
+            //menuStrings.Add("Join Multiplayer");
             menuStrings.Add("Play Level 1");
             menuStrings.Add("Play Level 2");
             menuStrings.Add("Play Level 3");
+            menuStrings.Add("Play Level 4");
+            menuStrings.Add("Play Level 5");
             graphics.menuStrings = menuStrings;
             graphics.Visible = false;
             graphics.activeMenuItemIndex = 0;
@@ -109,7 +111,7 @@ namespace GlobalGameJam.GameObjects {
                             graphics.activeMenuItemIndex = menuStrings.Count - 1;
                         break;
                     case Keys.Enter:
-                        if (graphics.activeMenuItemIndex == 0) {
+                        if (graphics.activeMenuItemIndex == -1) {
                             Client.stopListening();
                             Client.onJoin.Clear();
                             CreateRegion.onCreateRegion.Clear();
@@ -124,28 +126,40 @@ namespace GlobalGameJam.GameObjects {
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
                             }
-                        } else if (graphics.activeMenuItemIndex == 1) {
+                        } else if (graphics.activeMenuItemIndex == 0) {
                             if(map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
-                            map.LoadMap("levels/campaign3.ani");
+                            map.LoadMap("levels/campaign1.ani");
+                            exitMenu();
+                        } else if (graphics.activeMenuItemIndex == 1) {
+                            if (map != null) map.getLoadRegion().deconstruct();
+                            LoadRegion syncedRegion = createGame();
+                            map.LoadMap("levels/campaign2.ani");//level2.ani");
                             exitMenu();
                         } else if (graphics.activeMenuItemIndex == 2) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
-                            map.LoadMap("levels/campaign4.ani");//level2.ani");
+                            map.LoadMap("levels/campaign3.ani");
                             exitMenu();
-                        } else if (graphics.activeMenuItemIndex == 3) {
+                        }
+                        else if (graphics.activeMenuItemIndex == 3) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
-                            if (graphics.activeMenuItemIndex == 1) {
-                                map.LoadMap("levels/level1.ani");
+                            map.LoadMap("levels/campaign4.ani");
+                            exitMenu();
+                        } else if (graphics.activeMenuItemIndex == 4) {
+                            if (map != null) map.getLoadRegion().deconstruct();
+                            LoadRegion syncedRegion = createGame();
+                            map.LoadMap("levels/campaign5.ani");
+                            exitMenu();
+                        }
+                    /*
                             } else if (graphics.activeMenuItemIndex == 2) {
                                 map.LoadMap("levels/level2.ani");
                             } else if (graphics.activeMenuItemIndex == 3) {
                                 map.LoadMap("levels/level3.ani");
                             }
-                            exitMenu();
-                        }
+                        }*/
                         break;
                     case Keys.M:
                         if (graphics.activeMenuItemIndex == 0) {

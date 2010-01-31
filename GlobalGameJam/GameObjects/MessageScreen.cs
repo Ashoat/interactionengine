@@ -126,8 +126,10 @@ namespace GlobalGameJam.GameObjects {
             Vector2 textpos = new Vector2((view.Width - textWidth) / 2, view.Height / 2 + 30);
 
             if (visible) {
-                spriteBatch.Draw(losingTexture, textRectangle, Color.White);
-                spriteBatch.DrawString(spriteFont, lostText, textpos, Color.Black, rotation, origin, scale, SpriteEffects.None, blackLayer);
+                //spriteBatch.Draw(losingTexture, textRectangle, Color.White);
+                spriteBatch.Draw(losingTexture, textRectangle, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.00001f);
+                //spriteBatch.DrawString(spriteFont, lostText, textpos, Color.White, rotation, origin, scale, SpriteEffects.None, 0.000000000001f);
+                //spriteBatch.DrawString(spriteFont, lostText, textpos+new Vector2(2.0f), Color.Black, rotation, origin, scale, SpriteEffects.None, 0f);
             }
         }
 

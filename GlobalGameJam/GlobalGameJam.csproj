@@ -56,10 +56,6 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InteractionEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\trunk\obj\x86\Debug\InteractionEngine.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
@@ -90,6 +86,7 @@
   <ItemGroup>
     <Compile Include="GameObjects\BAM.cs" />
     <Compile Include="GameObjects\Character.cs" />
+    <Compile Include="GameObjects\MessageScreen.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\FrameRateCounter.cs" />
     <Compile Include="GameObjects\Game.cs" />
@@ -98,7 +95,6 @@
     <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameObjects\MathHelper.cs" />
     <Compile Include="GameObjects\Menu.cs" />
-    <Compile Include="GameObjects\MessageScreen.cs" />
     <Compile Include="GameObjects\Monk.cs" />
     <Compile Include="GameObjects\NPC.cs" />
     <Compile Include="GameObjects\Player.cs" />
@@ -168,10 +164,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="levels\campaign1.ani">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="levels\campaign2.ani">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="levels\campaign3.ani">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="levels\campaign4.ani">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="levels\campaign5.ani">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="levels\level1.ani">
@@ -188,6 +193,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InteractionEngine\InteractionEngine.csproj">
+      <Project>{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}</Project>
+      <Name>InteractionEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InteractionEngine\InteractionEngine.csproj">
       <Project>{5FE56DFD-F468-4B3E-8317-9640B0CDF1DF}</Project>
       <Name>InteractionEngine</Name>

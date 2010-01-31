@@ -37,7 +37,7 @@ namespace GlobalGameJam.GameObjects {
 
         private int defaultRunSquares = 3;
         private int level = 1;
-        private float lineOfSight = 2;
+        private float lineOfSight = 3;
         private int runSquaresLeft;
         private Direction moveDirection;
         private Entity attackTarget;

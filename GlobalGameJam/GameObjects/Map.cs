@@ -306,19 +306,19 @@ namespace GlobalGameJam.GameObjects {
                 entityArray[oldLocation.X, oldLocation.Y].value = null;
             } else {
                 entityArray[oldLocation.X, oldLocation.Y].value = null;
-                /*foreach (UpdatableGameObject<Character> uppy in characterList) {
+                foreach (UpdatableGameObject<Character> uppy in characterList) {
                     Character chara = uppy.value;
                     if (chara is NPC) {
                         if (chara.Health > 0) return;
                     }
                 }
                 Message = GameObject.createGameObject<MessageScreen>(this.getLoadRegion());
-                Message.Text = "You Win1!!";
+                Message.Text = "You Win1!! \n Press enter to play again.";
                 GameOver = true;
                 playerWon = true;
                 Message.Texture = "WinTexture";
                 Message.open();
-                */
+                
             }
         }
 
