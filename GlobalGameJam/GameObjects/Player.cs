@@ -106,8 +106,8 @@ namespace GlobalGameJam.GameObjects {
             // do stuff
         }
 
-        public override void wasAttacked(int damage) {
-            base.wasAttacked(damage/2);
+        public override void wasAttacked(Character attacker, int damage) {
+            base.wasAttacked(attacker, damage/3);
             if (Health <= 0) {
                 // game over
             }

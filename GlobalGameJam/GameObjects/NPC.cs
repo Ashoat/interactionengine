@@ -50,7 +50,7 @@ namespace GlobalGameJam.GameObjects {
 
             base.update();
             
-            if (this.busyPerformingAction.value > 0 || Health <= 0) return;
+            if (Busy || Health <= 0) return;
             List<Character> chars = Map.getVisibleCharacters(this.Position, lineOfSight);
             foreach (Character character in chars) {
                 //if (characterType.getAttitudeToward(character.characterType) < 0) {
@@ -77,17 +77,26 @@ namespace GlobalGameJam.GameObjects {
                     
                     runSquaresLeft = defaultRunSquares;
                     moveDirection = Map.getDirection(character.Position,this.Position, character.Direction);
-                    this.move(moveDirection);
+                    bool canMove = this.move(moveDirection);
+                    bool inRange = MathHelper.PointDistance(this.Position, character.Position) <= 1.0f;
+                    if (!canMove && !Busy && inRange) this.attack(character);
                 } else {
                     // Don't update motion pattern
                 }
             }
 
-            if (this.busyPerformingAction.value <= 0 && !running && runSquaresLeft > 0) {
+            if (!Busy && !running && runSquaresLeft > 0) {
                 this.move(moveDirection);
                 runSquaresLeft--;
             }
                 
+        }
+
+        public override void wasAttacked(Character attacker, int damage) {
+            base.wasAttacked(attacker, damage);
+            if (!Busy && characterType.getAttitudeToward(attacker) == 0) {
+                attack(attacker);
+            }
         }
 
     }

@@ -92,7 +92,7 @@ namespace GlobalGameJam.GameObjects {
             health.value = 100;
         }
 
-        public virtual void wasAttacked(int damage) {
+        public virtual void wasAttacked(Character attacker, int damage) {
             health.value -= damage;
             GameObject.createGameObject<BAM>(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
             if (health.value <= 0) {

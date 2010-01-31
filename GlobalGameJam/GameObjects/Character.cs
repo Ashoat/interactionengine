@@ -65,7 +65,7 @@ namespace GlobalGameJam.GameObjects {
             }
             public static double getAttackModifier(CharacterType attacker, CharacterType attackee) {
                 if (attacker == attackee) return 1;
-                if ((attacker.typeNumber - attackee.typeNumber + 3) % 3 == 1) return 0.7;
+                if ((attacker.typeNumber - attackee.typeNumber + 3) % 3 == 1) return 0.5;
                 if ((attacker.typeNumber - attackee.typeNumber + 3) % 3 == 2) return 1.5;
                 return 1;
             }
@@ -99,6 +99,9 @@ namespace GlobalGameJam.GameObjects {
         // If this value is more than zero, the character is already busy doing something.
         // Specifies how many milliseconds it'll be before it's done.
         protected UpdatableInteger busyPerformingAction;
+        public bool Busy {
+            get { return busyPerformingAction.value > 0; }
+        }
         private CharacterType.UpdatableCharacterType updatableCharacterType;
         public CharacterType characterType {
             get { return updatableCharacterType.value; }
@@ -184,8 +187,8 @@ namespace GlobalGameJam.GameObjects {
             return false;
         }
 
-        public override void wasAttacked(int damage) {
-            base.wasAttacked(damage);
+        public override void wasAttacked(Character attacker, int damage) {
+            base.wasAttacked(attacker, damage);
             // Remove the character from the map.
             if (this.Health <= 0) map.setCharacter(this.Position, null);
         }
@@ -193,9 +196,9 @@ namespace GlobalGameJam.GameObjects {
         public void attack(Entity attackee) {
             if (busyPerformingAction.value > 0) return;
             double attackModifier = attackee is Character ? characterType.getAttackModifier((Character)attackee) : 1;
-            attackee.wasAttacked((int)(this.attackStrength.value * attackModifier));
+            attackee.wasAttacked(this, (int)(this.attackStrength.value * attackModifier));
             busyPerformingAction.value = attackDelay;
-            this.Direction = Map.getDirection(this.Position, attackee.Position);
+            this.Direction = Map.getDirection(this.Position, attackee.Position, this.Direction);
             // animate
         }
 
