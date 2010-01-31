@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using InteractionEngine.Constructs.Datatypes;
 using System;
 using System.Diagnostics;
+using InteractionEngine;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -18,9 +19,10 @@ namespace GlobalGameJam.GameObjects {
             set { level = value; }
         }
 
+        private int defaultRunSquares = 3;
         private int level = 1;
         public bool running;
-        private float lineOfSight = 2;
+        private float lineOfSight = 3;
         private int runSquaresLeft;
         private Direction moveDirection;
 
@@ -30,7 +32,22 @@ namespace GlobalGameJam.GameObjects {
             this.Health = Health * Level;
         }
 
+        private int counter = 0;
+        private TimeSpan start;
         public override void update() {
+
+            if (start == null) {
+                start = Engine.gameTime.TotalRealTime;
+            }
+            TimeSpan delta = Engine.gameTime.TotalRealTime - start;
+            //Console.WriteLine(delta);
+            if (delta.Seconds >= 1) {
+                start = Engine.gameTime.TotalRealTime;
+                //Console.WriteLine("NPC ticks/sec: " + counter);
+                counter = 0;
+            }
+            counter++;
+
             base.update();
             if (this.busyPerformingAction.value > 0 || Health <= 0) return;
             List<Character> chars = Map.getVisibleCharacters(this.Position, lineOfSight);
@@ -52,12 +69,12 @@ namespace GlobalGameJam.GameObjects {
                     }
                     moveDirection = Map.getDirection(this.Position, character.Position);
                     running = true;
-                    runSquaresLeft = 2;
+                    runSquaresLeft = defaultRunSquares;
                 } else if (relation < 0) {
                     // Begin defense run
                     //Debug.WriteLine("Running away");
                     running = true;
-                    runSquaresLeft = 2;
+                    runSquaresLeft = defaultRunSquares;
                     moveDirection = Map.getDirection(character.Position,this.Position);
                 } else {
                     // Don't update motion pattern

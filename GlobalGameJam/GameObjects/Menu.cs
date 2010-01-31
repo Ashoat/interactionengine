@@ -57,7 +57,7 @@ namespace GlobalGameJam.GameObjects {
             menuStrings.Add("Join Multiplayer");
             menuStrings.Add("Play Level 1");
             menuStrings.Add("Play Level 2");
-            menuStrings.Add("Play Level 2");
+            menuStrings.Add("Play Level 3");
             graphics.menuStrings = menuStrings;
             graphics.Visible = false;
             graphics.activeMenuItemIndex = 0;
@@ -117,7 +117,7 @@ namespace GlobalGameJam.GameObjects {
                         } else if (graphics.activeMenuItemIndex == 3) {
                             if (map != null) map.getLoadRegion().deconstruct();
                             LoadRegion syncedRegion = createGame();
-                            map.LoadMap("levels/level2.ani");
+                            map.LoadMap("levels/level3.ani");
                         }
                         exitMenu();
                         break;

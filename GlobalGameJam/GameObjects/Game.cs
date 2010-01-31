@@ -54,7 +54,7 @@ namespace GlobalGameJam.GameObjects {
 
         public void keyEvent(Keys key, KeyEvent keyEvent) {
             //Thread.Sleep(100);
-            Console.WriteLine("Key: " + key + ", " + keyEvent.ToString());
+            //Console.WriteLine("Key: " + key + ", " + keyEvent.ToString());
             if (menu.Displayed) {
                 if (keyEvent == KeyEvent.KEY_PRESSED) menu.handleKey(key);
             } else {
@@ -87,7 +87,7 @@ namespace GlobalGameJam.GameObjects {
             //Console.WriteLine(delta);
             if (delta.Seconds >= 1) {
                 start = Engine.gameTime.TotalRealTime;
-                Console.WriteLine("ticks/sec: " + counter);
+                //Console.WriteLine("ticks/sec: " + counter);
                 counter = 0;
             }
             counter++;            

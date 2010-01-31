@@ -88,7 +88,7 @@ namespace GlobalGameJam.Graphics
         }
         public override void onDraw()
         {
-            UpdateEffect();
+            /*UpdateEffect();
             
             RenderState renderState = UserInterface2D.graphicsDevice.RenderState;
             
@@ -126,7 +126,8 @@ namespace GlobalGameJam.Graphics
             renderState.SourceBlend = Blend.SourceAlpha;
             renderState.DestinationBlend =
                 Blend.InverseSourceAlpha;
-            if (true) // change to character running property
+            
+            */ if (true) // change to character running property
                 UpdateAnimation();
             base.onDraw();
         }
