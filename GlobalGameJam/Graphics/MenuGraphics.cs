@@ -62,7 +62,7 @@ namespace GlobalGameJam.Graphics {
             sb.Draw(menu, Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.00001f);
             for (int i = 0; i < menuStrings.Count; i++) {
                 String text = menuStrings[i];
-                Vector2 position = new Vector2((view.Width - menuStringWidth) / 2, view.Height / 2 + menuStringHeight * (i - menuStrings.Count / 2.0f));
+                Vector2 position = new Vector2((view.Width - menuStringWidth) / 4,88 + view.Height / 2 + menuStringHeight * (i - menuStrings.Count / 2.0f));
                 sb.DrawString(font, text, position, Color.White, 0.0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
                 if (i == activeMenuItemIndex) {
                     sb.Draw(

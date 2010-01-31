@@ -70,9 +70,11 @@ namespace GlobalGameJam.GameObjects {
                 case Keys.Down:
                     move(Direction.SOUTH);
                     break;
+                case Keys.LeftShift:
                 case Keys.RightShift:
                     shiftType();
                     break;
+                case Keys.LeftControl:
                 case Keys.RightControl:
                     attack();
                     break;

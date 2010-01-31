@@ -21,7 +21,7 @@ namespace GlobalGameJam {
             // Set up the UI.
             Engine.userInterface = new UserInterface2D();
             ((UserInterface2D)Engine.userInterface).setWindowSize(800, 600);
-
+            ((UserInterface2D)Engine.userInterface).setFullScreen(false);
             // Set up the engine
             Engine.status = Engine.Status.SINGLE_PLAYER;
 
