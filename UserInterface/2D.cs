@@ -352,8 +352,8 @@ namespace InteractionEngine.UserInterface.TwoDimensional {
             Vector3 position3 = this.gameObject.getLocation().Position;
             Vector2 position = new Vector2(position3.X, position3.Y);
             float rotationDegrees = this.gameObject.getLocation().yaw;
-            Vector2 origin = Vector2.Zero;
-            spriteBatch.Draw(texture, position, (Rectangle?)null, Color.White, (float)Math.PI / 180 * rotationDegrees,
+            Vector2 origin = new Vector2(texture.Width/2, texture.Height/2);
+            spriteBatch.Draw(texture, position + origin, (Rectangle?)null, Color.White, (float)Math.PI / 180 * rotationDegrees,
                 origin, scale, SpriteEffects.None, layerDepth);
         }
 
