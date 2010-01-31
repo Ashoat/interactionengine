@@ -54,6 +54,7 @@ namespace GlobalGameJam {
             new Wall();
             new Map();
             new KeyboardFocus();
+            new BAM();
 
             // Go!
             Engine.run();
