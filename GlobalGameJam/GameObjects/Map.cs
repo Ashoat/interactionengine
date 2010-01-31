@@ -21,6 +21,8 @@ namespace GlobalGameJam.GameObjects {
             set { active = value; }
         }
 
+        private TimeSpan lastCalledUpdate;
+
         #region FACTORY
 
         /// <summary>
@@ -276,18 +278,32 @@ namespace GlobalGameJam.GameObjects {
             }
             entityArray[oldLocation.X, oldLocation.Y].value = null;
         }
-        
+
         public void update(InteractionEngine.Networking.Client client, object ob) {
-            for (int i = characterList.Count-1; i >=0; i--) {
+            for (int i = characterList.Count - 1; i >= 0; i--) {
                 UpdatableGameObject<Character> c = characterList[i];
                 c.value.update();
             }
             Thread.Sleep(16);
             if (Active) {
-
-                Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+                if (!lastCalledUpdate.TotalMilliseconds.Equals(Engine.gameTime.ElapsedGameTime.TotalMilliseconds)) {
+                    Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+                    lastCalledUpdate = Engine.gameTime.ElapsedGameTime;
+                }
             }
         }
+
+        //public void update(InteractionEngine.Networking.Client client, object ob) {
+        //    for (int i = characterList.Count - 1; i >= 0; i--) {
+        //        UpdatableGameObject<Character> c = characterList[i];
+        //        c.value.update();
+        //    }
+        //    Thread.Sleep(16);
+        //    if (Active) {
+
+        //        Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+        //    }
+        //}
 
         public Player getPlayer() {
             return player;
