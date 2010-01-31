@@ -85,6 +85,9 @@ namespace GlobalGameJam.GameObjects {
         public override void construct() {
             location = new Location(this);
             graphics = new Graphics2DTexture(this);
+            mapFile = new UpdatableString(this);
+            serverPlayer = new UpdatableGameObject<Player>(this);
+            clientPlayer = new UpdatableGameObject<Player>(this);
             graphics.LayerDepth = 1;
             graphics.TextureName = "floor2";
             location.Position = new Vector3(0, 88, 0);
@@ -108,11 +111,14 @@ namespace GlobalGameJam.GameObjects {
 
         private UpdatableGameObject<Entity>[,] entityArray;
 
-        Player player;
+        UpdatableGameObject<Player> serverPlayer;
+        UpdatableGameObject<Player> clientPlayer;
         private List<UpdatableGameObject<Character>> characterList;
 
+        public UpdatableString mapFile;
         public void LoadMap(string mapFile)
         {
+            if (Engine.status != Engine.Status.MULTIPLAYER_CLIENT) this.mapFile.value = mapFile;
             for (int y=0; y < Height; y++) {
                 for (int x=0; x < Width; x++) {
                     if (entityArray[x,y] != null){
@@ -231,7 +237,11 @@ namespace GlobalGameJam.GameObjects {
                     break;
                 case '!':
                     returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
-                    player = (Player)returnEntity;
+                    serverPlayer.value = (Player)returnEntity;
+                    break;
+                case '?':
+                    returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
+                    clientPlayer.value = (Player)returnEntity;
                     break;
                 default:
                     returnEntity = null;
@@ -334,7 +344,7 @@ namespace GlobalGameJam.GameObjects {
                 c.value.update();
             }
 
-            if (!GameOver && player != null && player.Health <= 0) {
+            if (!GameOver && getPlayer() != null && getPlayer().Health <= 0) {
                 Message = GameObject.createGameObject<MessageScreen>(this.getLoadRegion());
                 GameOver = true;
                 playerWon = false;
@@ -357,7 +367,7 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public Player getPlayer() {
-            return player;
+            return Engine.status != Engine.Status.MULTIPLAYER_CLIENT ? serverPlayer.value : clientPlayer.value;
         }
 
         public static Direction getDirection(Point start, Point end, Direction tiebreaker) {

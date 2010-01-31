@@ -98,6 +98,7 @@
     <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameObjects\MathHelper.cs" />
     <Compile Include="GameObjects\Menu.cs" />
+    <Compile Include="GameObjects\MessageScreen.cs" />
     <Compile Include="GameObjects\Monk.cs" />
     <Compile Include="GameObjects\NPC.cs" />
     <Compile Include="GameObjects\Player.cs" />
