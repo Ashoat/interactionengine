@@ -11,7 +11,7 @@ namespace GlobalGameJam.GameObjects {
 
     public abstract class Character : Entity {
 
-        private bool running = false;
+        public bool running = false;
 
         public class CharacterType {
             public class UpdatableCharacterType {

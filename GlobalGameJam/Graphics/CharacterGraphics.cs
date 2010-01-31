@@ -93,7 +93,7 @@ namespace GlobalGameJam.Graphics
         public override void onDraw()
         {
             UpdateEffect();
-            
+            /*
             RenderState renderState = UserInterface2D.graphicsDevice.RenderState;
             
             renderState.PointSpriteEnable = true;
@@ -130,7 +130,7 @@ namespace GlobalGameJam.Graphics
             renderState.SourceBlend = Blend.SourceAlpha;
             renderState.DestinationBlend =
                 Blend.InverseSourceAlpha;
-            
+            */
             
             if (true) // change to character running property
                 UpdateAnimation();
