@@ -83,7 +83,7 @@ namespace GlobalGameJam.GameObjects {
 
         private void shiftType() {
             if (this.busyPerformingAction.value > 0) return;
-            if (this.Map.getVisibleCharacters(this.position, 2).Count == 0) {
+            if (this.Map.getVisibleCharacters(this.Position, 2).Count == 0) {
                 this.characterType = CharacterType.getNextShift(this.characterType);
                 UpdateTextures();
                 // one second delay for shape-shifting?
@@ -97,10 +97,9 @@ namespace GlobalGameJam.GameObjects {
 
         private void attack() {
             if (this.busyPerformingAction.value > 0) return;
-            List<Character> chars = Map.getVisibleCharacters(position, 1);
-            foreach (Character chara in chars) {
-                attack(chara);
-            }
+            List<Character> chars = Map.getVisibleCharacters(Position, 1);
+            Entity entity = Map.getEntity(Map.getPointInDirection(Position, Direction));
+            if (entity != null) attack(entity);
             // do stuff
         }
 

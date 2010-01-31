@@ -138,7 +138,7 @@ namespace GlobalGameJam.GameObjects {
         /// <returns>True if and only if the move completed successfully.</returns>
         public bool move(Direction moveDirection) {
             if (busyPerformingAction.value > 0) return false;
-            Point oldPosition = this.position;
+            Point oldPosition = this.Position;
             Point newPosition;
             switch (moveDirection) {
                 case Direction.NORTH:
@@ -157,9 +157,11 @@ namespace GlobalGameJam.GameObjects {
                     newPosition = oldPosition;
                     break;
             }
+
+            this.Direction = moveDirection;
             
             if (map.isEmpty(newPosition)) {
-                this.position = newPosition;
+                this.Position = newPosition;
                 map.setCharacter(oldPosition,this);
                 busyPerformingAction.value = movementDelay;
                 // animate
@@ -171,7 +173,7 @@ namespace GlobalGameJam.GameObjects {
         public override void wasAttacked(int damage) {
             base.wasAttacked(damage);
             // Remove the character from the map.
-            if (this.Health < 0) map.setCharacter(this.position, null);
+            if (this.Health < 0) map.setCharacter(this.Position, null);
         }
 
         public void attack(Entity attackee) {
@@ -179,6 +181,7 @@ namespace GlobalGameJam.GameObjects {
             double attackModifier = attackee is Character ? characterType.getAttackModifier((Character)attackee) : 1;
             attackee.wasAttacked((int)(this.attackStrength.value * attackModifier));
             busyPerformingAction.value = attackDelay;
+            this.Direction = Map.getDirection(this.Position, attackee.Position);
             // animate
         }
 

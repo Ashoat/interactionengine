@@ -91,6 +91,7 @@
     <Compile Include="GameObjects\BAM.cs" />
     <Compile Include="GameObjects\Character.cs" />
     <Compile Include="GameObjects\Entity.cs" />
+    <Compile Include="GameObjects\FrameRateCounter.cs" />
     <Compile Include="GameObjects\Game.cs" />
     <Compile Include="GameObjects\HealthBar.cs" />
     <Compile Include="GameObjects\HUD.cs" />

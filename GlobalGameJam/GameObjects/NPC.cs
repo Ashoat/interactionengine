@@ -16,7 +16,7 @@ namespace GlobalGameJam.GameObjects {
         public override void update() {
             base.update();
             if (this.busyPerformingAction.value > 0 || Health < 0) return;
-            List<Character> chars = Map.getVisibleCharacters(this.position, 1);
+            List<Character> chars = Map.getVisibleCharacters(this.Position, 1);
             foreach (Character character in chars) {
                 //if (characterType.getAttitudeToward(character.characterType) < 0) {
                 int relation = characterType.getAttitudeToward(character);
@@ -24,12 +24,12 @@ namespace GlobalGameJam.GameObjects {
                 Console.WriteLine("; Attitude: " + relation.ToString());
                 
                 if (relation > 0) {
-                    if (MathHelper.PointDistance(this.position, character.position) <= 1.0f) {
+                    if (MathHelper.PointDistance(this.Position, character.Position) <= 1.0f) {
                         // Attack
                         this.attack(character);
                     } else {
                         //Begin attack run
-                        moveDirection = getDirection(this.position,character.position);
+                        moveDirection = Map.getDirection(this.Position,character.Position);
                         running = true;
                         runSquaresLeft = 2;
                     }
@@ -37,7 +37,7 @@ namespace GlobalGameJam.GameObjects {
                     // Begin defense run
                     running = true;
                     runSquaresLeft = 2;
-                    moveDirection = getDirection(character.position,this.position);
+                    moveDirection = Map.getDirection(character.Position,this.Position);
                 } else {
                     // Don't update motion pattern
                 }
@@ -49,18 +49,6 @@ namespace GlobalGameJam.GameObjects {
                     running = false;
                 }
             }
-        }
-
-        private Direction getDirection(Point start, Point end) {
-            if (end.X - start.X > 0)
-                return Direction.EAST;
-            if (end.X - start.X < 0)
-                return Direction.WEST;
-            if (end.Y - start.Y > 0)
-                return Direction.SOUTH;
-            if (end.Y - start.Y < 0)
-                return Direction.NORTH;
-            throw new InvalidProgramException("The two points aren't above, below or to the side of each other!");
         }
 
     }

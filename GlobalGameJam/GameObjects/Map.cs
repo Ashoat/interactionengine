@@ -128,7 +128,7 @@ namespace GlobalGameJam.GameObjects {
                         entityArray[x, y] = LoadTile(tileType, x, y);
                         if (entityArray[x, y] != null)
                         {
-                            entityArray[x, y].position = new Point(x, y);
+                            entityArray[x, y].Position = new Point(x, y);
                         }
                     }
                 }
@@ -213,6 +213,10 @@ namespace GlobalGameJam.GameObjects {
             return entityArray[location.X,location.Y]==null;
         }
 
+        public Entity getEntity(Point location) {
+            return entityArray[location.X, location.Y];
+        }
+
         /// <summary>
         /// Sets the character on the map. Used to set the location of the character on the 
         /// map's internal representation of the game board
@@ -220,7 +224,7 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="character">The character object to update the map with</param>
         public void setCharacter(Point oldLocation, Character character) {
             if (character != null) {
-                entityArray[character.position.X, character.position.Y] = character;
+                entityArray[character.Position.X, character.Position.Y] = character;
             }
             entityArray[oldLocation.X, oldLocation.Y] = null;
         }
@@ -236,6 +240,34 @@ namespace GlobalGameJam.GameObjects {
         public Player getPlayer() {
             return player;
         }
+
+        public static Direction getDirection(Point start, Point end) {
+            if (end.X - start.X > 0)
+                return Direction.EAST;
+            if (end.X - start.X < 0)
+                return Direction.WEST;
+            if (end.Y - start.Y > 0)
+                return Direction.SOUTH;
+            if (end.Y - start.Y < 0)
+                return Direction.NORTH;
+            throw new InvalidProgramException("The two points aren't above, below or to the side of each other!");
+        }
+
+        public static Point getPointInDirection(Point point, Direction direction) {
+            switch (direction) {
+                case Direction.NORTH:
+                    return new Point(point.X, point.Y-1);
+                case Direction.SOUTH:
+                    return new Point(point.X, point.Y+1);
+                case Direction.WEST:
+                    return new Point(point.X-1, point.Y);
+                case Direction.EAST:
+                    return new Point(point.X+1, point.Y);
+                default:
+                    throw new ArgumentException("Invalid direction");
+            }
+        }
+
     }
 
     public enum Direction {

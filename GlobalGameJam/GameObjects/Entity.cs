@@ -5,6 +5,7 @@ using GlobalGameJam.Graphics;
 using InteractionEngine.Constructs.Datatypes;
 using InteractionEngine.UserInterface.TwoDimensional;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -13,13 +14,14 @@ namespace GlobalGameJam.GameObjects {
         private UpdatableInteger health;
         private UpdatableInteger x;
         private UpdatableInteger y;
+        private Direction direction;
 
         public int Health {
             get { return health.value; }
             set { health.value = value; }
         }
 
-        public Microsoft.Xna.Framework.Point position {
+        public Microsoft.Xna.Framework.Point Position {
             get {
                 return new Point(x.value, y.value);
             }
@@ -31,6 +33,29 @@ namespace GlobalGameJam.GameObjects {
                 int screenx = value.X * GRID_WIDTH;
                 int screeny = value.Y * GRID_HEIGHT + 88;
                 this.location.Position = new Vector3(screenx, screeny, 0);
+            }
+        }
+
+        public Direction Direction {
+            get { return this.direction; }
+            set {
+                this.direction = value;
+                switch (direction) {
+                    case Direction.NORTH:
+                        this.location.yaw = 0;
+                        break;
+                    case Direction.SOUTH:
+                        this.location.yaw = 180;
+                        break;
+                    case Direction.WEST:
+                        this.location.yaw = -90;
+                        break;
+                    case Direction.EAST:
+                        this.location.yaw = 90;
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid direction");
+                }
             }
         }
 
