@@ -50,6 +50,7 @@ namespace InteractionEngine {
             Engine.userInterface.initialize();
             if (width > 0) this.graphics.PreferredBackBufferWidth = width;
             if (height > 0) this.graphics.PreferredBackBufferHeight = height;
+            this.graphics.IsFullScreen = fullscreen;
             this.graphics.ApplyChanges();
             this.graphics.GraphicsDevice.Clear(this.color);
             foreach (Constructs.GameObjectable gameObject in Engine.getGameObjectArray()) { 
@@ -68,6 +69,10 @@ namespace InteractionEngine {
         public void setWindowSize(int width, int height) {
             this.height = height;
             this.width = width;
+        }
+        private bool fullscreen;
+        public void setFullScreenMode(bool fullscreen) {
+            this.fullscreen = fullscreen;
         }
 
         Microsoft.Xna.Framework.Graphics.Color color;
