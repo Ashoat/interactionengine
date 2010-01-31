@@ -94,7 +94,7 @@ namespace GlobalGameJam.GameObjects {
                 counter = 0;
             }
             counter++;            
-            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "timetick", null));
+            //Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "timetick", null));
         }
     }
 

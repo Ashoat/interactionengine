@@ -71,8 +71,8 @@ namespace GlobalGameJam.GameObjects {
         /// <param name="loadRegion">The LoadRegion to which this GameObject belongs.</param>
         public override void construct() {
             graphics = new FrameRateCounterGraphics(this);
-            this.addEventMethod("tick", tick);
-            Engine.addEvent(new Event(this.id, "tick", null));
+            this.addEventMethod("fps_tick", tick);
+            Engine.addEvent(new Event(this.id, "fps_tick", null));
         }
 
         public void tick(Client client, object param) {
@@ -87,7 +87,7 @@ namespace GlobalGameJam.GameObjects {
 
                 tickRate = System.Math.Round(10 * tickRate) / 10;
             }
-            Engine.addEvent(new Event(this.id, "tick", null));
+            Engine.addEvent(new Event(this.id, "fps_tick", null));
         }
 
     }
