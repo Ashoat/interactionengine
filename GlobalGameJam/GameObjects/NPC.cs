@@ -48,6 +48,7 @@ namespace GlobalGameJam.GameObjects {
             counter++;
 
             base.update();
+            
             if (this.busyPerformingAction.value > 0 || Health <= 0) return;
             List<Character> chars = Map.getVisibleCharacters(this.Position, lineOfSight);
             foreach (Character character in chars) {
@@ -67,25 +68,22 @@ namespace GlobalGameJam.GameObjects {
                         //Debug.WriteLine("Moving to Attack");
                     }
                     moveDirection = Map.getDirection(this.Position, character.Position);
-                    running = true;
+                    this.move(moveDirection);
                     runSquaresLeft = defaultRunSquares;
                 } else if (relation < 0) {
                     // Begin defense run
                     //Debug.WriteLine("Running away");
-                    running = true;
+                    
                     runSquaresLeft = defaultRunSquares;
                     moveDirection = Map.getDirection(character.Position,this.Position);
+                    this.move(moveDirection);
                 } else {
                     // Don't update motion pattern
                 }
             }
-            if (running) {
+            
                 runSquaresLeft--;
-                this.move(moveDirection);
-                if (runSquaresLeft == 0) {
-                    running = false;
-                }
-            }
+                
         }
 
     }

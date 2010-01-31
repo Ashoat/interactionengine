@@ -119,7 +119,7 @@ namespace GlobalGameJam.GameObjects {
                             try {
                                 Engine.server = new Server("127.0.0.1");
                                 // Make sure we know what region is the hosted region so we can kill it later
-                                CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
+                                //CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
                                 Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
@@ -148,7 +148,7 @@ namespace GlobalGameJam.GameObjects {
                             try {
                                 Engine.server = new Server("127.0.0.1");
                                 // Make sure we know what region is the hosted region so we can kill it later
-                                CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
+                                //CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
                                 Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
