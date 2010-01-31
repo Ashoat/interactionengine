@@ -92,6 +92,13 @@ namespace GlobalGameJam.GameObjects {
 
         public void LoadMap(string mapFile)
         {
+            for (int y=0; y < Height; y++) {
+                for (int x=0; x < Width; x++) {
+                    if (entityArray[x,y] != null){
+                        entityArray[x, y].deconstruct();
+                    }
+                }
+            }
             characterList = new List<Character>();
             try
             {
@@ -242,7 +249,9 @@ namespace GlobalGameJam.GameObjects {
                 c.update();
             }
             Thread.Sleep(16);
-            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+            if (Active) {
+                Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+            }
         }
 
         public Player getPlayer() {

@@ -33,7 +33,7 @@ namespace GlobalGameJam {
             game.addMap(map);
             Menu menu = GameObject.createGameObject<Menu>(localRegion);
             game.setMenu(menu); // so that keyboard commands go to menu
-            //menu.show();
+            menu.show();
             
             KeyboardFocus kf = GameObject.createGameObject<KeyboardFocus>(localRegion);
             ((UserInterface2D)Engine.userInterface).registerKeyboardFocus(kf);
