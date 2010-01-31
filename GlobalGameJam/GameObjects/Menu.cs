@@ -60,7 +60,6 @@ namespace GlobalGameJam.GameObjects {
             menuStrings.Add("Play Level 1");
             menuStrings.Add("Play Level 2");
             menuStrings.Add("Play Level 3");
-            menuStrings.Add("Play Level 4");
             graphics.menuStrings = menuStrings;
             graphics.Visible = false;
             graphics.activeMenuItemIndex = 0;
@@ -120,7 +119,7 @@ namespace GlobalGameJam.GameObjects {
                             try {
                                 Engine.server = new Server("127.0.0.1");
                                 // Make sure we know what region is the hosted region so we can kill it later
-                                CreateRegion.onCreateRegion.Add(new Event(this.id, "getHostedRegion", null));
+                                CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
                                 Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
@@ -134,8 +133,6 @@ namespace GlobalGameJam.GameObjects {
                                 map.LoadMap("levels/level2.ani");
                             } else if (graphics.activeMenuItemIndex == 3) {
                                 map.LoadMap("levels/level3.ani");
-                            } else if (graphics.activeMenuItemIndex == 4) {
-                                map.LoadMap("levels/level4.ani");
                             }
                             exitMenu();
                         }
@@ -151,7 +148,7 @@ namespace GlobalGameJam.GameObjects {
                             try {
                                 Engine.server = new Server("127.0.0.1");
                                 // Make sure we know what region is the hosted region so we can kill it later
-                                CreateRegion.onCreateRegion.Add(new Event(this.id, "getHostedRegion", null));
+                                CreateRegion.onRegionTransfer.Add(new Event(this.id, "getHostedRegion", null));
                                 Server.onDisconnect.Add(new Event(this.id, "handleDroppedConnection", null));
                             } catch (GameWorldException) {
                                 Engine.status = Engine.Status.SINGLE_PLAYER;
@@ -201,10 +198,10 @@ namespace GlobalGameJam.GameObjects {
                 LoadRegion lr = (LoadRegion)parameter;
                 foreach (GameObject go in lr.getGameObjectArray()) {
                     if (go is Map) {
+                        exitMenu();
                         map = (Map)go;
                         map.Active = true;
                         game.addMap(map);
-                        exitMenu();
                         Engine.addEvent(new InteractionEngine.EventHandling.Event(map.id, "tick", null));
                         return;
                     }
