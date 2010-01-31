@@ -109,11 +109,11 @@ namespace GlobalGameJam.GameObjects {
             get { return width; }
         }
 
-        private UpdatableGameObject<Entity>[,] entityArray;
+        public UpdatableGameObject<Entity>[,] entityArray;
 
         UpdatableGameObject<Player> serverPlayer;
         UpdatableGameObject<Player> clientPlayer;
-        private List<UpdatableGameObject<Character>> characterList;
+        public List<UpdatableGameObject<Character>> characterList;
 
         public UpdatableString mapFile;
         public void LoadMap(string mapFile)
