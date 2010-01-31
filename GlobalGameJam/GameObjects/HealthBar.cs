@@ -41,7 +41,7 @@ namespace GlobalGameJam.GameObjects {
 
         #endregion
 
-        public const float LAYER = 0.1f;
+        public const float LAYER = 0.006f;
 
         UpdatableGameObject<Map> map;
         public float HealthPercentage {

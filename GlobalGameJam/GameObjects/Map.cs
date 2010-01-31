@@ -248,7 +248,7 @@ namespace GlobalGameJam.GameObjects {
             foreach (Character c in characterList) {
                 c.update();
             }
-            Thread.Sleep(16);
+            //Thread.Sleep(16);
             if (Active) {
                 Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
             }

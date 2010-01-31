@@ -137,8 +137,8 @@ namespace GlobalGameJam.GameObjects {
             float rotation = 0;
             float scale = 1;
             Vector2 origin = Vector2.Zero;
-            float whiteLayer = 0.00101f;
-            float blackLayer = 0.00102f;
+            float whiteLayer = 0.0000000101f;
+            float blackLayer = 0.0000000102f;
             Vector2 whitePosition = new Vector2(view.Width - stringWidth, view.Height - 20 - 2 * spriteFont.LineSpacing);
             Vector2 blackPosition = whitePosition + Vector2.One;
             Vector2 whiteCountPosition = whitePosition + new Vector2(0, spriteFont.LineSpacing);
@@ -148,13 +148,11 @@ namespace GlobalGameJam.GameObjects {
             spriteBatch.DrawString(spriteFont, fps, whitePosition, Color.White, rotation, origin, scale, SpriteEffects.None, whiteLayer);
             spriteBatch.DrawString(spriteFont, tps, blackCountPosition, Color.Black, rotation, origin, scale, SpriteEffects.None, blackLayer);
             spriteBatch.DrawString(spriteFont, tps, whiteCountPosition, Color.White, rotation, origin, scale, SpriteEffects.None, whiteLayer);
-         //   spriteBatch.DrawString(spriteFont, lastDrawIndex + "", blackCountPosition, Color.Black, rotation, origin, scale, SpriteEffects.None, blackLayer);
-         //   spriteBatch.DrawString(spriteFont, lastDrawIndex + "", whiteCountPosition, Color.White, rotation, origin, scale, SpriteEffects.None, whiteLayer);
 
         }
 
         public float LayerDepth {
-            get { return 0.00102f; }
+            get { return 0.0000000102f; }
         }
 
         public Vector3? intersectionPoint(double x, double y) {
