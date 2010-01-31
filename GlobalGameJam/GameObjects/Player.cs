@@ -40,7 +40,7 @@ namespace GlobalGameJam.GameObjects {
             base.construct();
             movementDelay = 200;
             //Health = 200;
-            graphics.setTexture("Player");
+            //graphics.setTexture("Player");
             UpdateTextures();
         }
 

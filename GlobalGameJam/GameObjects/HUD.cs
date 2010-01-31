@@ -51,6 +51,7 @@ namespace GlobalGameJam.GameObjects {
             location = new Location(this);
             graphics = new Graphics2DTexture(this);
             graphics.TextureName = "hud";
+            graphics.LayerDepth = 0.05f;
         }
 
     }

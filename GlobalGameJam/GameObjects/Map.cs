@@ -14,6 +14,12 @@ namespace GlobalGameJam.GameObjects {
 
     public class Map : GameObject, Graphable2D {
 
+        private bool active = false;
+        public bool Active {
+            get { return active; }
+            set { active = value; }
+        }
+
         #region FACTORY
 
         /// <summary>
@@ -63,7 +69,9 @@ namespace GlobalGameJam.GameObjects {
             location.Position = new Vector3(0, 88, 0);
             mapLoadRegion = this.getLoadRegion();
             this.addEventMethod("tick", new InteractionEngine.EventHandling.EventMethod(this.update));
-            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+            if (Active) {
+                Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "tick", null));
+            }
         }
 
         private int height;
@@ -189,8 +197,8 @@ namespace GlobalGameJam.GameObjects {
         /// <returns>A list of characters that are visisble</returns>
         public List<Character> getVisibleCharacters(Point location, float radius) {
             List<Character> charList = new List<Character>();
-            for (int x = (int)Math.Max(location.X-radius,0); x <= Math.Min(location.X+radius,Width); x++) {
-                for (int y = (int)Math.Max(location.Y-radius,0); y <= Math.Min(location.Y+radius,Height); y++) {
+            for (int x = (int)Math.Max(location.X-radius,0); x <= Math.Min(location.X+radius,Width-1); x++) {
+                for (int y = (int)Math.Max(location.Y-radius,0); y <= Math.Min(location.Y+radius,Height-1); y++) {
                     float val = (float)Math.Sqrt(Math.Pow(location.X - x, 2) + Math.Pow(location.Y - y, 2));
                     if (0 < val && val <= radius) {
                         Entity e = entityArray[x, y];

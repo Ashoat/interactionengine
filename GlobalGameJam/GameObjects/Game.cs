@@ -1,10 +1,17 @@
 ﻿using InteractionEngine.Constructs;
 using InteractionEngine.UserInterface;
 using Microsoft.Xna.Framework.Input;
+using System.Threading;
+using System;
+using InteractionEngine.Networking;
+using InteractionEngine;
+using Microsoft.Xna.Framework;
 
 namespace GlobalGameJam.GameObjects {
 
     public class GalactazoidsGame : GameObject, Keyboardable {
+
+        Menu menu;
 
         #region FACTORY
 
@@ -32,7 +39,12 @@ namespace GlobalGameJam.GameObjects {
 
         #endregion
 
+        private TimeSpan start;
+
         public override void construct() {
+            
+            this.addEventMethod("timetick", new InteractionEngine.EventHandling.EventMethod(this.tick));
+            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "timetick", null));
         }
 
         public Player player;
@@ -41,16 +53,45 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public void keyEvent(Keys key, KeyEvent keyEvent) {
+            //Thread.Sleep(100);
+            Console.WriteLine("Key: " + key);
             if (keyEvent != KeyEvent.KEY_TYPED) return;
-            if (Keys.Escape == key) {
+            if (menu.Displayed) {
+                menu.handleKey(key);
             } else {
-                map.getPlayer().handleKey(key);
+                if (Keys.Escape == key) {
+                    menu.show();
+                } else {
+                    map.getPlayer().handleKey(key);
+                }
             }
         }
 
         Map map;
         internal void addMap(Map map) {
             this.map = map;
+        }
+
+        internal void setMenu(Menu menu) {
+            this.menu = menu;
+            this.menu.map = map;
+        }
+
+        private int counter = 0;
+
+        private void tick(Client c, object o) {
+            if (start == null) {
+                start = Engine.gameTime.TotalRealTime;
+            }
+            TimeSpan delta = Engine.gameTime.TotalRealTime - start;
+            //Console.WriteLine(delta);
+            if (delta.Seconds >= 1) {
+                start = Engine.gameTime.TotalRealTime;
+                Console.WriteLine("ticks/sec: " + counter);
+                counter = 0;
+            }
+            counter++;            
+            Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "timetick", null));
         }
     }
 
