@@ -252,6 +252,7 @@ namespace InteractionEngine.Constructs {
         internal void internalDeconstruct() {
             InteractionEngine.Engine.removeGameObject(this.id);
             this.loadRegion.removeObject(this.id);
+            Engine.removeGameObjectEvents(this);
         }
 
         #endregion
