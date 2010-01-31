@@ -210,6 +210,7 @@ namespace GlobalGameJam.GameObjects {
                     if (go is Map) {
                         exitMenu();
                         map = (Map)go;
+                        map.LoadMap(map.mapFile.value);
                         map.Active = true;
                         game.addMap(map);
                         Engine.addEvent(new InteractionEngine.EventHandling.Event(map.id, "tick", null));
