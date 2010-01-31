@@ -218,7 +218,7 @@ namespace InteractionEngine.UserInterface {
     }
 
     public enum KeyEvent {
-        KEY_PRESSED, KEY_TYPED, KEY_REMOVED
+        KEY_PRESSED, KEY_TYPED, KEY_RELEASED, IS_DOWN
     }
 
     /**

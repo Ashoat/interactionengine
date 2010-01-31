@@ -128,7 +128,9 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         #region Keyboard Stuff
 
         private KeyboardFocus kf;
-        private const int repeatDelay = 20;
+        private static int repeatInterval = 1000 / (2 + System.Windows.Forms.SystemInformation.KeyboardSpeed);
+        private static int repeatDelay = 250 + 250 * System.Windows.Forms.SystemInformation.KeyboardDelay;
+        private List<Microsoft.Xna.Framework.Input.Keys> pressed = new List<Microsoft.Xna.Framework.Input.Keys>();
         private Dictionary<Microsoft.Xna.Framework.Input.Keys, double> repeatTimes = new Dictionary<Microsoft.Xna.Framework.Input.Keys, double>();
         public void registerKeyboardFocus(KeyboardFocus kf) {
             this.kf = kf;
@@ -136,11 +138,24 @@ namespace InteractionEngine.UserInterface.ThreeDimensional {
         private void checkKeyboard(System.Collections.Generic.List<InteractionEngine.EventHandling.Event> newEvents) {
             if (this.kf == null || !Engine.game.IsActive) return;
             Microsoft.Xna.Framework.Input.KeyboardState keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+            foreach (Microsoft.Xna.Framework.Input.Keys key in new List<Microsoft.Xna.Framework.Input.Keys>(pressed)) {
+                if (!Array.Exists(keyboard.GetPressedKeys(), new System.Predicate<Microsoft.Xna.Framework.Input.Keys>((Microsoft.Xna.Framework.Input.Keys x) => key.Equals(x)))) {
+                    kf.keyEvent(null, key, KeyEvent.KEY_RELEASED);
+                    pressed.Remove(key);
+                }
+            }
             foreach (Microsoft.Xna.Framework.Input.Keys key in keyboard.GetPressedKeys()) {
-                if (!repeatTimes.ContainsKey(key) || repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
-                   // newEvents.Add(this.kf.getEvent((int)key));
+                kf.keyEvent(null, key, KeyEvent.IS_DOWN);
+                if (!pressed.Contains(key)) {
+                    kf.keyEvent(null, key, KeyEvent.KEY_PRESSED);
                     kf.keyEvent(null, key, KeyEvent.KEY_TYPED);
+                    pressed.Add(key);
                     repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatDelay;
+                }
+                if (repeatTimes[key] < InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds) {
+                    // newEvents.Add(this.kf.getEvent((int)key));
+                    kf.keyEvent(null, key, KeyEvent.KEY_TYPED);
+                    repeatTimes[key] = InteractionEngine.Engine.gameTime.TotalRealTime.TotalMilliseconds + repeatInterval;
                 }
             }
         }
