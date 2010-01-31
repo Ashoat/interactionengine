@@ -68,7 +68,7 @@ namespace GlobalGameJam.GameObjects {
                         //Begin attack run
                         //Debug.WriteLine("Moving to Attack");
                     }
-                    moveDirection = Map.getDirection(this.Position, character.Position);
+                    moveDirection = Map.getDirection(this.Position, character.Position, this.Direction);
                     this.move(moveDirection);
                     runSquaresLeft = defaultRunSquares;
                 } else if (relation < 0) {
@@ -76,7 +76,7 @@ namespace GlobalGameJam.GameObjects {
                     //Debug.WriteLine("Running away");
                     
                     runSquaresLeft = defaultRunSquares;
-                    moveDirection = Map.getDirection(character.Position,this.Position);
+                    moveDirection = Map.getDirection(character.Position,this.Position, character.Direction);
                     this.move(moveDirection);
                 } else {
                     // Don't update motion pattern

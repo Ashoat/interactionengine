@@ -306,15 +306,18 @@ namespace GlobalGameJam.GameObjects {
             return player;
         }
 
-        public static Direction getDirection(Point start, Point end) {
-            if (end.X - start.X > 0)
-                return Direction.EAST;
-            if (end.X - start.X < 0)
-                return Direction.WEST;
-            if (end.Y - start.Y > 0)
-                return Direction.SOUTH;
-            if (end.Y - start.Y < 0)
-                return Direction.NORTH;
+        public static Direction getDirection(Point start, Point end, Direction tiebreaker) {
+            double dy = end.Y - start.Y;
+            double dx = end.X - start.X;
+            if (dy * dy > dx * dx) {
+                if (dy > 0) return Direction.SOUTH;
+                else return Direction.NORTH;
+            } else if (dx * dx > dy * dy) {
+                if (dx > 0) return Direction.EAST;
+                else return Direction.WEST;
+            } else {
+                return tiebreaker;
+            }
             throw new InvalidProgramException("The two points aren't above, below or to the side of each other!");
         }
 
