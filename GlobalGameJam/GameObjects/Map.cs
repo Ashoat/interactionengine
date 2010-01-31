@@ -86,10 +86,10 @@ namespace GlobalGameJam.GameObjects {
             get { return width; }
         }
 
-        UpdatableGameObject<Entity>[,] entityArray;
+        private UpdatableGameObject<Entity>[,] entityArray;
 
         Player player;
-        List<UpdatableGameObject<Character>> characterList;
+        private List<UpdatableGameObject<Character>> characterList;
 
         public void LoadMap(string mapFile)
         {
@@ -272,11 +272,12 @@ namespace GlobalGameJam.GameObjects {
             if (character != null) {
                 entityArray[character.Position.X, character.Position.Y].value = character;
             }
-            entityArray[oldLocation.X, oldLocation.Y] = null;
+            entityArray[oldLocation.X, oldLocation.Y].value = null;
         }
         
         public void update(InteractionEngine.Networking.Client client, object ob) {
-            foreach (UpdatableGameObject<Character> c in characterList) {
+            for (int i = characterList.Count-1; i >=0; i--) {
+                UpdatableGameObject<Character> c = characterList[i];
                 c.value.update();
             }
             Thread.Sleep(16);
@@ -317,6 +318,17 @@ namespace GlobalGameJam.GameObjects {
             }
         }
 
+
+        internal void removeEntity(Entity entity) {
+            UpdatableGameObject<Character> ugg = null;
+            foreach (UpdatableGameObject<Character> ug in characterList) {
+                if (ug.value == entity) {
+                    ugg = ug;
+                    break;
+                }
+            }
+            characterList.Remove(ugg);
+        }
     }
 
     public enum Direction {

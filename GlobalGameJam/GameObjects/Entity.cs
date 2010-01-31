@@ -21,6 +21,13 @@ namespace GlobalGameJam.GameObjects {
             set { health.value = value; }
         }
 
+        protected Map map;
+
+        public Map Map {
+            get { return map; }
+            set { map = value; }
+        }
+
         public Microsoft.Xna.Framework.Point Position {
             get {
                 return new Point(x.value, y.value);
@@ -89,6 +96,7 @@ namespace GlobalGameJam.GameObjects {
             health.value -= damage;
             GameObject.createGameObject<BAM>(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
             if (health.value <= 0) {
+                map.removeEntity(this);
                 this.deconstruct();
             }
         }

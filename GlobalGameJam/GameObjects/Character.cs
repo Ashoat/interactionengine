@@ -90,13 +90,6 @@ namespace GlobalGameJam.GameObjects {
             }
         }
 
-        protected Map map;
-
-        public Map Map {
-            get { return map; }
-            set { map = value; }
-        }
-
         public override EntityGraphics makeGraphics() {
             return new CharacterGraphics(this);
         }
