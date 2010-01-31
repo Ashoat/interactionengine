@@ -54,7 +54,7 @@ namespace GlobalGameJam.GameObjects {
 
         public void keyEvent(Keys key, KeyEvent keyEvent) {
             //Thread.Sleep(100);
-            Console.WriteLine("Key: " + key);
+            Console.WriteLine("Key: " + key + ", " + keyEvent.ToString());
             if (keyEvent != KeyEvent.KEY_TYPED) return;
             if (menu.Displayed) {
                 menu.handleKey(key);
