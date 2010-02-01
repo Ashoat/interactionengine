@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using InteractionEngine;
+using InteractionEngine.EventHandling;
+using InteractionEngine.Networking;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -48,6 +50,7 @@ namespace GlobalGameJam.GameObjects {
             movementDelay = 50;
             //Health = 200;
             //graphics.setTexture("Player");
+            this.addEventMethod("handleKey", new EventMethod(handleKey));
             UpdateTextures();
         }
 
@@ -62,7 +65,9 @@ namespace GlobalGameJam.GameObjects {
                 characterGraphics.setTextures(new string[] { "player_punk_0", "player_punk_1" });
         }
 
-        public void handleKey(Keys key) {
+        public void handleKey(Client client, object paramet)
+        {
+            Keys key = (Keys)paramet;
             Console.WriteLine("Player key: " + key);
             switch (key) {
                 case Keys.Left:
@@ -88,6 +93,7 @@ namespace GlobalGameJam.GameObjects {
                 default:
                     break;
             }
+            Console.WriteLine(this.isClient.value + " " + this.Position);
             //Console.WriteLine(key);
         }
 
@@ -125,7 +131,6 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public override void update() {
-            
             base.update();
         }
 

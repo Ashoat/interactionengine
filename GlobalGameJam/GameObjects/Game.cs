@@ -6,6 +6,7 @@ using System;
 using InteractionEngine.Networking;
 using InteractionEngine;
 using Microsoft.Xna.Framework;
+using InteractionEngine.EventHandling;
 
 namespace GlobalGameJam.GameObjects {
 
@@ -47,8 +48,6 @@ namespace GlobalGameJam.GameObjects {
             //Engine.addEvent(new InteractionEngine.EventHandling.Event(this.id, "timetick", null));
         }
 
-        public Player player;
-
         
         public void focusLost(Keyboardable blah) {
         }
@@ -78,7 +77,7 @@ namespace GlobalGameJam.GameObjects {
                         menu.show();
                     }
                 } else if (keyEvent == KeyEvent.IS_DOWN) {
-                    if (map != null && map.getPlayer() != null) map.getPlayer().handleKey(key);
+                    if (map != null && map.getPlayer() != null) Engine.addEvent(new Event(map.getPlayer().id, "handleKey", key));
                 }
             }
         }
