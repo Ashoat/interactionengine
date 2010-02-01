@@ -165,25 +165,6 @@ namespace GlobalGameJam.Graphics {
             attackAnimationCountdown = (float)Engine.gameTime.TotalGameTime.TotalMilliseconds;
             attacking = true;
 
-            Random rand = new Random();
-
-            int r = rand.Next(4);
-            switch (r)
-            {
-                case 0:
-                    Program.audio.playSound("omnomnom");
-                    break;
-                case 1:
-                    Program.audio.playSound("pewpew");
-                    break;
-                case 2:
-                    Program.audio.playSound("bam");
-                    break;
-                case 3:
-                    Program.audio.playSound("shoot");
-                    break;
-            }
-
             if (entity is Player) {
                 if (!attack_emitter.Modifiers.Contains(lmod)) {
                     attack_emitter.Modifiers.Add(lmod);

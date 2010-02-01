@@ -103,7 +103,7 @@ namespace GlobalGameJam.GameObjects {
                 this.characterType = CharacterType.getNextShift(this.characterType);
                 UpdateTextures();
                 // one second delay for shape-shifting?
-                this.busyPerformingAction.value = 1000;
+                this.busyPerformingAction.value = 300;
                 // do animation
                 Program.audio.playSound("shift");
                 ((CharacterGraphics)graphics).startShiftAnimation();

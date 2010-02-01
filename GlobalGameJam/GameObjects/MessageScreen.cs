@@ -115,10 +115,9 @@ namespace GlobalGameJam.GameObjects {
 
             Viewport view = UserInterface2D.graphicsDevice.Viewport;
 
-            float rotation = 0;
-            float scale = 1;
+           
             Vector2 origin = Vector2.Zero;
-            float blackLayer = 0.0000000102f;
+            
             
             int textureWidth = losingTexture.Width;
             int textureHeight = losingTexture.Height;

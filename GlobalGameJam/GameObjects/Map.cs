@@ -118,6 +118,7 @@ namespace GlobalGameJam.GameObjects {
         public UpdatableString mapFile;
         public void LoadMap(string mapFile)
         {
+            GameOver = false;
             if (Engine.status != Engine.Status.MULTIPLAYER_CLIENT) this.mapFile.value = mapFile;
             for (int y=0; y < Height; y++) {
                 for (int x=0; x < Width; x++) {
@@ -235,11 +236,13 @@ namespace GlobalGameJam.GameObjects {
                     returnEntity = GameObject.createGameObject<Skunk>(mapLoadRegion);
                     ((NPC)returnEntity).Level = 3;
                     break;
-                case '?':
+                case '!':
+
                     returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
                     serverPlayer.value = (Player)returnEntity;
                     break;
-                case '!':
+                case '?':
+
                     returnEntity = GameObject.createGameObject<Player>(mapLoadRegion);
                     clientPlayer.value = (Player)returnEntity;
                     break;
@@ -292,7 +295,10 @@ namespace GlobalGameJam.GameObjects {
         }
 
         public Entity getEntity(Point location) {
-            return entityArray[location.X, location.Y].value;
+            if (location.X >= 0 && location.Y >= 0 && location.X < Width && location.Y < Height)
+                return entityArray[location.X, location.Y].value;
+            else
+                return null;
         }
 
         /// <summary>
@@ -316,7 +322,7 @@ namespace GlobalGameJam.GameObjects {
                 Message.Text = "You Win1!! \n Press enter to play again.";
                 GameOver = true;
                 playerWon = true;
-                Message.Texture = "WinTexture";
+                Message.Texture = "win";
                 Message.open();
                 
             }
@@ -344,13 +350,19 @@ namespace GlobalGameJam.GameObjects {
                 c.value.update();
             }
 
-            if (!GameOver && getPlayer() != null && getPlayer().Health <= 0) {
+            
+            //Console.WriteLine(GameOver);
+            //Console.WriteLine(getPlayer().Health);
+            if (!GameOver && (getPlayer() != null && getPlayer().Health <= 0 || getPlayer() == null)) {
                 Message = GameObject.createGameObject<MessageScreen>(this.getLoadRegion());
                 GameOver = true;
                 playerWon = false;
                 Message.Text = "Be more careful next time!. \nPress enter to return to the menu";
                 Message.Texture = "game_over";
                 Message.open();
+                if (Message.getGraphics2D().Visible == false) {
+                    Message.open();
+                }
             }
 
             //Thread.Sleep(16);

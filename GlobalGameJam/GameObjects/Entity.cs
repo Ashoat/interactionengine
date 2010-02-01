@@ -106,6 +106,24 @@ namespace GlobalGameJam.GameObjects {
         public virtual void wasAttacked(Character attacker, int damage) {
             Health -= damage;
             GameObject.createGameObject<BAM>(this.getLoadRegion()).setLocationAndLifespan(this.location.Position, 300);
+            Random rand = new Random();
+
+            int r = rand.Next(4);
+            switch (r)
+            {
+                case 0:
+                    Program.audio.playSound("omnomnom");
+                    break;
+                case 1:
+                    Program.audio.playSound("pewpew");
+                    break;
+                case 2:
+                    Program.audio.playSound("bam");
+                    break;
+                case 3:
+                    Program.audio.playSound("shoot");
+                    break;
+            }
             if (Health <= 0) {
                 Program.audio.playSound("death");
                 map.value.removeEntity(this);
